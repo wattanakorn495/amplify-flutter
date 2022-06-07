@@ -20,6 +20,8 @@ import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import './graphql/send_graphql_request.dart';
+
 import 'amplify_api_config.dart';
 import 'amplify_authorization_rest_client.dart';
 
@@ -70,6 +72,21 @@ class AmplifyAPIDart extends AmplifyAPI {
     );
   }
 
+  /// Returns the HTTP client to be used for GraphQL operations.
+  ///
+  /// Use [apiName] if there are multiple GraphQL endpoints.
+  @visibleForTesting
+  http.Client getGraphQLClient({String? apiName}) {
+    final endpoint = _apiConfig.getEndpoint(
+      type: EndpointType.graphQL,
+      apiName: apiName,
+    );
+    return _clientPool[endpoint.name] ??= AmplifyAuthorizationRestClient(
+      endpointConfig: endpoint.config,
+      baseClient: _baseHttpClient,
+    );
+  }
+
   Uri _getRestUri(
       String path, String? apiName, Map<String, dynamic>? queryParameters) {
     final endpoint = _apiConfig.getEndpoint(
@@ -77,6 +94,14 @@ class AmplifyAPIDart extends AmplifyAPI {
       apiName: apiName,
     );
     return endpoint.getUri(path, queryParameters);
+  }
+
+  Uri _getGraphQLUri(String? apiName) {
+    final endpoint = _apiConfig.getEndpoint(
+      type: EndpointType.graphQL,
+      apiName: apiName,
+    );
+    return endpoint.getUri(null, null);
   }
 
   /// NOTE: http does not support request abort https://github.com/dart-lang/http/issues/424.
@@ -101,6 +126,30 @@ class AmplifyAPIDart extends AmplifyAPI {
     // TODO: integrate with auth provider implementation.
     throw UnimplementedError(
         'registerAuthProvider() has not been implemented.');
+  }
+
+  // ====== GraphQL ======
+
+  @override
+  CancelableOperation<GraphQLResponse<T>> query<T>(
+      {required GraphQLRequest<T> request}) {
+    final graphQLClient = getGraphQLClient(apiName: request.apiName);
+    final uri = _getGraphQLUri(request.apiName);
+
+    final responseFuture = sendGraphQLRequest<T>(
+        request: request, client: graphQLClient, uri: uri);
+    return _makeCancelable<GraphQLResponse<T>>(responseFuture);
+  }
+
+  @override
+  CancelableOperation<GraphQLResponse<T>> mutate<T>(
+      {required GraphQLRequest<T> request}) {
+    final graphQLClient = getGraphQLClient(apiName: request.apiName);
+    final uri = _getGraphQLUri(request.apiName);
+
+    final responseFuture = sendGraphQLRequest<T>(
+        request: request, client: graphQLClient, uri: uri);
+    return _makeCancelable<GraphQLResponse<T>>(responseFuture);
   }
 
   // ====== REST =======
