@@ -3,6 +3,7 @@ name: amplify_flutter_repository
 packages:
   - packages/**
   - example/*
+  - pentest/*
   - packages/**/example/*
   - "*"
 
