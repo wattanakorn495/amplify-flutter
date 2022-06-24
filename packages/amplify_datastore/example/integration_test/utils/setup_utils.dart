@@ -97,10 +97,11 @@ Future<void> waitForObserve() async {
 /// the ready event hasn't been emitted with in 2 minutes.
 class DataStoreStarter {
   final Completer _completer = Completer();
-  late StreamSubscription hubSubscription;
+  late StreamSubscription<DataStoreHubEvent> hubSubscription;
 
   Future<void> startDataStore() {
-    hubSubscription = Amplify.Hub.listen([HubChannel.DataStore], (event) {
+    hubSubscription =
+        Amplify.Hub.listen(HubChannel.DataStore, (DataStoreHubEvent event) {
       if (event.eventName == 'ready') {
         print(
             '🎉🎉🎉DataStore is ready to start running test suites with API sync enabled.🎉🎉🎉');

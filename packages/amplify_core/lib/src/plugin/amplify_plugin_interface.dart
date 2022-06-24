@@ -14,6 +14,7 @@
  */
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 /// Interface for all amplify plugins
@@ -30,7 +31,9 @@ abstract class AmplifyPluginInterface {
   Future<void> addPlugin() async {}
 
   /// Configures the plugin using the registered [config].
-  Future<void> configure({AmplifyConfig? config}) async {}
+  Future<void> configure(
+      {AmplifyConfig? config,
+      required AmplifyAuthProviderRepository authProviderRepo}) async {}
 
   /// Resets the plugin by removing all traces of it from the device.
   @visibleForTesting

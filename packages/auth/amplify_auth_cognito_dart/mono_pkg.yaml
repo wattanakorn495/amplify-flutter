@@ -1,0 +1,18 @@
+sdk:
+  - stable
+  - dev
+
+stages:
+  - analyze_and_format:
+      - group:
+          - format
+          - analyze: --fatal-infos lib test
+  - unit_test:
+      - group:
+          - command: dart --version
+          - test: --exclude-tags=build
+          - test: -p chrome
+  - build_test:
+      - test: --tags=build
+        sdk:
+          - stable

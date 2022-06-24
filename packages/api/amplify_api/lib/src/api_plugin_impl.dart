@@ -14,9 +14,13 @@
 
 library amplify_api;
 
+import 'dart:io';
+
 import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_api/src/native_api_plugin.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:async/async.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
@@ -24,6 +28,7 @@ import './graphql/send_graphql_request.dart';
 
 import 'amplify_api_config.dart';
 import 'amplify_authorization_rest_client.dart';
+import 'util.dart';
 
 /// {@template amplify_api.amplify_api_dart}
 /// The AWS implementation of the Amplify API category.
@@ -31,10 +36,14 @@ import 'amplify_authorization_rest_client.dart';
 class AmplifyAPIDart extends AmplifyAPI {
   late final AWSApiPluginConfig _apiConfig;
   final http.Client? _baseHttpClient;
+  late final AmplifyAuthProviderRepository _authProviderRepo;
 
   /// A map of the keys from the Amplify API config to HTTP clients to use for
   /// requests to that endpoint.
   final Map<String, AmplifyAuthorizationRestClient> _clientPool = {};
+
+  /// The registered [APIAuthProvider] instances.
+  final Map<APIAuthorizationType, APIAuthProvider> _authProviders = {};
 
   /// {@macro amplify_api.amplify_api_dart}
   AmplifyAPIDart({
@@ -47,7 +56,9 @@ class AmplifyAPIDart extends AmplifyAPI {
   }
 
   @override
-  Future<void> configure({AmplifyConfig? config}) async {
+  Future<void> configure(
+      {AmplifyConfig? config,
+      required AmplifyAuthProviderRepository authProviderRepo}) async {
     final apiConfig = config?.api?.awsPlugin;
     if (apiConfig == null) {
       throw const ApiException('No AWS API config found',
@@ -55,6 +66,29 @@ class AmplifyAPIDart extends AmplifyAPI {
               'https://docs.amplify.aws/lib/graphqlapi/getting-started/q/platform/flutter/#configure-api');
     }
     _apiConfig = apiConfig;
+    _authProviderRepo = authProviderRepo;
+  }
+
+  @override
+  Future<void> addPlugin() async {
+    if (zIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
+      return;
+    }
+
+    final nativeBridge = NativeApiBridge();
+    try {
+      final authProvidersList =
+          _authProviders.keys.map((key) => key.rawValue).toList();
+      await nativeBridge.addPlugin(authProvidersList);
+    } on PlatformException catch (e) {
+      if (e.code == 'AmplifyAlreadyConfiguredException') {
+        throw const AmplifyAlreadyConfiguredException(
+            AmplifyExceptionMessages.alreadyConfiguredDefaultMessage,
+            recoverySuggestion:
+                AmplifyExceptionMessages.alreadyConfiguredDefaultSuggestion);
+      }
+      throw AmplifyException.fromMap((e.details as Map).cast());
+    }
   }
 
   /// Returns the HTTP client to be used for REST operations.
@@ -69,6 +103,7 @@ class AmplifyAPIDart extends AmplifyAPI {
     return _clientPool[endpoint.name] ??= AmplifyAuthorizationRestClient(
       endpointConfig: endpoint.config,
       baseClient: _baseHttpClient,
+      authProviderRepo: _authProviderRepo,
     );
   }
 
@@ -84,6 +119,7 @@ class AmplifyAPIDart extends AmplifyAPI {
     return _clientPool[endpoint.name] ??= AmplifyAuthorizationRestClient(
       endpointConfig: endpoint.config,
       baseClient: _baseHttpClient,
+      authProviderRepo: _authProviderRepo,
     );
   }
 
@@ -122,10 +158,7 @@ class AmplifyAPIDart extends AmplifyAPI {
 
   @override
   void registerAuthProvider(APIAuthProvider authProvider) {
-    // ignore: todo
-    // TODO: integrate with auth provider implementation.
-    throw UnimplementedError(
-        'registerAuthProvider() has not been implemented.');
+    _authProviders[authProvider.type] = authProvider;
   }
 
   // ====== GraphQL ======
@@ -159,15 +192,15 @@ class AmplifyAPIDart extends AmplifyAPI {
     String path, {
     HttpPayload? body,
     Map<String, String>? headers,
-    Map<String, dynamic>? queryParameters,
+    Map<String, String>? queryParameters,
     String? apiName,
   }) {
     final uri = _getRestUri(path, apiName, queryParameters);
     final client = getRestClient(apiName: apiName);
     return _prepareRestResponse(AWSStreamedHttpRequest.delete(
       uri,
-      body: body ?? const HttpPayload.empty(),
-      headers: headers,
+      body: body ?? HttpPayload.empty(),
+      headers: addContentTypeToHeaders(headers, body),
     ).send(client));
   }
 
@@ -175,7 +208,7 @@ class AmplifyAPIDart extends AmplifyAPI {
   CancelableOperation<AWSStreamedHttpResponse> get(
     String path, {
     Map<String, String>? headers,
-    Map<String, dynamic>? queryParameters,
+    Map<String, String>? queryParameters,
     String? apiName,
   }) {
     final uri = _getRestUri(path, apiName, queryParameters);
@@ -192,7 +225,7 @@ class AmplifyAPIDart extends AmplifyAPI {
   CancelableOperation<AWSStreamedHttpResponse> head(
     String path, {
     Map<String, String>? headers,
-    Map<String, dynamic>? queryParameters,
+    Map<String, String>? queryParameters,
     String? apiName,
   }) {
     final uri = _getRestUri(path, apiName, queryParameters);
@@ -211,7 +244,7 @@ class AmplifyAPIDart extends AmplifyAPI {
     String path, {
     HttpPayload? body,
     Map<String, String>? headers,
-    Map<String, dynamic>? queryParameters,
+    Map<String, String>? queryParameters,
     String? apiName,
   }) {
     final uri = _getRestUri(path, apiName, queryParameters);
@@ -219,8 +252,8 @@ class AmplifyAPIDart extends AmplifyAPI {
     return _prepareRestResponse(
       AWSStreamedHttpRequest.patch(
         uri,
-        headers: headers,
-        body: body ?? const HttpPayload.empty(),
+        headers: addContentTypeToHeaders(headers, body),
+        body: body ?? HttpPayload.empty(),
       ).send(client),
     );
   }
@@ -230,7 +263,7 @@ class AmplifyAPIDart extends AmplifyAPI {
     String path, {
     HttpPayload? body,
     Map<String, String>? headers,
-    Map<String, dynamic>? queryParameters,
+    Map<String, String>? queryParameters,
     String? apiName,
   }) {
     final uri = _getRestUri(path, apiName, queryParameters);
@@ -238,8 +271,8 @@ class AmplifyAPIDart extends AmplifyAPI {
     return _prepareRestResponse(
       AWSStreamedHttpRequest.post(
         uri,
-        headers: headers,
-        body: body ?? const HttpPayload.empty(),
+        headers: addContentTypeToHeaders(headers, body),
+        body: body ?? HttpPayload.empty(),
       ).send(client),
     );
   }
@@ -249,7 +282,7 @@ class AmplifyAPIDart extends AmplifyAPI {
     String path, {
     HttpPayload? body,
     Map<String, String>? headers,
-    Map<String, dynamic>? queryParameters,
+    Map<String, String>? queryParameters,
     String? apiName,
   }) {
     final uri = _getRestUri(path, apiName, queryParameters);
@@ -257,8 +290,8 @@ class AmplifyAPIDart extends AmplifyAPI {
     return _prepareRestResponse(
       AWSStreamedHttpRequest.put(
         uri,
-        headers: headers,
-        body: body ?? const HttpPayload.empty(),
+        headers: addContentTypeToHeaders(headers, body),
+        body: body ?? HttpPayload.empty(),
       ).send(client),
     );
   }

@@ -13,7 +13,6 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
@@ -41,14 +40,14 @@ class _RestApiViewState extends State<RestApiView> {
     try {
       final restOperation = Amplify.API.put(
         _apiPathController.text,
-        body: HttpPayload.string('{"name":"Mow the lawn"}'),
+        body: HttpPayload.json({'name': 'Mow the lawn'}),
       );
 
       _lastRestOperation = restOperation;
-      final response = await restOperation.value;
+      final response = await restOperation.response;
 
       print('Put SUCCESS');
-      print(await response.decodeBody());
+      print(response.decodeBody());
     } on Exception catch (e) {
       print('Put FAILED');
       print(e);
@@ -59,14 +58,14 @@ class _RestApiViewState extends State<RestApiView> {
     try {
       final restOperation = Amplify.API.post(
         _apiPathController.text,
-        body: HttpPayload.string('{"name":"Mow the lawn"}'),
+        body: HttpPayload.json({'name': 'Mow the lawn'}),
       );
 
       _lastRestOperation = restOperation;
-      final response = await restOperation.value;
+      final response = await restOperation.response;
 
       print('Post SUCCESS');
-      print(await response.decodeBody());
+      print(response.decodeBody());
     } on Exception catch (e) {
       print('Post FAILED');
       print(e);
@@ -80,11 +79,10 @@ class _RestApiViewState extends State<RestApiView> {
       );
 
       _lastRestOperation = restOperation;
-      final response = await restOperation.value;
+      final response = await restOperation.response;
 
       print('Get SUCCESS');
-      print(response.statusCode);
-      print(await response.decodeBody());
+      print(response.decodeBody());
     } on ApiException catch (e) {
       print('Get FAILED');
       print(e.toString());
@@ -97,10 +95,10 @@ class _RestApiViewState extends State<RestApiView> {
         _apiPathController.text,
       );
       _lastRestOperation = restOperation;
-      final response = await restOperation.value;
+      final response = await restOperation.response;
 
       print('Delete SUCCESS');
-      print(await response.decodeBody());
+      print(response.decodeBody());
     } on Exception catch (e) {
       print('Delete FAILED');
       print(e);
@@ -123,7 +121,7 @@ class _RestApiViewState extends State<RestApiView> {
       );
 
       _lastRestOperation = restOperation;
-      final response = await restOperation.response;
+      await restOperation.response;
 
       print('Head SUCCESS');
     } on ApiException catch (e) {
@@ -136,14 +134,14 @@ class _RestApiViewState extends State<RestApiView> {
     try {
       final restOperation = Amplify.API.patch(
         _apiPathController.text,
-        body: HttpPayload.string('{"name":"Mow the lawn"}'),
+        body: HttpPayload.json({'name': 'Mow the lawn'}),
       );
 
       _lastRestOperation = restOperation;
       final response = await restOperation.response;
 
       print('Patch SUCCESS');
-      print(await response.decodeBody());
+      print(response.decodeBody());
     } on ApiException catch (e) {
       print('Patch FAILED');
       print(e.toString());

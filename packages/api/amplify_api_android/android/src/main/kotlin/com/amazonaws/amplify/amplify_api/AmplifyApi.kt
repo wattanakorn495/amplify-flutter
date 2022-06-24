@@ -21,11 +21,11 @@ import androidx.annotation.NonNull
 import androidx.annotation.VisibleForTesting
 import com.amazonaws.amplify.amplify_api.auth.FlutterAuthProviders
 import com.amazonaws.amplify.amplify_api.rest_api.FlutterRestApi
-import com.amazonaws.amplify.amplify_core.AtomicResult
-import com.amazonaws.amplify.amplify_core.cast
-import com.amazonaws.amplify.amplify_core.exception.ExceptionUtil.Companion.createSerializedUnrecognizedError
-import com.amazonaws.amplify.amplify_core.exception.ExceptionUtil.Companion.handleAddPluginException
-import com.amazonaws.amplify.amplify_core.exception.ExceptionUtil.Companion.postExceptionToFlutterChannel
+import com.amazonaws.amplify.AtomicResult
+import com.amazonaws.amplify.cast
+import com.amazonaws.amplify.exception.ExceptionUtil.Companion.createSerializedUnrecognizedError
+import com.amazonaws.amplify.exception.ExceptionUtil.Companion.handleAddPluginException
+import com.amazonaws.amplify.exception.ExceptionUtil.Companion.postExceptionToFlutterChannel
 import com.amplifyframework.api.aws.AWSApiPlugin
 import com.amplifyframework.api.aws.AuthorizationType
 import com.amplifyframework.core.Amplify
@@ -39,7 +39,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 
 /** AmplifyApiPlugin */
-class AmplifyApi : FlutterPlugin, MethodCallHandler {
+class AmplifyApi : FlutterPlugin, MethodCallHandler, NativeApiPluginBindings.NativeApiBridge {
 
     private companion object {
         /**
@@ -83,6 +83,11 @@ class AmplifyApi : FlutterPlugin, MethodCallHandler {
             "com.amazonaws.amplify/api_observe_events"
         )
         eventchannel!!.setStreamHandler(graphqlSubscriptionStreamHandler)
+
+        NativeApiPluginBindings.NativeApiBridge.setup(
+            flutterPluginBinding.binaryMessenger,
+            this
+        )
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -93,27 +98,6 @@ class AmplifyApi : FlutterPlugin, MethodCallHandler {
 
         if (methodName == "cancel") {
             onCancel(result, (call.arguments as String))
-            return
-        } else if (methodName == "addPlugin") {
-            try {
-                val authProvidersList: List<String> =
-                    (arguments["authProviders"] as List<*>?)?.cast() ?: listOf()
-                val authProviders = authProvidersList.map { AuthorizationType.valueOf(it) }
-                if (flutterAuthProviders == null) {
-                    flutterAuthProviders = FlutterAuthProviders(authProviders)
-                }
-                flutterAuthProviders!!.setMethodChannel(channel)
-                Amplify.addPlugin(
-                    AWSApiPlugin
-                        .builder()
-                        .apiAuthProviders(flutterAuthProviders!!.factory)
-                        .build()
-                )
-                logger.info("Added API plugin")
-                result.success(null)
-            } catch (e: Exception) {
-                handleAddPluginException("API", e, result)
-            }
             return
         }
 
@@ -168,5 +152,29 @@ class AmplifyApi : FlutterPlugin, MethodCallHandler {
         eventchannel = null
         graphqlSubscriptionStreamHandler?.close()
         graphqlSubscriptionStreamHandler = null
+
+        NativeApiPluginBindings.NativeApiBridge.setup(
+            flutterPluginBinding.binaryMessenger,
+            null,
+        )
+    }
+
+    override fun addPlugin(authProvidersList: MutableList<String>) {
+        try {
+            val authProviders = authProvidersList.map { AuthorizationType.valueOf(it) }
+            if (flutterAuthProviders == null) {
+                flutterAuthProviders = FlutterAuthProviders(authProviders)
+            }
+            flutterAuthProviders!!.setMethodChannel(channel)
+            Amplify.addPlugin(
+                AWSApiPlugin
+                    .builder()
+                    .apiAuthProviders(flutterAuthProviders!!.factory)
+                    .build()
+            )
+            logger.info("Added API plugin")
+        } catch (e: Exception) {
+            logger.error(e.message)
+        }
     }
 }

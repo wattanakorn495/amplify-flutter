@@ -15,7 +15,7 @@
 import 'dart:async';
 
 import 'package:amplify_core/amplify_core.dart';
-import 'package:aws_common/aws_common.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
@@ -29,35 +29,54 @@ class AmplifyAuthorizationRestClient extends http.BaseClient {
   final AWSApiConfig endpointConfig;
   final http.Client _baseClient;
   final bool _useDefaultBaseClient;
+  final AmplifyAuthProviderRepository _authProviderRepo;
 
   /// Provide an [AWSApiConfig] which will determine how requests from this
   /// client are authorized.
   AmplifyAuthorizationRestClient({
     required this.endpointConfig,
+    required AmplifyAuthProviderRepository authProviderRepo,
     http.Client? baseClient,
   })  : _useDefaultBaseClient = baseClient == null,
-        _baseClient = baseClient ?? http.Client();
+        _baseClient = baseClient ?? http.Client(),
+        _authProviderRepo = authProviderRepo;
 
   /// Implementation of [send] that authorizes any request without "Authorization"
   /// header already set.
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async =>
-      _baseClient.send(_authorizeRequest(request));
+      _baseClient.send(await _authorizeRequest(request));
 
   @override
   void close() {
     if (_useDefaultBaseClient) _baseClient.close();
   }
 
-  http.BaseRequest _authorizeRequest(http.BaseRequest request) {
+  Future<http.BaseRequest> _authorizeRequest(http.BaseRequest request) async {
     if (!request.headers.containsKey(AWSHeaders.authorization) &&
         endpointConfig.authorizationType != APIAuthorizationType.none) {
       // ignore: todo
       // TODO: Use auth providers from core to transform the request.
       final apiKey = endpointConfig.apiKey;
+
       if (endpointConfig.authorizationType == APIAuthorizationType.apiKey &&
           apiKey != null) {
         request.headers.putIfAbsent(_xApiKey, () => apiKey);
+        return request;
+      }
+      final authProvider = _authProviderRepo
+          .getAuthProvider(describeEnum(endpointConfig.authorizationType));
+      if (authProvider != null) {
+        final region = endpointConfig.region;
+        final service = endpointConfig.endpointType == EndpointType.graphQL
+            ? AWSService.appSync
+            : AWSService.apiGateway;
+        return authProvider.authorizeRequest(request,
+            options:
+                HttpRequestTransformOptions(service: service, region: region));
+      } else {
+        throw ApiException(
+            'Unable to authorize request for authorization mode: ${describeEnum(endpointConfig.authorizationType)}. Ensure the correct plugin has been added from the CLI and Amplify.addPlugin.');
       }
     }
     return request;

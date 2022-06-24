@@ -18,6 +18,7 @@ import 'dart:typed_data';
 
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_flutter/src/amplify_impl.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -33,7 +34,11 @@ const queryParameters = {
   'queryParameterA': 'queryValueA',
   'queryParameterB': 'queryValueB'
 };
-const headers = {'headerA': 'headerValueA', 'headerB': 'headerValueB'};
+const headers = {
+  'headerA': 'headerValueA',
+  'headerB': 'headerValueB',
+  AWSHeaders.contentType: 'text/plain'
+};
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -165,7 +170,8 @@ void main() {
         expect(restOptions['apiName'], 'restapi');
         expect(restOptions['path'], '/items');
         expect(restOptions['queryParameters'], queryParameters);
-        expect(restOptions['headers'], headers);
+        expect(restOptions['headers'][AWSHeaders.contentType],
+            'application/x-www-form-urlencoded');
         expect(utf8.decode(restOptions['body'] as List<int>), 'foo=bar');
         return {
           'data': helloResponse,
@@ -178,13 +184,44 @@ void main() {
     final restOperation = api.post(
       '/items',
       apiName: 'restapi',
-      body: HttpPayload.fields({'foo': 'bar'}),
+      body: HttpPayload.formFields({'foo': 'bar'}),
       queryParameters: queryParameters,
-      headers: headers,
     );
 
     final response = await restOperation.value;
     expect(response.headers['foo'], 'bar');
+    await _assertResponse(response);
+  });
+
+  test(
+      'POST with json-encoded body has property Content-Type and gets proper response',
+      () async {
+    apiChannel.setMockMethodCallHandler((MethodCall methodCall) async {
+      if (methodCall.method == 'post') {
+        Map<dynamic, dynamic> restOptions =
+            methodCall.arguments['restOptions'] as Map;
+        expect(restOptions['apiName'], 'restapi');
+        expect(restOptions['path'], '/items');
+        expect(restOptions['queryParameters'], queryParameters);
+        expect(
+            restOptions['headers'][AWSHeaders.contentType], 'application/json');
+        expect(utf8.decode(restOptions['body'] as List<int>), '{"foo":"bar"}');
+        return {
+          'data': helloResponse,
+          'statusCode': statusOK,
+          'headers': {'foo': 'bar'}
+        };
+      }
+    });
+
+    final restOperation = api.post(
+      '/items',
+      apiName: 'restapi',
+      body: HttpPayload.json({'foo': 'bar'}),
+      queryParameters: queryParameters,
+    );
+
+    final response = await restOperation.value;
     await _assertResponse(response);
   });
 
