@@ -22,7 +22,7 @@ import 'cognito_user_attribute_key_converter.dart';
 
 part 'auth.g.dart';
 
-@amplifySerializable
+@zAmplifySerializable
 @CognitoUserAttributeKeyConverter()
 class CognitoAuthConfig with AWSEquatable<CognitoAuthConfig>, AWSSerializable {
   const CognitoAuthConfig({

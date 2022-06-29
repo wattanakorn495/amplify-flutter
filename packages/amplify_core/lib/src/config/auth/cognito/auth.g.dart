@@ -63,7 +63,7 @@ Map<String, dynamic> _$CognitoAuthConfigToJson(CognitoAuthConfig instance) {
   writeNotNull(
       'socialProviders',
       instance.socialProviders
-          ?.map((e) => _$SocialProviderEnumMap[e])
+          ?.map((e) => _$SocialProviderEnumMap[e]!)
           .toList());
   writeNotNull(
       'loginMechanism',
@@ -90,7 +90,7 @@ Map<String, dynamic> _$CognitoAuthConfigToJson(CognitoAuthConfig instance) {
   writeNotNull(
       'mfaConfiguration', _$MfaConfigurationEnumMap[instance.mfaConfiguration]);
   writeNotNull(
-      'mfaTypes', instance.mfaTypes?.map((e) => _$MfaTypeEnumMap[e]).toList());
+      'mfaTypes', instance.mfaTypes?.map((e) => _$MfaTypeEnumMap[e]!).toList());
   writeNotNull(
       'verificationMechanisms',
       instance.verificationMechanisms
@@ -100,9 +100,9 @@ Map<String, dynamic> _$CognitoAuthConfigToJson(CognitoAuthConfig instance) {
 }
 
 const _$AuthenticationFlowTypeEnumMap = {
-  AuthenticationFlowType.userSrpAuth: 'USER_SRP_AUTH',
-  AuthenticationFlowType.userPasswordAuth: 'USER_PASSWORD_AUTH',
-  AuthenticationFlowType.customAuth: 'CUSTOM_AUTH',
+  AuthenticationFlowType.userSrpAuth: 'userSrpAuth',
+  AuthenticationFlowType.userPasswordAuth: 'userPasswordAuth',
+  AuthenticationFlowType.customAuth: 'customAuth',
 };
 
 const _$SocialProviderEnumMap = {
