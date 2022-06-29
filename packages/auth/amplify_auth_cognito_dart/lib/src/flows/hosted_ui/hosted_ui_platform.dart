@@ -17,6 +17,7 @@ import 'package:amplify_auth_cognito_dart/src/credentials/cognito_keys.dart';
 import 'package:amplify_auth_cognito_dart/src/crypto/oauth.dart';
 import 'package:amplify_auth_cognito_dart/src/flows/hosted_ui/hosted_ui_config.dart';
 import 'package:amplify_auth_cognito_dart/src/jwt/jwt.dart';
+import 'package:amplify_auth_cognito_dart/src/sdk/cognito_identity_provider.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_secure_storage_dart/amplify_secure_storage_dart.dart';
 import 'package:http/http.dart' as http;
@@ -47,6 +48,15 @@ abstract class HostedUiPlatform {
 
   /// The dependency token for [HostedUiPlatform].
   static const token = Token<HostedUiPlatform>([Token<DependencyManager>()]);
+
+  /// Used to match errors returned from Hosted UI exchanges for errors 
+  /// originating in user-defined Lambda triggers.
+  ///
+  /// This is the only way to check for these currently since Cognito does not 
+  /// send back any special code to distinguish these from other, more general 
+  /// errors.
+  static final RegExp _lambdaErrorRegex =
+      RegExp(r'^\w+ failed with error (.*)\. $');
 
   /// The Hosted UI configuration.
   @protected
@@ -161,6 +171,56 @@ abstract class HostedUiPlatform {
     );
   }
 
+  /// Creates an authorization code grant.
+  @protected
+  @visibleForTesting
+  @nonVirtual
+  oauth2.AuthorizationCodeGrant createGrant(
+    CognitoOAuthConfig config, {
+    AuthProvider? provider,
+    String? codeVerifier,
+    http.Client? httpClient,
+  }) {
+    return oauth2.AuthorizationCodeGrant(
+      config.appClientId,
+      HostedUiConfig(config).signInUri(provider),
+      HostedUiConfig(config).tokenUri,
+      secret: config.appClientSecret,
+      httpClient: httpClient,
+      codeVerifier: codeVerifier,
+
+      // The spec recommends against this, but it's what Cognito expects. Basic
+      // authorization will fail with `invalid_grant`.
+      basicAuth: false,
+    );
+  }
+
+  /// Creates an authorization code grant and advances the internal state to
+  /// `pendingResponse` so that parameter exchange will work.
+  @protected
+  @visibleForTesting
+  @nonVirtual
+  oauth2.AuthorizationCodeGrant restoreGrant(
+    CognitoOAuthConfig config, {
+    required String state,
+    required String codeVerifier,
+    http.Client? httpClient,
+  }) {
+    final grant = createGrant(
+      config,
+      codeVerifier: codeVerifier,
+      httpClient: httpClient,
+    );
+
+    return grant
+      // Advances the internal state.
+      ..getAuthorizationUrl(
+        signInRedirectUri,
+        scopes: config.scopes,
+        state: state,
+      );
+  }
+
   /// Performs the second part of the authorization code flow, exhanging the
   /// parameters retrieved via the WebView with the OAuth server for an access
   /// and refresh token.
@@ -169,6 +229,13 @@ abstract class HostedUiPlatform {
     if (parameters.error != null) {
       final error = parameters.error!;
       final errorDesc = parameters.errorDescription ?? error.description;
+
+      // Handle Lambda exceptions
+      final lambdaMessage = _lambdaErrorRegex.firstMatch(errorDesc)?.group(1);
+      if (lambdaMessage != null) {
+        throw UnexpectedLambdaException(message: lambdaMessage);
+      }
+
       final errorUri = parameters.errorUri;
       final desc = StringBuffer(errorDesc);
       if (errorUri != null) {
@@ -204,10 +271,24 @@ abstract class HostedUiPlatform {
     required String state,
     required String codeVerifier,
   }) async {
+    final parameters = dependencyManager.get<OAuthParameters>();
+    if (parameters != null) {
+      authCodeGrant = restoreGrant(
+        config,
+        state: state,
+        codeVerifier: codeVerifier,
+        httpClient: httpClient,
+      );
+      return dispatcher.dispatch(HostedUiEvent.exchange(parameters));
+    }
+
+    // Clear all state from the previous session.
     _authCodeGrant = null;
     _secureStorage
       ..delete(key: _keys[HostedUiKey.state])
-      ..delete(key: _keys[HostedUiKey.codeVerifier]);
+      ..delete(key: _keys[HostedUiKey.codeVerifier])
+      ..delete(key: _keys[HostedUiKey.nonce])
+      ..delete(key: _keys[HostedUiKey.options]);
 
     throw const SignedOutException('The user is currently signed out');
   }

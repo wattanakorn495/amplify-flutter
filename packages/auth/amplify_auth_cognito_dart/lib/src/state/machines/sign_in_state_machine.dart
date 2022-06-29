@@ -28,7 +28,9 @@ import 'package:amplify_auth_cognito_dart/src/flows/srp/srp_password_verifier_wo
 import 'package:amplify_auth_cognito_dart/src/jwt/jwt.dart';
 import 'package:amplify_auth_cognito_dart/src/model/cognito_user.dart';
 import 'package:amplify_auth_cognito_dart/src/model/sign_in_parameters.dart';
-import 'package:amplify_auth_cognito_dart/src/sdk/cognito_identity_provider.dart';
+import 'package:amplify_auth_cognito_dart/src/sdk/cognito_identity_provider.dart'
+    hide InvalidParameterException;
+import 'package:amplify_auth_cognito_dart/src/sdk/sdk_bridge.dart';
 import 'package:amplify_auth_cognito_dart/src/state/state.dart';
 import 'package:amplify_core/amplify_core.dart'
     hide UpdateUserAttributesRequest;
@@ -61,12 +63,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
     final pluginFlowType =
         expect<CognitoPluginConfig>().auth?.default$?.authenticationFlowType ??
             AuthenticationFlowType.userSrpAuth;
-    switch (pluginFlowType) {
-      case AuthenticationFlowType.customAuth:
-        return AuthFlowType.customAuth;
-      case AuthenticationFlowType.userSrpAuth:
-        return AuthFlowType.userSrpAuth;
-    }
+    return pluginFlowType.sdkValue;
   }();
 
   /// Parameters to the flow.
@@ -111,9 +108,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
         }
         worker = SrpInitWorker.create();
         worker.logs.listen(safePrint);
-        await worker.spawn(
-          jsEntrypoint: 'packages/amplify_auth_cognito/workers.dart.js',
-        );
+        await worker.spawn();
         addInstance<SrpInitWorker>(worker);
         return worker;
       });
@@ -127,9 +122,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
         }
         worker = SrpPasswordVerifierWorker.create();
         worker.logs.listen(safePrint);
-        await worker.spawn(
-          jsEntrypoint: 'packages/amplify_auth_cognito/workers.dart.js',
-        );
+        await worker.spawn();
         addInstance<SrpPasswordVerifierWorker>(worker);
         return worker;
       });
@@ -143,9 +136,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
         }
         worker = SrpDevicePasswordVerifierWorker.create();
         worker.logs.listen(safePrint);
-        await worker.spawn(
-          jsEntrypoint: 'packages/amplify_auth_cognito/workers.dart.js',
-        );
+        await worker.spawn();
         addInstance<SrpDevicePasswordVerifierWorker>(worker);
         return worker;
       });
@@ -159,9 +150,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
         }
         worker = ConfirmDeviceWorker.create();
         worker.logs.listen(safePrint);
-        await worker.spawn(
-          jsEntrypoint: 'packages/amplify_auth_cognito/workers.dart.js',
-        );
+        await worker.spawn();
         addInstance<ConfirmDeviceWorker>(worker);
         return worker;
       });
@@ -182,47 +171,30 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
       _password = password;
     }
 
+    String expectPassword() {
+      if (password == null) {
+        throw const InvalidParameterException('No password was provided');
+      }
+      return password;
+    }
+
     authFlowType = event.authFlow ?? defaultAuthFlowType;
-    if (authFlowType != AuthFlowType.customAuth) {
-      return initiateSrp(event);
+    switch (authFlowType) {
+      case AuthFlowType.userSrpAuth:
+        expectPassword();
+        return initiateSrpAuth(event);
+      case AuthFlowType.customAuth:
+        return initiateCustomAuth(event);
+      case AuthFlowType.userPasswordAuth:
+        return initiateUserPasswordAuth(event, expectPassword());
+      case AuthFlowType.refreshToken:
+      case AuthFlowType.refreshTokenAuth:
+      case AuthFlowType.adminNoSrpAuth:
+      case AuthFlowType.adminUserPasswordAuth:
+        break;
     }
 
-    // If a password is provided, start the SRP flow by including
-    // `CHALLENGE_NAME` in the auth parameters.
-    if (password != null) {
-      final initRequest = await initiateSrp(event);
-      return initRequest.rebuild(
-        (b) => b
-          ..authFlow = AuthFlowType.customAuth
-          ..authParameters.addAll({
-            CognitoConstants.challengeParamChallengeName: 'SRP_A',
-          }),
-      );
-    }
-
-    return InitiateAuthRequest.build((b) {
-      b
-        ..authFlow = AuthFlowType.customAuth
-        ..authParameters.addAll({
-          CognitoConstants.challengeParamUsername: parameters.username,
-        })
-        ..clientId = config.appClientId
-        ..clientMetadata.addAll(event.clientMetadata);
-
-      if (config.appClientSecret != null) {
-        b.authParameters[CognitoConstants.challengeParamSecretHash] =
-            computeSecretHash(
-          parameters.username,
-          config.appClientId,
-          config.appClientSecret!,
-        );
-      }
-
-      final deviceKey = user.device?.id;
-      if (deviceKey != null) {
-        b.authParameters[CognitoConstants.challengeParamDeviceKey] = deviceKey;
-      }
-    });
+    throw StateError('Unsupported auth flow: $authFlowType');
   }
 
   /// Creates the response to a challenge with name [challengeName] and
@@ -414,7 +386,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
         // `userAttributes.attributename` parameter. This parameter can also set
         // values for writable attributes that aren't required by your user pool.
         b.challengeResponses[
-                '${CognitoConstants.challengeParamUserAttributesPrefix}$missingAttributeKey'] =
+                '${CognitoConstants.challengeParamUserAttributesPrefix}${missingAttributeKey.key}'] =
             missingAttributeValue;
       }
       _attributesNeedingUpdate = newAttributes;
@@ -432,7 +404,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
 
   /// Initiates an SRP flow.
   @protected
-  Future<InitiateAuthRequest> initiateSrp(SignInInitiate event) async {
+  Future<InitiateAuthRequest> initiateSrpAuth(SignInInitiate event) async {
     final worker = await initWorker;
     worker.add(SrpInitMessage());
     _initResult = await worker.stream.first;
@@ -446,6 +418,79 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
           CognitoConstants.challengeParamSrpA:
               _initResult!.publicA.toRadixString(16),
         })
+        ..clientMetadata.addAll(event.clientMetadata);
+
+      if (config.appClientSecret != null) {
+        b.authParameters[CognitoConstants.challengeParamSecretHash] =
+            computeSecretHash(
+          parameters.username,
+          config.appClientId,
+          config.appClientSecret!,
+        );
+      }
+
+      final deviceKey = user.device?.id;
+      if (deviceKey != null) {
+        b.authParameters[CognitoConstants.challengeParamDeviceKey] = deviceKey;
+      }
+    });
+  }
+
+  /// Initiates a username/password auth flow.
+  @protected
+  Future<InitiateAuthRequest> initiateUserPasswordAuth(
+    SignInInitiate event,
+    String password,
+  ) async {
+    return InitiateAuthRequest.build((b) {
+      b
+        ..authFlow = AuthFlowType.userPasswordAuth
+        ..clientId = config.appClientId
+        ..authParameters.addAll({
+          CognitoConstants.challengeParamUsername: parameters.username,
+          CognitoConstants.challengeParamPassword: password,
+        })
+        ..clientMetadata.addAll(event.clientMetadata);
+
+      if (config.appClientSecret != null) {
+        b.authParameters[CognitoConstants.challengeParamSecretHash] =
+            computeSecretHash(
+          parameters.username,
+          config.appClientId,
+          config.appClientSecret!,
+        );
+      }
+
+      final deviceKey = user.device?.id;
+      if (deviceKey != null) {
+        b.authParameters[CognitoConstants.challengeParamDeviceKey] = deviceKey;
+      }
+    });
+  }
+
+  /// Initiates a custom auth flow.
+  @protected
+  Future<InitiateAuthRequest> initiateCustomAuth(SignInInitiate event) async {
+    // If a password is provided, start the SRP flow by including
+    // `CHALLENGE_NAME` in the auth parameters.
+    if (parameters.password != null) {
+      final initRequest = await initiateSrpAuth(event);
+      return initRequest.rebuild(
+        (b) => b
+          ..authFlow = AuthFlowType.customAuth
+          ..authParameters.addAll({
+            CognitoConstants.challengeParamChallengeName: 'SRP_A',
+          }),
+      );
+    }
+
+    return InitiateAuthRequest.build((b) {
+      b
+        ..authFlow = AuthFlowType.customAuth
+        ..authParameters.addAll({
+          CognitoConstants.challengeParamUsername: parameters.username,
+        })
+        ..clientId = config.appClientId
         ..clientMetadata.addAll(event.clientMetadata);
 
       if (config.appClientSecret != null) {

@@ -17,6 +17,8 @@ package com.amazonaws.amplify.amplify_auth_cognito
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager.MATCH_ALL
+import android.content.pm.PackageManager.MATCH_DEFAULT_ONLY
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
@@ -78,6 +80,13 @@ open class AuthCognito :
      */
     private var nativePlugin: NativeAuthPluginBindings.NativeAuthPlugin? = null
 
+    /**
+     * The initial route parameters used to launch the main activity, which can happen when using
+     * non-Chrome browsers or when a Hosted UI redirect occurs while the app is closed. They are
+     * sent to the platform during configuration.
+     */
+    private var initialParameters: Map<String, String>? = null
+
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         nativePlugin = NativeAuthPluginBindings.NativeAuthPlugin(binding.binaryMessenger)
         NativeAuthPluginBindings.NativeAuthBridge.setup(
@@ -98,6 +107,9 @@ open class AuthCognito :
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         mainActivity = binding.activity
         activityBinding = binding
+        // Treat the launching intent the same as an intent created while the application was
+        // running to capture a sign in callback which launched the app.
+        onNewIntent(binding.activity.intent)
         binding.addOnNewIntentListener(this)
         binding.addActivityResultListener(this)
     }
@@ -124,6 +136,10 @@ open class AuthCognito :
     }
 
     override fun addPlugin(result: NativeAuthPluginBindings.Result<Void>) {
+        if (initialParameters != null) {
+            nativePlugin!!.exchange(initialParameters!!) {}
+            initialParameters = null
+        }
         try {
             Amplify.addPlugin(NativeAuthPlugin { nativePlugin })
             result.success(null)
@@ -132,14 +148,15 @@ open class AuthCognito :
         }
     }
 
+    override fun getValidationData(): MutableMap<String, String> {
+        // Currently, the Android libraries do not provide any data by default.
+        return mutableMapOf()
+    }
+
     /**
      * Handles the result of a sign in redirect.
      */
-    private fun handleSignInResult(uri: Uri): Boolean {
-        val queryParameters = mutableMapOf<String, String>()
-        for (name in uri.queryParameterNames) {
-            queryParameters[name] = uri.getQueryParameter(name) ?: ""
-        }
+    private fun handleSignInResult(queryParameters: MutableMap<String, String>): Boolean {
         signInResult?.success(queryParameters)
         signInResult = null
         return true
@@ -166,14 +183,17 @@ open class AuthCognito :
             addCategory(Intent.CATEGORY_BROWSABLE)
             data = Uri.fromParts("https", "", null)
         }
-        val defaultViewHandlerInfo = packageManager.resolveActivity(activityIntent, 0)
+        val defaultViewHandlerInfo = packageManager.resolveActivity(
+            activityIntent,
+            MATCH_DEFAULT_ONLY
+        )
         var defaultViewHandlerPackageName: String? = null
         if (defaultViewHandlerInfo != null) {
             defaultViewHandlerPackageName = defaultViewHandlerInfo.activityInfo.packageName
         }
 
         // Get all apps that can handle VIEW intents.
-        val resolvedActivityList = packageManager.queryIntentActivities(activityIntent, 0)
+        val resolvedActivityList = packageManager.queryIntentActivities(activityIntent, MATCH_ALL)
         val packagesSupportingCustomTabs = mutableListOf<String>()
         for (info in resolvedActivityList) {
             val serviceIntent = Intent()
@@ -207,7 +227,10 @@ open class AuthCognito :
         val intent = CustomTabsIntent.Builder().apply {
             setShareState(CustomTabsIntent.SHARE_STATE_OFF)
         }.build()
-        intent.intent.`package` = browserPackageName ?: this.browserPackageName
+        val useBrowserPackage = browserPackageName
+            ?: this.browserPackageName
+            ?: throw HostedUiException.NOBROWSER()
+        intent.intent.`package` = useBrowserPackage
         intent.intent.putExtra(
             Intent.EXTRA_REFERRER,
             Uri.parse("android-app://${mainActivity!!.packageName}")
@@ -272,16 +295,19 @@ open class AuthCognito :
                 Log.e(TAG, "No data associated with intent")
                 return false
             }
+            val queryParameters = uri.queryParameters
             return if (signInResult != null && signOutResult != null) {
                 Log.e(TAG, "Inconsistent state. Pending sign in and sign out.")
                 false
             } else if (signInResult != null) {
-                handleSignInResult(uri)
+                handleSignInResult(queryParameters)
             } else if (signOutResult != null) {
                 handleSignOutResult()
             } else {
-                Log.e(TAG, "Could not handle intent as there is no active session.")
-                false
+                if (queryParameters.isNotEmpty()) {
+                    initialParameters = queryParameters
+                }
+                true
             }
         }
         return false
@@ -321,3 +347,15 @@ open class AuthCognito :
     }
 
 }
+
+/**
+ * The query parameters of the URI.
+ */
+val Uri.queryParameters: MutableMap<String, String>
+    get() {
+        val queryParameters = mutableMapOf<String, String>()
+        for (name in queryParameterNames) {
+            queryParameters[name] = getQueryParameter(name) ?: ""
+        }
+        return queryParameters
+    }
