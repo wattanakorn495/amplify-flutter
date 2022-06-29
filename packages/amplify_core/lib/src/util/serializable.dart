@@ -19,8 +19,26 @@ import 'package:aws_common/aws_common.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
+// Export these so that files importing only this file will have access to
+// these helpers in their generated parts.
+export 'package:json_annotation/json_annotation.dart'
+    show
+        $enumDecode,
+        $enumDecodeNullable,
+        $checkKeys,
+        $checkedConvert,
+        $checkedCreate,
+        $checkedNew;
+
 /// Global serialization options for Amplify types.
-const amplifySerializable = JsonSerializable(
+const zAmplifySerializable = JsonSerializable(
+  includeIfNull: false,
+  explicitToJson: true,
+);
+
+/// Global serialization options for Amplify types with generic parameters.
+const zAmplifyGenericSerializable = JsonSerializable(
+  genericArgumentFactories: true,
   includeIfNull: false,
   explicitToJson: true,
 );

@@ -13,19 +13,8 @@
 // permissions and limitations under the License.
 //
 
-import 'package:json_annotation/json_annotation.dart';
-
 enum AuthenticationFlowType {
-  @JsonValue('USER_SRP_AUTH')
-  userSrpAuth('USER_SRP_AUTH'),
-
-  @JsonValue('USER_PASSWORD_AUTH')
-  userPasswordAuth('USER_PASSWORD_AUTH'),
-
-  @JsonValue('CUSTOM_AUTH')
-  customAuth('CUSTOM_AUTH');
-
-  const AuthenticationFlowType(this.value);
-
-  final String value;
+  userSrpAuth,
+  userPasswordAuth,
+  customAuth,
 }
