@@ -270,9 +270,12 @@ class HostedUiFailed extends HostedUiEvent with ErrorEvent {
   HostedUiEventType get type => HostedUiEventType.failed;
 
   @override
-  String? checkPrecondition(HostedUiState currentState) {
+  PreconditionException? checkPrecondition(HostedUiState currentState) {
     if (currentState.type == HostedUiStateType.failure) {
-      return 'The state machine is already in a failure state.';
+      return const AuthPreconditionException(
+        'The state machine is already in a failure state.',
+        shouldEmit: false,
+      );
     }
     return null;
   }
