@@ -19,7 +19,7 @@ part 'auth_next_sign_in_step.g.dart';
 
 @zAmplifyGenericSerializable
 class AuthNextSignInStep<Key extends UserAttributeKey> extends AuthNextStep
-    with AWSEquatable<AuthNextSignInStep>, AWSDebuggable {
+    with AWSEquatable<AuthNextSignInStep<Key>>, AWSDebuggable {
   const AuthNextSignInStep({
     super.additionalInfo,
     super.codeDeliveryDetails,

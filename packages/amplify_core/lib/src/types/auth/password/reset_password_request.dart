@@ -23,7 +23,7 @@ part 'reset_password_request.g.dart';
 @zAmplifyGenericSerializable
 class ResetPasswordRequest<Options extends ResetPasswordOptions>
     with
-        AWSEquatable<ResetPasswordRequest>,
+        AWSEquatable<ResetPasswordRequest<Options>>,
         AWSSerializable<Map<String, Object?>>,
         AWSDebuggable {
   /// {@macro amplify_core.reset_password_request}
