@@ -19,6 +19,7 @@ import 'package:amplify_core/amplify_core.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import '../util.dart';
 import 'graphql_response_decoder.dart';
 
 @internal
@@ -33,9 +34,11 @@ Future<GraphQLResponse<T>> sendGraphQLRequest<T>(
   if (responseBody is Map<String, dynamic>) {
     final responseData = json.encode(responseBody['data']);
 
-    // TEMP no errors
+    List<GraphQLResponseError> errors =
+        deserializeGraphQLResponseErrors(responseBody);
+
     return GraphQLResponseDecoder.instance
-        .decode<T>(request: request, data: responseData, errors: []);
+        .decode<T>(request: request, data: responseData, errors: errors);
   }
 
   // TEMP
