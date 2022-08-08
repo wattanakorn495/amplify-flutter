@@ -37,8 +37,7 @@ class CognitoUserPoolsAuthProvider extends TokenIdentityAmplifyAuthProvider {
 
   @override
   Future<String> getIdentityId() async {
-    final authSession =
-        await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
+    await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
     final identityId = authSession.identityId;
 
     if (identityId == null) {
