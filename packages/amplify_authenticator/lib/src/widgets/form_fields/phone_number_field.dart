@@ -13,7 +13,15 @@
  * permissions and limitations under the License.
 */
 
-part of '../form_field.dart';
+import 'package:amplify_authenticator/src/l10n/input_resolver.dart';
+import 'package:amplify_authenticator/src/mixins/authenticator_phone_field.dart';
+import 'package:amplify_authenticator/src/mixins/authenticator_text_field.dart';
+import 'package:amplify_authenticator/src/utils/country_code.dart';
+import 'package:amplify_authenticator/src/utils/validators.dart';
+import 'package:amplify_authenticator/src/widgets/component.dart';
+import 'package:amplify_authenticator/src/widgets/form_field.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class AuthenticatorPhoneField<FieldType> extends AuthenticatorFormField<
     FieldType, String, AuthenticatorPhoneField<FieldType>> {
@@ -26,7 +34,7 @@ class AuthenticatorPhoneField<FieldType> extends AuthenticatorFormField<
     this.enabled,
     this.initialValue,
     this.errorMaxLines,
-  }) : super._(
+  }) : super(
           key: key,
           field: field,
           titleKey: InputResolverKey.phoneNumberTitle,

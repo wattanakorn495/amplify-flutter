@@ -13,8 +13,8 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_authenticator/amplify_authenticator.dart';
-import 'package:flutter/material.dart';
+import 'package:amplify_core/amplify_core.dart' show PasswordProtectionSettings;
+import 'package:flutter/material.dart' show BuildContext;
 
 import 'authenticator_localizations.dart';
 import 'resolver.dart';

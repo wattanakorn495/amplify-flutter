@@ -13,7 +13,18 @@
  * permissions and limitations under the License.
 */
 
-part of authenticator.form_field;
+import 'package:amplify_authenticator/src/enums/signup_types.dart';
+import 'package:amplify_authenticator/src/keys.dart';
+import 'package:amplify_authenticator/src/l10n/input_resolver.dart';
+import 'package:amplify_authenticator/src/mixins/authenticator_date_field.dart';
+import 'package:amplify_authenticator/src/mixins/authenticator_phone_field.dart';
+import 'package:amplify_authenticator/src/mixins/authenticator_text_field.dart';
+import 'package:amplify_authenticator/src/mixins/authenticator_username_field.dart';
+import 'package:amplify_authenticator/src/models/username_input.dart';
+import 'package:amplify_authenticator/src/utils/validators.dart';
+import 'package:amplify_authenticator/src/widgets/form_field.dart';
+import 'package:amplify_core/amplify_core.dart' show CognitoUserAttributeKey;
+import 'package:flutter/material.dart';
 
 /// {@category Prebuilt Widgets}
 /// {@template amplify_authenticator.sign_up_form_field}
@@ -35,7 +46,7 @@ abstract class SignUpFormField<FieldValue> extends AuthenticatorFormField<
     CognitoUserAttributeKey? customAttributeKey,
     bool? required,
   })  : _customAttributeKey = customAttributeKey,
-        super._(
+        super(
           key: key,
           field: field,
           titleKey: titleKey,

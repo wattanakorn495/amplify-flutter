@@ -13,7 +13,8 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:amplify_authenticator/src/enums/authenticator_step.dart';
+import 'package:amplify_authenticator/src/widgets/form.dart';
 import 'package:flutter/material.dart';
 
 class InheritedForms extends InheritedWidget {

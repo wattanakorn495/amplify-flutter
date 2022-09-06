@@ -13,7 +13,18 @@
  * permissions and limitations under the License.
 */
 
-part of authenticator.form_field;
+import 'package:amplify_authenticator/src/enums/verify_attribute_field_types.dart';
+import 'package:amplify_authenticator/src/keys.dart';
+import 'package:amplify_authenticator/src/l10n/input_resolver.dart';
+import 'package:amplify_authenticator/src/mixins/authenticator_radio_field.dart';
+import 'package:amplify_authenticator/src/mixins/authenticator_text_field.dart';
+import 'package:amplify_authenticator/src/state/auth_state.dart';
+import 'package:amplify_authenticator/src/state/inherited_auth_bloc.dart';
+import 'package:amplify_authenticator/src/utils/validators.dart';
+import 'package:amplify_authenticator/src/widgets/authenticator_input_config.dart';
+import 'package:amplify_authenticator/src/widgets/form_field.dart';
+import 'package:amplify_core/amplify_core.dart' show CognitoUserAttributeKey;
+import 'package:flutter/material.dart';
 
 /// {@category Prebuilt Widgets}
 /// {@template amplify_authenticator.verify_user_form_field}
@@ -30,7 +41,7 @@ abstract class VerifyUserFormField<FieldValue> extends AuthenticatorFormField<
     String? title,
     String? hintText,
     FormFieldValidator<FieldValue>? validator,
-  }) : super._(
+  }) : super(
           key: key,
           field: field,
           titleKey: titleKey,

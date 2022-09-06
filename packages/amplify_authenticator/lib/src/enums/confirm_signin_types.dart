@@ -13,8 +13,7 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import 'package:flutter/foundation.dart';
+import 'package:amplify_core/amplify_core.dart' show CognitoUserAttributeKey;
 
 enum ConfirmSignInField {
   code,
@@ -38,10 +37,8 @@ enum ConfirmSignInField {
   // updatedAt,
   // website,
   custom,
-  customChallenge
-}
+  customChallenge;
 
-extension ConfirmSignInFieldX on ConfirmSignInField {
   CognitoUserAttributeKey toCognitoAttribute() {
     switch (this) {
       case ConfirmSignInField.code:
@@ -49,8 +46,7 @@ extension ConfirmSignInFieldX on ConfirmSignInField {
       case ConfirmSignInField.custom:
         throw StateError('Can only be called on attribute types');
       default:
-        final key =
-            describeEnum(this).replaceAllMapped(RegExp(r'[A-Z]'), (match) {
+        final key = this.name.replaceAllMapped(RegExp(r'[A-Z]'), (match) {
           return '_${match.group(0)!.toLowerCase()}';
         });
         return CognitoUserAttributeKey.parse(key);

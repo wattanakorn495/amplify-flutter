@@ -13,8 +13,10 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_authenticator/src/constants/authenticator_constants.dart';
+import 'package:amplify_authenticator/src/enums/authenticator_step.dart';
+import 'package:amplify_authenticator/src/l10n/auth_strings_resolver.dart';
+import 'package:amplify_authenticator/src/state/authenticator_state.dart';
 import 'package:amplify_authenticator/src/state/inherited_config.dart';
 import 'package:amplify_authenticator/src/state/inherited_forms.dart';
 import 'package:amplify_authenticator/src/widgets/component.dart';

@@ -13,8 +13,9 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_authenticator/amplify_authenticator.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:amplify_authenticator/src/l10n/input_resolver.dart';
+import 'package:amplify_core/amplify_core.dart'
+    show AmplifyConfig, PasswordPolicyCharacters, PasswordProtectionSettings;
 import 'package:flutter/material.dart';
 
 final emailRegex = RegExp(r'^\S+@\S+$');

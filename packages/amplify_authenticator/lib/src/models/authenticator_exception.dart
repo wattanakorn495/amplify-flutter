@@ -13,10 +13,8 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_authenticator/amplify_authenticator.dart';
-import 'package:amplify_core/amplify_core.dart';
-import 'package:flutter/material.dart';
-import 'package:smithy/smithy.dart';
+import 'package:amplify_core/amplify_core.dart' show AmplifyException;
+import 'package:smithy/smithy.dart' show SmithyException;
 
 /// {@template amplify_authenticator.authenticator_exception}
 /// An exception originating within the Authenticator as part of the sign up/

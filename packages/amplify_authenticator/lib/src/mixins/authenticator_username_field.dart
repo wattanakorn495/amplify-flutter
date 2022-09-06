@@ -22,6 +22,7 @@ import 'package:amplify_authenticator/src/utils/validators.dart';
 import 'package:amplify_authenticator/src/widgets/component.dart';
 import 'package:amplify_authenticator/src/widgets/form.dart';
 import 'package:amplify_authenticator/src/widgets/form_field.dart';
+import 'package:amplify_authenticator/src/widgets/form_fields/phone_number_field.dart';
 import 'package:flutter/material.dart';
 
 mixin AuthenticatorUsernameField<FieldType,

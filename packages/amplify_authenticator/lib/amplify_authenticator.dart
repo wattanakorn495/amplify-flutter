@@ -51,7 +51,7 @@ export 'package:amplify_auth_cognito/amplify_auth_cognito.dart'
 export 'package:amplify_flutter/amplify_flutter.dart'
     show PasswordProtectionSettings, PasswordPolicyCharacters;
 
-export 'src/enums/enums.dart' show AuthenticatorStep, Gender;
+export 'src/enums/enums.dart';
 export 'src/l10n/auth_strings_resolver.dart' hide ButtonResolverKeyType;
 export 'src/models/authenticator_exception.dart';
 export 'src/models/username_input.dart'
@@ -87,14 +87,12 @@ export 'src/widgets/form.dart'
         ConfirmResetPasswordForm,
         VerifyUserForm,
         ConfirmVerifyUserForm;
-export 'src/widgets/form_field.dart'
-    show
-        ConfirmSignInFormField,
-        ConfirmSignUpFormField,
-        ResetPasswordFormField,
-        SignInFormField,
-        SignUpFormField,
-        VerifyUserFormField;
+export 'src/widgets/form_fields/confirm_sign_in_form_field.dart';
+export 'src/widgets/form_fields/confirm_sign_up_form_field.dart';
+export 'src/widgets/form_fields/reset_password_form_field.dart';
+export 'src/widgets/form_fields/sign_in_form_field.dart';
+export 'src/widgets/form_fields/sign_up_form_field.dart';
+export 'src/widgets/form_fields/verify_user_form_field.dart';
 
 /// {@template amplify_authenticator.authenticator}
 /// # Amplify Authenticator

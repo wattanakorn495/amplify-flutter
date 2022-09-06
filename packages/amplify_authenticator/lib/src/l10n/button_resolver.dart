@@ -13,9 +13,9 @@
  * permissions and limitations under the License.
  */
 
-import 'package:amplify_authenticator/amplify_authenticator.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:amplify_authenticator/src/enums/authenticator_step.dart';
+import 'package:amplify_core/amplify_core.dart' show AuthProvider;
+import 'package:flutter/material.dart' show BuildContext;
 
 import 'authenticator_localizations.dart';
 import 'resolver.dart';
@@ -75,7 +75,7 @@ class ButtonResolverKey {
   static const skip = ButtonResolverKey._(ButtonResolverKeyType.skip);
 
   @override
-  String toString() => describeEnum(type);
+  String toString() => type.name;
 }
 
 /// The resolver class for shared button Widgets

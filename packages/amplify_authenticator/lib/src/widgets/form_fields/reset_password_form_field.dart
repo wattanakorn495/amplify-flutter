@@ -13,7 +13,14 @@
  * permissions and limitations under the License.
 */
 
-part of authenticator.form_field;
+import 'package:amplify_authenticator/src/enums/reset_password_field.dart';
+import 'package:amplify_authenticator/src/keys.dart';
+import 'package:amplify_authenticator/src/l10n/input_resolver.dart';
+import 'package:amplify_authenticator/src/mixins/authenticator_text_field.dart';
+import 'package:amplify_authenticator/src/utils/validators.dart';
+import 'package:amplify_authenticator/src/widgets/component.dart';
+import 'package:amplify_authenticator/src/widgets/form_field.dart';
+import 'package:flutter/material.dart';
 
 /// {@category Prebuilt Widgets}
 /// {@template amplify_authenticator.confirm_sign_up_form_field}
@@ -30,7 +37,7 @@ class ResetPasswordFormField extends AuthenticatorFormField<ResetPasswordField,
     InputResolverKey? titleKey,
     InputResolverKey? hintTextKey,
     FormFieldValidator<String>? validator,
-  }) : super._(
+  }) : super(
           key: key,
           field: field,
           titleKey: titleKey,
