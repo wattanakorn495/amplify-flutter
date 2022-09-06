@@ -151,7 +151,7 @@ class _SignInTextField extends SignInFormField<String> {
 }
 
 class _SignInTextFieldState extends _SignInFormFieldState<String>
-    with AuthenticatorTextField {
+    with AuthenticatorTextField<SignInField, SignInFormField<String>> {
   @override
   String? get initialValue {
     switch (widget.field) {
@@ -214,4 +214,6 @@ class _SignInUsernameField extends SignInFormField<UsernameInput> {
 }
 
 class _SignInUsernameFieldState extends _SignInFormFieldState<UsernameInput>
-    with AuthenticatorUsernameField {}
+    with
+        AuthenticatorUsernameField<SignInField,
+            SignInFormField<UsernameInput>> {}

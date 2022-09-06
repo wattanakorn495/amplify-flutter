@@ -60,7 +60,10 @@ class AuthenticatorPhoneField<FieldType> extends AuthenticatorFormField<
 class _AuthenticatorPhoneFieldState<FieldType>
     extends AuthenticatorFormFieldState<FieldType, String,
         AuthenticatorPhoneField<FieldType>>
-    with AuthenticatorPhoneFieldMixin, AuthenticatorTextField {
+    with
+        AuthenticatorPhoneFieldMixin<FieldType,
+            AuthenticatorPhoneField<FieldType>>,
+        AuthenticatorTextField<FieldType, AuthenticatorPhoneField<FieldType>> {
   @override
   String? get initialValue {
     var initialValue = widget.initialValue ?? super.initialValue;

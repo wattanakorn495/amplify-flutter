@@ -435,7 +435,7 @@ class _SignUpTextField extends SignUpFormField<String> {
 }
 
 class _SignUpTextFieldState extends _SignUpFormFieldState<String>
-    with AuthenticatorTextField {
+    with AuthenticatorTextField<SignUpField, SignUpFormField<String>> {
   @override
   String? get initialValue {
     switch (widget.field) {
@@ -629,7 +629,9 @@ class _SignUpUsernameField extends SignUpFormField<UsernameInput> {
 }
 
 class _SignUpUsernameFieldState extends _SignUpFormFieldState<UsernameInput>
-    with AuthenticatorUsernameField {}
+    with
+        AuthenticatorUsernameField<SignUpField,
+            SignUpFormField<UsernameInput>> {}
 
 class _SignUpPhoneField extends SignUpFormField<String> {
   const _SignUpPhoneField({
@@ -659,7 +661,7 @@ class _SignUpPhoneField extends SignUpFormField<String> {
 }
 
 class _SignUpPhoneFieldState extends _SignUpTextFieldState
-    with AuthenticatorPhoneFieldMixin {
+    with AuthenticatorPhoneFieldMixin<SignUpField, SignUpFormField<String>> {
   @override
   String? get initialValue {
     var initialValue = state.getAttribute(CognitoUserAttributeKey.phoneNumber);
@@ -718,7 +720,7 @@ class _SignUpDateField extends SignUpFormField<String> {
 }
 
 class _SignUpDateFieldState extends _SignUpFormFieldState<String>
-    with AuthenticatorDateField {
+    with AuthenticatorDateField<SignUpField, SignUpFormField<String>> {
   @override
   String? get initialValue {
     return state.getAttribute(widget.field.toCognitoAttribute());

@@ -76,9 +76,8 @@ class ResetPasswordFormField extends AuthenticatorFormField<ResetPasswordField,
 }
 
 class _ResetPasswordFormFieldState extends AuthenticatorFormFieldState<
-    ResetPasswordField,
-    String,
-    ResetPasswordFormField> with AuthenticatorTextField {
+        ResetPasswordField, String, ResetPasswordFormField>
+    with AuthenticatorTextField<ResetPasswordField, ResetPasswordFormField> {
   @override
   bool get obscureText {
     switch (widget.field) {

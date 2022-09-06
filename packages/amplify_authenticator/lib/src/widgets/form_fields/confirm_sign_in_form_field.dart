@@ -19,7 +19,7 @@ part of authenticator.form_field;
 /// {@template amplify_authenticator.confirm_sign_in_form_field}
 /// A prebuilt form field widget for use on the Confirm Sign In step.
 /// {@endtemplate}
-abstract class ConfirmSignInFormField<FieldValue>
+abstract class ConfirmSignInFormField<FieldValue extends Object?>
     extends AuthenticatorFormField<ConfirmSignInField, FieldValue,
         ConfirmSignInFormField<FieldValue>> {
   /// {@macro amplify_authenticator.confirm_sign_in_form_field}
@@ -48,7 +48,7 @@ abstract class ConfirmSignInFormField<FieldValue>
         );
 
   /// Creates a new password component.
-  static ConfirmSignInFormField newPassword({
+  static ConfirmSignInFormField<String> newPassword({
     Key? key,
     FormFieldValidator<String>? validator,
   }) =>
@@ -61,7 +61,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a new password component.
-  static ConfirmSignInFormField confirmNewPassword({
+  static ConfirmSignInFormField<String> confirmNewPassword({
     Key? key,
     FormFieldValidator<String>? validator,
   }) =>
@@ -74,7 +74,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates an auth answer component.
-  static ConfirmSignInFormField customChallenge({
+  static ConfirmSignInFormField<String> customChallenge({
     Key? key,
     String? title,
     String? hintText,
@@ -93,7 +93,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a verification code component.
-  static ConfirmSignInFormField verificationCode({
+  static ConfirmSignInFormField<String> verificationCode({
     Key? key,
     FormFieldValidator<String>? validator,
   }) =>
@@ -106,7 +106,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates an address component.
-  static ConfirmSignInFormField address({
+  static ConfirmSignInFormField<String> address({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -121,7 +121,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a birthdate component.
-  static ConfirmSignInFormField birthdate({
+  static ConfirmSignInFormField<String> birthdate({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -136,7 +136,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates an email component.
-  static ConfirmSignInFormField email({
+  static ConfirmSignInFormField<String> email({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -151,7 +151,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a familyName component.
-  static ConfirmSignInFormField familyName({
+  static ConfirmSignInFormField<String> familyName({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -166,7 +166,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a gender component.
-  static ConfirmSignInFormField gender({
+  static ConfirmSignInFormField<String> gender({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -181,7 +181,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a givenName component.
-  static ConfirmSignInFormField givenName({
+  static ConfirmSignInFormField<String> givenName({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -196,7 +196,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a middleName component.
-  static ConfirmSignInFormField middleName({
+  static ConfirmSignInFormField<String> middleName({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -211,7 +211,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a name component.
-  static ConfirmSignInFormField name({
+  static ConfirmSignInFormField<String> name({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -226,7 +226,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a nickname component.
-  static ConfirmSignInFormField nickname({
+  static ConfirmSignInFormField<String> nickname({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -241,7 +241,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a phoneNumber component.
-  static ConfirmSignInFormField phoneNumber({
+  static ConfirmSignInFormField<String> phoneNumber({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -256,7 +256,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a preferredUsername component.
-  static ConfirmSignInFormField preferredUsername({
+  static ConfirmSignInFormField<String> preferredUsername({
     Key? key,
     FormFieldValidator<String>? validator,
     bool? required,
@@ -271,7 +271,7 @@ abstract class ConfirmSignInFormField<FieldValue>
       );
 
   /// Creates a custom attribute component.
-  static ConfirmSignInFormField custom({
+  static ConfirmSignInFormField<String> custom({
     Key? key,
     required String title,
     required CognitoUserAttributeKey attributeKey,
@@ -440,7 +440,9 @@ class _ConfirmSignInPhoneField extends ConfirmSignInFormField<String> {
 }
 
 class _ConfirmSignInPhoneFieldState extends _ConfirmSignInTextFieldState
-    with AuthenticatorPhoneFieldMixin {
+    with
+        AuthenticatorPhoneFieldMixin<ConfirmSignInField,
+            ConfirmSignInFormField<String>> {
   @override
   String? get initialValue {
     var initialValue = state.getAttribute(CognitoUserAttributeKey.phoneNumber);
@@ -499,7 +501,9 @@ class _ConfirmSignInTextField extends ConfirmSignInFormField<String> {
 }
 
 class _ConfirmSignInTextFieldState extends _ConfirmSignInFormFieldState<String>
-    with AuthenticatorTextField {
+    with
+        AuthenticatorTextField<ConfirmSignInField,
+            ConfirmSignInFormField<String>> {
   @override
   String? get initialValue {
     switch (widget.field) {
@@ -696,7 +700,9 @@ class _ConfirmSignInDateField extends ConfirmSignInFormField<String> {
 }
 
 class _ConfirmSignInDateFieldState extends _ConfirmSignInFormFieldState<String>
-    with AuthenticatorDateField {
+    with
+        AuthenticatorDateField<ConfirmSignInField,
+            ConfirmSignInFormField<String>> {
   @override
   String? get initialValue {
     return state.getAttribute(widget.field.toCognitoAttribute());

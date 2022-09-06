@@ -572,7 +572,7 @@ class ConfirmSignInNewPasswordForm extends AuthenticatorForm {
   /// A custom Confirm Sign In with New Password form.
   const ConfirmSignInNewPasswordForm.custom({
     Key? key,
-    required List<ConfirmSignInFormField> fields,
+    required List<ConfirmSignInFormField<dynamic>> fields,
   }) : super._(
           key: key,
           fields: fields,

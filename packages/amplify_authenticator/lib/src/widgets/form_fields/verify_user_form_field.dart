@@ -100,7 +100,9 @@ class _VerifyUserTextField extends VerifyUserFormField<String> {
 }
 
 class _VerifyUserTextFieldState extends _VerifyUserFormFieldState<String>
-    with AuthenticatorTextField {
+    with
+        AuthenticatorTextField<VerifyAttributeField,
+            VerifyUserFormField<String>> {
   @override
   bool get obscureText {
     return false;
@@ -159,7 +161,9 @@ class _VerifyUserRadioField
 
 class _VerifyAttributeFieldState
     extends _VerifyUserFormFieldState<CognitoUserAttributeKey>
-    with AuthenticatorRadioField {
+    with
+        AuthenticatorRadioField<VerifyAttributeField, CognitoUserAttributeKey,
+            VerifyUserFormField<CognitoUserAttributeKey>> {
   @override
   late final List<InputSelection<InputResolverKey, CognitoUserAttributeKey>>
       selections;

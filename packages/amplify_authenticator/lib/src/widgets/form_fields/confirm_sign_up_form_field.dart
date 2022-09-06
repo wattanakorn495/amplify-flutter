@@ -149,7 +149,9 @@ class _ConfirmSignUpTextField extends ConfirmSignUpFormField<String> {
 }
 
 class _ConfirmSignUpTextFieldState extends _ConfirmSignUpFormFieldState<String>
-    with AuthenticatorTextField {
+    with
+        AuthenticatorTextField<ConfirmSignUpField,
+            ConfirmSignUpFormField<String>> {
   @override
   String? get initialValue {
     switch (widget.field) {
