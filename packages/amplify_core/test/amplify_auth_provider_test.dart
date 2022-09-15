@@ -124,7 +124,7 @@ void main() {
     test('can register a valid auth provider and use to retrieve', () async {
       final authRepo = AmplifyAuthProviderRepository();
 
-      const providerKey = AmplifyAuthProviderToken();
+      const providerKey = AmplifyAuthProviderToken('');
       authRepo.registerAuthProvider(providerKey, authProvider);
       final actualAuthProvider = authRepo.getAuthProvider(providerKey);
       final authorizedRequest =
@@ -136,7 +136,8 @@ void main() {
       final authRepo = AmplifyAuthProviderRepository();
 
       final credentialAuthProvider = TestAWSCredentialsAuthProvider();
-      const providerKey = AmplifyAuthProviderToken<AWSIamAmplifyAuthProvider>();
+      const providerKey =
+          AmplifyAuthProviderToken<AWSIamAmplifyAuthProvider>('');
       authRepo.registerAuthProvider(providerKey, credentialAuthProvider);
       AWSIamAmplifyAuthProvider? actualAuthProvider =
           authRepo.getAuthProvider(providerKey);
@@ -146,7 +147,7 @@ void main() {
     test('will overwrite previous provider in same key', () async {
       final authRepo = AmplifyAuthProviderRepository();
 
-      const providerKey = AmplifyAuthProviderToken();
+      const providerKey = AmplifyAuthProviderToken('');
       authRepo.registerAuthProvider(providerKey, authProvider);
       authRepo.registerAuthProvider(providerKey, SecondTestAuthProvider());
       final actualAuthProvider = authRepo.getAuthProvider(providerKey);
@@ -154,6 +155,13 @@ void main() {
       final authorizedRequest =
           await actualAuthProvider!.authorizeRequest(_generateTestRequest());
       expect(authorizedRequest.headers[_testAuthKey], 'bar');
+    });
+
+    test('2 AmplifyAuthProviderToken of same type are not the same', () async {
+      const token1 = AmplifyAuthProviderToken<TokenAmplifyAuthProvider>('1');
+      const token2 = AmplifyAuthProviderToken<TokenAmplifyAuthProvider>('2');
+      final isSame = token1 == token2;
+      expect(isSame, isFalse);
     });
   });
 }
