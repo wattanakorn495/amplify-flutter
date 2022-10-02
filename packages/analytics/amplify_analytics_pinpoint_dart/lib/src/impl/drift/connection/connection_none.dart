@@ -17,7 +17,7 @@ import 'package:drift/drift.dart';
 
 /// Multi platform class that opens [Drift] [DatabaseConnection] to platform specific database
 /// Fallback case for unsupported platforms
-DatabaseConnection connect(CachedEventsPathProvider? pathProvider) {
+QueryExecutor connect(CachedEventsPathProvider? pathProvider) {
   throw UnsupportedError(
       'No suitable database implementation was found on this platform.');
 }

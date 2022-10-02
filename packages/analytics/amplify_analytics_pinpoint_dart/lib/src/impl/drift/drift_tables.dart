@@ -28,7 +28,7 @@ class DriftJsonStrings extends Table {
 @DriftDatabase(tables: [DriftJsonStrings])
 class DriftDatabaseJsonStrings extends _$DriftDatabaseJsonStrings {
   DriftDatabaseJsonStrings(CachedEventsPathProvider? pathProvider)
-      : super(impl.connect(pathProvider).executor);
+      : super(impl.connect(pathProvider));
 
   // you should bump this number whenever you change or add a table definition.
   // Migrations are covered later in the documentation.

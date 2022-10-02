@@ -33,7 +33,7 @@ import 'package:path/path.dart' as p;
 /// To move synchronous database work off the main thread, we use a
 /// [DriftIsolate], which can run queries in a background isolate under the
 /// hood.
-DatabaseConnection connect(CachedEventsPathProvider? pathProvider) {
+QueryExecutor connect(CachedEventsPathProvider? pathProvider) {
   return DatabaseConnection.delayed(Future.sync(() async {
     String dir = '';
     if (pathProvider == null) {
@@ -51,7 +51,7 @@ DatabaseConnection connect(CachedEventsPathProvider? pathProvider) {
 
     final driftIsolate = await receiveDriftIsolate.first as DriftIsolate;
     return driftIsolate.connect();
-  }));
+  })).executor;
 }
 
 /// The entrypoint of isolates can only take a single message, but we need two

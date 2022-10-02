@@ -21,7 +21,35 @@ abstract class DeviceContextInfoProvider {
 /// Data representation of DeviceContextInfo required for Pinpoint EndpointDemographic:
 /// https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-endpoints.html
 class DeviceContextInfo {
-  const DeviceContextInfo({
+  factory DeviceContextInfo({
+    String? countryCode,
+    String? locale,
+    String? timezone,
+    String? appName,
+    String? appPackageName,
+    String? appVersion,
+    String? make,
+    String? model,
+    String? modelVersion,
+    String? platformVersion,
+    DevicePlatform? platform,
+  }) {
+    return DeviceContextInfo._(
+      countryCode: sanitize(countryCode),
+      locale: sanitize(locale),
+      timezone: sanitize(timezone),
+      appName: sanitize(appName),
+      appPackageName: sanitize(appPackageName),
+      appVersion: sanitize(appVersion),
+      make: sanitize(make),
+      model: sanitize(model),
+      modelVersion: sanitize(modelVersion),
+      platformVersion: sanitize(platformVersion),
+      platform: platform,
+    );
+  }
+
+  const DeviceContextInfo._({
     this.countryCode,
     this.locale,
     this.timezone,
@@ -34,6 +62,12 @@ class DeviceContextInfo {
     this.platform,
     this.platformVersion,
   });
+
+  static final int _maxFieldLength = 50;
+  static String? sanitize(String? field) {
+    if (field == null || field.length <= _maxFieldLength) return field;
+    return field.substring(0, _maxFieldLength);
+  }
 
   final String? countryCode;
   final String? locale;
