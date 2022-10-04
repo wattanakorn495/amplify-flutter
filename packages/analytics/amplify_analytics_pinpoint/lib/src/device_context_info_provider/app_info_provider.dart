@@ -32,7 +32,8 @@ class AppInfo {
 
 /// Provides AppInfo from Flutter -> Dart
 class AppInfoProvider {
-  static Future<AppInfo> getAppData() async {
+  /// Get AppInfo
+  static Future<AppInfo> getAppInfo() async {
     final info = await PackageInfo.fromPlatform();
     return AppInfo(
       info.appName,

@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:amplify_analytics_pinpoint_dart/src/impl/drift/connection/connection.dart' as impl;
 import 'package:amplify_analytics_pinpoint_dart/src/impl/flutter_provider_interfaces/path_provider.dart';
-import 'connection/connection.dart' as impl;
-
 import 'package:drift/drift.dart';
+
 part 'drift_tables.g.dart';
 
 /// This file determines results of auto generated drift_tables.g.dart file on dart build

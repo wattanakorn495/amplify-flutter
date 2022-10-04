@@ -25,15 +25,6 @@ import 'package:built_value/serializer.dart';
 /// Interface with underlying device storage using the [Drift] package
 /// Present interface for saving/retrieving PinpointEvents
 class EventStorageAdapter {
-  /// Underlying drift database used to store Events
-  final DriftDatabaseJsonStrings _db;
-  final Serializers _serializers;
-
-  /// Pinpoint max event size
-  static const int _maxEventKbSize = 1000;
-
-  /// Pinpoint max events per event flush batch
-  static const int _maxEventsInBatch = 100;
 
   factory EventStorageAdapter(CachedEventsPathProvider? pathProvider) {
     final db = DriftDatabaseJsonStrings(pathProvider);
@@ -51,14 +42,23 @@ class EventStorageAdapter {
   }
 
   EventStorageAdapter._(this._db, this._serializers);
+  /// Underlying drift database used to store Events
+  final DriftDatabaseJsonStrings _db;
+  final Serializers _serializers;
+
+  /// Pinpoint max event size
+  static const int _maxEventKbSize = 1000;
+
+  /// Pinpoint max events per event flush batch
+  static const int _maxEventsInBatch = 100;
 
   /// Serialize and save Event to device storage
   Future<void> saveEvent(Event event) async {
     final jsonString = jsonEncode(_serializers.serialize(event));
 
     if (jsonString.length > _maxEventKbSize) {
-      throw AnalyticsException(
-          'Pinpoint event size limit exceeded.  Max size is: ${_maxEventKbSize} bytes');
+      throw const AnalyticsException(
+          'Pinpoint event size limit exceeded.  Max size is: $_maxEventKbSize bytes',);
     }
 
     await _db.addJsonString(jsonString);
@@ -71,11 +71,11 @@ class EventStorageAdapter {
     int maxEvents = _maxEventsInBatch,
   }) async {
     // Raw objects read from Drift storage
-    List<DriftJsonString> driftJsonStrings =
+    final driftJsonStrings =
         await _db.getJsonStrings(maxEvents);
 
     // Convert raw objects to Event
-    List<StoredEvent> storedEvents = <StoredEvent>[];
+    final storedEvents = <StoredEvent>[];
     for (final driftJsonString in driftJsonStrings) {
       final storedEvent = StoredEvent(driftJsonString, _serializers);
       storedEvents.add(storedEvent);
@@ -92,8 +92,6 @@ class EventStorageAdapter {
 /// Wrapper class around [Event]
 /// Includes DriftId to identify that event for deletion when calling [deleteEvents]
 class StoredEvent {
-  int id;
-  Event event;
 
   /// Create StoredEvent from [DriftJsonString]
   factory StoredEvent(DriftJsonString data, Serializers serializers) {
@@ -102,4 +100,6 @@ class StoredEvent {
   }
 
   StoredEvent._internal(this.id, this.event);
+  int id;
+  Event event;
 }

@@ -63,7 +63,7 @@ class DeviceContextInfo {
     this.platformVersion,
   });
 
-  static final int _maxFieldLength = 50;
+  static const int _maxFieldLength = 50;
   static String? sanitize(String? field) {
     if (field == null || field.length <= _maxFieldLength) return field;
     return field.substring(0, _maxFieldLength);

@@ -13,11 +13,10 @@
 // limitations under the License.
 
 import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/key_value_store.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/sdk/pinpoint.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:intl/intl.dart';
-
-import 'key_value_store.dart';
 
 const String sessionStartEventType = '_session.start';
 const String sessionStopEventType = '_session.stop';
@@ -30,19 +29,6 @@ typedef SessionFunc = Function(SessionBuilder);
 /// Based on App foreground/background events
 /// Events sent to Pinpoint must have an attached Session object
 class SessionManager {
-  final _maxIdLength = 8;
-
-  SessionFunc _onSessionStart;
-  SessionFunc _onSessionEnd;
-
-  SessionBuilder? _sessionBuilder;
-  SessionBuilder? get sessionBuilder => _sessionBuilder;
-
-  final AppLifecycleProvider? _lifecycleObserver;
-
-  final KeyValueStore _keyValueStore;
-
-  int startTimeMilliseconds = DateTime.now().millisecondsSinceEpoch;
 
   /// [onSessionStart] [onSessionEnd] are callbacks to
   /// allow parent classes to react to session events
@@ -62,6 +48,19 @@ class SessionManager {
     _lifecycleObserver?.setOnBackgroundListener(stopSession);
     _lifecycleObserver?.startObserving();
   }
+  final _maxIdLength = 8;
+
+  final SessionFunc _onSessionStart;
+  final SessionFunc _onSessionEnd;
+
+  SessionBuilder? _sessionBuilder;
+  SessionBuilder? get sessionBuilder => _sessionBuilder;
+
+  final AppLifecycleProvider? _lifecycleObserver;
+
+  final KeyValueStore _keyValueStore;
+
+  int startTimeMilliseconds = DateTime.now().millisecondsSinceEpoch;
 
   void startSession() {
     _executeStop();
@@ -87,17 +86,17 @@ class SessionManager {
   }
 
   String _generateSessionId() {
-    String id = _keyValueStore.getFixedEndpointId();
+    var id = _keyValueStore.getFixedEndpointId();
     id = id.padLeft(_maxIdLength, '_');
     id = id.substring(0, _maxIdLength);
 
-    DateTime date = DateTime.now().toUtc();
+    final date = DateTime.now().toUtc();
 
-    DateFormat dateFormat = DateFormat('yyyyMMdd-HHmmssSSS', 'en_US');
+    final dateFormat = DateFormat('yyyyMMdd-HHmmssSSS', 'en_US');
 
-    String dateString = dateFormat.format(date) + date.millisecond.toString();
+    final dateString = dateFormat.format(date) + date.millisecond.toString();
 
-    return id + '-' + dateString;
+    return '$id-$dateString';
   }
 
   void _executeStart() {
@@ -115,7 +114,7 @@ class SessionManager {
   void _executeStop() {
     if (_sessionBuilder == null) {
       safePrint(
-          'Warning - stop session called without sessionBuilder initialized');
+          'Warning - stop session called without sessionBuilder initialized',);
       return;
     }
 

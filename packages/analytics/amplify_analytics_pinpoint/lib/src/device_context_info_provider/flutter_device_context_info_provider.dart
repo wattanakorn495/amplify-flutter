@@ -27,7 +27,7 @@ class FlutterDeviceContextInfoProvider implements DeviceContextInfoProvider {
 
   @override
   Future<DeviceContextInfo> getDeviceInfoDetails() async {
-    var appInfo = await AppInfoProvider.getAppData();
+    var appInfo = await AppInfoProvider.getAppInfo();
     var deviceInfo = await DeviceInfoProvider().getDeviceInfo();
     return DeviceContextInfo(
       countryCode: WidgetsBinding.instance.window.locale.countryCode,

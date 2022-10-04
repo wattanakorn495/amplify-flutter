@@ -18,7 +18,6 @@ import 'device_info.dart';
 /// Fallback case for unsupported platforms
 class DeviceInfoProvider {
   /// Retrieve DeviceInfo
-  @override
   Future<DeviceInfo> getDeviceInfo() async {
     throw UnsupportedError(
         'No suitable implementation was found on this platform.');

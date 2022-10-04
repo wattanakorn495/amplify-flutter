@@ -13,30 +13,37 @@
 // limitations under the License.
 
 import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/endpoint_client/endpoint_global_fields_manager.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/key_value_store.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/sdk/pinpoint.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:built_collection/built_collection.dart';
 
-import 'endpoint_global_fields_manager.dart';
-
 /// Manages fields of a Pinpoint Endpoint local object
 /// Uses [PinpointClient] to update AWS Pinpoint Endpoint
 /// For more details see Pinpoint Endpoint online spec: https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-endpoints.html
 class EndpointClient {
+
+  EndpointClient._(
+    this._appId,
+    this._keyValueStore,
+    this._pinpointClient,
+    this._globalFieldsManager,
+    this._endpointBuilder,
+  );
   final String _appId;
   final PinpointClient _pinpointClient;
   final KeyValueStore _keyValueStore;
 
   // Current Endpoint being managed
-  PublicEndpointBuilder _endpointBuilder;
+  final PublicEndpointBuilder _endpointBuilder;
   final EndpointGlobalFieldsManager _globalFieldsManager;
 
   static Future<EndpointClient> getInstance(
       String appId,
       KeyValueStore keyValueStore,
       PinpointClient pinpointClient,
-      DeviceContextInfo? deviceContextInfo) async {
+      DeviceContextInfo? deviceContextInfo,) async {
     final globalFieldsManager =
         await EndpointGlobalFieldsManager.getInstance(keyValueStore);
 
@@ -65,14 +72,6 @@ class EndpointClient {
     );
   }
 
-  EndpointClient._(
-    this._appId,
-    this._keyValueStore,
-    this._pinpointClient,
-    this._globalFieldsManager,
-    this._endpointBuilder,
-  );
-
   void addAttribute(String name, List<String> values) =>
       _globalFieldsManager.addAttribute(name, values);
   void removeAttribute(String name) =>
@@ -83,8 +82,8 @@ class EndpointClient {
 
   /// Update the UserProfile object on the EndpointProfile
   Future<void> setUser(
-      String userId, AnalyticsUserProfile copyFromProfile) async {
-    EndpointUserBuilder newUserBuilder = EndpointUserBuilder();
+      String userId, AnalyticsUserProfile copyFromProfile,) async {
+    final newUserBuilder = EndpointUserBuilder();
 
     newUserBuilder.userId = userId;
 
@@ -152,7 +151,7 @@ class EndpointClient {
       await _pinpointClient.updateEndpoint(UpdateEndpointRequest(
           applicationId: _appId,
           endpointId: _keyValueStore.getFixedEndpointId(),
-          endpointRequest: _endpointToRequest(getPublicEndpoint())));
+          endpointRequest: _endpointToRequest(getPublicEndpoint()),),);
     } catch (error) {
       safePrint('updateEndpoint - exception encountered: ${error.toString()}');
     }
@@ -171,6 +170,6 @@ class EndpointClient {
         metrics: publicEndpoint.metrics,
         optOut: publicEndpoint.optOut,
         requestId: publicEndpoint.requestId,
-        user: publicEndpoint.user);
+        user: publicEndpoint.user,);
   }
 }

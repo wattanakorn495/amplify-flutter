@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.dart';
-import 'package:amplify_core/amplify_core.dart';
-import 'package:drift/drift.dart';
-
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/impl/flutter_provider_interfaces/path_provider.dart';
+import 'package:amplify_core/amplify_core.dart';
+import 'package:drift/drift.dart';
 import 'package:drift/isolate.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
@@ -35,10 +34,10 @@ import 'package:path/path.dart' as p;
 /// hood.
 QueryExecutor connect(CachedEventsPathProvider? pathProvider) {
   return DatabaseConnection.delayed(Future.sync(() async {
-    String dir = '';
+    var dir = '';
     if (pathProvider == null) {
       safePrint(
-          'No pathProvider provided for non web platform.  Analytics events might not be cached properly');
+          'No pathProvider provided for non web platform.  Analytics events might not be cached properly',);
     } else {
       dir = await pathProvider.getApplicationSupportPath();
     }
@@ -47,11 +46,11 @@ QueryExecutor connect(CachedEventsPathProvider? pathProvider) {
 
     final receiveDriftIsolate = ReceivePort();
     await Isolate.spawn(_entrypointForDriftIsolate,
-        _IsolateStartRequest(receiveDriftIsolate.sendPort, dbPath));
+        _IsolateStartRequest(receiveDriftIsolate.sendPort, dbPath),);
 
     final driftIsolate = await receiveDriftIsolate.first as DriftIsolate;
     return driftIsolate.connect();
-  })).executor;
+  }),).executor;
 }
 
 /// The entrypoint of isolates can only take a single message, but we need two
@@ -59,10 +58,10 @@ QueryExecutor connect(CachedEventsPathProvider? pathProvider) {
 /// should be opened on the background isolate). So, we bundle this information
 /// in a single class.
 class _IsolateStartRequest {
-  final SendPort talkToMain;
-  final String databasePath;
 
   _IsolateStartRequest(this.talkToMain, this.databasePath);
+  final SendPort talkToMain;
+  final String databasePath;
 }
 
 /// The entrypoint for a background isolate launching a drift server.

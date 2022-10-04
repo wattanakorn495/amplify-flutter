@@ -15,19 +15,25 @@
 import 'dart:async';
 
 import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/endpoint_client/endpoint_client.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/event_client/event_client.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/event_creator/event_creator.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/key_value_store.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/session_manager.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/stoppable_timer.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/sdk/pinpoint.dart';
 import 'package:amplify_core/amplify_core.dart';
 
-import 'endpoint_client/endpoint_client.dart';
-import 'event_client/event_client.dart';
-import 'event_creator/event_creator.dart';
-import 'key_value_store.dart';
-
 /// Top level client for executing all behaviors of the Analytics Plugin
 /// by managing behaviors and inter dependencies of sub clients and helper classes
 class AnalyticsClient {
+
+  AnalyticsClient._(
+    this._sessionManager,
+    this._eventClient,
+    this._eventCreator,
+    this._endpointClient,
+  );
   final SessionManager _sessionManager;
   final EventClient _eventClient;
   final EventCreator _eventCreator;
@@ -52,10 +58,10 @@ class AnalyticsClient {
         await EventCreator.getInstance(keyValueStore, deviceContextInfo);
 
     final endpointClient = await EndpointClient.getInstance(
-        appId, keyValueStore, pinpointClient, deviceContextInfo);
+        appId, keyValueStore, pinpointClient, deviceContextInfo,);
 
     final eventClient = EventClient(
-        appId, keyValueStore, endpointClient, pinpointClient, pathProvider);
+        appId, keyValueStore, endpointClient, pinpointClient, pathProvider,);
 
     // Initialize session manager
     // And define auto session start/end Events to be sent on session start/end events
@@ -84,13 +90,6 @@ class AnalyticsClient {
     );
   }
 
-  AnalyticsClient._(
-    this._sessionManager,
-    this._eventClient,
-    this._eventCreator,
-    this._endpointClient,
-  );
-
   Future<void> flushEvents() async {
     await _eventClient.flushEvents();
   }
@@ -98,8 +97,8 @@ class AnalyticsClient {
   /// Create a [Event] object from [AnalyticsEvent] received from the public API
   /// Received events are NEVER sent immediately but cached to be sent in a batch
   void recordEvent(AnalyticsEvent analyticsEvent) {
-    Event pinpointEvent = _eventCreator.createPinpointEvent(
-        analyticsEvent.name, _sessionManager.sessionBuilder, analyticsEvent);
+    final pinpointEvent = _eventCreator.createPinpointEvent(
+        analyticsEvent.name, _sessionManager.sessionBuilder, analyticsEvent,);
     _eventClient.recordEvent(pinpointEvent);
   }
 

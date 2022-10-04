@@ -16,6 +16,7 @@ import 'dart:collection';
 
 import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/endpoint_client/endpoint_client.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/event_client/events_storage_adapter.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/key_value_store.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/sdk/pinpoint.dart';
 import 'package:amplify_core/amplify_core.dart';
@@ -23,13 +24,19 @@ import 'package:built_collection/built_collection.dart';
 import 'package:smithy/smithy.dart';
 import 'package:uuid/uuid.dart';
 
-import 'events_storage_adapter.dart';
-
 /// Manages storage and flush of analytics events
 /// Uses [EventStorageAdapter] to cached analytics events
 /// Uses [PinpointClient] to flush analytics events to AWS Pinpoint
 /// For more details see Pinpoint Event online spec: https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-events.html
 class EventClient {
+
+  EventClient(
+    this._appId,
+    this._keyValueStore,
+    this._endpointClient,
+    this._pinpointClient,
+    CachedEventsPathProvider? _pathProvider,
+  ) : _storageAdapter = EventStorageAdapter(_pathProvider);
   final EventStorageAdapter _storageAdapter;
 
   final String _appId;
@@ -39,14 +46,6 @@ class EventClient {
 
   final _uuid = const Uuid();
 
-  EventClient(
-    this._appId,
-    this._keyValueStore,
-    this._endpointClient,
-    this._pinpointClient,
-    CachedEventsPathProvider? _pathProvider,
-  ) : _storageAdapter = EventStorageAdapter(_pathProvider);
-
   /// Received events are NEVER sent immediately but cached to be sent in a batch
   void recordEvent(Event event) {
     _storageAdapter.saveEvent(event);
@@ -55,7 +54,7 @@ class EventClient {
   /// Send cached events as a batch to Pinpoint
   /// Parse and response to Pinpoint response
   Future<void> flushEvents() async {
-    List<StoredEvent> storedEvents = await _storageAdapter.retrieveEvents();
+    final storedEvents = await _storageAdapter.retrieveEvents();
 
     final eventsMap = <String, Event>{};
     final eventIdsToDelete = HashMap<String, int>();
@@ -72,17 +71,17 @@ class EventClient {
     }
 
     // The Event batch to be sent to Pinpoint
-    EventsBatch batch = EventsBatch(
+    final batch = EventsBatch(
         endpoint: _endpointClient.getPublicEndpoint(),
-        events: BuiltMap<String, Event>(eventsMap));
+        events: BuiltMap<String, Event>(eventsMap),);
 
     final batchItems = BuiltMap<String, EventsBatch>(
-        {_keyValueStore.getFixedEndpointId(): batch});
+        {_keyValueStore.getFixedEndpointId(): batch},);
 
     try {
       final result = await _pinpointClient.putEvents(PutEventsRequest(
           applicationId: _appId,
-          eventsRequest: EventsRequest(batchItem: batchItems)));
+          eventsRequest: EventsRequest(batchItem: batchItems),),);
 
       // Parse the EndpointResponse portion of Result
       final endpointResponse =
@@ -90,7 +89,7 @@ class EventClient {
 
       if (endpointResponse == null) {
         safePrint(
-            'putEvents - no EndpointResponse object received from Pinpoint');
+            'putEvents - no EndpointResponse object received from Pinpoint',);
       }
 
       // Parse the EndpointItemResponse portion of Result
@@ -98,11 +97,11 @@ class EventClient {
 
       if (endpointItemResponse == null) {
         safePrint(
-            'putEvents - no PinpointEndpoint response received from Pinpoint');
+            'putEvents - no PinpointEndpoint response received from Pinpoint',);
       }
       if (endpointItemResponse?.statusCode != 202) {
         safePrint(
-            'putEvents - issue with PinpointEndpoint response: ${endpointItemResponse?.toString()}');
+            'putEvents - issue with PinpointEndpoint response: ${endpointItemResponse?.toString()}',);
       }
 
       // Parse the individual response for each Event in batch
@@ -110,16 +109,16 @@ class EventClient {
 
       if (eventsItemResponse == null) {
         safePrint(
-            'putEvents - no EventsItemResponse response received from Pinpoint');
+            'putEvents - no EventsItemResponse response received from Pinpoint',);
       }
       eventsItemResponse?.forEach((eventID, eventItemResponse) {
         if (!_equalsIgnoreCase(eventItemResponse.message ?? '', 'Accepted')) {
           safePrint(
-              'putEvents - issue with eventId: ${eventID} \n ${eventItemResponse.toString()}');
+              'putEvents - issue with eventId: $eventID \n ${eventItemResponse.toString()}',);
 
           if (_isRetryable(eventItemResponse.message ?? '')) {
             safePrint(
-                'putEvents - recoverable issue, will attempt to resend: ${eventID} in next FlushEvents');
+                'putEvents - recoverable issue, will attempt to resend: $eventID in next FlushEvents',);
             eventIdsToDelete.remove(eventID);
           }
         }
@@ -145,13 +144,13 @@ class EventClient {
     // Always delete local store of events
     // Unless a retryable exception has been received (see above)
     finally {
-      _storageAdapter.deleteEvents(eventIdsToDelete.values);
+      await _storageAdapter.deleteEvents(eventIdsToDelete.values);
     }
   }
 
   // If exception is recoverable, do not delete eventIds from local cache
   void _handleRecoverableException(
-      SmithyHttpException e, HashMap eventIdsToDelete) {
+      SmithyHttpException e, HashMap eventIdsToDelete,) {
     safePrint('putEvents - exception encountered: ${e.toString}');
     safePrint('Recoverable issue, will attempt to resend event batch');
     eventIdsToDelete.clear();
@@ -159,9 +158,9 @@ class EventClient {
 
   bool _isRetryable(String? message) {
     return message != null &&
-        !_equalsIgnoreCase(message, "ValidationException") &&
-        !_equalsIgnoreCase(message, "SerializationException") &&
-        !_equalsIgnoreCase(message, "BadRequestException");
+        !_equalsIgnoreCase(message, 'ValidationException') &&
+        !_equalsIgnoreCase(message, 'SerializationException') &&
+        !_equalsIgnoreCase(message, 'BadRequestException');
   }
 
   bool _equalsIgnoreCase(String string1, String string2) {

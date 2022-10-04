@@ -15,14 +15,12 @@
 import 'dart:async';
 
 import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/analytics_client.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/key_value_store.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/sdk/pinpoint.dart';
-
 import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_secure_storage_dart/amplify_secure_storage_dart.dart';
 import 'package:aws_signature_v4/aws_signature_v4.dart';
-
-import 'impl/analytics_client/analytics_client.dart';
-import 'impl/analytics_client/key_value_store.dart';
 
 /// Public facing Plugin
 /// Validate and parse inputs
@@ -59,20 +57,20 @@ class AmplifyAnalyticsPinpointDart extends AnalyticsPluginInterface {
       throw const AnalyticsException('No Pinpoint plugin config available');
     }
 
-    PinpointPluginConfig pinpointConfig = config.analytics!.awsPlugin!;
-    String appId = pinpointConfig.pinpointAnalytics.appId;
-    String region = pinpointConfig.pinpointAnalytics.region;
+    final pinpointConfig = config.analytics!.awsPlugin!;
+    final appId = pinpointConfig.pinpointAnalytics.appId;
+    final region = pinpointConfig.pinpointAnalytics.region;
 
     /// Prepare PinpointClient
-    AWSIamAmplifyAuthProvider? authProvider = authProviderRepo
+    final authProvider = authProviderRepo
         .getAuthProvider(APIAuthorizationType.iam.authProviderToken);
 
     if (authProvider == null) {
       throw const AnalyticsException(
-          'No AWSIamAmplifyAuthProvider available.  Is Auth category added and configured?');
+          'No AWSIamAmplifyAuthProvider available.  Is Auth category added and configured?',);
     }
 
-    AWSCredentials credentials = await authProvider.retrieve();
+    final credentials = await authProvider.retrieve();
 
     final pinpointClient = PinpointClient(
       region: region,
@@ -82,7 +80,7 @@ class AmplifyAnalyticsPinpointDart extends AnalyticsPluginInterface {
     /// Prepare AnalyticsClient
     final keyValueStore = await KeyValueStore.getInstance(_credentialStorage);
 
-    DeviceContextInfo? deviceContextInfo = null;
+    DeviceContextInfo? deviceContextInfo;
     if (_deviceContextInfoProvider != null) {
       deviceContextInfo =
           await _deviceContextInfoProvider!.getDeviceInfoDetails();
@@ -146,13 +144,13 @@ class AmplifyAnalyticsPinpointDart extends AnalyticsPluginInterface {
     required AnalyticsUserProfile userProfile,
   }) async {
     _checkConfigured();
-    _analyticsClient?.identifyUser(userId, userProfile);
+    await _analyticsClient?.identifyUser(userId, userProfile);
   }
 
   void _checkConfigured() {
     if (_analyticsClient == null) {
-      throw new AnalyticsException('Analytics not configured',
-          recoverySuggestion: 'Please call Amplify.configure(amplifyconfig)');
+      throw const AnalyticsException('Analytics not configured',
+          recoverySuggestion: 'Please call Amplify.configure(amplifyconfig)',);
     }
   }
 }

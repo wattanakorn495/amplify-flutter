@@ -1,8 +1,7 @@
-include: package:amplify_lints/dart.yaml
+include: package:amplify_lints/library.yaml
 
 analyzer:
-  errors:
-    avoid_unused_constructor_parameters: ignore
-    public_member_api_docs: ignore
   exclude:
     - lib/**/*.g.dart
+    - lib/src/sdk/src/**
+    - lib/src/native_auth_plugin.dart

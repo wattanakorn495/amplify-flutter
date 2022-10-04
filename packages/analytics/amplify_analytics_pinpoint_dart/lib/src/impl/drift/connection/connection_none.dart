@@ -19,5 +19,5 @@ import 'package:drift/drift.dart';
 /// Fallback case for unsupported platforms
 QueryExecutor connect(CachedEventsPathProvider? pathProvider) {
   throw UnsupportedError(
-      'No suitable database implementation was found on this platform.');
+      'No suitable database implementation was found on this platform.',);
 }

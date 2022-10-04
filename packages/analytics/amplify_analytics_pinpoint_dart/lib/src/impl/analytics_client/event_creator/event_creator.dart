@@ -13,42 +13,40 @@
 // limitations under the License.
 
 import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.dart';
+import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/event_creator/event_global_fields_manager.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/key_value_store.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/sdk/pinpoint.dart';
 import 'package:amplify_analytics_pinpoint_dart/src/version.dart';
 import 'package:amplify_core/amplify_core.dart';
-
 import 'package:built_collection/built_collection.dart';
-
-import 'event_global_fields_manager.dart';
 
 /// Manage creation of new Events
 /// By storing and applying globalProperties and default values that all new Events should have
 /// For more details see Pinpoint Event online spec: https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-events.html
 class EventCreator {
+
+  EventCreator._getInstance(this._globalFieldsManager, this._deviceContextInfo);
   static const int _maxEventTypeLength = 50;
 
   final EventGlobalFieldsManager _globalFieldsManager;
   final DeviceContextInfo? _deviceContextInfo;
 
-  EventCreator._getInstance(this._globalFieldsManager, this._deviceContextInfo);
-
   static Future<EventCreator> getInstance(KeyValueStore keyValueStore,
-          DeviceContextInfo? deviceContextInfoProvider) async =>
+          DeviceContextInfo? deviceContextInfoProvider,) async =>
       EventCreator._getInstance(
           await EventGlobalFieldsManager.getInstance(keyValueStore),
-          deviceContextInfoProvider);
+          deviceContextInfoProvider,);
 
   /// Create a Pinpoint [Event] from a [AnalyticsEvent] received from the public API
   /// Also, auto fill fields of [Event]
   Event createPinpointEvent(String eventType, SessionBuilder? sessionBuilder,
-      [AnalyticsEvent? analyticsEvent]) {
+      [AnalyticsEvent? analyticsEvent,]) {
     if (eventType.length > _maxEventTypeLength) {
       throw const AnalyticsException(
-          'The event type is too long, the max event type length is {$_maxEventTypeLength} characters.');
+          'The event type is too long, the max event type length is {$_maxEventTypeLength} characters.',);
     }
 
-    EventBuilder eventBuilder = EventBuilder();
+    final eventBuilder = EventBuilder();
 
     // Fill in defaults for all events
     eventBuilder.eventType = eventType;
@@ -70,7 +68,7 @@ class EventCreator {
     /// Read attributes and metrics from [analyticsEvent]
     if (analyticsEvent != null) {
       EventGlobalFieldsManager.extractAnalyticsProperties(
-          eventAttrs, eventMetrics, analyticsEvent.properties);
+          eventAttrs, eventMetrics, analyticsEvent.properties,);
     }
 
     eventBuilder.attributes = MapBuilder(eventAttrs);

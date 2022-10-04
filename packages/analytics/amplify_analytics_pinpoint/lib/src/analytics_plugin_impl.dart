@@ -40,5 +40,6 @@ class AmplifyAnalyticsPinpoint extends AmplifyAnalyticsPinpointDart {
             ),
             pathProvider: FlutterPathProvider(),
             appLifecycleProvider: FlutterAppLifecycleProvider(),
-            deviceContextInfoProvider: FlutterDeviceContextInfoProvider());
+            deviceContextInfoProvider:
+                const FlutterDeviceContextInfoProvider());
 }
