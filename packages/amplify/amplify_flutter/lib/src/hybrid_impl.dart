@@ -36,6 +36,7 @@ class AmplifyHybridImpl extends AmplifyClassImpl {
       [
         ...API.plugins,
         ...Auth.plugins,
+        ...Storage.plugins,
       ].map((p) => p.configure(
           config: amplifyConfig, authProviderRepo: authProviderRepo)),
       eagerError: true,
