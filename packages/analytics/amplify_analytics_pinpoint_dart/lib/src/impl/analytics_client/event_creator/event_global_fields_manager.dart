@@ -24,9 +24,11 @@ import 'package:amplify_core/amplify_core.dart';
 /// These values are sent with every new Event
 /// For more details see Pinpoint Event online spec: https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-events.html
 class EventGlobalFieldsManager {
-
   EventGlobalFieldsManager._getInstance(
-      this._keyValueStore, this._globalAttributes, this._globalMetrics,);
+    this._keyValueStore,
+    this._globalAttributes,
+    this._globalMetrics,
+  );
   final Map<String, String> _globalAttributes;
   final Map<String, double> _globalMetrics;
 
@@ -38,20 +40,32 @@ class EventGlobalFieldsManager {
   final KeyValueStore _keyValueStore;
 
   static Future<EventGlobalFieldsManager> getInstance(
-          KeyValueStore keyValueStore,) async =>
+    KeyValueStore keyValueStore,
+  ) async =>
       EventGlobalFieldsManager._getInstance(
-          keyValueStore,
-          Map<String, String>.from(jsonDecode(
-              await keyValueStore.getJson(KeyValueStore.eventsGlobalAttrsKey) ??
-                  '{}',),),
-          Map<String, double>.from(jsonDecode(await keyValueStore
-                  .getJson(KeyValueStore.endpointGlobalMetricsKey) ??
-              '{}',),),);
+        keyValueStore,
+        Map<String, String>.from(
+          jsonDecode(
+            await keyValueStore.getJson(KeyValueStore.eventsGlobalAttrsKey) ??
+                '{}',
+          ),
+        ),
+        Map<String, double>.from(
+          jsonDecode(
+            await keyValueStore
+                    .getJson(KeyValueStore.endpointGlobalMetricsKey) ??
+                '{}',
+          ),
+        ),
+      );
 
 // Note: no max size for global properties
   Future<void> addGlobalProperties(AnalyticsProperties globalProperties) async {
     extractAnalyticsProperties(
-        _globalAttributes, _globalMetrics, globalProperties,);
+      _globalAttributes,
+      _globalMetrics,
+      globalProperties,
+    );
 
     await _saveProperties();
   }
@@ -71,17 +85,23 @@ class EventGlobalFieldsManager {
 
   Future<void> _saveProperties() async {
     await _keyValueStore.saveJson(
-        KeyValueStore.eventsGlobalAttrsKey, jsonEncode(_globalAttributes),);
+      KeyValueStore.eventsGlobalAttrsKey,
+      jsonEncode(_globalAttributes),
+    );
     await _keyValueStore.saveJson(
-        KeyValueStore.eventsGlobalMetricsKey, jsonEncode(_globalMetrics),);
+      KeyValueStore.eventsGlobalMetricsKey,
+      jsonEncode(_globalMetrics),
+    );
   }
 
   /// Extract Attributes and Metrics from [analyticsProperties] and add them to [attrs] and [metrics]
-  static void extractAnalyticsProperties(Map<String, String> attrs,
-      Map<String, double> metrics, AnalyticsProperties analyticsProperties,) {
+  static void extractAnalyticsProperties(
+    Map<String, String> attrs,
+    Map<String, double> metrics,
+    AnalyticsProperties analyticsProperties,
+  ) {
     final propertiesMap = analyticsProperties.getAllProperties();
-    final propertiesTypesMap =
-        analyticsProperties.getAllPropertiesTypes();
+    final propertiesTypesMap = analyticsProperties.getAllPropertiesTypes();
 
     propertiesTypesMap.forEach((k, v) {
       final type = propertiesTypesMap[k]!;

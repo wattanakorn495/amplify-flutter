@@ -33,24 +33,29 @@ import 'package:path/path.dart' as p;
 /// [DriftIsolate], which can run queries in a background isolate under the
 /// hood.
 QueryExecutor connect(CachedEventsPathProvider? pathProvider) {
-  return DatabaseConnection.delayed(Future.sync(() async {
-    var dir = '';
-    if (pathProvider == null) {
-      safePrint(
-          'No pathProvider provided for non web platform.  Analytics events might not be cached properly',);
-    } else {
-      dir = await pathProvider.getApplicationSupportPath();
-    }
+  return DatabaseConnection.delayed(
+    Future.sync(() async {
+      var dir = '';
+      if (pathProvider == null) {
+        safePrint(
+          'No pathProvider provided for non web platform.  Analytics events might not be cached properly',
+        );
+      } else {
+        dir = await pathProvider.getApplicationSupportPath();
+      }
 
-    final dbPath = p.join(dir, 'amplify_flutter_analytics.sqlite');
+      final dbPath = p.join(dir, 'amplify_flutter_analytics.sqlite');
 
-    final receiveDriftIsolate = ReceivePort();
-    await Isolate.spawn(_entrypointForDriftIsolate,
-        _IsolateStartRequest(receiveDriftIsolate.sendPort, dbPath),);
+      final receiveDriftIsolate = ReceivePort();
+      await Isolate.spawn(
+        _entrypointForDriftIsolate,
+        _IsolateStartRequest(receiveDriftIsolate.sendPort, dbPath),
+      );
 
-    final driftIsolate = await receiveDriftIsolate.first as DriftIsolate;
-    return driftIsolate.connect();
-  }),).executor;
+      final driftIsolate = await receiveDriftIsolate.first as DriftIsolate;
+      return driftIsolate.connect();
+    }),
+  ).executor;
 }
 
 /// The entrypoint of isolates can only take a single message, but we need two
@@ -58,7 +63,6 @@ QueryExecutor connect(CachedEventsPathProvider? pathProvider) {
 /// should be opened on the background isolate). So, we bundle this information
 /// in a single class.
 class _IsolateStartRequest {
-
   _IsolateStartRequest(this.talkToMain, this.databasePath);
   final SendPort talkToMain;
   final String databasePath;

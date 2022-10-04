@@ -23,7 +23,6 @@ import 'package:built_collection/built_collection.dart';
 /// Uses [PinpointClient] to update AWS Pinpoint Endpoint
 /// For more details see Pinpoint Endpoint online spec: https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-endpoints.html
 class EndpointClient {
-
   EndpointClient._(
     this._appId,
     this._keyValueStore,
@@ -40,10 +39,11 @@ class EndpointClient {
   final EndpointGlobalFieldsManager _globalFieldsManager;
 
   static Future<EndpointClient> getInstance(
-      String appId,
-      KeyValueStore keyValueStore,
-      PinpointClient pinpointClient,
-      DeviceContextInfo? deviceContextInfo,) async {
+    String appId,
+    KeyValueStore keyValueStore,
+    PinpointClient pinpointClient,
+    DeviceContextInfo? deviceContextInfo,
+  ) async {
     final globalFieldsManager =
         await EndpointGlobalFieldsManager.getInstance(keyValueStore);
 
@@ -82,7 +82,9 @@ class EndpointClient {
 
   /// Update the UserProfile object on the EndpointProfile
   Future<void> setUser(
-      String userId, AnalyticsUserProfile copyFromProfile,) async {
+    String userId,
+    AnalyticsUserProfile copyFromProfile,
+  ) async {
     final newUserBuilder = EndpointUserBuilder();
 
     newUserBuilder.userId = userId;
@@ -148,10 +150,13 @@ class EndpointClient {
   /// Send local Endpoint instance to AWS Pinpoint
   Future<void> updateEndpoint() async {
     try {
-      await _pinpointClient.updateEndpoint(UpdateEndpointRequest(
+      await _pinpointClient.updateEndpoint(
+        UpdateEndpointRequest(
           applicationId: _appId,
           endpointId: _keyValueStore.getFixedEndpointId(),
-          endpointRequest: _endpointToRequest(getPublicEndpoint()),),);
+          endpointRequest: _endpointToRequest(getPublicEndpoint()),
+        ),
+      );
     } catch (error) {
       safePrint('updateEndpoint - exception encountered: ${error.toString()}');
     }
@@ -160,16 +165,17 @@ class EndpointClient {
   /// Create an EndpointRequest object from a local Endpoint instance
   EndpointRequest _endpointToRequest(PublicEndpoint publicEndpoint) {
     return EndpointRequest(
-        address: publicEndpoint.address,
-        attributes: publicEndpoint.attributes,
-        channelType: publicEndpoint.channelType,
-        demographic: publicEndpoint.demographic,
-        effectiveDate: publicEndpoint.effectiveDate,
-        endpointStatus: publicEndpoint.endpointStatus,
-        location: publicEndpoint.location,
-        metrics: publicEndpoint.metrics,
-        optOut: publicEndpoint.optOut,
-        requestId: publicEndpoint.requestId,
-        user: publicEndpoint.user,);
+      address: publicEndpoint.address,
+      attributes: publicEndpoint.attributes,
+      channelType: publicEndpoint.channelType,
+      demographic: publicEndpoint.demographic,
+      effectiveDate: publicEndpoint.effectiveDate,
+      endpointStatus: publicEndpoint.endpointStatus,
+      location: publicEndpoint.location,
+      metrics: publicEndpoint.metrics,
+      optOut: publicEndpoint.optOut,
+      requestId: publicEndpoint.requestId,
+      user: publicEndpoint.user,
+    );
   }
 }

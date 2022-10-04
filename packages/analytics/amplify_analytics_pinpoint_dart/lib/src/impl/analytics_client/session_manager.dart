@@ -29,7 +29,6 @@ typedef SessionFunc = Function(SessionBuilder);
 /// Based on App foreground/background events
 /// Events sent to Pinpoint must have an attached Session object
 class SessionManager {
-
   /// [onSessionStart] [onSessionEnd] are callbacks to
   /// allow parent classes to react to session events
   SessionManager(
@@ -114,7 +113,8 @@ class SessionManager {
   void _executeStop() {
     if (_sessionBuilder == null) {
       safePrint(
-          'Warning - stop session called without sessionBuilder initialized',);
+        'Warning - stop session called without sessionBuilder initialized',
+      );
       return;
     }
 

@@ -24,26 +24,32 @@ import 'package:built_collection/built_collection.dart';
 /// By storing and applying globalProperties and default values that all new Events should have
 /// For more details see Pinpoint Event online spec: https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-events.html
 class EventCreator {
-
   EventCreator._getInstance(this._globalFieldsManager, this._deviceContextInfo);
   static const int _maxEventTypeLength = 50;
 
   final EventGlobalFieldsManager _globalFieldsManager;
   final DeviceContextInfo? _deviceContextInfo;
 
-  static Future<EventCreator> getInstance(KeyValueStore keyValueStore,
-          DeviceContextInfo? deviceContextInfoProvider,) async =>
+  static Future<EventCreator> getInstance(
+    KeyValueStore keyValueStore,
+    DeviceContextInfo? deviceContextInfoProvider,
+  ) async =>
       EventCreator._getInstance(
-          await EventGlobalFieldsManager.getInstance(keyValueStore),
-          deviceContextInfoProvider,);
+        await EventGlobalFieldsManager.getInstance(keyValueStore),
+        deviceContextInfoProvider,
+      );
 
   /// Create a Pinpoint [Event] from a [AnalyticsEvent] received from the public API
   /// Also, auto fill fields of [Event]
-  Event createPinpointEvent(String eventType, SessionBuilder? sessionBuilder,
-      [AnalyticsEvent? analyticsEvent,]) {
+  Event createPinpointEvent(
+    String eventType,
+    SessionBuilder? sessionBuilder, [
+    AnalyticsEvent? analyticsEvent,
+  ]) {
     if (eventType.length > _maxEventTypeLength) {
       throw const AnalyticsException(
-          'The event type is too long, the max event type length is {$_maxEventTypeLength} characters.',);
+        'The event type is too long, the max event type length is {$_maxEventTypeLength} characters.',
+      );
     }
 
     final eventBuilder = EventBuilder();
@@ -68,7 +74,10 @@ class EventCreator {
     /// Read attributes and metrics from [analyticsEvent]
     if (analyticsEvent != null) {
       EventGlobalFieldsManager.extractAnalyticsProperties(
-          eventAttrs, eventMetrics, analyticsEvent.properties,);
+        eventAttrs,
+        eventMetrics,
+        analyticsEvent.properties,
+      );
     }
 
     eventBuilder.attributes = MapBuilder(eventAttrs);

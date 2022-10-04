@@ -67,7 +67,8 @@ class AmplifyAnalyticsPinpointDart extends AnalyticsPluginInterface {
 
     if (authProvider == null) {
       throw const AnalyticsException(
-          'No AWSIamAmplifyAuthProvider available.  Is Auth category added and configured?',);
+        'No AWSIamAmplifyAuthProvider available.  Is Auth category added and configured?',
+      );
     }
 
     final credentials = await authProvider.retrieve();
@@ -149,8 +150,10 @@ class AmplifyAnalyticsPinpointDart extends AnalyticsPluginInterface {
 
   void _checkConfigured() {
     if (_analyticsClient == null) {
-      throw const AnalyticsException('Analytics not configured',
-          recoverySuggestion: 'Please call Amplify.configure(amplifyconfig)',);
+      throw const AnalyticsException(
+        'Analytics not configured',
+        recoverySuggestion: 'Please call Amplify.configure(amplifyconfig)',
+      );
     }
   }
 }

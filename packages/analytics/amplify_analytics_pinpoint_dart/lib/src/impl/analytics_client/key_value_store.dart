@@ -19,7 +19,6 @@ import 'package:uuid/uuid.dart';
 /// Interface with underlying device key-value storage using [SecureStorageInterface]
 /// Present interface for saving/retrieving Strings
 class KeyValueStore {
-
   KeyValueStore._(this.uniqueId, this._storage);
   // Stored Keys
   static const String uniqueIdKey = 'UniqueId';
@@ -42,9 +41,10 @@ class KeyValueStore {
     // Initialize storage component
     if (storage == null) {
       storage = AmplifySecureStorageWorker(
-          config: AmplifySecureStorageConfig(
-        scope: 'analytics',
-      ),);
+        config: AmplifySecureStorageConfig(
+          scope: 'analytics',
+        ),
+      );
     } else {
       storage = storage;
     }

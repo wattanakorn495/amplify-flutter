@@ -22,9 +22,11 @@ import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/key_va
 /// Metrics are Double/Int
 /// For more details see Pinpoint Endpoint online spec: https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-endpoints.html
 class EndpointGlobalFieldsManager {
-
   EndpointGlobalFieldsManager._getInstance(
-      this._keyValueStore, this._globalAttributes, this._globalMetrics,);
+    this._keyValueStore,
+    this._globalAttributes,
+    this._globalMetrics,
+  );
   final int _maxKeyLength = 50;
   final int _maxAttributeValues = 50;
   final int _maxAttributes = 20;
@@ -42,27 +44,35 @@ class EndpointGlobalFieldsManager {
   final KeyValueStore _keyValueStore;
 
   static Future<EndpointGlobalFieldsManager> getInstance(
-      KeyValueStore sharedPrefs,) async {
+    KeyValueStore sharedPrefs,
+  ) async {
     /// Retrieve stored GlobalAttributes
     Map<String, dynamic> decodedGlobalAttributesJson = jsonDecode(
-        await sharedPrefs.getJson(KeyValueStore.endpointGlobalAttrsKey) ??
-            '{}',);
+      await sharedPrefs.getJson(KeyValueStore.endpointGlobalAttrsKey) ?? '{}',
+    );
     final globalAttributes = decodedGlobalAttributesJson
         .map((key, value) => MapEntry(key, List<String>.from(value)));
 
     /// Retrieve stored GlobalMetrics
-    final globalMetrics = Map<String, double>.from(jsonDecode(
+    final globalMetrics = Map<String, double>.from(
+      jsonDecode(
         await sharedPrefs.getJson(KeyValueStore.endpointGlobalMetricsKey) ??
-            '{}',),);
+            '{}',
+      ),
+    );
 
     return EndpointGlobalFieldsManager._getInstance(
-        sharedPrefs, globalAttributes, globalMetrics,);
+      sharedPrefs,
+      globalAttributes,
+      globalMetrics,
+    );
   }
 
   String _processKey(String key) {
     if (key.length > _maxKeyLength) {
       print(
-          'The attribute key has been trimmed to a length of $_maxKeyLength characters.',);
+        'The attribute key has been trimmed to a length of $_maxKeyLength characters.',
+      );
       return key.substring(0, _maxKeyLength);
     }
     return key;
@@ -75,7 +85,8 @@ class EndpointGlobalFieldsManager {
     if (values.length > _maxAttributeValues) {
       trimmedValues = values.sublist(0, _maxAttributeValues);
       print(
-          'The attribute values has been reduced to $_maxAttributeValues values.',);
+        'The attribute values has been reduced to $_maxAttributeValues values.',
+      );
     } else {
       trimmedValues = List.from(values);
     }
@@ -87,7 +98,8 @@ class EndpointGlobalFieldsManager {
         value = value.substring(0, _maxAttributeValueLength);
         trimmedValues[i] = value;
         print(
-            'The attribute value has been trimmed to a length of $_maxAttributeValueLength characters',);
+          'The attribute value has been trimmed to a length of $_maxAttributeValueLength characters',
+        );
       }
     }
 
@@ -100,7 +112,8 @@ class EndpointGlobalFieldsManager {
       _saveAttributes();
     } else {
       print(
-          'Max number of attributes/metrics reached: $_maxAttributes.  Ignoring additional attributes.',);
+        'Max number of attributes/metrics reached: $_maxAttributes.  Ignoring additional attributes.',
+      );
     }
   }
 
@@ -111,7 +124,9 @@ class EndpointGlobalFieldsManager {
 
   void _saveAttributes() {
     _keyValueStore.saveJson(
-        KeyValueStore.endpointGlobalAttrsKey, jsonEncode(_globalAttributes),);
+      KeyValueStore.endpointGlobalAttrsKey,
+      jsonEncode(_globalAttributes),
+    );
   }
 
   void addMetric(String name, double value) {
@@ -120,7 +135,8 @@ class EndpointGlobalFieldsManager {
       _saveMetrics();
     } else {
       print(
-          'Max number of attributes/metrics reached: $_maxAttributes).  Ignoring additional metrics',);
+        'Max number of attributes/metrics reached: $_maxAttributes).  Ignoring additional metrics',
+      );
     }
   }
 
@@ -131,6 +147,8 @@ class EndpointGlobalFieldsManager {
 
   void _saveMetrics() {
     _keyValueStore.saveJson(
-        KeyValueStore.endpointGlobalMetricsKey, jsonEncode(_globalMetrics),);
+      KeyValueStore.endpointGlobalMetricsKey,
+      jsonEncode(_globalMetrics),
+    );
   }
 }

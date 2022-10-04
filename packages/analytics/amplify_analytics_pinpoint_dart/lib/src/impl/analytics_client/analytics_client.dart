@@ -27,7 +27,6 @@ import 'package:amplify_core/amplify_core.dart';
 /// Top level client for executing all behaviors of the Analytics Plugin
 /// by managing behaviors and inter dependencies of sub clients and helper classes
 class AnalyticsClient {
-
   AnalyticsClient._(
     this._sessionManager,
     this._eventClient,
@@ -58,10 +57,19 @@ class AnalyticsClient {
         await EventCreator.getInstance(keyValueStore, deviceContextInfo);
 
     final endpointClient = await EndpointClient.getInstance(
-        appId, keyValueStore, pinpointClient, deviceContextInfo,);
+      appId,
+      keyValueStore,
+      pinpointClient,
+      deviceContextInfo,
+    );
 
     final eventClient = EventClient(
-        appId, keyValueStore, endpointClient, pinpointClient, pathProvider,);
+      appId,
+      keyValueStore,
+      endpointClient,
+      pinpointClient,
+      pathProvider,
+    );
 
     // Initialize session manager
     // And define auto session start/end Events to be sent on session start/end events
@@ -98,7 +106,10 @@ class AnalyticsClient {
   /// Received events are NEVER sent immediately but cached to be sent in a batch
   void recordEvent(AnalyticsEvent analyticsEvent) {
     final pinpointEvent = _eventCreator.createPinpointEvent(
-        analyticsEvent.name, _sessionManager.sessionBuilder, analyticsEvent,);
+      analyticsEvent.name,
+      _sessionManager.sessionBuilder,
+      analyticsEvent,
+    );
     _eventClient.recordEvent(pinpointEvent);
   }
 

@@ -25,7 +25,6 @@ import 'package:built_value/serializer.dart';
 /// Interface with underlying device storage using the [Drift] package
 /// Present interface for saving/retrieving PinpointEvents
 class EventStorageAdapter {
-
   factory EventStorageAdapter(CachedEventsPathProvider? pathProvider) {
     final db = DriftDatabaseJsonStrings(pathProvider);
 
@@ -42,6 +41,7 @@ class EventStorageAdapter {
   }
 
   EventStorageAdapter._(this._db, this._serializers);
+
   /// Underlying drift database used to store Events
   final DriftDatabaseJsonStrings _db;
   final Serializers _serializers;
@@ -58,7 +58,8 @@ class EventStorageAdapter {
 
     if (jsonString.length > _maxEventKbSize) {
       throw const AnalyticsException(
-          'Pinpoint event size limit exceeded.  Max size is: $_maxEventKbSize bytes',);
+        'Pinpoint event size limit exceeded.  Max size is: $_maxEventKbSize bytes',
+      );
     }
 
     await _db.addJsonString(jsonString);
@@ -71,8 +72,7 @@ class EventStorageAdapter {
     int maxEvents = _maxEventsInBatch,
   }) async {
     // Raw objects read from Drift storage
-    final driftJsonStrings =
-        await _db.getJsonStrings(maxEvents);
+    final driftJsonStrings = await _db.getJsonStrings(maxEvents);
 
     // Convert raw objects to Event
     final storedEvents = <StoredEvent>[];
@@ -92,7 +92,6 @@ class EventStorageAdapter {
 /// Wrapper class around [Event]
 /// Includes DriftId to identify that event for deletion when calling [deleteEvents]
 class StoredEvent {
-
   /// Create StoredEvent from [DriftJsonString]
   factory StoredEvent(DriftJsonString data, Serializers serializers) {
     final event = serializers.deserialize(jsonDecode(data.jsonString)) as Event;
