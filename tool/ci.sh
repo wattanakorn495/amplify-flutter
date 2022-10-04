@@ -1,5 +1,5 @@
 #!/bin/bash
-# Created with package:mono_repo v6.3.0
+# Created with package:mono_repo v6.4.1
 
 # Support built in commands on windows out of the box.
 # When it is a flutter repo (check the pubspec.yaml for "sdk: flutter")
@@ -87,39 +87,47 @@ for PKG in ${PKGS}; do
         echo 'flutter analyze --fatal-infos lib pigeons'
         flutter analyze --fatal-infos lib pigeons || EXIT_CODE=$?
         ;;
-      command_0)
+      command_00)
         echo 'dart --version'
         dart --version || EXIT_CODE=$?
         ;;
-      command_1)
+      command_01)
         echo 'dart run build_runner test --delete-conflicting-outputs -- -p chrome,firefox'
         dart run build_runner test --delete-conflicting-outputs -- -p chrome,firefox || EXIT_CODE=$?
         ;;
-      command_2)
+      command_02)
         echo 'dart run build_runner test --release --delete-conflicting-outputs -- -p chrome,firefox'
         dart run build_runner test --release --delete-conflicting-outputs -- -p chrome,firefox || EXIT_CODE=$?
         ;;
-      command_3)
+      command_03)
+        echo '../../../tool/license.sh -check'
+        ../../../tool/license.sh -check || EXIT_CODE=$?
+        ;;
+      command_04)
+        echo '../../../tool/coverage.sh'
+        ../../../tool/coverage.sh || EXIT_CODE=$?
+        ;;
+      command_05)
         echo 'dart run build_runner test -- -p chrome,firefox'
         dart run build_runner test -- -p chrome,firefox || EXIT_CODE=$?
         ;;
-      command_4)
+      command_06)
         echo 'dart test -p chrome,firefox'
         dart test -p chrome,firefox || EXIT_CODE=$?
         ;;
-      command_5)
+      command_07)
         echo 'git submodule update --init'
         git submodule update --init || EXIT_CODE=$?
         ;;
-      command_6)
+      command_08)
         echo 'tool/test-desktop.sh'
         tool/test-desktop.sh || EXIT_CODE=$?
         ;;
-      command_7)
+      command_09)
         echo 'dart run build_runner test --delete-conflicting-outputs --verbose -- -p chrome,firefox'
         dart run build_runner test --delete-conflicting-outputs --verbose -- -p chrome,firefox || EXIT_CODE=$?
         ;;
-      command_8)
+      command_10)
         echo 'dart run build_runner test --release --delete-conflicting-outputs --verbose -- -p chrome,firefox'
         dart run build_runner test --release --delete-conflicting-outputs --verbose -- -p chrome,firefox || EXIT_CODE=$?
         ;;
@@ -132,14 +140,22 @@ for PKG in ${PKGS}; do
         dart test || EXIT_CODE=$?
         ;;
       test_1)
+        echo 'dart test --coverage=coverage'
+        dart test --coverage=coverage || EXIT_CODE=$?
+        ;;
+      test_2)
+        echo 'dart test -p chrome --coverage=coverage'
+        dart test -p chrome --coverage=coverage || EXIT_CODE=$?
+        ;;
+      test_3)
         echo 'dart test --tags=build'
         dart test --tags=build || EXIT_CODE=$?
         ;;
-      test_3)
+      test_5)
         echo 'dart test -p chrome'
         dart test -p chrome || EXIT_CODE=$?
         ;;
-      test_4)
+      test_6)
         echo 'dart test -p firefox'
         dart test -p firefox || EXIT_CODE=$?
         ;;
