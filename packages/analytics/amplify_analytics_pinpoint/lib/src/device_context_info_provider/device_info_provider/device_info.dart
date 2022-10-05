@@ -18,22 +18,22 @@ import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.
 /// https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-endpoints.html
 class DeviceInfo {
   /// Manufacturer
-  String? make;
+  final String? make;
 
   /// Model name or number of device
-  String? model;
+  final String? model;
 
   /// Model version of device
-  String? modelVersion;
+  final String? modelVersion;
 
   /// Platform: iOS/Android, etc.
-  DevicePlatform? platform;
+  final DevicePlatform? platform;
 
   /// Version of platform
-  String? platformVersion;
+  final String? platformVersion;
 
   /// Constructs DeviceInfo data object with provided information
-  DeviceInfo({
+  const DeviceInfo({
     this.make,
     this.model,
     this.modelVersion,

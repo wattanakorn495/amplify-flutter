@@ -46,8 +46,8 @@ class EventClient {
   final _uuid = const Uuid();
 
   /// Received events are NEVER sent immediately but cached to be sent in a batch
-  void recordEvent(Event event) {
-    _storageAdapter.saveEvent(event);
+  Future<void> recordEvent(Event event) async {
+    return _storageAdapter.saveEvent(event);
   }
 
   /// Send cached events as a batch to Pinpoint
@@ -153,7 +153,7 @@ class EventClient {
     }
     // Always delete local store of events
     // Unless a retryable exception has been received (see above)
-    finally {
+     finally {
       await _storageAdapter.deleteEvents(eventIdsToDelete.values);
     }
   }

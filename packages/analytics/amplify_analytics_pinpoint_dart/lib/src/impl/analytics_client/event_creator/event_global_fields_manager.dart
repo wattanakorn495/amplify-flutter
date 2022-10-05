@@ -18,17 +18,21 @@ import 'dart:convert';
 import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/key_value_store.dart';
 import 'package:amplify_core/amplify_core.dart';
 
-/// Manages the storage, retrieval, and update of [Attributes] and [Metrics] for Events
-/// Attributes are String/Bool
-/// Metrics are Double/Int
-/// These values are sent with every new Event
-/// For more details see Pinpoint Event online spec: https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-events.html
+/// Manages the storage, retrieval, and update of [Attributes] and [Metrics] for
+/// Events.
+///
+/// - Attributes are String/bool
+/// - Metrics are double/int
+///
+/// These values are sent with every new Event. For more details, see
+/// [Pinpoint Event](https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-events.html) online spec.
 class EventGlobalFieldsManager {
-  EventGlobalFieldsManager._getInstance(
+  EventGlobalFieldsManager(
     this._keyValueStore,
     this._globalAttributes,
     this._globalMetrics,
   );
+
   final Map<String, String> _globalAttributes;
   final Map<String, double> _globalMetrics;
 
@@ -39,17 +43,18 @@ class EventGlobalFieldsManager {
 
   final KeyValueStore _keyValueStore;
 
+  static EventGlobalFieldsManager? _instance;
+
   static Future<EventGlobalFieldsManager> getInstance(
     KeyValueStore keyValueStore,
   ) async =>
-      EventGlobalFieldsManager._getInstance(
+      _instance ??= EventGlobalFieldsManager(
         keyValueStore,
-        Map<String, String>.from(
-          jsonDecode(
-            await keyValueStore.getJson(KeyValueStore.eventsGlobalAttrsKey) ??
-                '{}',
-          ),
-        ),
+        (jsonDecode(
+          await keyValueStore.getJson(KeyValueStore.eventsGlobalAttrsKey) ??
+              '{}',
+        ) as Map<String, Object?>)
+            .cast(),
         Map<String, double>.from(
           jsonDecode(
             await keyValueStore
@@ -59,13 +64,9 @@ class EventGlobalFieldsManager {
         ),
       );
 
-// Note: no max size for global properties
   Future<void> addGlobalProperties(AnalyticsProperties globalProperties) async {
-    extractAnalyticsProperties(
-      _globalAttributes,
-      _globalMetrics,
-      globalProperties,
-    );
+    _globalAttributes.addAll(globalProperties.attributes);
+    _globalMetrics.addAll(globalProperties.metrics);
 
     await _saveProperties();
   }

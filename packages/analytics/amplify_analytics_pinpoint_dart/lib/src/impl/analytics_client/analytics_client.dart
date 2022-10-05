@@ -104,13 +104,13 @@ class AnalyticsClient {
 
   /// Create a [Event] object from [AnalyticsEvent] received from the public API
   /// Received events are NEVER sent immediately but cached to be sent in a batch
-  void recordEvent(AnalyticsEvent analyticsEvent) {
+  Future<void> recordEvent(AnalyticsEvent analyticsEvent) {
     final pinpointEvent = _eventCreator.createPinpointEvent(
       analyticsEvent.name,
       _sessionManager.sessionBuilder,
       analyticsEvent,
     );
-    _eventClient.recordEvent(pinpointEvent);
+    return _eventClient.recordEvent(pinpointEvent);
   }
 
   void enable() {

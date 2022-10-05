@@ -18,16 +18,16 @@ import 'package:package_info_plus/package_info_plus.dart';
 /// https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-endpoints.html
 class AppInfo {
   /// The app name. `CFBundleDisplayName` on iOS, `application/label` on Android.
-  String? appName;
+  final String? appName;
 
   /// The package name. `bundleIdentifier` on iOS, `getPackageName` on Android.
-  String? packageName;
+  final String? packageName;
 
   /// The package version. `CFBundleShortVersionString` on iOS, `versionName` on Android.
-  String? version;
+  final String? version;
 
   /// Constructs AppInfo data object with provided information
-  AppInfo(this.appName, this.packageName, this.version);
+  const AppInfo(this.appName, this.packageName, this.version);
 }
 
 /// Provides AppInfo from Flutter -> Dart

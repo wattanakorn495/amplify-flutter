@@ -39,16 +39,13 @@ class KeyValueStore {
     SecureStorageInterface? storage,
   ) async {
     // Initialize storage component
-    if (storage == null) {
-      storage = AmplifySecureStorageWorker(
-        config: AmplifySecureStorageConfig(
-          scope: 'analytics',
-        ),
-      );
-    } else {
-      storage = storage;
-    }
+    storage ??= AmplifySecureStorageWorker(
+      config: AmplifySecureStorageConfig(
+        scope: 'analytics',
+      ),
+    );
 
+    // TODO: Move logic
     // Retrieve Unique ID
     var storedUniqueId = await storage.read(key: uniqueIdKey);
     if (storedUniqueId == null) {
@@ -69,7 +66,7 @@ class KeyValueStore {
 
   /// UniqueID is used to identify the Pinpoint Endpoint attached to this device
   /// It must be constant and never changed
-  String getFixedEndpointId() {
-    return uniqueId;
+  Future<String> getFixedEndpointId() {
+    return _storage.read(key: key);
   }
 }

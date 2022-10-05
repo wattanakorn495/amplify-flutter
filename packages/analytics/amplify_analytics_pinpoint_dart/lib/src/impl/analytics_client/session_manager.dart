@@ -23,7 +23,7 @@ const String sessionStopEventType = '_session.stop';
 
 enum SessionState { inactive, active, paused }
 
-typedef SessionFunc = Function(SessionBuilder);
+typedef SessionFunc = void Function(SessionBuilder);
 
 /// Manage creation and deletion of Session objects
 /// Based on App foreground/background events
@@ -52,8 +52,8 @@ class SessionManager {
   final SessionFunc _onSessionStart;
   final SessionFunc _onSessionEnd;
 
-  SessionBuilder? _sessionBuilder;
-  SessionBuilder? get sessionBuilder => _sessionBuilder;
+  Session? _session;
+  Session? get session => _session;
 
   final AppLifecycleProvider? _lifecycleObserver;
 
@@ -79,7 +79,7 @@ class SessionManager {
   }
 
   SessionState getSessionState() {
-    if (_sessionBuilder == null) return SessionState.inactive;
+    if (_session == null) return SessionState.inactive;
 
     return SessionState.active;
   }
@@ -101,9 +101,11 @@ class SessionManager {
   void _executeStart() {
     final curTime = DateTime.now();
 
-    _sessionBuilder = SessionBuilder()
-      ..id = _generateSessionId()
-      ..startTimestamp = curTime.toUtc().toIso8601String();
+    _session = Session.build(
+      (b) => b
+        ..id = _generateSessionId()
+        ..startTimestamp = curTime.toUtc().toIso8601String(),
+    );
 
     startTimeMilliseconds = curTime.millisecondsSinceEpoch;
 
@@ -130,4 +132,9 @@ class SessionManager {
     // Delete the session
     _sessionBuilder = null;
   }
+}
+
+class _Session {
+  Session _session;
+  DateTime _startTime;
 }

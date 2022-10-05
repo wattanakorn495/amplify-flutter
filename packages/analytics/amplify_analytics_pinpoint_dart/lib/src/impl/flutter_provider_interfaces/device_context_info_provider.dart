@@ -35,16 +35,16 @@ class DeviceContextInfo {
     DevicePlatform? platform,
   }) {
     return DeviceContextInfo._(
-      countryCode: sanitize(countryCode),
-      locale: sanitize(locale),
-      timezone: sanitize(timezone),
-      appName: sanitize(appName),
-      appPackageName: sanitize(appPackageName),
-      appVersion: sanitize(appVersion),
-      make: sanitize(make),
-      model: sanitize(model),
-      modelVersion: sanitize(modelVersion),
-      platformVersion: sanitize(platformVersion),
+      countryCode: _sanitize(countryCode),
+      locale: _sanitize(locale),
+      timezone: _sanitize(timezone),
+      appName: _sanitize(appName),
+      appPackageName: _sanitize(appPackageName),
+      appVersion: _sanitize(appVersion),
+      make: _sanitize(make),
+      model: _sanitize(model),
+      modelVersion: _sanitize(modelVersion),
+      platformVersion: _sanitize(platformVersion),
       platform: platform,
     );
   }
@@ -64,8 +64,9 @@ class DeviceContextInfo {
   });
 
   static const int _maxFieldLength = 50;
-  static String? sanitize(String? field) {
+  static String? _sanitize(String? field) {
     if (field == null || field.length <= _maxFieldLength) return field;
+// TODO: Add logging statement
     return field.substring(0, _maxFieldLength);
   }
 

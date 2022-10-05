@@ -23,13 +23,14 @@ import 'package:built_collection/built_collection.dart';
 /// Uses [PinpointClient] to update AWS Pinpoint Endpoint
 /// For more details see Pinpoint Endpoint online spec: https://docs.aws.amazon.com/pinpoint/latest/apireference/apps-application-id-endpoints.html
 class EndpointClient {
-  EndpointClient._(
+  EndpointClient(
     this._appId,
     this._keyValueStore,
     this._pinpointClient,
     this._globalFieldsManager,
     this._endpointBuilder,
   );
+
   final String _appId;
   final PinpointClient _pinpointClient;
   final KeyValueStore _keyValueStore;
@@ -63,7 +64,7 @@ class EndpointClient {
       ..country = deviceContextInfo?.countryCode;
     endpointBuilder.requestId = keyValueStore.getFixedEndpointId();
 
-    return EndpointClient._(
+    return EndpointClient(
       appId,
       keyValueStore,
       pinpointClient,
@@ -89,7 +90,7 @@ class EndpointClient {
 
     newUserBuilder.userId = userId;
 
-    // TODO - introduce a new AWSPinpointUserProfile subclass of AnalyticsUserProfile
+    // TODO(fjnoyp): introduce a new AWSPinpointUserProfile subclass of AnalyticsUserProfile
     // Which will contain 'userAttributes' that will be stored on EndpointUserBuilder
 
     // The [AnalyticsUserProfile] name, email, and plan fields are added as regular attributes to the local Endpoint
@@ -119,6 +120,8 @@ class EndpointClient {
     // Note that the [copyFromProfile]'s properties are copied to Endpoint metrics/attributes
     // Instead of the [EndpointUserBuilder] object
     if (copyFromProfile.properties != null) {
+      _globalFieldsManager.globalAttributes
+          .addAll(copyFromProfile.properties!.attributes);
       final typesMap = copyFromProfile.properties!.getAllPropertiesTypes();
       copyFromProfile.properties!.getAllProperties().forEach((key, value) {
         if (typesMap[key] == 'DOUBLE' || typesMap[key] == 'INT') {

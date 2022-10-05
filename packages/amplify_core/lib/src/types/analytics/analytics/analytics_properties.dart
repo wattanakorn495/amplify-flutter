@@ -46,4 +46,12 @@ class AnalyticsProperties {
 
   Map<String, String> getAllPropertiesTypes() =>
       UnmodifiableMapView(_propertiesTypes);
+
+  Map<String, String> get attributes => {
+        for (final entry in _propertiesTypes.entries
+            .where((e) => e.value == 'STRING' || e.value == 'BOOL'))
+          _properties[entry.key]!.toString(),
+      };
+
+  Map<String, double> get metrics {}
 }

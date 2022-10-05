@@ -43,7 +43,7 @@ class EventCreator {
   /// Also, auto fill fields of [Event]
   Event createPinpointEvent(
     String eventType,
-    SessionBuilder? sessionBuilder, [
+    Session sessionBuilder, [
     AnalyticsEvent? analyticsEvent,
   ]) {
     if (eventType.length > _maxEventTypeLength) {
@@ -58,7 +58,7 @@ class EventCreator {
     eventBuilder.eventType = eventType;
     eventBuilder.sdkName = 'amplify-flutter';
     eventBuilder.clientSdkVersion = packageVersion;
-    eventBuilder.session = sessionBuilder;
+    eventBuilder.session.replace(sessionBuilder);
 
     eventBuilder.timestamp = DateTime.now().toUtc().toIso8601String();
 
@@ -80,8 +80,8 @@ class EventCreator {
       );
     }
 
-    eventBuilder.attributes = MapBuilder(eventAttrs);
-    eventBuilder.metrics = MapBuilder(eventMetrics);
+    eventBuilder.attributes.addAll(eventAttrs);
+    eventBuilder.metrics.addAll(eventMetrics);
 
     return eventBuilder.build();
   }

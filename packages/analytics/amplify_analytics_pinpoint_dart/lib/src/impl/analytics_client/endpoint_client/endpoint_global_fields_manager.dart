@@ -16,6 +16,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:amplify_analytics_pinpoint_dart/src/impl/analytics_client/key_value_store.dart';
+import 'package:amplify_core/amplify_core.dart';
 
 /// Manages the storage, retrieval, and update of [Attributes] and [Metrics] of a PinpointEndpoint
 /// Attributes are String/Bool
@@ -27,10 +28,13 @@ class EndpointGlobalFieldsManager {
     this._globalAttributes,
     this._globalMetrics,
   );
-  final int _maxKeyLength = 50;
-  final int _maxAttributeValues = 50;
-  final int _maxAttributes = 20;
-  final int _maxAttributeValueLength = 100;
+  static const int _maxKeyLength = 50;
+  static const int _maxAttributeValues = 50;
+  static const int _maxAttributes = 20;
+  static const int _maxAttributeValueLength = 100;
+
+  static final AmplifyLogger _logger =
+      AmplifyLogger.category(Category.analytics);
 
   final Map<String, List<String>> _globalAttributes;
   final Map<String, double> _globalMetrics;
@@ -47,9 +51,11 @@ class EndpointGlobalFieldsManager {
     KeyValueStore sharedPrefs,
   ) async {
     /// Retrieve stored GlobalAttributes
-    Map<String, dynamic> decodedGlobalAttributesJson = jsonDecode(
-      await sharedPrefs.getJson(KeyValueStore.endpointGlobalAttrsKey) ?? '{}',
-    );
+    final cachedAttributes =
+        await sharedPrefs.getJson(KeyValueStore.endpointGlobalAttrsKey);
+    final decodedGlobalAttributesJson = cachedAttributes == null
+        ? null
+        : jsonDecode(cachedAttributes) as Map<String, Object?>;
     final globalAttributes = decodedGlobalAttributesJson
         .map((key, value) => MapEntry(key, List<String>.from(value)));
 
@@ -70,8 +76,9 @@ class EndpointGlobalFieldsManager {
 
   String _processKey(String key) {
     if (key.length > _maxKeyLength) {
-      print(
-        'The attribute key has been trimmed to a length of $_maxKeyLength characters.',
+      _logger.warn(
+        'The attribute key has been trimmed to a length of $_maxKeyLength '
+        'characters: $key.',
       );
       return key.substring(0, _maxKeyLength);
     }
@@ -88,7 +95,7 @@ class EndpointGlobalFieldsManager {
         'The attribute values has been reduced to $_maxAttributeValues values.',
       );
     } else {
-      trimmedValues = List.from(values);
+      trimmedValues = List.of(values);
     }
 
     // Restrict list element lengths to '_max_attribute_value_length"
@@ -106,15 +113,17 @@ class EndpointGlobalFieldsManager {
     return trimmedValues;
   }
 
-  void addAttribute(String name, List<String> values) {
-    if (_globalAttributes.length + _globalMetrics.length < _maxAttributes) {
-      _globalAttributes[_processKey(name)] = _processAttributeValues(values);
-      _saveAttributes();
-    } else {
+  Future<void> addAttribute(String name, List<String> values) async {
+    if (_globalAttributes.length + _globalMetrics.length > _maxAttributes) {
       print(
-        'Max number of attributes/metrics reached: $_maxAttributes.  Ignoring additional attributes.',
+        'Max number of attributes/metrics reached: $_maxAttributes. '
+        'Ignoring additional attributes.',
       );
+      return;
     }
+
+    _globalAttributes[_processKey(name)] = _processAttributeValues(values);
+    return _saveAttributes();
   }
 
   void removeAttribute(String name) {
@@ -122,8 +131,8 @@ class EndpointGlobalFieldsManager {
     _saveAttributes();
   }
 
-  void _saveAttributes() {
-    _keyValueStore.saveJson(
+  Future<void> _saveAttributes() {
+    return _keyValueStore.saveJson(
       KeyValueStore.endpointGlobalAttrsKey,
       jsonEncode(_globalAttributes),
     );

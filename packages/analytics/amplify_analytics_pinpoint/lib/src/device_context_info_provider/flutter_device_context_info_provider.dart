@@ -27,8 +27,8 @@ class FlutterDeviceContextInfoProvider implements DeviceContextInfoProvider {
 
   @override
   Future<DeviceContextInfo> getDeviceInfoDetails() async {
-    var appInfo = await AppInfoProvider.getAppInfo();
-    var deviceInfo = await DeviceInfoProvider().getDeviceInfo();
+    final appInfo = await AppInfoProvider.getAppInfo();
+    final deviceInfo = await DeviceInfoProvider().getDeviceInfo();
     return DeviceContextInfo(
       countryCode: WidgetsBinding.instance.window.locale.countryCode,
       locale: WidgetsBinding.instance.window.locale.toString(),
@@ -37,6 +37,7 @@ class FlutterDeviceContextInfoProvider implements DeviceContextInfoProvider {
       // which are not accepted by Pinpoint
       // Other packages require location objects (tz database) or don't work on all platforms
       // NOTE: all times sent to Pinpoint must be in UTC ... (DateTime.now().toUtc()...)
+      // TODO: On web, do what JS does
       timezone: 'UTC',
       appName: appInfo.appName,
       appPackageName: appInfo.packageName,

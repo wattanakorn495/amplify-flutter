@@ -73,12 +73,8 @@ class DeviceInfoProvider {
         );
       }
     } on PlatformException {
-      return DeviceInfo(
-        platform: DevicePlatform.unknown,
-      );
+      // fall through
     }
-    return DeviceInfo(
-      platform: DevicePlatform.unknown,
-    );
+    throw StateError('Unknown platform');
   }
 }

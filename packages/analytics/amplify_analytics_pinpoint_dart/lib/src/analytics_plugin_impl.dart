@@ -37,7 +37,17 @@ class AmplifyAnalyticsPinpointDart extends AnalyticsPluginInterface {
         _appLifecycleProvider = appLifecycleProvider,
         _deviceContextInfoProvider = deviceContextInfoProvider;
 
-  late AnalyticsClient? _analyticsClient;
+  AnalyticsClient? __analyticsClient;
+  AnalyticsClient get _analyticsClient {
+    if (__analyticsClient == null) {
+      throw const AnalyticsException(
+        'Analytics not configured',
+        recoverySuggestion: 'Please call Amplify.configure(amplifyconfig)',
+      );
+    }
+    return __analyticsClient!;
+  }
+
   final SecureStorageInterface? _credentialStorage;
 
   /// External Flutter Provider implementations
@@ -87,7 +97,7 @@ class AmplifyAnalyticsPinpointDart extends AnalyticsPluginInterface {
           await _deviceContextInfoProvider!.getDeviceInfoDetails();
     }
 
-    _analyticsClient = await AnalyticsClient.getInstance(
+    __analyticsClient = await AnalyticsClient.getInstance(
       appId,
       keyValueStore,
       pinpointClient,
@@ -99,28 +109,24 @@ class AmplifyAnalyticsPinpointDart extends AnalyticsPluginInterface {
 
   @override
   Future<void> enable() async {
-    _checkConfigured();
-    _analyticsClient?.enable();
+    _analyticsClient.enable();
   }
 
   @override
   Future<void> disable() async {
-    _checkConfigured();
-    _analyticsClient?.disable();
+    _analyticsClient.disable();
   }
 
   @override
   Future<void> flushEvents() async {
-    _checkConfigured();
-    await _analyticsClient?.flushEvents();
+    await _analyticsClient.flushEvents();
   }
 
   @override
   Future<void> recordEvent({
     required AnalyticsEvent event,
   }) async {
-    _checkConfigured();
-    _analyticsClient?.recordEvent(event);
+   _analyticsClient.recordEvent(event);
   }
 
   @override
@@ -149,11 +155,6 @@ class AmplifyAnalyticsPinpointDart extends AnalyticsPluginInterface {
   }
 
   void _checkConfigured() {
-    if (_analyticsClient == null) {
-      throw const AnalyticsException(
-        'Analytics not configured',
-        recoverySuggestion: 'Please call Amplify.configure(amplifyconfig)',
-      );
-    }
+    i
   }
 }

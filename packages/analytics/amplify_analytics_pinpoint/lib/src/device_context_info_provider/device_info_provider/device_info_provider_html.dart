@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:amplify_analytics_pinpoint_dart/amplify_analytics_pinpoint_dart.dart';
+import 'package:amplify_core/src/platform/platform_html.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 
@@ -28,7 +29,7 @@ class DeviceInfoProvider {
       return DeviceInfo(
         make: webInfo.vendor, // vendor of the browser
         model: webInfo.browserName.toString(),
-        modelVersion: webInfo.appVersion, // version of browser
+        modelVersion: osIdentifier.split('/')[1], // version of browser
         platform: DevicePlatform.web,
         platformVersion: webInfo.platform, // version of browser?
       );

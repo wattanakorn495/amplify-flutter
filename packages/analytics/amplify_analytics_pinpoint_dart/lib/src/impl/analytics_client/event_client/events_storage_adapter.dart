@@ -22,9 +22,12 @@ import 'package:amplify_analytics_pinpoint_dart/src/sdk/src/pinpoint/common/seri
 import 'package:amplify_core/amplify_core.dart';
 import 'package:built_value/serializer.dart';
 
+/// {@template amplify_analytics_pinpoint_dart.event_storage_adapter}
 /// Interface with underlying device storage using the [Drift] package
-/// Present interface for saving/retrieving PinpointEvents
+/// Present interface for saving/retrieving PinpointEvents.
+/// {@endtemplate}
 class EventStorageAdapter {
+  /// {@macro amplify_analytics_pinpoint_dart.event_storage_adapter}
   factory EventStorageAdapter(CachedEventsPathProvider? pathProvider) {
     final db = DriftDatabaseJsonStrings(pathProvider);
 
@@ -95,10 +98,11 @@ class StoredEvent {
   /// Create StoredEvent from [DriftJsonString]
   factory StoredEvent(DriftJsonString data, Serializers serializers) {
     final event = serializers.deserialize(jsonDecode(data.jsonString)) as Event;
-    return StoredEvent._internal(data.id, event);
+    return StoredEvent._(data.id, event);
   }
 
-  StoredEvent._internal(this.id, this.event);
-  int id;
-  Event event;
+  const StoredEvent._(this.id, this.event);
+
+  final int id;
+  final Event event;
 }
