@@ -35,6 +35,12 @@ runs:
       run: ./build-support/create_integration_test_profile.sh
       shell: bash
 
+    # The dummy configuration produced by aft has some characters which cause the
+    # Amplify CLI to throw when running pull, so just delete the dummy file.
+    - name: Remove config file created by aft
+      run: melos exec --scope=${{ inputs.scope }} rm lib/amplifyconfiguration.dart
+      shell: bash
+
     - name: Pull Amplify Configurations
       # TODO: remove NEXT_API_APP_ID before merging to main
       run: |
