@@ -12,9 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:smithy/smithy.dart';
+import 'package:amplify_core/amplify_core.dart';
 
-/// A class which can handle running [Operation]s.
-abstract class Client {
-  const Client();
+/// {@template amplify_core.auth.sign_in_details}
+/// Details about how a user signed in.
+///
+/// Returned as a member of [AuthUser] from [AuthCategory.getCurrentUser].
+/// {@endtemplate}
+abstract class SignInDetails with AWSSerializable<Map<String, Object?>> {
+  /// {@macro amplify_core.auth.sign_in_details}
+  const SignInDetails();
 }
