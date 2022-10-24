@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:amplify_core/amplify_core.dart' hide PaginatedResult;
@@ -19,10 +20,18 @@ import 'package:amplify_storage_s3_dart/amplify_storage_s3_dart.dart';
 import 'package:amplify_storage_s3_dart/src/sdk/s3.dart' as s3;
 import 'package:amplify_storage_s3_dart/src/sdk/src/s3/common/endpoint_resolver.dart'
     as endpoint_resolver;
+import 'package:amplify_storage_s3_dart/src/storage_s3_service/storage_s3_service.dart';
+import 'package:amplify_storage_s3_dart/src/storage_s3_service/transfer/transfer.dart'
+    as transfer;
+
 import 'package:aws_signature_v4/aws_signature_v4.dart';
 import 'package:meta/meta.dart';
 import 'package:smithy/smithy.dart' as smithy;
 import 'package:smithy_aws/smithy_aws.dart';
+
+/// Zone value symbol for testing.
+@visibleForTesting
+const testDateTimeNowOverride = #_testDateTimeNowOverride;
 
 /// {@template amplify_storage_s3.storage_s3_service}
 /// This is a wrapper implementation over Smithy S3Client as a glue layer
@@ -36,26 +45,27 @@ class StorageS3Service {
     required S3StoragePrefixResolver prefixResolver,
     required AWSIamAmplifyAuthProvider credentialsProvider,
     required AWSLogger logger,
-    @visibleForTesting DependencyManager? dependencyManagerOverride,
+    required DependencyManager dependencyManager,
   })  : _defaultBucket = defaultBucket,
         _defaultRegion = defaultRegion,
-        // dependencyManagerOverride should be available only in unit tests
-        _defaultS3Client = dependencyManagerOverride == null
-            ? s3.S3Client(
-                region: defaultRegion,
-                credentialsProvider: credentialsProvider,
-                s3ClientConfig: _defaultS3ClientConfig,
-              )
-            : dependencyManagerOverride.expect(),
+        // dependencyManager.get() => S3Client is used for unit tests
+        _defaultS3Client = dependencyManager.get() ??
+            s3.S3Client(
+              region: defaultRegion,
+              credentialsProvider: credentialsProvider,
+              s3ClientConfig: _defaultS3ClientConfig,
+            ),
         _prefixResolver = prefixResolver,
         _logger = logger,
         _signerScope = AWSCredentialScope(
           region: defaultRegion,
           service: AWSService.s3,
         ),
-        _awsSigV4Signer = dependencyManagerOverride == null
-            ? AWSSigV4Signer(credentialsProvider: credentialsProvider)
-            : dependencyManagerOverride.expect();
+        // dependencyManager.get() => AWSSigV4Signer is used for unit tests
+        _awsSigV4Signer = dependencyManager.get() ??
+            AWSSigV4Signer(credentialsProvider: credentialsProvider),
+        _dependencyManager = dependencyManager,
+        _serviceStartingTime = DateTime.now();
 
   static const _defaultS3ClientConfig = S3ClientConfig();
   static final _defaultS3SignerConfiguration = S3ServiceConfiguration();
@@ -67,8 +77,13 @@ class StorageS3Service {
   final AWSLogger _logger;
   final AWSCredentialScope _signerScope;
   final AWSSigV4Signer _awsSigV4Signer;
+  final DependencyManager _dependencyManager;
+  final DateTime _serviceStartingTime;
 
-  /// Takes in input from [AmplifyStorageS3Dart.list] to compose a
+  transfer.TransferDatabase get _transferDatabase =>
+      _dependencyManager.getOrCreate(transfer.TransferDatabase.token);
+
+  /// Takes in input from [AmplifyStorageS3Dart.list] API to compose a
   /// [s3.ListObjectsV2Request] and to S3 service, then returns a
   /// [S3StorageListResult] based on [smithy.PaginatedResult] returned by
   /// [s3.S3Client.listObjectsV2] API.
@@ -81,7 +96,9 @@ class StorageS3Service {
     String? path,
     required S3StorageListOptions options,
   }) async {
-    final resolvedPrefix = await _getResolvedPrefix(
+    final resolvedPrefix = await getResolvedPrefix(
+      prefixResolver: _prefixResolver,
+      logger: _logger,
       storageAccessLevel: options.storageAccessLevel,
       identityId: options.targetIdentityId,
     );
@@ -106,8 +123,8 @@ class StorageS3Service {
     }
   }
 
-  /// Takes in input from [AmplifyStorageS3Dart.getProperties] to compose a
-  /// [s3.HeadObjectRequest] and send to S3 service, then returns a
+  /// Takes in input from [AmplifyStorageS3Dart.getProperties] API to compose
+  /// a [s3.HeadObjectRequest] and send to S3 service, then returns a
   /// [S3StorageGetPropertiesResult] based on the [s3.HeadObjectOutput] returned
   /// by [s3.S3Client.headObject] API.
   ///
@@ -116,7 +133,9 @@ class StorageS3Service {
     required String key,
     required S3StorageGetPropertiesOptions options,
   }) async {
-    final resolvedPrefix = await _getResolvedPrefix(
+    final resolvedPrefix = await getResolvedPrefix(
+      prefixResolver: _prefixResolver,
+      logger: _logger,
       storageAccessLevel: options.storageAccessLevel,
       identityId: options.targetIdentityId,
     );
@@ -125,7 +144,8 @@ class StorageS3Service {
 
     return S3StorageGetPropertiesResult(
       storageItem: S3StorageItem.fromHeadObjectOutput(
-        await _headObject(
+        await headObject(
+          s3client: _defaultS3Client,
           bucket: _defaultBucket,
           key: keyToGetProperties,
         ),
@@ -134,7 +154,7 @@ class StorageS3Service {
     );
   }
 
-  /// Takes in input from [AmplifyStorageS3Dart.getUrl] to create a
+  /// Takes in input from [AmplifyStorageS3Dart.getUrl] API to create a
   /// `GET` [AWSHttpRequest], then `presign` it with [AWSSigV4Signer], and
   /// returns a [S3StorageGetUrlResult] containing the presigned [Uri].
   ///
@@ -146,19 +166,23 @@ class StorageS3Service {
     if (options.checkObjectExistence) {
       // make a HeadObject call for checking object existence
       // it may throw 404 if object doesn't exist in bucket
+      final targetIdentityId = options.targetIdentityId;
+      final getPropertiesOptions = targetIdentityId == null
+          ? S3StorageGetPropertiesOptions(
+              storageAccessLevel: options.storageAccessLevel,
+            )
+          : S3StorageGetPropertiesOptions.forIdentity(
+              targetIdentityId,
+            );
       await getProperties(
         key: key,
-        options: options.targetIdentityId == null
-            ? S3StorageGetPropertiesOptions(
-                storageAccessLevel: options.storageAccessLevel,
-              )
-            : S3StorageGetPropertiesOptions.forIdentity(
-                options.targetIdentityId!,
-              ),
+        options: getPropertiesOptions,
       );
     }
 
-    final resolvedPrefix = await _getResolvedPrefix(
+    final resolvedPrefix = await getResolvedPrefix(
+      prefixResolver: _prefixResolver,
+      logger: _logger,
       storageAccessLevel: options.storageAccessLevel,
       identityId: options.targetIdentityId,
     );
@@ -180,10 +204,113 @@ class StorageS3Service {
         expiresIn: options.expiresIn,
         serviceConfiguration: _defaultS3SignerConfiguration,
       ),
+      expiresAt:
+          (Zone.current[testDateTimeNowOverride] as DateTime? ?? DateTime.now())
+              .add(options.expiresIn),
     );
   }
 
-  /// Takes in input from [AmplifyStorageS3Dart.copy] to compose a
+  /// Takes in the input from [AmplifyStorageS3Dart.downloadData] API, and
+  /// creates a [S3DownloadTask], to start the download process, then returns
+  /// the [S3DownloadTask].
+  ///
+  /// {@macro amplify_storage_s3_dart.download_task.pre_start}
+  ///
+  /// {@macro amplify_storage_s3_dart.download_task.on_progress}
+  ///
+  /// {@macro amplify_storage_s3_dart.download_task.on_receiving_bytes}
+  ///
+  /// {@macro amplify_storage_s3_dart.download_task.on_done}
+  S3DownloadTask downloadData({
+    required String key,
+    required S3StorageDownloadDataOptions options,
+    FutureOr<void> Function()? preStart,
+    void Function(S3TransferProgress)? onProgress,
+    void Function(List<int>)? onData,
+    FutureOr<void> Function()? onDone,
+    FutureOr<void> Function()? onError,
+  }) {
+    final downloadDataTask = S3DownloadTask(
+      s3Client: _defaultS3Client,
+      bucket: _defaultBucket,
+      key: key,
+      options: options,
+      prefixResolver: _prefixResolver,
+      logger: _logger,
+      onProgress: onProgress,
+      onData: onData,
+      preStart: preStart,
+      onDone: onDone,
+      onError: onError,
+    );
+
+    unawaited(downloadDataTask.start());
+
+    return downloadDataTask;
+  }
+
+  /// Takes in the input from [AmplifyStorageS3Dart.uploadData] API, and creates
+  /// a [S3UploadTask], to start the upload process, then returns the
+  /// [S3UploadTask].
+  S3UploadTask uploadData({
+    required String key,
+    required S3DataPayload dataPayload,
+    required S3StorageUploadDataOptions options,
+    void Function(S3TransferProgress)? onProgress,
+    FutureOr<void> Function()? onDone,
+    FutureOr<void> Function()? onError,
+  }) {
+    final uploadDataTask = S3UploadTask.fromDataPayload(
+      dataPayload,
+      s3Client: _defaultS3Client,
+      bucket: _defaultBucket,
+      key: key,
+      options: options,
+      prefixResolver: _prefixResolver,
+      logger: _logger,
+      onProgress: onProgress,
+      transferDatabase: _transferDatabase,
+    );
+
+    unawaited(uploadDataTask.start());
+
+    return uploadDataTask;
+  }
+
+  /// Takes in the input from [AmplifyStorageS3Dart.uploadFile] API, and creates
+  /// a [S3UploadTask], to start the upload process, then returns the
+  /// [S3UploadTask].
+  S3UploadTask uploadFile({
+    required String key,
+    required AWSFile localFile,
+    required S3StorageUploadFileOptions options,
+    void Function(S3TransferProgress)? onProgress,
+    FutureOr<void> Function()? onDone,
+    FutureOr<void> Function()? onError,
+  }) {
+    final uploadDataOptions = S3StorageUploadDataOptions(
+      storageAccessLevel: options.storageAccessLevel,
+      getProperties: options.getProperties,
+      metadata: options.metadata,
+    );
+    final uploadDataTask = S3UploadTask.fromAWSFile(
+      localFile,
+      s3Client: _defaultS3Client,
+      bucket: _defaultBucket,
+      key: key,
+      options: uploadDataOptions,
+      prefixResolver: _prefixResolver,
+      logger: _logger,
+      onProgress: onProgress,
+      transferDatabase: _transferDatabase,
+    );
+
+    unawaited(uploadDataTask.start());
+
+    return uploadDataTask;
+  }
+
+  /// Takes in input from [AmplifyStorageS3Dart.copy] API to compose a
   /// [s3.CopyObjectRequest] and send to S3 service to copy `source` to
   /// `destination`, then returns a [S3StorageCopyResult] based on the `key` of
   /// `destination`.
@@ -201,11 +328,15 @@ class StorageS3Service {
     required S3StorageCopyOptions options,
   }) async {
     final resolvedPrefixes = await Future.wait([
-      _getResolvedPrefix(
+      getResolvedPrefix(
+        prefixResolver: _prefixResolver,
+        logger: _logger,
         storageAccessLevel: source.storageAccessLevel,
         identityId: source.targetIdentityId,
       ),
-      _getResolvedPrefix(
+      getResolvedPrefix(
+        prefixResolver: _prefixResolver,
+        logger: _logger,
         storageAccessLevel: destination.storageAccessLevel,
         identityId: destination.targetIdentityId,
       )
@@ -232,14 +363,18 @@ class StorageS3Service {
     return S3StorageCopyResult(
       copiedItem: options.getProperties
           ? S3StorageItem.fromHeadObjectOutput(
-              await _headObject(bucket: _defaultBucket, key: destinationKey),
+              await headObject(
+                s3client: _defaultS3Client,
+                bucket: _defaultBucket,
+                key: destinationKey,
+              ),
               key: destination.storageItem.key,
             )
           : S3StorageItem(key: destination.storageItem.key),
     );
   }
 
-  /// Takes in input from [AmplifyStorageS3Dart.move] to compose a
+  /// Takes in input from [AmplifyStorageS3Dart.move] API to compose a
   /// [s3.CopyObjectRequest] and send to S3 service to copy `source` to
   /// `destination`, followed by a [s3.DeleteObjectRequest] to delete the
   /// `source`, then returns a [S3StorageMoveResult] based on the `key` of
@@ -275,7 +410,9 @@ class StorageS3Service {
       );
     }
 
-    final resolvedSourcePrefix = await _getResolvedPrefix(
+    final resolvedSourcePrefix = await getResolvedPrefix(
+      prefixResolver: _prefixResolver,
+      logger: _logger,
       storageAccessLevel: source.storageAccessLevel,
       identityId: source.targetIdentityId,
     );
@@ -283,7 +420,11 @@ class StorageS3Service {
     final keyToRemove = '$resolvedSourcePrefix${source.storageItem.key}';
 
     try {
-      await _deleteObject(bucket: _defaultBucket, key: keyToRemove);
+      await _deleteObject(
+        s3client: _defaultS3Client,
+        bucket: _defaultBucket,
+        key: keyToRemove,
+      );
     } on S3StorageException catch (error) {
       throw S3StorageException(
         'Delete the source object failed while moving it due to: ${error.message}',
@@ -295,7 +436,7 @@ class StorageS3Service {
     return S3StorageMoveResult(movedItem: copyResult.copiedItem);
   }
 
-  /// Takes in input from [AmplifyStorageS3Dart.remove] to compose a
+  /// Takes in input from [AmplifyStorageS3Dart.remove] API to compose a
   /// [s3.DeleteObjectRequest] and send to S3 service, then returns a
   /// [S3StorageRemoveResult] based on the `key` to be removed.
   ///
@@ -304,20 +445,26 @@ class StorageS3Service {
     required String key,
     required S3StorageRemoveOptions options,
   }) async {
-    final resolvedPrefix = await _getResolvedPrefix(
+    final resolvedPrefix = await getResolvedPrefix(
+      prefixResolver: _prefixResolver,
+      logger: _logger,
       storageAccessLevel: options.storageAccessLevel,
     );
 
     final keyToRemove = '$resolvedPrefix$key';
 
-    await _deleteObject(bucket: _defaultBucket, key: keyToRemove);
+    await _deleteObject(
+      s3client: _defaultS3Client,
+      bucket: _defaultBucket,
+      key: keyToRemove,
+    );
 
     return S3StorageRemoveResult(
       removedItem: S3StorageItem(key: key),
     );
   }
 
-  /// Takes in input from [AmplifyStorageS3Dart.removeMany] to compose a
+  /// Takes in input from [AmplifyStorageS3Dart.removeMany] API to compose a
   /// [s3.DeleteObjectsRequest] and send to S3 service, then returns a
   /// [S3StorageRemoveManyResult] based on the [s3.DeleteObjectsOutput] returned
   /// by [s3.S3Client.deleteObjects] API.
@@ -330,7 +477,9 @@ class StorageS3Service {
     // Each request can contain up to 1000 objects to remove
     // https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObjects.html
     const defaultBatchSize = 1000;
-    final resolvedPrefix = await _getResolvedPrefix(
+    final resolvedPrefix = await getResolvedPrefix(
+      prefixResolver: _prefixResolver,
+      logger: _logger,
       storageAccessLevel: options.storageAccessLevel,
     );
 
@@ -383,7 +532,71 @@ class StorageS3Service {
     );
   }
 
-  Future<s3.HeadObjectOutput> _headObject({
+  static Future<s3.DeleteObjectOutput> _deleteObject({
+    required s3.S3Client s3client,
+    required String bucket,
+    required String key,
+  }) async {
+    final request = s3.DeleteObjectRequest.build((builder) {
+      builder
+        ..bucket = bucket
+        ..key = key;
+    });
+
+    try {
+      // The current capability of the `remove` API doesn't require parsing
+      // the [DeleteObjectOutput] returned by [S3Client.deleteObject].
+      return await s3client.deleteObject(request);
+    } on smithy.UnknownSmithyHttpException catch (error) {
+      // S3Client.deleteObject may return 403, for deleting a non-existing
+      // object, the API call returns a successful response
+      throw S3StorageException.fromUnknownSmithyHttpException(error);
+    }
+  }
+
+  static String _getS3EndpointHost({required String region}) =>
+      endpoint_resolver.endpointResolver
+          .resolve(
+            endpoint_resolver.sdkId,
+            region,
+          )
+          .endpoint
+          .uri
+          .host;
+
+  /// Resolve a client object key to a "full" object key with proper prefix.
+  ///
+  /// This API is used only internally.
+  @internal
+  static Future<String> getResolvedPrefix({
+    required S3StoragePrefixResolver prefixResolver,
+    required AWSLogger logger,
+    required StorageAccessLevel storageAccessLevel,
+    String? identityId,
+  }) async {
+    try {
+      return await prefixResolver.resolvePrefix(
+        storageAccessLevel: storageAccessLevel,
+        identityId: identityId,
+      );
+    } on Exception catch (error, st) {
+      logger.error('Error happened while resolving prefix', error, st);
+      throw S3StorageException(
+        'Error happened while resolving prefix.',
+        recoverySuggestion:
+            'If you are providing a custom prefix resolver, please review the underlying exception to determine the cause.',
+        underlyingException: error,
+      );
+    }
+  }
+
+  /// Creates and sends a [s3.HeadObjectRequest] to S3 service, and then
+  /// returns a [s3.HeadObjectOutput].
+  ///
+  /// This API is used only internally.
+  @internal
+  static Future<s3.HeadObjectOutput> headObject({
+    required s3.S3Client s3client,
     required String bucket,
     required String key,
   }) async {
@@ -394,61 +607,37 @@ class StorageS3Service {
     });
 
     try {
-      return await _defaultS3Client.headObject(request);
+      return await s3client.headObject(request);
     } on smithy.UnknownSmithyHttpException catch (error) {
       // S3Client.headObject may return 403 or 404 error
       throw S3StorageException.fromUnknownSmithyHttpException(error);
     }
   }
 
-  Future<s3.DeleteObjectOutput> _deleteObject({
-    required String bucket,
-    required String key,
-  }) async {
-    final request = s3.DeleteObjectRequest.build((builder) {
-      builder
-        ..bucket = _defaultBucket
-        ..key = key;
-    });
+  /// As background operation is not yet supported, in order to avoid incomplete
+  /// multipart uploads (caused by App process being killed) from occupying
+  /// storage space, [s3.AbortMultipartUploadRequest]s are sent for each
+  /// multipart upload id stored in the [transfer.TransferDatabase] to remove
+  /// uploaded parts upon [StorageS3Service] initiation.
+  @internal
+  Future<void> abortIncompleteMultipartUploads() async {
+    final records = await _transferDatabase
+        .getMultipartUploadRecordsCreatedBefore(_serviceStartingTime);
 
-    try {
-      // The current capability of the `remove` API doesn't require parsing
-      // the [DeleteObjectOutput] returned by [S3Client.deleteObject].
-      return await _defaultS3Client.deleteObject(request);
-    } on smithy.UnknownSmithyHttpException catch (error) {
-      // S3Client.deleteObject may return 403, for deleting a non-existing
-      // object, the API call returns a successful response
-      throw S3StorageException.fromUnknownSmithyHttpException(error);
+    for (final record in records) {
+      final request = s3.AbortMultipartUploadRequest.build((builder) {
+        builder
+          ..bucket = _defaultBucket
+          ..key = record.objectKey
+          ..uploadId = record.uploadId;
+      });
+
+      try {
+        await _defaultS3Client.abortMultipartUpload(request);
+        await _transferDatabase.deleteTransferRecords(record.uploadId);
+      } on Exception catch (error) {
+        _logger.error('Failed to abort multipart upload due to: $error');
+      }
     }
   }
-
-  Future<String> _getResolvedPrefix({
-    required StorageAccessLevel storageAccessLevel,
-    String? identityId,
-  }) async {
-    try {
-      return await _prefixResolver.resolvePrefix(
-        storageAccessLevel: storageAccessLevel,
-        identityId: identityId,
-      );
-    } on Exception catch (error, st) {
-      _logger.error('Error happened while resolving prefix', error, st);
-      throw S3StorageException(
-        'Error happened while resolving prefix.',
-        recoverySuggestion:
-            'If you are providing a custom prefix resolver, please review the underlying exception to determine the cause.',
-        underlyingException: error,
-      );
-    }
-  }
-
-  String _getS3EndpointHost({required String region}) =>
-      endpoint_resolver.endpointResolver
-          .resolve(
-            endpoint_resolver.sdkId,
-            region,
-          )
-          .endpoint
-          .uri
-          .host;
 }

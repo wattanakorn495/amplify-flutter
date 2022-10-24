@@ -115,6 +115,12 @@ abstract class StoragePluginKey<
     PluginStorageGetUrlOptions extends StorageGetUrlOptions,
     PluginStorageUploadDataOperation extends StorageUploadDataOperation,
     PluginStorageUploadDataOptions extends StorageUploadDataOptions,
+    PluginStorageUploadFileOperation extends StorageUploadFileOperation,
+    PluginStorageUploadFileOptions extends StorageUploadFileOptions,
+    PluginStorageDownloadDataOperation extends StorageDownloadDataOperation,
+    PluginStorageDownloadDataOptions extends StorageDownloadDataOptions,
+    PluginStorageDownloadFileOperation extends StorageDownloadFileOperation,
+    PluginStorageDownloadFileOptions extends StorageDownloadFileOptions,
     PluginStorageCopyOperation extends StorageCopyOperation,
     PluginStorageCopyOptions extends StorageCopyOptions,
     PluginStorageMoveOperation extends StorageMoveOperation,
@@ -124,6 +130,7 @@ abstract class StoragePluginKey<
     PluginStorageRemoveManyOperation extends StorageRemoveManyOperation,
     PluginStorageRemoveManyOptions extends StorageRemoveManyOptions,
     PluginStorageItem extends StorageItem,
+    PluginTransferProgress extends StorageTransferProgress,
     P extends StoragePluginInterface<
         PluginStorageListOperation,
         PluginStorageListOptions,
@@ -133,6 +140,12 @@ abstract class StoragePluginKey<
         PluginStorageGetUrlOptions,
         PluginStorageUploadDataOperation,
         PluginStorageUploadDataOptions,
+        PluginStorageUploadFileOperation,
+        PluginStorageUploadFileOptions,
+        PluginStorageDownloadDataOperation,
+        PluginStorageDownloadDataOptions,
+        PluginStorageDownloadFileOperation,
+        PluginStorageDownloadFileOptions,
         PluginStorageCopyOperation,
         PluginStorageCopyOptions,
         PluginStorageMoveOperation,
@@ -141,6 +154,7 @@ abstract class StoragePluginKey<
         PluginStorageRemoveOptions,
         PluginStorageRemoveManyOperation,
         PluginStorageRemoveManyOptions,
-        PluginStorageItem>> extends AmplifyPluginKey<P> {
+        PluginStorageItem,
+        PluginTransferProgress>> extends AmplifyPluginKey<P> {
   const StoragePluginKey();
 }

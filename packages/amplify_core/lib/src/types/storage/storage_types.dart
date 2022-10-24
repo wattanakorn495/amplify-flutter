@@ -21,6 +21,18 @@ export 'copy_options.dart';
 export 'copy_request.dart';
 export 'copy_result.dart';
 
+export 'data_payload.dart';
+
+export 'download_data_operation.dart';
+export 'download_data_options.dart';
+export 'download_data_request.dart';
+export 'download_data_result.dart';
+
+export 'download_file_operation.dart';
+export 'download_file_options.dart';
+export 'download_file_request.dart';
+export 'download_file_result.dart';
+
 export 'get_properties_operation.dart';
 export 'get_properties_options.dart';
 export 'get_properties_request.dart';
@@ -58,3 +70,8 @@ export 'upload_data_operation.dart';
 export 'upload_data_options.dart';
 export 'upload_data_request.dart';
 export 'upload_data_result.dart';
+
+export 'upload_file_operation.dart';
+export 'upload_file_options.dart';
+export 'upload_file_request.dart';
+export 'upload_file_result.dart';

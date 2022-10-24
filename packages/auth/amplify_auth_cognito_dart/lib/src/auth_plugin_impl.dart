@@ -1052,15 +1052,6 @@ class AmplifyAuthCognitoDart extends AuthPluginInterface<
         const CredentialStoreEvent.clearCredentials(),
       );
 
-      // Clear device secrets if unconfirmed
-      final username = tokens.username;
-      final deviceSecrets = await _deviceRepo.get(username);
-      if (deviceSecrets != null &&
-          deviceSecrets.deviceStatus ==
-              cognito.DeviceRememberedStatusType.notRemembered) {
-        await _deviceRepo.remove(username);
-      }
-
       _hubEventController.add(AuthHubEvent.signedOut());
     }
     return const SignOutResult();
