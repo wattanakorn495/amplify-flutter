@@ -22,7 +22,6 @@ import 'package:amplify_storage_s3_dart/src/storage_s3_service/storage_s3_servic
 import 'package:amplify_storage_s3_dart/src/storage_s3_service/transfer/transfer.dart'
     as transfer;
 import 'package:async/async.dart';
-import 'package:built_collection/built_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:smithy/smithy.dart';
 
@@ -49,10 +48,10 @@ import 'package:smithy/smithy.dart';
 class S3UploadTask {
   S3UploadTask._({
     required s3.S3Client s3Client,
-    required S3StoragePrefixResolver prefixResolver,
+    required S3PrefixResolver prefixResolver,
     required String bucket,
     required String key,
-    required S3StorageUploadDataOptions options,
+    required S3UploadDataOptions options,
     S3DataPayload? dataPayload,
     AWSFile? localFile,
     void Function(S3TransferProgress)? onProgress,
@@ -77,10 +76,10 @@ class S3UploadTask {
   S3UploadTask.fromDataPayload(
     S3DataPayload dataPayload, {
     required s3.S3Client s3Client,
-    required S3StoragePrefixResolver prefixResolver,
+    required S3PrefixResolver prefixResolver,
     required String bucket,
     required String key,
-    required S3StorageUploadDataOptions options,
+    required S3UploadDataOptions options,
     void Function(S3TransferProgress)? onProgress,
     required AWSLogger logger,
     required transfer.TransferDatabase transferDatabase,
@@ -102,10 +101,10 @@ class S3UploadTask {
   S3UploadTask.fromAWSFile(
     AWSFile localFile, {
     required s3.S3Client s3Client,
-    required S3StoragePrefixResolver prefixResolver,
+    required S3PrefixResolver prefixResolver,
     required String bucket,
     required String key,
-    required S3StorageUploadDataOptions options,
+    required S3UploadDataOptions options,
     void Function(S3TransferProgress)? onProgress,
     required AWSLogger logger,
     required transfer.TransferDatabase transferDatabase,
@@ -127,13 +126,13 @@ class S3UploadTask {
   // Took reference from amplify-js
   static const _maxNumParallelTasks = 4;
 
-  final Completer<S3StorageItem> _uploadCompleter = Completer();
+  final Completer<S3Item> _uploadCompleter = Completer();
 
   final s3.S3Client _s3Client;
-  final S3StoragePrefixResolver _prefixResolver;
+  final S3PrefixResolver _prefixResolver;
   final String _bucket;
   final String _key;
-  final S3StorageUploadDataOptions _options;
+  final S3UploadDataOptions _options;
   final void Function(S3TransferProgress)? _onProgress;
   final AWSLogger _logger;
   final transfer.TransferDatabase _transferDatabase;
@@ -172,7 +171,7 @@ class S3UploadTask {
   int get _numOfCompletedSubtasks => _completedSubtasks.length;
 
   /// The Future of the [S3UploadTask]
-  Future<S3StorageItem> get result => _uploadCompleter.future;
+  Future<S3Item> get result => _uploadCompleter.future;
 
   /// Starts the [S3UploadTask].
   ///
@@ -274,7 +273,7 @@ class S3UploadTask {
     final resolvedPrefix = await StorageS3Service.getResolvedPrefix(
       prefixResolver: _prefixResolver,
       logger: _logger,
-      storageAccessLevel: _options.storageAccessLevel,
+      accessLevel: _options.accessLevel,
     );
 
     _resolvedKey = '$resolvedPrefix$_key';
@@ -294,10 +293,10 @@ class S3UploadTask {
     try {
       // TODO(HuiSF): invoke onProgress here to emit upload progres when
       //  AWSHttpOperation is returned from the putObject API.
-      await _s3Client.putObject(putObjectRequest);
+      await _s3Client.putObject(putObjectRequest).result;
       _uploadCompleter.complete(
         _options.getProperties
-            ? S3StorageItem.fromHeadObjectOutput(
+            ? S3Item.fromHeadObjectOutput(
                 await StorageS3Service.headObject(
                   s3client: _s3Client,
                   bucket: _bucket,
@@ -305,11 +304,11 @@ class S3UploadTask {
                 ),
                 key: _key,
               )
-            : S3StorageItem(key: _key),
+            : S3Item(key: _key),
       );
     } on UnknownSmithyHttpException catch (error, stackTrace) {
       _completeUploadWithError(
-        S3StorageException.fromUnknownSmithyHttpException(error),
+        S3Exception.fromUnknownSmithyHttpException(error),
         stackTrace,
       );
     }
@@ -326,7 +325,7 @@ class S3UploadTask {
           _fileSize - _minPartSize * (_fileSize / _minPartSize).floor();
 
       if (_expectedNumOfSubtasks > _maxNumberOfParts) {
-        throw S3StorageException.uploadSourceIsTooLarge();
+        throw S3Exception.uploadSourceIsTooLarge();
       }
 
       _isMultipartUpload = true;
@@ -370,7 +369,7 @@ class S3UploadTask {
         // the multipart upload to remove all uploaded parts from the bucket
         await Future.wait(_ongoingSubtasks.map((subtask) => subtask.request));
         await _terminateMultipartUploadOnError(
-          S3StorageException.controllableOperationCanceled(),
+          S3Exception.controllableOperationCanceled(),
           isCancel: true,
         );
 
@@ -402,7 +401,7 @@ class S3UploadTask {
               await _completeMultipartUpload();
               _uploadCompleter.complete(
                 _options.getProperties
-                    ? S3StorageItem.fromHeadObjectOutput(
+                    ? S3Item.fromHeadObjectOutput(
                         await StorageS3Service.headObject(
                           s3client: _s3Client,
                           bucket: _bucket,
@@ -410,7 +409,7 @@ class S3UploadTask {
                         ),
                         key: _key,
                       )
-                    : S3StorageItem(key: _key),
+                    : S3Item(key: _key),
               );
               _state = S3TransferState.success;
               _emitTransferProgress();
@@ -432,11 +431,11 @@ class S3UploadTask {
     final createdAt = DateTime.now().toIso8601String();
 
     try {
-      final output = await _s3Client.createMultipartUpload(request);
+      final output = await _s3Client.createMultipartUpload(request).result;
       final uploadId = output.uploadId;
 
       if (uploadId == null) {
-        throw S3StorageException.unexpectedMultipartUploadId();
+        throw S3Exception.unexpectedMultipartUploadId();
       } else {
         await _transferDatabase.insertTransferRecord(
           transfer.TransferRecordsCompanion.insert(
@@ -448,7 +447,7 @@ class S3UploadTask {
         _multipartUploadId = uploadId;
       }
     } on UnknownSmithyHttpException catch (error) {
-      throw S3StorageException.fromUnknownSmithyHttpException(error);
+      throw S3Exception.fromUnknownSmithyHttpException(error);
     }
   }
 
@@ -474,17 +473,17 @@ class S3UploadTask {
                   (a, b) => a.partNumber.compareTo(b.partNumber),
                 ))
               .map((e) => e.completedPart)
-              .toBuiltList(),
+              .toList(),
         ).toBuilder();
     });
 
     try {
-      await _s3Client.completeMultipartUpload(request);
+      await _s3Client.completeMultipartUpload(request).result;
       await _transferDatabase.deleteTransferRecords(_multipartUploadId);
     } on UnknownSmithyHttpException catch (error) {
       // TODO(HuiSF): verify if s3Client sdk throws different exception type
       //  wrapping errors extracted from a 200 response.
-      throw S3StorageException.fromUnknownSmithyHttpException(error);
+      throw S3Exception.fromUnknownSmithyHttpException(error);
     }
   }
 
@@ -555,11 +554,11 @@ class S3UploadTask {
       //  when _terminateMultipartUploadOnError is called.
       // TODO(HuiSF): add finer upload progress emitter when AWSHttpOperation
       //  is available from uploadPart.
-      final result = await _s3Client.uploadPart(request);
+      final result = await _s3Client.uploadPart(request).result;
       final eTag = result.eTag;
 
       if (eTag == null) {
-        throw S3StorageException.unexpectedETagFromService();
+        throw S3Exception.unexpectedETagFromService();
       }
 
       return _CompletedSubtask(
@@ -569,9 +568,9 @@ class S3UploadTask {
         eTag: eTag,
       );
     } on UnknownSmithyHttpException catch (error) {
-      throw S3StorageException.fromUnknownSmithyHttpException(error);
+      throw S3Exception.fromUnknownSmithyHttpException(error);
     } on s3.NoSuchUpload catch (error) {
-      throw S3StorageException.fromS3NoSuchUpload(error);
+      throw S3Exception.fromS3NoSuchUpload(error);
     }
   }
 
@@ -596,13 +595,13 @@ class S3UploadTask {
         ..uploadId = _multipartUploadId;
     });
 
-    await _s3Client.abortMultipartUpload(request);
+    await _s3Client.abortMultipartUpload(request).result;
 
     if (isCancel) {
       _uploadCompleter.completeError(error);
     } else {
       _completeUploadWithError(
-        S3StorageException.multipartUploadAborted(error),
+        S3Exception.multipartUploadAborted(error),
       );
     }
 

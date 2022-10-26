@@ -113,10 +113,8 @@ class DeleteObjectOperation extends _i1.HttpOperation<
         if (input.requestPayer != null) {
           b.headers['x-amz-request-payer'] = input.requestPayer!.value;
         }
-        if (input.bypassGovernanceRetention != null) {
-          b.headers['x-amz-bypass-governance-retention'] =
-              input.bypassGovernanceRetention!.toString();
-        }
+        b.headers['x-amz-bypass-governance-retention'] =
+            input.bypassGovernanceRetention.toString();
         if (input.expectedBucketOwner != null) {
           if (input.expectedBucketOwner!.isNotEmpty) {
             b.headers['x-amz-expected-bucket-owner'] =
@@ -135,7 +133,7 @@ class DeleteObjectOperation extends _i1.HttpOperation<
   @override
   _i3.DeleteObjectOutput buildOutput(
     _i3.DeleteObjectOutputPayload payload,
-    _i7.AWSStreamedHttpResponse response,
+    _i7.AWSBaseHttpResponse response,
   ) =>
       _i3.DeleteObjectOutput.fromResponse(
         payload,
@@ -143,6 +141,8 @@ class DeleteObjectOperation extends _i1.HttpOperation<
       );
   @override
   List<_i1.SmithyError> get errorTypes => const [];
+  @override
+  String get runtimeTypeName => 'DeleteObject';
   @override
   _i4.AWSRetryer get retryer => _i4.AWSRetryer();
   @override
@@ -166,9 +166,9 @@ class DeleteObjectOperation extends _i1.HttpOperation<
   @override
   _i1.Endpoint get endpoint => _awsEndpoint.endpoint;
   @override
-  _i9.Future<_i3.DeleteObjectOutput> run(
+  _i1.SmithyOperation<_i3.DeleteObjectOutput> run(
     _i2.DeleteObjectRequest input, {
-    _i1.HttpClient? client,
+    _i7.AWSHttpClient? client,
     _i1.ShapeId? useProtocol,
   }) {
     return _i9.runZoned(

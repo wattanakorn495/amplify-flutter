@@ -101,17 +101,19 @@ Future<void> main() async {
 
 Future<void> listOperation() async {
   final path = prompt('Enter a path to list objects for: ');
-  final storageAccessLevel = promptStorageAccessLevel(
+  final accessLevel = promptStorageAccessLevel(
     'Choose the storage access level associated with the path: ',
   );
+
+  const pageSize = 5;
 
   // get plugin with plugin key to gain S3 specific interface
   final s3Plugin = Amplify.Storage.getPlugin(AmplifyStorageS3Dart.pluginKey);
   final operation = s3Plugin.list(
     path: path,
-    options: S3StorageListOptions(
-      storageAccessLevel: storageAccessLevel,
-      pageSize: 5,
+    options: S3ListOptions(
+      accessLevel: accessLevel,
+      pageSize: pageSize,
     ),
   );
 
@@ -119,7 +121,7 @@ Future<void> listOperation() async {
   // final operation = Amplify.Storage.list(
   //   path: path,
   //   options: StorageS3ListOptions(
-  //     storageAccessLevel: storageAccessLevel,
+  //     accessLevel: accessLevel,
   //     pageSize: 5,
   //   ),
   // );
@@ -130,12 +132,12 @@ Future<void> listOperation() async {
 
   while (true) {
     stdout.writeln('Listed ${result.items.length} objects.');
-    stdout.writeln('${result.pluginMetadata}');
+    stdout.writeln('Sub directories: ${result.metadata.subPaths}');
     result.items.asMap().forEach((index, item) {
       stdout.writeln('$index. key: ${item.key} | size: ${item.size}');
     });
 
-    if (!result.hasNext) {
+    if (!result.hasNextPage) {
       break;
     }
 
@@ -147,21 +149,30 @@ Future<void> listOperation() async {
       break;
     }
 
-    result = await result.next();
+    result = await s3Plugin
+        .list(
+          path: path,
+          options: S3ListOptions(
+            accessLevel: accessLevel,
+            pageSize: pageSize,
+            nextToken: result.nextToken,
+          ),
+        )
+        .result;
   }
 }
 
 Future<void> getPropertiesOperation() async {
   final key = prompt('Enter the object to get properties for: ');
-  final storageAccessLevel = promptStorageAccessLevel(
+  final accessLevel = promptStorageAccessLevel(
     'Choose the storage access level associated with the object: ',
   );
 
   final s3Plugin = Amplify.Storage.getPlugin(AmplifyStorageS3Dart.pluginKey);
   final getPropertiesOperation = s3Plugin.getProperties(
     key: key,
-    options: S3StorageGetPropertiesOptions(
-      storageAccessLevel: storageAccessLevel,
+    options: S3GetPropertiesOptions(
+      accessLevel: accessLevel,
     ),
   );
   final result = await getPropertiesOperation.result;
@@ -177,15 +188,15 @@ Future<void> getPropertiesOperation() async {
 
 Future<void> getUrlOperation() async {
   final key = prompt('Enter the object key to get url for: ');
-  final storageAccessLevel = promptStorageAccessLevel(
+  final accessLevel = promptStorageAccessLevel(
     'Choose the storage access level associated with the object: ',
   );
 
   final s3Plugin = Amplify.Storage.getPlugin(AmplifyStorageS3Dart.pluginKey);
   final getUrlOperation = s3Plugin.getUrl(
     key: key,
-    options: S3StorageGetUrlOptions(
-      storageAccessLevel: storageAccessLevel,
+    options: S3GetUrlOptions(
+      accessLevel: accessLevel,
       expiresIn: const Duration(
         minutes: 10,
       ),
@@ -207,15 +218,15 @@ Future<void> getUrlOperation() async {
 
 Future<void> downloadDataOperation() async {
   final key = prompt('Enter the key of the object to download: ');
-  final storageAccessLevel = promptStorageAccessLevel(
+  final accessLevel = promptStorageAccessLevel(
     'Choose the storage access level associated with the object: ',
   );
 
   final s3Plugin = Amplify.Storage.getPlugin(AmplifyStorageS3Dart.pluginKey);
   final downloadDataOperation = s3Plugin.downloadData(
     key: key,
-    options: S3StorageDownloadDataOptions(
-      storageAccessLevel: storageAccessLevel,
+    options: S3DownloadDataOptions(
+      accessLevel: accessLevel,
       getProperties: true,
     ),
     onProgress: onTransferProgress,
@@ -242,7 +253,7 @@ Future<void> downloadDataOperation() async {
 
 Future<void> downloadFileOperation() async {
   final key = prompt('Enter the key of the object to download: ');
-  final storageAccessLevel = promptStorageAccessLevel(
+  final accessLevel = promptStorageAccessLevel(
     'Choose the storage access level associated with the object: ',
   );
   final destinationPath = prompt(
@@ -254,9 +265,9 @@ Future<void> downloadFileOperation() async {
   final downloadFileOperation = s3Plugin.downloadFile(
     key: key,
     localFile: localFile,
-    options: S3StorageDownloadFileOptions(
+    options: S3DownloadFileOptions(
       getProperties: true,
-      storageAccessLevel: storageAccessLevel,
+      accessLevel: accessLevel,
     ),
     onProgress: onTransferProgress,
   );
@@ -283,7 +294,7 @@ Future<void> downloadFileOperation() async {
 Future<void> uploadDataUrlOperation() async {
   final dataUrl = prompt('Enter the data url to upload: ');
   final key = prompt('Enter the object key to upload the data url to: ');
-  final storageAccessLevel = promptStorageAccessLevel(
+  final accessLevel = promptStorageAccessLevel(
     'Choose the storage access level associated with the object to upload: ',
   );
 
@@ -291,8 +302,8 @@ Future<void> uploadDataUrlOperation() async {
   final uploadDataOperation = s3Plugin.uploadData(
     data: S3DataPayload.dataUrl(dataUrl),
     key: key,
-    options: S3StorageUploadDataOptions(
-      storageAccessLevel: storageAccessLevel,
+    options: S3UploadDataOptions(
+      accessLevel: accessLevel,
       getProperties: true,
     ),
   );
@@ -316,7 +327,7 @@ Future<void> uploadDataUrlOperation() async {
 Future<void> uploadFileOperation() async {
   final filePath = prompt('Enter the path of the file to be uploaded: ');
   final key = prompt('Enter the object key to upload the file to: ');
-  final storageAccessLevel = promptStorageAccessLevel(
+  final accessLevel = promptStorageAccessLevel(
     'Choose the storage access level associated with the object to upload: ',
   );
   final nameTag = prompt('Enter value of the name tag for this file: ');
@@ -334,8 +345,8 @@ Future<void> uploadFileOperation() async {
     localFile: file,
     key: key,
     onProgress: onTransferProgress,
-    options: S3StorageUploadFileOptions(
-      storageAccessLevel: storageAccessLevel,
+    options: S3UploadFileOptions(
+      accessLevel: accessLevel,
       getProperties: true,
       metadata: {
         'nameTag': nameTag,
@@ -374,15 +385,15 @@ Future<void> copyOperation() async {
 
   final s3Plugin = Amplify.Storage.getPlugin(AmplifyStorageS3Dart.pluginKey);
   final copyOperation = s3Plugin.copy(
-    source: S3StorageItemWithAccessLevel(
-      storageItem: S3StorageItem(key: sourceKey),
-      storageAccessLevel: sourceStorageAccessLevel,
+    source: S3ItemWithAccessLevel(
+      storageItem: S3Item(key: sourceKey),
+      accessLevel: sourceStorageAccessLevel,
     ),
-    destination: S3StorageItemWithAccessLevel(
-      storageItem: S3StorageItem(key: destinationKey),
-      storageAccessLevel: destinationStorageAccessLevel,
+    destination: S3ItemWithAccessLevel(
+      storageItem: S3Item(key: destinationKey),
+      accessLevel: destinationStorageAccessLevel,
     ),
-    options: const S3StorageCopyOptions(getProperties: true),
+    options: const S3CopyOptions(getProperties: true),
   );
 
   try {
@@ -413,15 +424,15 @@ Future<void> moveOperation() async {
 
   final s3Plugin = Amplify.Storage.getPlugin(AmplifyStorageS3Dart.pluginKey);
   final moveOperation = s3Plugin.move(
-    source: S3StorageItemWithAccessLevel(
-      storageItem: S3StorageItem(key: sourceKey),
-      storageAccessLevel: sourceStorageAccessLevel,
+    source: S3ItemWithAccessLevel(
+      storageItem: S3Item(key: sourceKey),
+      accessLevel: sourceStorageAccessLevel,
     ),
-    destination: S3StorageItemWithAccessLevel(
-      storageItem: S3StorageItem(key: destinationKey),
-      storageAccessLevel: destinationStorageAccessLevel,
+    destination: S3ItemWithAccessLevel(
+      storageItem: S3Item(key: destinationKey),
+      accessLevel: destinationStorageAccessLevel,
     ),
-    options: const S3StorageMoveOptions(getProperties: true),
+    options: const S3MoveOptions(getProperties: true),
   );
 
   try {
@@ -442,15 +453,15 @@ Future<void> moveOperation() async {
 
 Future<void> removeOperation() async {
   final key = prompt('Enter the object key to remove: ');
-  final storageAccessLevel = promptStorageAccessLevel(
+  final accessLevel = promptStorageAccessLevel(
     'Choose the storage access level associated with the object: ',
   );
 
   final s3Plugin = Amplify.Storage.getPlugin(AmplifyStorageS3Dart.pluginKey);
   final removeOperation = s3Plugin.remove(
     key: key,
-    options: S3StorageRemoveOptions(
-      storageAccessLevel: storageAccessLevel,
+    options: S3RemoveOptions(
+      accessLevel: accessLevel,
     ),
   );
 
@@ -491,14 +502,14 @@ StorageAccessLevel promptStorageAccessLevel(String message) {
     value = int.tryParse(input ?? '');
   }
 
-  var storageAccessLevel = StorageAccessLevel.guest;
+  var accessLevel = StorageAccessLevel.guest;
   if (value == 2) {
-    storageAccessLevel = StorageAccessLevel.protected;
+    accessLevel = StorageAccessLevel.protected;
   } else if (value == 3) {
-    storageAccessLevel = StorageAccessLevel.private;
+    accessLevel = StorageAccessLevel.private;
   }
 
-  return storageAccessLevel;
+  return accessLevel;
 }
 
 Never exitError(Object error, [StackTrace? stackTrace]) {

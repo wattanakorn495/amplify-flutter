@@ -135,10 +135,8 @@ class DeleteObjectsOperation extends _i1.HttpOperation<
         if (input.requestPayer != null) {
           b.headers['x-amz-request-payer'] = input.requestPayer!.value;
         }
-        if (input.bypassGovernanceRetention != null) {
-          b.headers['x-amz-bypass-governance-retention'] =
-              input.bypassGovernanceRetention!.toString();
-        }
+        b.headers['x-amz-bypass-governance-retention'] =
+            input.bypassGovernanceRetention.toString();
         if (input.expectedBucketOwner != null) {
           if (input.expectedBucketOwner!.isNotEmpty) {
             b.headers['x-amz-expected-bucket-owner'] =
@@ -149,13 +147,15 @@ class DeleteObjectsOperation extends _i1.HttpOperation<
           b.headers['x-amz-sdk-checksum-algorithm'] =
               input.checksumAlgorithm!.value;
         }
+        b.requestInterceptors
+            .add(_i5.WithChecksum(input.checksumAlgorithm?.value));
       });
   @override
   int successCode([_i4.DeleteObjectsOutput? output]) => 200;
   @override
   _i4.DeleteObjectsOutput buildOutput(
     _i4.DeleteObjectsOutputPayload payload,
-    _i8.AWSStreamedHttpResponse response,
+    _i8.AWSBaseHttpResponse response,
   ) =>
       _i4.DeleteObjectsOutput.fromResponse(
         payload,
@@ -163,6 +163,8 @@ class DeleteObjectsOperation extends _i1.HttpOperation<
       );
   @override
   List<_i1.SmithyError> get errorTypes => const [];
+  @override
+  String get runtimeTypeName => 'DeleteObjects';
   @override
   _i5.AWSRetryer get retryer => _i5.AWSRetryer();
   @override
@@ -186,9 +188,9 @@ class DeleteObjectsOperation extends _i1.HttpOperation<
   @override
   _i1.Endpoint get endpoint => _awsEndpoint.endpoint;
   @override
-  _i10.Future<_i4.DeleteObjectsOutput> run(
+  _i1.SmithyOperation<_i4.DeleteObjectsOutput> run(
     _i3.DeleteObjectsRequest input, {
-    _i1.HttpClient? client,
+    _i8.AWSHttpClient? client,
     _i1.ShapeId? useProtocol,
   }) {
     return _i10.runZoned(

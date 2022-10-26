@@ -37,7 +37,6 @@ class AmplifyHybridImpl extends AmplifyClassImpl {
         ...API.plugins,
         ...Auth.plugins,
         ...Analytics.plugins,
-        ...Storage.plugins,
       ].map(
         (p) => p.configure(
           config: amplifyConfig,

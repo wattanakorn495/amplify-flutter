@@ -135,7 +135,10 @@ class AmplifyAuthCognito extends AmplifyAuthCognitoDart with AWSDebuggable {
     AmplifyConfig? config,
     required AmplifyAuthProviderRepository authProviderRepo,
   }) async {
-    await super.configure(config: config, authProviderRepo: authProviderRepo);
+    await super.configure(
+      config: config,
+      authProviderRepo: authProviderRepo,
+    );
 
     // Update the native cache for the current user on hub events.
     final nativeBridge = stateMachine.get<NativeAuthBridge>();

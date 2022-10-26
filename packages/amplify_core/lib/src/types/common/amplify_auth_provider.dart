@@ -42,9 +42,9 @@ class IamAuthProviderOptions extends AuthProviderOptions {
 }
 
 class ApiKeyAuthProviderOptions extends AuthProviderOptions {
-  final String apiKey;
-
   const ApiKeyAuthProviderOptions(this.apiKey);
+
+  final String apiKey;
 }
 
 abstract class AmplifyAuthProvider {
