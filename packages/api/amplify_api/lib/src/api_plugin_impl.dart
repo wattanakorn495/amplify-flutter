@@ -108,7 +108,10 @@ class AmplifyAPIDart extends AmplifyAPI {
   }
 
   @override
-  Future<void> addPlugin() async {
+  Future<void> addPlugin({
+    required AmplifyAuthProviderRepository authProviderRepo,
+  }) async {
+    await super.addPlugin(authProviderRepo: authProviderRepo);
     if (zIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
       return;
     }
