@@ -263,7 +263,7 @@ class HeadObjectOperation extends _i1.HttpOperation<
         if (input.partNumber != null) {
           b.queryParameters.add(
             'partNumber',
-            input.partNumber.toString(),
+            input.partNumber!.toString(),
           );
         }
       });

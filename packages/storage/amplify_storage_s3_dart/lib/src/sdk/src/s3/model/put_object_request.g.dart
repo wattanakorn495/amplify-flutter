@@ -14,7 +14,7 @@ class _$PutObjectRequest extends PutObjectRequest {
   @override
   final String bucket;
   @override
-  final bool bucketKeyEnabled;
+  final bool? bucketKeyEnabled;
   @override
   final String? cacheControl;
   @override
@@ -90,7 +90,7 @@ class _$PutObjectRequest extends PutObjectRequest {
       {this.acl,
       this.body,
       required this.bucket,
-      required this.bucketKeyEnabled,
+      this.bucketKeyEnabled,
       this.cacheControl,
       this.checksumAlgorithm,
       this.checksumCrc32,
@@ -127,8 +127,6 @@ class _$PutObjectRequest extends PutObjectRequest {
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         bucket, r'PutObjectRequest', 'bucket');
-    BuiltValueNullFieldError.checkNotNull(
-        bucketKeyEnabled, r'PutObjectRequest', 'bucketKeyEnabled');
     BuiltValueNullFieldError.checkNotNull(key, r'PutObjectRequest', 'key');
   }
 
@@ -478,8 +476,7 @@ class PutObjectRequestBuilder
               body: body,
               bucket: BuiltValueNullFieldError.checkNotNull(
                   bucket, r'PutObjectRequest', 'bucket'),
-              bucketKeyEnabled: BuiltValueNullFieldError.checkNotNull(
-                  bucketKeyEnabled, r'PutObjectRequest', 'bucketKeyEnabled'),
+              bucketKeyEnabled: bucketKeyEnabled,
               cacheControl: cacheControl,
               checksumAlgorithm: checksumAlgorithm,
               checksumCrc32: checksumCrc32,

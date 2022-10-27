@@ -115,7 +115,7 @@ class DeleteObjectOperation extends _i1.HttpOperation<
         }
         if (input.bypassGovernanceRetention != null) {
           b.headers['x-amz-bypass-governance-retention'] =
-              input.bypassGovernanceRetention.toString();
+              input.bypassGovernanceRetention!.toString();
         }
         if (input.expectedBucketOwner != null) {
           if (input.expectedBucketOwner!.isNotEmpty) {

@@ -73,8 +73,6 @@ abstract class PutObjectRequest
     String? tagging,
     String? websiteRedirectLocation,
   }) {
-    body ??= const _i2.Stream.empty();
-    bucketKeyEnabled ??= false;
     return _$PutObjectRequest._(
       acl: acl,
       body: body,
@@ -279,10 +277,7 @@ abstract class PutObjectRequest
   ];
 
   @BuiltValueHook(initializeBuilder: true)
-  static void _init(PutObjectRequestBuilder b) {
-    b.body = const _i2.Stream.empty();
-    b.bucketKeyEnabled = false;
-  }
+  static void _init(PutObjectRequestBuilder b) {}
 
   /// The canned ACL to apply to the object. For more information, see [Canned ACL](https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL).
   ///
@@ -302,7 +297,7 @@ abstract class PutObjectRequest
   /// Specifies whether Amazon S3 should use an S3 Bucket Key for object encryption with server-side encryption using AWS KMS (SSE-KMS). Setting this header to `true` causes Amazon S3 to use an S3 Bucket Key for object encryption with SSE-KMS.
   ///
   /// Specifying this header with a PUT action doesn’t affect bucket-level settings for S3 Bucket Key.
-  bool get bucketKeyEnabled;
+  bool? get bucketKeyEnabled;
 
   /// Can be used to specify caching behavior along the request/reply chain. For more information, see [http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9).
   String? get cacheControl;

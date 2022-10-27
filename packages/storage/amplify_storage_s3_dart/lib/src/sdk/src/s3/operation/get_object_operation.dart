@@ -341,7 +341,7 @@ class GetObjectOperation extends _i1.HttpOperation<_i2.GetObjectRequestPayload,
         if (input.partNumber != null) {
           b.queryParameters.add(
             'partNumber',
-            input.partNumber.toString(),
+            input.partNumber!.toString(),
           );
         }
       });
