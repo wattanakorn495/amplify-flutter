@@ -271,7 +271,7 @@ class AmplifyAPIDart extends AmplifyAPI {
         uri,
         body: body,
         headers: headers,
-      ).send(client),
+      ).send(client: client),
     );
   }
 
@@ -288,7 +288,7 @@ class AmplifyAPIDart extends AmplifyAPI {
       AWSHttpRequest.get(
         uri,
         headers: headers,
-      ).send(client),
+      ).send(client: client),
     );
   }
 
@@ -305,7 +305,7 @@ class AmplifyAPIDart extends AmplifyAPI {
       AWSHttpRequest.head(
         uri,
         headers: headers,
-      ).send(client),
+      ).send(client: client),
     );
   }
 
@@ -324,7 +324,7 @@ class AmplifyAPIDart extends AmplifyAPI {
         uri,
         headers: headers,
         body: body ?? const HttpPayload.empty(),
-      ).send(client),
+      ).send(client: client),
     );
   }
 
@@ -343,7 +343,7 @@ class AmplifyAPIDart extends AmplifyAPI {
         uri,
         headers: headers,
         body: body ?? const HttpPayload.empty(),
-      ).send(client),
+      ).send(client: client),
     );
   }
 
@@ -362,7 +362,7 @@ class AmplifyAPIDart extends AmplifyAPI {
         uri,
         headers: headers,
         body: body ?? const HttpPayload.empty(),
-      ).send(client),
+      ).send(client: client),
     );
   }
 }
