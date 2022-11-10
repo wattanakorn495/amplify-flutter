@@ -144,6 +144,9 @@ class S3UploadTask {
   late S3TransferState _state;
   late final String _resolvedKey;
 
+  // fields used to manage the single upload process
+  SmithyOperation<s3.PutObjectOutput>? _putObjectOperation;
+
   // fields used to manage the multipart upload process
   late final ChunkedStreamReader<int> _fileReader;
   late final StreamController<_CompletedSubtask> _subtasksStreamController;
@@ -152,7 +155,8 @@ class S3UploadTask {
   late final int _lastPartSize;
   late final String _multipartUploadId;
   late final int _expectedNumOfSubtasks;
-  final _ongoingSubtasks = <_OngoingSubtask>[];
+  final _ongoingSubtasks = <int, _OngoingSubtask>{};
+  final _ongoingUploadPartHttpOperations = <int, _OngoingUploadPartOperation>{};
   final _completedSubtasks = <_CompletedSubtask>[];
   int _transferredBytes = 0;
   int _currentSubTaskId = 0;
@@ -188,6 +192,7 @@ class S3UploadTask {
     // size is unknown when uploading a stream of bytes and we cannot
     // determine whether to use multipart upload, so use putObject
     if (dataPayload != null) {
+      _fileSize = -1;
       unawaited(_startPutObject(dataPayload));
       return;
     }
@@ -266,7 +271,12 @@ class S3UploadTask {
         _state == S3TransferState.failure) {
       return;
     }
-    await _subtasksStreamSubscription.cancel();
+
+    if (_isMultipartUpload) {
+      await _subtasksStreamSubscription.cancel();
+    } else {
+      await _putObjectOperation?.cancel();
+    }
   }
 
   Future<void> _setResolvedKey() async {
@@ -281,6 +291,8 @@ class S3UploadTask {
 
   Future<void> _startPutObject(S3DataPayload body) async {
     _determineUploadModeCompleter.complete();
+    _state = S3TransferState.inProgress;
+
     final putObjectRequest = s3.PutObjectRequest.build((builder) {
       builder
         ..bucket = _bucket
@@ -291,9 +303,15 @@ class S3UploadTask {
     });
 
     try {
-      // TODO(HuiSF): invoke onProgress here to emit upload progres when
-      //  AWSHttpOperation is returned from the putObject API.
-      await _s3Client.putObject(putObjectRequest).result;
+      _putObjectOperation = _s3Client.putObject(putObjectRequest);
+
+      _putObjectOperation!.requestProgress.listen((bytesSent) {
+        _transferredBytes += bytesSent;
+        _emitTransferProgress();
+      });
+
+      await _putObjectOperation!.result;
+
       _uploadCompleter.complete(
         _options.getProperties
             ? S3Item.fromHeadObjectOutput(
@@ -306,11 +324,21 @@ class S3UploadTask {
               )
             : S3Item(key: _key),
       );
+
+      _state = S3TransferState.success;
+      _emitTransferProgress();
+    } on CancellationException {
+      _logger.debug('PutObject HTTP operation has been canceled.');
+      _state = S3TransferState.canceled;
+      _uploadCompleter
+          .completeError(S3Exception.controllableOperationCanceled());
+      _emitTransferProgress();
     } on UnknownSmithyHttpException catch (error, stackTrace) {
       _completeUploadWithError(
         S3Exception.fromUnknownSmithyHttpException(error),
         stackTrace,
       );
+      _emitTransferProgress();
     }
   }
 
@@ -348,10 +376,11 @@ class S3UploadTask {
       },
       onPause: () async {
         _state = S3TransferState.paused;
+        _cancelOngoingUploadPartOperations(cancelingOnPause: true);
         _emitTransferProgress();
       },
       onResume: () async {
-        unawaited(_startNextUploadPartsBatch());
+        unawaited(_startNextUploadPartsBatch(resumingFromPause: true));
         _state = S3TransferState.inProgress;
         _emitTransferProgress();
       },
@@ -362,12 +391,7 @@ class S3UploadTask {
             _numOfCompletedSubtasks == _expectedNumOfSubtasks) {
           return;
         }
-        // TODO(HuiSF): Add logic to cancel current ongoing upload HTTP
-        //  requests when AWSHttpOperation is avaialble to use.
-
-        // Wait for all parts uploads to be completed before terminating
-        // the multipart upload to remove all uploaded parts from the bucket
-        await Future.wait(_ongoingSubtasks.map((subtask) => subtask.request));
+        _cancelOngoingUploadPartOperations();
         await _terminateMultipartUploadOnError(
           S3Exception.controllableOperationCanceled(),
           isCancel: true,
@@ -378,12 +402,11 @@ class S3UploadTask {
     );
 
     _subtasksStreamSubscription =
-        _subtasksStreamController.stream.listen((event) {
-      _completedSubtasks.add(event);
-      _transferredBytes += event.transferredBytes;
+        _subtasksStreamController.stream.listen((completedSubtask) {
+      _completedSubtasks.add(completedSubtask);
+      _transferredBytes += completedSubtask.transferredBytes;
       _emitTransferProgress();
-      _ongoingSubtasks
-          .removeWhere((subtask) => subtask.partNumber == event.partNumber);
+      _ongoingSubtasks.remove(completedSubtask.partNumber);
 
       // close the stream if all subtasks are done
       if (_numOfCompletedSubtasks == _expectedNumOfSubtasks) {
@@ -487,7 +510,9 @@ class S3UploadTask {
     }
   }
 
-  Future<void> _startNextUploadPartsBatch() async {
+  Future<void> _startNextUploadPartsBatch({
+    bool resumingFromPause = false,
+  }) async {
     // await for previous batching to complete (if any)
     await _uploadPartBatchingCompleted;
 
@@ -505,12 +530,30 @@ class S3UploadTask {
     );
 
     _state = S3TransferState.inProgress;
-    var count = 1;
-    while (count++ <= numToBatch) {
-      // part number starts from 1 up to 10_000
-      _currentSubTaskId += 1;
-      await _startNextUploadPart(partNumber: _currentSubTaskId);
+
+    if (resumingFromPause && _ongoingSubtasks.isNotEmpty) {
+      // resume canceled subtask on pause if any
+      for (final ongoingSubtask in _ongoingSubtasks.values) {
+        // update to the latest request
+        _ongoingSubtasks[ongoingSubtask.partNumber] = ongoingSubtask.copyWith(
+          request: _handleUploadPart(
+            partNumber: ongoingSubtask.partNumber,
+            uploadPartRequest: _uploadPart(
+              partBody: Stream.value(ongoingSubtask.partBodyChunk),
+              partNumber: ongoingSubtask.partNumber,
+            ),
+          ),
+        );
+      }
+    } else {
+      var count = 1;
+      while (count++ <= numToBatch) {
+        // part number starts from 1 up to 10_000
+        _currentSubTaskId += 1;
+        await _startNextUploadPart(partNumber: _currentSubTaskId);
+      }
     }
+
     // Complete current batching
     _uploadPartBatchingCompleter?.complete();
   }
@@ -520,18 +563,15 @@ class S3UploadTask {
   }) async {
     final chunk = await _fileReader.readChunk(_minPartSize);
 
-    final uploadPartFuture = _uploadPart(
-      partBody: Stream.value(chunk),
+    _ongoingSubtasks[partNumber] = _OngoingSubtask(
+      partBodyChunk: chunk,
       partNumber: partNumber,
-    ).then(_subtasksStreamController.add).catchError((Object error) {
-      _terminateMultipartUploadOnError(error, isCancel: false);
-    });
-
-    _ongoingSubtasks.add(
-      _OngoingSubtask(
-        partBodyChunk: chunk,
+      request: _handleUploadPart(
         partNumber: partNumber,
-        request: uploadPartFuture,
+        uploadPartRequest: _uploadPart(
+          partBody: Stream.value(chunk),
+          partNumber: partNumber,
+        ),
       ),
     );
   }
@@ -550,11 +590,16 @@ class S3UploadTask {
     });
 
     try {
-      // TODO(HuiSF): add the AWSHttpOperation into a cache, and cancel them
-      //  when _terminateMultipartUploadOnError is called.
-      // TODO(HuiSF): add finer upload progress emitter when AWSHttpOperation
-      //  is available from uploadPart.
-      final result = await _s3Client.uploadPart(request).result;
+      final operation = _s3Client.uploadPart(request);
+      _ongoingUploadPartHttpOperations[partNumber] =
+          _OngoingUploadPartOperation(
+        partNumber: partNumber,
+        smithyOperation: operation,
+      );
+
+      final result = await operation.result;
+      _ongoingUploadPartHttpOperations.remove(partNumber);
+
       final eTag = result.eTag;
 
       if (eTag == null) {
@@ -571,6 +616,32 @@ class S3UploadTask {
       throw S3Exception.fromUnknownSmithyHttpException(error);
     } on s3.NoSuchUpload catch (error) {
       throw S3Exception.fromS3NoSuchUpload(error);
+    }
+  }
+
+  Future<void> _handleUploadPart({
+    required int partNumber,
+    required Future<_CompletedSubtask> uploadPartRequest,
+  }) async {
+    try {
+      final completedSubtask = await uploadPartRequest;
+      _subtasksStreamController.add(completedSubtask);
+    } on CancellationException {
+      _logger
+          .debug('Part $partNumber upload HTTP operation has been canceled.');
+    } on Exception catch (error) {
+      unawaited(_terminateMultipartUploadOnError(error, isCancel: false));
+    }
+  }
+
+  void _cancelOngoingUploadPartOperations({
+    bool cancelingOnPause = false,
+  }) {
+    for (final operation in _ongoingUploadPartHttpOperations.values) {
+      operation.smithyOperation.cancel();
+      if (!cancelingOnPause) {
+        _ongoingSubtasks.remove(operation.partNumber);
+      }
     }
   }
 
@@ -641,4 +712,26 @@ class _OngoingSubtask {
   final List<int> partBodyChunk;
   final int partNumber;
   final Future<void> request;
+
+  _OngoingSubtask copyWith({
+    List<int>? partBodyChunk,
+    int? partNumber,
+    Future<void>? request,
+  }) {
+    return _OngoingSubtask(
+      partBodyChunk: partBodyChunk ?? this.partBodyChunk,
+      partNumber: partNumber ?? this.partNumber,
+      request: request ?? this.request,
+    );
+  }
+}
+
+class _OngoingUploadPartOperation {
+  _OngoingUploadPartOperation({
+    required this.partNumber,
+    required this.smithyOperation,
+  });
+
+  final int partNumber;
+  final SmithyOperation<s3.UploadPartOutput> smithyOperation;
 }

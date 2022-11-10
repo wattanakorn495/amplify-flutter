@@ -237,11 +237,13 @@ Future<void> downloadDataOperation() async {
   );
 
   stdout.writeln('Downloading...');
-  await Future<void>.delayed(const Duration(seconds: 1));
-  await downloadDataOperation.pause();
+  // TODO(HuiSF): re-enable controllable APIs when SmithyOperation.cancel
+  // can cancel underlying http request.
+  // await Future<void>.delayed(const Duration(seconds: 1));
+  // await downloadDataOperation.pause();
 
-  await Future<void>.delayed(const Duration(seconds: 4));
-  await downloadDataOperation.resume();
+  // await Future<void>.delayed(const Duration(seconds: 4));
+  // await downloadDataOperation.resume();
 
   try {
     final result = await downloadDataOperation.result;
@@ -277,11 +279,13 @@ Future<void> downloadFileOperation() async {
   );
 
   stdout.writeln('Downloading...');
-  await Future<void>.delayed(const Duration(seconds: 1));
-  await downloadFileOperation.pause();
+  // TODO(HuiSF): re-enable controllable APIs when SmithyOperation.cancel
+  // can cancel underlying http request.
+  // await Future<void>.delayed(const Duration(seconds: 1));
+  // await downloadFileOperation.pause();
 
-  await Future<void>.delayed(const Duration(seconds: 4));
-  await downloadFileOperation.resume();
+  // await Future<void>.delayed(const Duration(seconds: 4));
+  // await downloadFileOperation.resume();
 
   try {
     final result = await downloadFileOperation.result;
@@ -359,11 +363,11 @@ Future<void> uploadFileOperation() async {
   );
 
   stdout.writeln('Uploading...');
-  // await Future<void>.delayed(const Duration(seconds: 1));
-  // await uploadFileOperation.pause();
+  await Future<void>.delayed(const Duration(seconds: 3));
+  await uploadFileOperation.pause();
 
-  // await Future<void>.delayed(const Duration(seconds: 4));
-  // await uploadFileOperation.resume();
+  await Future<void>.delayed(const Duration(seconds: 4));
+  await uploadFileOperation.resume();
 
   try {
     final result = await uploadFileOperation.result;
