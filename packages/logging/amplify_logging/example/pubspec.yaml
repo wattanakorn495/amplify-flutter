@@ -1,0 +1,20 @@
+name: amplify_logging_example
+description: Demonstrates how to use the amplify_logging plugin.
+publish_to: 'none'
+
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+
+dependencies:
+  amplify_logging:
+    path: ../
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  amplify_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
