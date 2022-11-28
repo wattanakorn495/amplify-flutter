@@ -182,9 +182,9 @@ abstract class PartialTestEnumModel extends PartialModel<String, TestEnumModel>
             nullableEnumNullableList?.map((el) => el?.value).toList(),
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'TestEnumModel';
@@ -786,24 +786,20 @@ class _RemoteTestEnumModel extends RemoteTestEnumModel {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'TestEnumModel',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'TestEnumModel',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'TestEnumModel',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteTestEnumModel(
       id: id,
       enumVal: enumVal,

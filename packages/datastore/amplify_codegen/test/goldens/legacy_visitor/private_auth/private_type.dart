@@ -129,9 +129,9 @@ abstract class PartialPrivateType extends PartialModel<String, PrivateType>
         'bar': bar,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'PrivateType';
@@ -449,24 +449,20 @@ class _RemotePrivateType extends RemotePrivateType {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'PrivateType',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'PrivateType',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'PrivateType',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemotePrivateType(
       id: id,
       name: name,

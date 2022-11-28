@@ -70,7 +70,7 @@ abstract class StructureGenerator<Definition extends StructureTypeDefinition>
               DartTypes.amplifyCore.modelFieldError
                   .newInstance([
                     literalString(className),
-                    literalString(field.dartName),
+                    literalString(field.name),
                   ])
                   .thrown
                   .code,

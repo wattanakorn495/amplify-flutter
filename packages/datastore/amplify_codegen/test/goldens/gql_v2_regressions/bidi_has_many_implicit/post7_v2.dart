@@ -151,9 +151,9 @@ abstract class PartialPost7V2 extends PartialModel<String, Post7V2>
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
         'blog7V2PostsId': blog7V2PostsId,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Post7V2';
@@ -595,24 +595,20 @@ class _RemotePost7V2 extends RemotePost7V2 {
     final blog7V2PostsId = json['blog7V2PostsId'] == null
         ? null
         : (json['blog7V2PostsId'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Post7V2',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Post7V2',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Post7V2',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final blog = json['blog'] == null
         ? null
         : Blog7V2.classType

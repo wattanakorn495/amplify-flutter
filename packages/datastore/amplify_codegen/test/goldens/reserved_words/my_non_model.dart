@@ -34,7 +34,7 @@ class MyNonModel
     final enum_ = json['enum'] == null
         ? (throw ModelFieldError(
             'MyNonModel',
-            'enum_',
+            'enum',
           ))
         : (json['enum'] as String);
     return MyNonModel(enum_: enum_);

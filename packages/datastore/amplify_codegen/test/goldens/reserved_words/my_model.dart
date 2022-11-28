@@ -114,9 +114,9 @@ abstract class PartialMyModel extends PartialModel<String, MyModel>
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
         'id': id,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'MyModel';
@@ -178,7 +178,7 @@ abstract class MyModel extends PartialMyModel
     final enum_ = json['enum'] == null
         ? (throw ModelFieldError(
             'MyModel',
-            'enum_',
+            'enum',
           ))
         : (json['enum'] as String);
     final createdAt = json['createdAt'] == null
@@ -375,7 +375,7 @@ class _RemoteMyModel extends RemoteMyModel {
     final enum_ = json['enum'] == null
         ? (throw ModelFieldError(
             'MyModel',
-            'enum_',
+            'enum',
           ))
         : (json['enum'] as String);
     final createdAt = json['createdAt'] == null
@@ -396,24 +396,20 @@ class _RemoteMyModel extends RemoteMyModel {
             'id',
           ))
         : (json['id'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'MyModel',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'MyModel',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'MyModel',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteMyModel(
       enum_: enum_,
       createdAt: createdAt,

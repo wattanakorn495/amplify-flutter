@@ -126,9 +126,9 @@ abstract class PartialPost2 extends PartialModel<String, Post2>
         'comments': comments?.toJson(),
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Post2';
@@ -481,24 +481,20 @@ class _RemotePost2 extends RemotePost2 {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Post2',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Post2',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Post2',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final comments = json['comments'] == null
         ? null
         : AsyncModelCollection<String, Comment2, PartialComment2,

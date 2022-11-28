@@ -240,9 +240,9 @@ abstract class PartialModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
         'rating': rating,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName =>
@@ -265,7 +265,7 @@ class _PartialModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
     final modelId = json['modelID'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey',
-            'modelId',
+            'modelID',
           ))
         : (json['modelID'] as String);
     final title = json['title'] == null
@@ -330,7 +330,7 @@ abstract class ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
     final modelId = json['modelID'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey',
-            'modelId',
+            'modelID',
           ))
         : (json['modelID'] as String);
     final title = json['title'] == null
@@ -603,7 +603,7 @@ class _RemoteModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
     final modelId = json['modelID'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey',
-            'modelId',
+            'modelID',
           ))
         : (json['modelID'] as String);
     final title = json['title'] == null
@@ -630,24 +630,20 @@ class _RemoteModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey(
       modelId: modelId,
       title: title,

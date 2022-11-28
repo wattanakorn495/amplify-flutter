@@ -137,9 +137,9 @@ abstract class PartialComment extends PartialModel<String, Comment>
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
         'postCommentsId': postCommentsId,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Comment';
@@ -505,24 +505,20 @@ class _RemoteComment extends RemoteComment {
     final postCommentsId = json['postCommentsId'] == null
         ? null
         : (json['postCommentsId'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Comment',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Comment',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Comment',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final post = json['post'] == null
         ? null
         : Post.classType

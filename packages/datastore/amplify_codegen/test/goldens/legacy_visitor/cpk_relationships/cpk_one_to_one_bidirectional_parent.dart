@@ -258,9 +258,9 @@ abstract class PartialCpkOneToOneBidirectionalParent extends PartialModel<
             cpkOneToOneBidirectionalParentExplicitChildId,
         'cpkOneToOneBidirectionalParentExplicitChildName':
             cpkOneToOneBidirectionalParentExplicitChildName,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'CpkOneToOneBidirectionalParent';
@@ -801,24 +801,20 @@ class _RemoteCpkOneToOneBidirectionalParent
             ? null
             : (json['cpkOneToOneBidirectionalParentExplicitChildName']
                 as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'CpkOneToOneBidirectionalParent',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'CpkOneToOneBidirectionalParent',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'CpkOneToOneBidirectionalParent',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final explicitChild = json['explicitChild'] == null
         ? cpkOneToOneBidirectionalParentExplicitChildId == null ||
                 cpkOneToOneBidirectionalParentExplicitChildName == null

@@ -76,7 +76,9 @@ class _FromJsonVisitor extends SchemaTypeVisitor<Expression> {
               defaultValue?.call() ?? (isRequired ? orElse() : literalNull),
               exp,
             )
-        : (isRequired ? _jsonRef.ifNullThen(orElse()) : _jsonRef);
+        : (isRequired
+            ? _jsonRef.ifNullThen(defaultValue?.call() ?? orElse())
+            : _jsonRef);
   }
 
   @override
@@ -252,9 +254,16 @@ class _FromJsonVisitor extends SchemaTypeVisitor<Expression> {
       case AppSyncScalar.string:
         break;
     }
+    Expression Function()? defaultValue;
+    // `_deleted` is nullable in the schema but if not present, we know it's
+    // `false`.
+    if (field.name == '_deleted') {
+      defaultValue = () => literalFalse;
+    }
     return _deserialize(
       type: type,
       asA: type.wireType.nonNull,
+      defaultValue: defaultValue,
       constructor:
           constructor == null ? null : (val) => constructor!.call([val]),
     );

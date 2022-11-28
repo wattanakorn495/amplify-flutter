@@ -75,22 +75,22 @@ extension ModelHelpers on StructureTypeDefinition {
   Map<String, ModelField> allFields(ModelHierarchyType type) {
     final isRequired = type == ModelHierarchyType.remote;
     final remoteMetadataFields = {
-      'version': ModelField(
-        name: 'version',
+      '_version': ModelField(
+        name: '_version',
         type: SchemaType.scalar(
           AppSyncScalar.int_,
           isRequired: isRequired,
         ),
       ),
-      'deleted': ModelField(
-        name: 'deleted',
+      '_deleted': ModelField(
+        name: '_deleted',
         type: SchemaType.scalar(
           AppSyncScalar.boolean,
           isRequired: isRequired,
         ),
       ),
-      'lastChangedAt': ModelField(
-        name: 'lastChangedAt',
+      '_lastChangedAt': ModelField(
+        name: '_lastChangedAt',
         type: SchemaType.scalar(
           AppSyncScalar.awsDateTime,
           isRequired: isRequired,
