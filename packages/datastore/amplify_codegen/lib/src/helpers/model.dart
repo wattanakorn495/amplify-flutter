@@ -289,6 +289,22 @@ class ModelReferences {
       );
 }
 
+/// The name of the query field generated in the schema for
+/// [modelName].[fieldName].
+String queryName(String modelName, String fieldName) {
+  final buf = StringBuffer()
+    ..write(modelName[0].toLowerCase())
+    ..write(modelName.substring(1));
+  if (!modelName.endsWith('s')) {
+    buf.write('s');
+  }
+  buf
+    ..write('By')
+    ..write(fieldName[0].toUpperCase())
+    ..write(fieldName.substring(1));
+  return buf.toString();
+}
+
 /// Helpers for [ObjectTypeDefinitionNode].
 extension ModelDefinitionHelpers on ObjectTypeDefinitionNode {
   /// Whether this type has a directive named [directiveName].
@@ -305,23 +321,6 @@ extension ModelDefinitionHelpers on ObjectTypeDefinitionNode {
   /// Whether `this` is a [NonModelType].
   bool get isNonModel => !isModel;
 
-  /// The name of the query field generated for [fieldName].
-  String queryFieldName(String fieldName) {
-    final buf = StringBuffer();
-    final name = this.name.value;
-    buf
-      ..write(name[0].toLowerCase())
-      ..write(name.substring(1));
-    if (!name.endsWith('s')) {
-      buf.write('s');
-    }
-    buf
-      ..write('By')
-      ..write(fieldName[0].toUpperCase())
-      ..write(fieldName.substring(1));
-    return buf.toString();
-  }
-
   /// The keys/indexes for this model + their associated `fields` property.
   /// Unnamed primary keys are indexed by `null` in the returned map.
   Iterable<ModelIndex> get indexFields sync* {
@@ -332,7 +331,7 @@ extension ModelDefinitionHelpers on ObjectTypeDefinitionNode {
           ? directive.argumentNamed('fields')!.stringListValue
           : const <String>[];
       final queryField = directive.argumentNamed('queryField')?.stringValue ??
-          queryFieldName(field.wireName);
+          queryName(name.value, field.wireName);
       yield ModelIndex.secondaryKey(
         name: indexName,
         queryField: queryField,

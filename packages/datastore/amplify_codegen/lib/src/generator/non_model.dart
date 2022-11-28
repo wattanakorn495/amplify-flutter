@@ -26,10 +26,7 @@ import 'package:code_builder/code_builder.dart';
 /// {@endtemplate}
 class NonModelGenerator extends StructureGenerator<NonModelTypeDefinition> {
   /// {@template amplify_codegen.non_model_generator}
-  NonModelGenerator({
-    required super.node,
-    required super.definition,
-  });
+  NonModelGenerator(super.definition);
 
   @override
   GeneratedLibrary generate() {

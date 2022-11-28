@@ -25,14 +25,15 @@ import 'package:gql/language.dart';
 Map<String, GeneratedLibrary> generateForSchema(String schema) {
   // Parse all models before starting
   final schemaDefinition = parseSchema(schema);
+  final graphQlSchema = parseString(schema);
   final context = CodegenContext(schemaDefinition);
 
   // Generate libraries for model types and enums
   final libraries = runWithContext(
     context,
     () => <GeneratedLibrary>[
-      ...parseString(schema).definitions.map((definition) {
-        return definition.accept(LibraryVisitor(schemaDefinition));
+      ...schemaDefinition.typeDefinitions.values.map((definition) {
+        return LibraryVisitor(graphQlSchema.definitions).visit(definition);
       }).whereType(),
       ModelProviderGenerator(schemaDefinition).generate(),
     ],

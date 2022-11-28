@@ -24,23 +24,18 @@ import 'package:gql/ast.dart';
 abstract class LibraryGenerator<Node extends TypeDefinitionNode,
     TypeDefinition extends SchemaTypeDefinition> {
   /// {@macro amplify_codegen.library_generator}
-  LibraryGenerator({
-    required this.node,
-    required this.definition,
-  }) : builder = LibraryBuilder()..name = 'models.${definition.libraryName}';
+  LibraryGenerator(this.definition)
+      : builder = LibraryBuilder()..name = 'models.${definition.libraryName}';
 
   /// The pre-configured builder for [generate]'s output.
   final LibraryBuilder builder;
-
-  /// The raw GraphQL node.
-  final Node node;
 
   /// The semantic type definition from the parsed schema.
   final TypeDefinition definition;
 
   /// The name as defined in the GraphQL schema.
-  String get schemaName => node.name.value;
+  String get schemaName => definition.name;
 
-  /// Generates a [Library] for [node] and [definition].
+  /// Generates a [Library] for [definition].
   GeneratedLibrary generate();
 }

@@ -68,9 +68,9 @@ abstract class ModelIndex
 
   /// Creates an `@index` model index.
   factory ModelIndex.secondaryKey({
+    required String name,
     required String field,
     required String queryField,
-    required String name,
     List<String> sortKeyFields = const [],
   }) =>
       _$ModelIndex._(

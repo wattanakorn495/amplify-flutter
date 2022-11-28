@@ -87,32 +87,30 @@ abstract class SchemaVisitor<T> {
 /// each one. Specifically, this targets object `type` definitions and `enum`
 /// definitions.
 /// {@endtemplate}
-class LibraryVisitor extends SimpleVisitor<GeneratedLibrary> {
+class LibraryVisitor extends SchemaVisitor<GeneratedLibrary> {
   /// {@macro amplify_codegen.library_visitor}
-  LibraryVisitor(this.schema);
+  LibraryVisitor(this.nodes);
 
-  /// The semantic schema definition.
-  final SchemaDefinition schema;
+  /// The raw GraphQL nodes.
+  final List<DefinitionNode> nodes;
 
   @override
-  GeneratedLibrary visitEnumTypeDefinitionNode(EnumTypeDefinitionNode node) {
-    final definition =
-        schema.typeDefinitions[node.name.value] as EnumTypeDefinition;
-    return EnumGenerator(node: node, definition: definition).generate();
+  GeneratedLibrary visitEnum(EnumTypeDefinition definition) {
+    return EnumGenerator(
+      definition,
+      node: nodes
+          .whereType<EnumTypeDefinitionNode>()
+          .singleWhere((n) => n.name.value == definition.name),
+    ).generate();
   }
 
   @override
-  GeneratedLibrary visitObjectTypeDefinitionNode(
-    ObjectTypeDefinitionNode node,
-  ) {
-    final definition =
-        schema.typeDefinitions[node.name.value] as StructureTypeDefinition;
-    if (definition is ModelTypeDefinition) {
-      return ModelGenerator(node: node, definition: definition).generate();
-    }
-    return NonModelGenerator(
-      node: node,
-      definition: definition as NonModelTypeDefinition,
-    ).generate();
+  GeneratedLibrary visitModel(ModelTypeDefinition definition) {
+    return ModelGenerator(definition).generate();
+  }
+
+  @override
+  GeneratedLibrary visitNonModel(NonModelTypeDefinition definition) {
+    return NonModelGenerator(definition).generate();
   }
 }

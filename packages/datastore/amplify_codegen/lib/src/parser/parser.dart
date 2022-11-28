@@ -17,7 +17,7 @@ import 'package:amplify_codegen/src/helpers/field.dart';
 import 'package:amplify_codegen/src/helpers/model.dart';
 import 'package:amplify_codegen/src/helpers/types.dart';
 import 'package:amplify_codegen/src/parser/connection_info.dart';
-import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/amplify_core.dart' hide ModelType;
 import 'package:amplify_core/src/types/models/mipr.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:collection/collection.dart';
@@ -149,15 +149,16 @@ class _SchemaParser {
               return;
             }
 
+            final relationship = ModelAssociationType.valueOf(
+              relationshipDirective.name.value,
+            );
+
             // Get the model referred to by this relationship.
             final relatedModelName = fieldNode.type.typeName;
             final relatedModel = builder.typeDefinitions[relatedModelName]!
                 as ModelTypeDefinition;
             final relatedModelNode = objectNodes[relatedModelName]!;
 
-            final relationship = ModelAssociationType.valueOf(
-              relationshipDirective.name.value,
-            );
             late ConnectionInfo connectionInfo;
             switch (relationship) {
               case ModelAssociationType.belongsTo:
@@ -182,13 +183,28 @@ class _SchemaParser {
                 connectionInfo = processHasMany(
                   modelName: model.name,
                   field: field,
-                  fieldNode: fieldNode,
+                  indexName: fieldNode.indexName,
                   relatedModel: relatedModel,
                   relatedModelNode: relatedModelNode,
                 );
                 break;
               case ModelAssociationType.manyToMany:
-                connectionInfo = processManyToMany();
+                // Convert `manyToMany` to `hasMany` + join table
+                final relationName = fieldNode
+                    .directiveNamed('manyToMany')!
+                    .argumentNamed('relationName')!
+                    .stringValue;
+                final joinTable =
+                    (builder.typeDefinitions[relationName] ??= _createJoinTable(
+                  name: relationName,
+                  modelA: model,
+                  modelB: relatedModel,
+                )) as ModelTypeDefinition;
+                connectionInfo = processHasMany(
+                  modelName: model.name,
+                  field: field,
+                  relatedModel: joinTable,
+                );
                 break;
             }
             fieldBuilder.association.replace(connectionInfo.association);
@@ -220,6 +236,94 @@ class _SchemaParser {
     }
 
     return builder.build();
+  }
+
+  String _graphQlName(String name) {
+    final capitalized = name[0].toUpperCase() + name.substring(1);
+    return capitalized.replaceAll(
+      RegExp(r'^[^_A-Za-z]+|[^_0-9A-Za-z]'),
+      '',
+    );
+  }
+
+  ModelTypeDefinition _createJoinTable({
+    required String name,
+    required ModelTypeDefinition modelA,
+    required ModelTypeDefinition modelB,
+  }) {
+    // From: https://github.com/aws-amplify/amplify-codegen/blob/0cdc52777c3e69f2968e72e7534d40645c72e7e5/packages/appsync-modelgen-plugin/src/visitors/appsync-visitor.ts#L795
+    String joinFieldName(String modelName, String fieldName) {
+      return '${modelName[0].toLowerCase()}${modelName.substring(1)}'
+          '${fieldName[0].toUpperCase()}${fieldName.substring(1)}';
+    }
+
+    final modelAPrimaryKey = modelA.modelIdentifier.fields.map((fieldName) {
+      return modelA.fields[fieldName]!.rebuild(
+        (b) => b
+          ..name = joinFieldName(modelA.name, fieldName)
+          ..isReadOnly = true,
+      );
+    });
+    final modelBPrimaryKey = modelB.modelIdentifier.fields.map((fieldName) {
+      return modelB.fields[fieldName]!.rebuild(
+        (b) => b
+          ..name = joinFieldName(modelB.name, fieldName)
+          ..isReadOnly = true,
+      );
+    });
+    return ModelTypeDefinition.build((b) {
+      final sanitizedName = _graphQlName(name);
+      b
+        ..name = sanitizedName
+        ..pluralName =
+            sanitizedName.endsWith('s') ? sanitizedName : '${sanitizedName}s';
+      b.fields.addAll({
+        'id': ModelField(
+          name: 'id',
+          type: const SchemaType.scalar(
+            AppSyncScalar.id,
+            isRequired: true,
+          ),
+        ),
+        ...Map.fromEntries(
+          modelAPrimaryKey.map((field) => MapEntry(field.name, field)),
+        ),
+        modelA.name.camelCase: ModelField(
+          name: modelA.name.camelCase,
+          type: SchemaType.model(modelA.name, isRequired: true),
+          association: ModelAssociation.belongsTo(
+            associatedType: modelA.name,
+            targetNames: modelAPrimaryKey.map((f) => f.name).toList(),
+          ),
+        ),
+        ...Map.fromEntries(
+          modelBPrimaryKey.map((field) => MapEntry(field.name, field)),
+        ),
+        modelB.name.camelCase: ModelField(
+          name: modelB.name.camelCase,
+          type: SchemaType.model(modelB.name, isRequired: true),
+          association: ModelAssociation.belongsTo(
+            associatedType: modelB.name,
+            targetNames: modelBPrimaryKey.map((f) => f.name).toList(),
+          ),
+        ),
+      });
+      b.indexes.addAll([
+        ModelIndex.primaryKey(field: 'id'),
+        ModelIndex.secondaryKey(
+          name: 'by${modelA.name}',
+          field: modelAPrimaryKey.first.name,
+          sortKeyFields: modelAPrimaryKey.skip(1).map((f) => f.name).toList(),
+          queryField: queryName(name, modelAPrimaryKey.first.name),
+        ),
+        ModelIndex.secondaryKey(
+          name: 'by${modelB.name}',
+          field: modelBPrimaryKey.first.name,
+          sortKeyFields: modelBPrimaryKey.skip(1).map((f) => f.name).toList(),
+          queryField: queryName(name, modelBPrimaryKey.first.name),
+        ),
+      ]);
+    });
   }
 
   /// A `belongsTo` connection forms a 1-1 relationship between two models where
@@ -483,19 +587,16 @@ class _SchemaParser {
   ConnectionInfo processHasMany({
     required String modelName,
     required ModelField field,
-    required FieldDefinitionNode fieldNode,
+    String? indexName,
     required ModelTypeDefinition relatedModel,
-    required ObjectTypeDefinitionNode relatedModelNode,
+    ObjectTypeDefinitionNode? relatedModelNode,
   }) {
     final connectionInfo = ConnectionInfoBuilder();
     connectionInfo.association
       ..associationType = ModelAssociationType.hasMany
       ..associatedType = relatedModel.name;
 
-    final relatedModelNode = objectNodes[relatedModel.name]!;
-
     // If present, find the related fields matching the local `fields`.
-    final indexName = fieldNode.indexName;
     final index = indexName == null
         ? relatedModel.modelIdentifier
         : relatedModel.indexNamed(indexName);
@@ -503,14 +604,23 @@ class _SchemaParser {
 
     // Get the associated field by relationship equality when the relation
     // is bi-directional, i.e. there is a corresponding `@belongsTo`.
-    final bidiField = relatedModelNode.fields.singleWhereOrNull((f) {
-      return f.isBelongsTo &&
-          f.type.typeName == modelName &&
-          (indexName == null || f.connectionFields?[0] == directlyRelatedField);
-    });
+    final bidiField = relatedModelNode?.fields.singleWhereOrNull((f) {
+          return f.isBelongsTo &&
+              f.type.typeName == modelName &&
+              (indexName == null ||
+                  f.connectionFields?[0] == directlyRelatedField);
+        })?.wireName ??
+        relatedModel.fields.values.singleWhereOrNull((f) {
+          final association = f.association;
+          return association != null &&
+              association.associationType == ModelAssociationType.belongsTo &&
+              association.associatedType == modelName &&
+              (indexName == null ||
+                  association.targetNames![0] == directlyRelatedField);
+        })?.wireName;
 
     if (bidiField != null) {
-      connectionInfo.association.associatedFields.add(bidiField.wireName);
+      connectionInfo.association.associatedFields.add(bidiField);
     } else if (indexName != null) {
       connectionInfo.association.associatedFields.addAll(index.fields);
     } else {
@@ -524,7 +634,7 @@ class _SchemaParser {
       for (final foreignField in foreignKeyFields) {
         final syntheticFieldName = makeConnectionAttributeName(
           modelName,
-          fieldNode.name.value,
+          field.name,
           foreignField.name,
         );
         targetNames.add(syntheticFieldName);
@@ -557,12 +667,5 @@ class _SchemaParser {
     }
 
     return connectionInfo.build();
-  }
-
-  /// A `manyToMany` connection forms a N-N relationship between two models
-  /// where the foreign key is held by both models and points to a synthetic
-  /// join table which is injected into the schema.
-  ConnectionInfo processManyToMany() {
-    throw UnimplementedError();
   }
 }

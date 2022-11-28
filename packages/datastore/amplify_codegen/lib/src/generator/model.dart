@@ -33,10 +33,7 @@ import 'package:smithy_codegen/src/util/symbol_ext.dart';
 /// {@endtemplate}
 class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
   /// {@template amplify_codegen.model_generator}
-  ModelGenerator({
-    required super.node,
-    required super.definition,
-  });
+  ModelGenerator(super.definition);
 
   late final ModelNames _names = definition.names;
   late final ModelReferences _references = definition.references;
