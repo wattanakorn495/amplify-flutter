@@ -273,7 +273,7 @@ class _PartialTeam extends PartialTeam {
 
 abstract class Team extends PartialTeam implements Model<TeamIdentifier, Team> {
   factory Team({
-    String? teamId,
+    required String teamId,
     required String name,
     Project? project,
   }) = _Team;
@@ -512,11 +512,10 @@ abstract class Team extends PartialTeam implements Model<TeamIdentifier, Team> {
 
 class _Team extends Team {
   _Team({
-    String? teamId,
+    required this.teamId,
     required this.name,
     this.project,
-  })  : teamId = teamId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         teamProjectProjectId = project?.projectId,
         teamProjectName = project?.name,

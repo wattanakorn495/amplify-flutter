@@ -364,7 +364,7 @@ class _PartialProject extends PartialProject {
 abstract class Project extends PartialProject
     implements Model<ProjectIdentifier, Project> {
   factory Project({
-    String? projectId,
+    required String projectId,
     required String name,
     Team? devTeam,
     Team? productTeam,
@@ -735,7 +735,7 @@ abstract class Project extends PartialProject
 
 class _Project extends Project {
   _Project({
-    String? projectId,
+    required this.projectId,
     required this.name,
     Team? devTeam,
     Team? productTeam,
@@ -743,8 +743,7 @@ class _Project extends Project {
     this.projectDevTeamName,
     this.projectProductTeamTeamId,
     this.projectProductTeamName,
-  })  : projectId = projectId ?? uuid(),
-        devTeam = devTeam == null ? null : AsyncModel.fromModel(devTeam),
+  })  : devTeam = devTeam == null ? null : AsyncModel.fromModel(devTeam),
         productTeam =
             productTeam == null ? null : AsyncModel.fromModel(productTeam),
         createdAt = TemporalDateTime.now(),

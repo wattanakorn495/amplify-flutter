@@ -236,7 +236,7 @@ class _PartialModelWithPrimaryKey extends PartialModelWithPrimaryKey {
 abstract class ModelWithPrimaryKey extends PartialModelWithPrimaryKey
     implements Model<String, ModelWithPrimaryKey> {
   factory ModelWithPrimaryKey({
-    String? productId,
+    required String productId,
     required String name,
     String? content,
     required String albumId,
@@ -499,13 +499,12 @@ abstract class ModelWithPrimaryKey extends PartialModelWithPrimaryKey
 
 class _ModelWithPrimaryKey extends ModelWithPrimaryKey {
   _ModelWithPrimaryKey({
-    String? productId,
+    required this.productId,
     required this.name,
     this.content,
     required this.albumId,
     required this.categoryId,
-  })  : productId = productId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         super._();
 

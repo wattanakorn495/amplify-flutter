@@ -509,7 +509,8 @@ return ${allocate(_references.partialModelImpl)}.fromJson(json) as T;
         // Allow nullable `ID` parameters to the main constructor since these
         // fields can be auto-generated.
         final isIdField = fieldType is mipr.ScalarType &&
-            fieldType.value == mipr.AppSyncScalar.id;
+            fieldType.value == mipr.AppSyncScalar.id &&
+            field.name == 'id';
         final isPrimaryKey =
             definition.modelIdentifier.fields.contains(field.name);
         final factoryTypeRef =
@@ -755,7 +756,8 @@ return value as T;
         );
 
         final isIdField = fieldType is mipr.ScalarType &&
-            fieldType.value == mipr.AppSyncScalar.id;
+            fieldType.value == mipr.AppSyncScalar.id &&
+            field.name == 'id';
         final isPrimaryKey =
             definition.modelIdentifier.fields.contains(field.name);
         final factoryTypeRef =

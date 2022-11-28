@@ -278,7 +278,7 @@ class _PartialComment extends PartialComment {
 abstract class Comment extends PartialComment
     implements Model<CommentIdentifier, Comment> {
   factory Comment({
-    String? commentId,
+    required String commentId,
     required String content,
     Post? post,
   }) = _Comment;
@@ -519,11 +519,10 @@ abstract class Comment extends PartialComment
 
 class _Comment extends Comment {
   _Comment({
-    String? commentId,
+    required this.commentId,
     required this.content,
     this.post,
-  })  : commentId = commentId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         postCommentsPostId = post?.postId,
         postCommentsTitle = post?.title,

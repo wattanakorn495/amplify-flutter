@@ -189,7 +189,7 @@ class _PartialPowerSource extends PartialPowerSource {
 abstract class PowerSource extends PartialPowerSource
     implements Model<String, PowerSource> {
   factory PowerSource({
-    String? sourceId,
+    required String sourceId,
     required double amps,
     required double volts,
   }) = _PowerSource;
@@ -379,11 +379,10 @@ abstract class PowerSource extends PartialPowerSource
 
 class _PowerSource extends PowerSource {
   _PowerSource({
-    String? sourceId,
+    required this.sourceId,
     required this.amps,
     required this.volts,
-  })  : sourceId = sourceId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         super._();
 

@@ -184,7 +184,7 @@ abstract class ModelWithExplicitlyDefinedPk
     extends PartialModelWithExplicitlyDefinedPk
     implements Model<String, ModelWithExplicitlyDefinedPk> {
   factory ModelWithExplicitlyDefinedPk({
-    String? modelId,
+    required String modelId,
     required String title,
   }) = _ModelWithExplicitlyDefinedPk;
 
@@ -352,10 +352,9 @@ abstract class ModelWithExplicitlyDefinedPk
 
 class _ModelWithExplicitlyDefinedPk extends ModelWithExplicitlyDefinedPk {
   _ModelWithExplicitlyDefinedPk({
-    String? modelId,
+    required this.modelId,
     required this.title,
-  })  : modelId = modelId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         super._();
 

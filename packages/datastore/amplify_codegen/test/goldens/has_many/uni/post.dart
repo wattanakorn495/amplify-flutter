@@ -245,7 +245,7 @@ class _PartialPost extends PartialPost {
 
 abstract class Post extends PartialPost implements Model<PostIdentifier, Post> {
   factory Post({
-    String? postId,
+    required String postId,
     required String title,
     List<Comment>? comments,
   }) = _Post;
@@ -456,11 +456,10 @@ abstract class Post extends PartialPost implements Model<PostIdentifier, Post> {
 
 class _Post extends Post {
   _Post({
-    String? postId,
+    required this.postId,
     required this.title,
     List<Comment>? comments,
-  })  : postId = postId ?? uuid(),
-        comments =
+  })  : comments =
             comments == null ? null : AsyncModelCollection.fromList(comments),
         createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),

@@ -478,9 +478,15 @@ extension ModelFieldHelpers on ModelField {
           }
           break;
         case AppSyncScalar.id:
-          // Allow nullable `ID` parameters to the main constructor since these
+          // Allow nullable `id` parameters to the main constructor since these
           // fields can be auto-generated.
-          if (isPrimaryKey) {
+          //
+          // The spec says only fields named "id" qualify for this
+          // auto-generation.
+          //
+          // Section "Identifier Generation":
+          // https://quip-amazon.com/Kx24A6l5CfuB/DataStore-correctness-specification-work#temp:C:JCV16d7c578c6ad4faf8bed29dcf
+          if (isPrimaryKey && name == 'id') {
             isRequired = false;
             defaultValue = DartTypes.awsCommon.uuid.call([]);
           }

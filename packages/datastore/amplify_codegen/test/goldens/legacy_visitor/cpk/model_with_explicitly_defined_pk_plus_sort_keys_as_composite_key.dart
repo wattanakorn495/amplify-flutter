@@ -317,7 +317,7 @@ abstract class ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
         Model<ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
             ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey> {
   factory ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey({
-    String? modelId,
+    required String modelId,
     required String title,
     required int rating,
   }) = _ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey;
@@ -543,11 +543,10 @@ abstract class ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
 class _ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
     extends ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey {
   _ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey({
-    String? modelId,
+    required this.modelId,
     required this.title,
     required this.rating,
-  })  : modelId = modelId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         super._();
 
