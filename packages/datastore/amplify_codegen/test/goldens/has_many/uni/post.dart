@@ -243,7 +243,9 @@ class _PartialPost extends PartialPost {
   final TemporalDateTime? updatedAt;
 }
 
-abstract class Post extends PartialPost implements Model<PostIdentifier, Post> {
+abstract class Post extends PartialPost
+    with LegacyModelFields<PostIdentifier, Post>
+    implements Model<PostIdentifier, Post> {
   factory Post({
     required String postId,
     required String title,

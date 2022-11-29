@@ -171,6 +171,7 @@ class _PartialTodoWithAuth extends PartialTodoWithAuth {
 }
 
 abstract class TodoWithAuth extends PartialTodoWithAuth
+    with LegacyModelFields<String, TodoWithAuth>
     implements Model<String, TodoWithAuth> {
   factory TodoWithAuth({
     String? id,

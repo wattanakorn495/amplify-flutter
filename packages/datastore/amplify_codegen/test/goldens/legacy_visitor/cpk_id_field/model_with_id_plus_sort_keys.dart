@@ -265,6 +265,9 @@ class _PartialModelWithIdPlusSortKeys extends PartialModelWithIdPlusSortKeys {
 }
 
 abstract class ModelWithIdPlusSortKeys extends PartialModelWithIdPlusSortKeys
+    with
+        LegacyModelFields<ModelWithIdPlusSortKeysIdentifier,
+            ModelWithIdPlusSortKeys>
     implements
         Model<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys> {
   factory ModelWithIdPlusSortKeys({

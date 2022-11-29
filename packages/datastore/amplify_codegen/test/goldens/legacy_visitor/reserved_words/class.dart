@@ -163,7 +163,9 @@ class _PartialClass extends PartialClass {
   final TemporalDateTime? updatedAt;
 }
 
-abstract class Class extends PartialClass implements Model<String, Class> {
+abstract class Class extends PartialClass
+    with LegacyModelFields<String, Class>
+    implements Model<String, Class> {
   factory Class({
     String? id,
     required String name,

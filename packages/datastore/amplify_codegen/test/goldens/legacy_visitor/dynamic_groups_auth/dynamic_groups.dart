@@ -187,6 +187,7 @@ class _PartialDynamicGroups extends PartialDynamicGroups {
 }
 
 abstract class DynamicGroups extends PartialDynamicGroups
+    with LegacyModelFields<String, DynamicGroups>
     implements Model<String, DynamicGroups> {
   factory DynamicGroups({
     String? id,

@@ -374,6 +374,9 @@ class _PartialCpkOneToOneBidirectionalParent
 
 abstract class CpkOneToOneBidirectionalParent
     extends PartialCpkOneToOneBidirectionalParent
+    with
+        LegacyModelFields<CpkOneToOneBidirectionalParentIdentifier,
+            CpkOneToOneBidirectionalParent>
     implements
         Model<CpkOneToOneBidirectionalParentIdentifier,
             CpkOneToOneBidirectionalParent> {

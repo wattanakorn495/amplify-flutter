@@ -197,7 +197,9 @@ class _PartialPost2 extends PartialPost2 {
   final TemporalDateTime? updatedAt;
 }
 
-abstract class Post2 extends PartialPost2 implements Model<String, Post2> {
+abstract class Post2 extends PartialPost2
+    with LegacyModelFields<String, Post2>
+    implements Model<String, Post2> {
   factory Post2({
     String? id,
     required String title,

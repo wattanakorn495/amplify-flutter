@@ -185,6 +185,7 @@ class _PartialModelWithExplicitIdAndSdi
 
 abstract class ModelWithExplicitIdAndSdi
     extends PartialModelWithExplicitIdAndSdi
+    with LegacyModelFields<String, ModelWithExplicitIdAndSdi>
     implements Model<String, ModelWithExplicitIdAndSdi> {
   factory ModelWithExplicitIdAndSdi({
     String? id,

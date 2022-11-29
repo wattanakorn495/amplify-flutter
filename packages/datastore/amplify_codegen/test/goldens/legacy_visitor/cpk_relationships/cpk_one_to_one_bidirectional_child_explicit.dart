@@ -341,6 +341,9 @@ class _PartialCpkOneToOneBidirectionalChildExplicit
 
 abstract class CpkOneToOneBidirectionalChildExplicit
     extends PartialCpkOneToOneBidirectionalChildExplicit
+    with
+        LegacyModelFields<CpkOneToOneBidirectionalChildExplicitIdentifier,
+            CpkOneToOneBidirectionalChildExplicit>
     implements
         Model<CpkOneToOneBidirectionalChildExplicitIdentifier,
             CpkOneToOneBidirectionalChildExplicit> {

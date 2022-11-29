@@ -235,7 +235,9 @@ class _PartialPost extends PartialPost {
   final String? blogPostsId;
 }
 
-abstract class Post extends PartialPost implements Model<String, Post> {
+abstract class Post extends PartialPost
+    with LegacyModelFields<String, Post>
+    implements Model<String, Post> {
   factory Post({
     String? id,
     required String title,

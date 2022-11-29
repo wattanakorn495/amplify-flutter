@@ -171,6 +171,7 @@ class _PartialReservedWord extends PartialReservedWord {
 }
 
 abstract class ReservedWord extends PartialReservedWord
+    with LegacyModelFields<String, ReservedWord>
     implements Model<String, ReservedWord> {
   factory ReservedWord({
     String? id,

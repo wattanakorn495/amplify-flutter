@@ -289,6 +289,7 @@ class _PartialTestModel extends PartialTestModel {
 }
 
 abstract class TestModel extends PartialTestModel
+    with LegacyModelFields<String, TestModel>
     implements Model<String, TestModel> {
   factory TestModel({
     String? id,

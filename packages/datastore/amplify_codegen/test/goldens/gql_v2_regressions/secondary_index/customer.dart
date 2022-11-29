@@ -205,6 +205,7 @@ class _PartialCustomer extends PartialCustomer {
 }
 
 abstract class Customer extends PartialCustomer
+    with LegacyModelFields<String, Customer>
     implements Model<String, Customer> {
   factory Customer({
     String? id,

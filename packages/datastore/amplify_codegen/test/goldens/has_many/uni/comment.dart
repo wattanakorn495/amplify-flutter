@@ -254,6 +254,7 @@ class _PartialComment extends PartialComment {
 }
 
 abstract class Comment extends PartialComment
+    with LegacyModelFields<CommentIdentifier, Comment>
     implements Model<CommentIdentifier, Comment> {
   factory Comment({
     required String commentId,

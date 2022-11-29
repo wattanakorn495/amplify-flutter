@@ -178,6 +178,7 @@ class _PartialMyModel extends PartialMyModel {
 }
 
 abstract class MyModel extends PartialMyModel
+    with LegacyModelFields<String, MyModel>
     implements Model<String, MyModel> {
   factory MyModel({
     ScalarNonModel? embeddedNonModel,

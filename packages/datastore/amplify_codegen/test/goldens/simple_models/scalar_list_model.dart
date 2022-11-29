@@ -1559,6 +1559,7 @@ class _PartialScalarListModel extends PartialScalarListModel {
 }
 
 abstract class ScalarListModel extends PartialScalarListModel
+    with LegacyModelFields<String, ScalarListModel>
     implements Model<String, ScalarListModel> {
   factory ScalarListModel({
     String? id,

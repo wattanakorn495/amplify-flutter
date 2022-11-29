@@ -190,7 +190,9 @@ class _PartialTag extends PartialTag {
   final TemporalDateTime? updatedAt;
 }
 
-abstract class Tag extends PartialTag implements Model<String, Tag> {
+abstract class Tag extends PartialTag
+    with LegacyModelFields<String, Tag>
+    implements Model<String, Tag> {
   factory Tag({
     String? id,
     required String label,

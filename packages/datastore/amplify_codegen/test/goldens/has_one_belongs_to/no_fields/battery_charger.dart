@@ -215,6 +215,7 @@ class _PartialBatteryCharger extends PartialBatteryCharger {
 }
 
 abstract class BatteryCharger extends PartialBatteryCharger
+    with LegacyModelFields<String, BatteryCharger>
     implements Model<String, BatteryCharger> {
   factory BatteryCharger({
     PowerSource? powerSource,

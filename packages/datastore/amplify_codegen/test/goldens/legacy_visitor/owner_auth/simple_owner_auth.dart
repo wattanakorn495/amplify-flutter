@@ -189,6 +189,7 @@ class _PartialSimpleOwnerAuth extends PartialSimpleOwnerAuth {
 }
 
 abstract class SimpleOwnerAuth extends PartialSimpleOwnerAuth
+    with LegacyModelFields<String, SimpleOwnerAuth>
     implements Model<String, SimpleOwnerAuth> {
   factory SimpleOwnerAuth({
     String? id,

@@ -214,6 +214,7 @@ class _PartialProject2 extends PartialProject2 {
 }
 
 abstract class Project2 extends PartialProject2
+    with LegacyModelFields<String, Project2>
     implements Model<String, Project2> {
   factory Project2({
     String? id,

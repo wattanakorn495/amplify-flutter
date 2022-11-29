@@ -155,6 +155,7 @@ class _PartialDateTimeOverrides extends PartialDateTimeOverrides {
 }
 
 abstract class DateTimeOverrides extends PartialDateTimeOverrides
+    with LegacyModelFields<String, DateTimeOverrides>
     implements Model<String, DateTimeOverrides> {
   factory DateTimeOverrides({
     String? id,

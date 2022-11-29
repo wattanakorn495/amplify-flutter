@@ -369,6 +369,7 @@ class _PartialTemporalTimeModel extends PartialTemporalTimeModel {
 }
 
 abstract class TemporalTimeModel extends PartialTemporalTimeModel
+    with LegacyModelFields<String, TemporalTimeModel>
     implements Model<String, TemporalTimeModel> {
   factory TemporalTimeModel({
     String? id,

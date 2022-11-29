@@ -187,6 +187,7 @@ class _PartialPrivateType extends PartialPrivateType {
 }
 
 abstract class PrivateType extends PartialPrivateType
+    with LegacyModelFields<String, PrivateType>
     implements Model<String, PrivateType> {
   factory PrivateType({
     String? id,

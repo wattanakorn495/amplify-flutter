@@ -175,6 +175,7 @@ class _PartialSimpleModel extends PartialSimpleModel {
 }
 
 abstract class SimpleModel extends PartialSimpleModel
+    with LegacyModelFields<String, SimpleModel>
     implements Model<String, SimpleModel> {
   factory SimpleModel({
     String? id,

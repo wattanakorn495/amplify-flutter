@@ -208,7 +208,9 @@ class _PartialTeam extends PartialTeam {
   final TemporalDateTime? updatedAt;
 }
 
-abstract class Team extends PartialTeam implements Model<TeamIdentifier, Team> {
+abstract class Team extends PartialTeam
+    with LegacyModelFields<TeamIdentifier, Team>
+    implements Model<TeamIdentifier, Team> {
   factory Team({
     required String teamId,
     required String name,

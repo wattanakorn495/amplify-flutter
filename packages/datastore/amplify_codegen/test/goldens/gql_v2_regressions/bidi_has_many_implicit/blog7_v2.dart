@@ -200,6 +200,7 @@ class _PartialBlog7V2 extends PartialBlog7V2 {
 }
 
 abstract class Blog7V2 extends PartialBlog7V2
+    with LegacyModelFields<String, Blog7V2>
     implements Model<String, Blog7V2> {
   factory Blog7V2({
     String? id,

@@ -1563,6 +1563,7 @@ class _PartialScalarListNonModel extends PartialScalarListNonModel {
 }
 
 abstract class ScalarListNonModel extends PartialScalarListNonModel
+    with LegacyModelFields<String, ScalarListNonModel>
     implements Model<String, ScalarListNonModel> {
   factory ScalarListNonModel({
     String? id,

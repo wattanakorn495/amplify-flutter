@@ -187,6 +187,7 @@ class _PartialStaticGroups extends PartialStaticGroups {
 }
 
 abstract class StaticGroups extends PartialStaticGroups
+    with LegacyModelFields<String, StaticGroups>
     implements Model<String, StaticGroups> {
   factory StaticGroups({
     String? id,

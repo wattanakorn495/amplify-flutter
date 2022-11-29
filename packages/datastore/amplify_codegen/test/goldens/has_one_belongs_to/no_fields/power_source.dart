@@ -187,6 +187,7 @@ class _PartialPowerSource extends PartialPowerSource {
 }
 
 abstract class PowerSource extends PartialPowerSource
+    with LegacyModelFields<String, PowerSource>
     implements Model<String, PowerSource> {
   factory PowerSource({
     String? id,

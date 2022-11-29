@@ -182,6 +182,7 @@ class _PartialModelWithExplicitlyDefinedPk
 
 abstract class ModelWithExplicitlyDefinedPk
     extends PartialModelWithExplicitlyDefinedPk
+    with LegacyModelFields<String, ModelWithExplicitlyDefinedPk>
     implements Model<String, ModelWithExplicitlyDefinedPk> {
   factory ModelWithExplicitlyDefinedPk({
     required String modelId,

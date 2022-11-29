@@ -221,6 +221,7 @@ class _PartialPostTags extends PartialPostTags {
 }
 
 abstract class PostTags extends PartialPostTags
+    with LegacyModelFields<String, PostTags>
     implements Model<String, PostTags> {
   factory PostTags({
     String? id,

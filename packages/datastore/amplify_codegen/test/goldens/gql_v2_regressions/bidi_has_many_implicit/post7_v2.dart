@@ -240,6 +240,7 @@ class _PartialPost7V2 extends PartialPost7V2 {
 }
 
 abstract class Post7V2 extends PartialPost7V2
+    with LegacyModelFields<String, Post7V2>
     implements Model<String, Post7V2> {
   factory Post7V2({
     String? id,

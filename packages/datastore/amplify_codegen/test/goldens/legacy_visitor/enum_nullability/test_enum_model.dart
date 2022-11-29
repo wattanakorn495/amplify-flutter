@@ -302,6 +302,7 @@ class _PartialTestEnumModel extends PartialTestEnumModel {
 }
 
 abstract class TestEnumModel extends PartialTestEnumModel
+    with LegacyModelFields<String, TestEnumModel>
     implements Model<String, TestEnumModel> {
   factory TestEnumModel({
     String? id,

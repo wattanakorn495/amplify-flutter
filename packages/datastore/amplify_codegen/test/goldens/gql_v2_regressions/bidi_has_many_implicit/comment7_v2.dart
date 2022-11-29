@@ -213,6 +213,7 @@ class _PartialComment7V2 extends PartialComment7V2 {
 }
 
 abstract class Comment7V2 extends PartialComment7V2
+    with LegacyModelFields<String, Comment7V2>
     implements Model<String, Comment7V2> {
   factory Comment7V2({
     String? id,

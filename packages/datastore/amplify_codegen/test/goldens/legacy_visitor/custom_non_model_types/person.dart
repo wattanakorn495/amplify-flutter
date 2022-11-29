@@ -194,7 +194,9 @@ class _PartialPerson extends PartialPerson {
   final String id;
 }
 
-abstract class Person extends PartialPerson implements Model<String, Person> {
+abstract class Person extends PartialPerson
+    with LegacyModelFields<String, Person>
+    implements Model<String, Person> {
   factory Person({
     required String name,
     required Phone phone,

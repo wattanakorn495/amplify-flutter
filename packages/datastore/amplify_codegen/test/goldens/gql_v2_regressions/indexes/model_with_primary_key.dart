@@ -234,6 +234,7 @@ class _PartialModelWithPrimaryKey extends PartialModelWithPrimaryKey {
 }
 
 abstract class ModelWithPrimaryKey extends PartialModelWithPrimaryKey
+    with LegacyModelFields<String, ModelWithPrimaryKey>
     implements Model<String, ModelWithPrimaryKey> {
   factory ModelWithPrimaryKey({
     required String productId,

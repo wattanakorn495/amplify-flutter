@@ -164,7 +164,9 @@ class _PartialTodo extends PartialTodo {
   final String id;
 }
 
-abstract class Todo extends PartialTodo implements Model<String, Todo> {
+abstract class Todo extends PartialTodo
+    with LegacyModelFields<String, Todo>
+    implements Model<String, Todo> {
   factory Todo({
     String? content,
     String? id,

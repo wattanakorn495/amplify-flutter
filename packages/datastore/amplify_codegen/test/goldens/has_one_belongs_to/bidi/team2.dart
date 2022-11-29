@@ -204,7 +204,9 @@ class _PartialTeam2 extends PartialTeam2 {
   final String? team2ProjectId;
 }
 
-abstract class Team2 extends PartialTeam2 implements Model<String, Team2> {
+abstract class Team2 extends PartialTeam2
+    with LegacyModelFields<String, Team2>
+    implements Model<String, Team2> {
   factory Team2({
     String? id,
     required String name,

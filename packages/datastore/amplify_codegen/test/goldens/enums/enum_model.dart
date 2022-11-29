@@ -189,6 +189,7 @@ class _PartialEnumModel extends PartialEnumModel {
 }
 
 abstract class EnumModel extends PartialEnumModel
+    with LegacyModelFields<String, EnumModel>
     implements Model<String, EnumModel> {
   factory EnumModel({
     String? id,

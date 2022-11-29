@@ -215,6 +215,7 @@ class _PartialCpkModel extends PartialCpkModel {
 }
 
 abstract class CpkModel extends PartialCpkModel
+    with LegacyModelFields<CpkModelIdentifier, CpkModel>
     implements Model<CpkModelIdentifier, CpkModel> {
   factory CpkModel({
     required String firstName,

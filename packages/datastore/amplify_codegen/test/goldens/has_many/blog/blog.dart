@@ -194,7 +194,9 @@ class _PartialBlog extends PartialBlog {
   final TemporalDateTime? updatedAt;
 }
 
-abstract class Blog extends PartialBlog implements Model<String, Blog> {
+abstract class Blog extends PartialBlog
+    with LegacyModelFields<String, Blog>
+    implements Model<String, Blog> {
   factory Blog({
     String? id,
     required String name,

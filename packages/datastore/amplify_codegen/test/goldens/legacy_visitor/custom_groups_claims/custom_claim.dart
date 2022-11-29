@@ -187,6 +187,7 @@ class _PartialCustomClaim extends PartialCustomClaim {
 }
 
 abstract class CustomClaim extends PartialCustomClaim
+    with LegacyModelFields<String, CustomClaim>
     implements Model<String, CustomClaim> {
   factory CustomClaim({
     String? id,

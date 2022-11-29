@@ -184,6 +184,7 @@ class _PartialAllowRead extends PartialAllowRead {
 }
 
 abstract class AllowRead extends PartialAllowRead
+    with LegacyModelFields<String, AllowRead>
     implements Model<String, AllowRead> {
   factory AllowRead({
     String? id,

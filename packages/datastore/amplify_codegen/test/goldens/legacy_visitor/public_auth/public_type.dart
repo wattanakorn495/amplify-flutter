@@ -186,6 +186,7 @@ class _PartialPublicType extends PartialPublicType {
 }
 
 abstract class PublicType extends PartialPublicType
+    with LegacyModelFields<String, PublicType>
     implements Model<String, PublicType> {
   factory PublicType({
     String? id,

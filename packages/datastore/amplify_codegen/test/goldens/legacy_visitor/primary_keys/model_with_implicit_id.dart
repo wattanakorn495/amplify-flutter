@@ -175,6 +175,7 @@ class _PartialModelWithImplicitId extends PartialModelWithImplicitId {
 }
 
 abstract class ModelWithImplicitId extends PartialModelWithImplicitId
+    with LegacyModelFields<String, ModelWithImplicitId>
     implements Model<String, ModelWithImplicitId> {
   factory ModelWithImplicitId({
     required String title,

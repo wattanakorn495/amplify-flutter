@@ -420,6 +420,12 @@ return ${allocate(_references.partialModelImpl)}.fromJson(json) as T;
             _references.modelIdentifier,
             _references.model,
           ),
+        )
+        ..mixins.add(
+          DartTypes.amplifyCore.legacyModelFields(
+            _references.modelIdentifier,
+            _references.model,
+          ),
         );
 
       // Add `classType` for model types

@@ -313,6 +313,10 @@ class _PartialModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
 
 abstract class ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
     extends PartialModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
+    with
+        LegacyModelFields<
+            ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
+            ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey>
     implements
         Model<ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
             ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey> {
