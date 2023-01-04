@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:collection';
-
-import 'package:amplify_codegen/src/generator/generator.dart';
+import 'package:amplify_codegen/src/generator/structure.dart';
 import 'package:amplify_codegen/src/generator/types.dart';
+import 'package:amplify_codegen/src/helpers/field.dart';
+import 'package:amplify_codegen/src/helpers/model.dart';
 import 'package:amplify_codegen/src/helpers/types.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 import 'package:code_builder/code_builder.dart';
-import 'package:gql/ast.dart';
+import 'package:smithy_codegen/src/util/symbol_ext.dart';
 
 /// {@template amplify_codegen.model_generator}
 /// Generates libraries for model types.
@@ -28,8 +28,7 @@ import 'package:gql/ast.dart';
 /// Generally, a library consists of two classes: the Model class and the
 /// ModelType class; however, custom types have only a Model class.
 /// {@endtemplate}
-class ModelGenerator
-    extends LibraryGenerator<ObjectTypeDefinitionNode, ModelTypeDefinition> {
+class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
   /// {@template amplify_codegen.model_generator}
   ModelGenerator({
     required super.node,
@@ -37,7 +36,7 @@ class ModelGenerator
   });
 
   /// The class name for the model.
-  late final String modelName = schemaName.pascalCase;
+  late final String modelName = className;
 
   /// The class name for the model type.
   late final String modelTypeName = '${modelName}Type';
@@ -54,23 +53,14 @@ class ModelGenerator
   /// The reference for the model identifier.
   late final Reference modelIdentifierType = () {
     final primaryIndex = definition.modelIdentifier;
-    final primaryKeyFields = primaryIndex.fields
+    final fields = primaryIndex.fields
         .map(
           (name) => definition.fields[name]!,
         )
         .toList();
-    assert(primaryIndex.fields.isNotEmpty, 'Not enough fields');
-    final fields = [
-      for (final field in primaryKeyFields)
-        Field(
-          (f) => f
-            ..name = field.name
-            ..type = field.type.reference
-            ..modifier = FieldModifier.final$,
-        ),
-    ];
+    assert(fields.isNotEmpty, 'Not enough fields');
     if (fields.length == 1) {
-      return fields.single.type!;
+      return fields.single.type.reference;
     }
     final modelIdentifierName = '${modelName}Identifier';
     final cls = Class((c) {
@@ -82,14 +72,22 @@ class ModelGenerator
           DartTypes.awsCommon.awsSerializable(DartTypes.core.json),
           DartTypes.awsCommon.awsDebuggable,
         ])
-        ..fields.addAll(fields);
+        ..fields.addAll([
+          for (final field in fields)
+            Field(
+              (f) => f
+                ..name = field.dartName
+                ..type = field.type.reference
+                ..modifier = FieldModifier.final$,
+            )
+        ]);
 
       final parameters = <Parameter>[];
-      for (final field in primaryKeyFields) {
+      for (final field in fields) {
         parameters.add(
           Parameter(
             (p) => p
-              ..name = field.name
+              ..name = field.dartName
               ..toThis = true
               ..named = true
               ..required = field.type.isRequired,
@@ -125,7 +123,9 @@ class ModelGenerator
             ..name = 'toJson'
             ..body = literalMap({
               for (final field in fields)
-                literalString(field.name): refer(field.name),
+                literalString(field.name): field.type.toJsonExp(
+                  refer(field.dartName),
+                ),
             }).code,
         ),
       );
@@ -171,6 +171,18 @@ class ModelGenerator
         ..constructors.add(Constructor((ctor) => ctor.constant = true));
 
       // The `fromJson` method.
+      final partialModelBound = DartTypes.amplifyCore.partialModel(
+        modelIdentifierType,
+        modelType,
+      );
+      final modelBound = DartTypes.amplifyCore.model(
+        modelIdentifierType,
+        modelType,
+      );
+      final remoteModelBound = DartTypes.amplifyCore.remoteModel(
+        modelIdentifierType,
+        modelType,
+      );
       c.methods.add(
         Method(
           (m) => m
@@ -181,10 +193,7 @@ class ModelGenerator
               TypeReference(
                 (t) => t
                   ..symbol = 'T'
-                  ..bound = DartTypes.amplifyCore.partialModel(
-                    modelIdentifierType,
-                    modelType,
-                  ),
+                  ..bound = partialModelBound,
               ),
             )
             ..requiredParameters.add(
@@ -195,7 +204,17 @@ class ModelGenerator
               ),
             )
             ..lambda = false
-            ..body = const Code('throw UnimplementedError();'),
+            ..body = Code.scope(
+              (allocate) => '''
+if (T == ${allocate(modelType)} || T == ${allocate(modelBound)}<${modelBound.types.map(allocate).join(', ')}>) {
+  return ${allocate(modelType)}.fromJson(json) as T;
+}
+if (T == ${allocate(remoteModelType)} || T == ${allocate(remoteModelBound)}<${remoteModelBound.types.map(allocate).join(', ')}>) {
+  return _${allocate(remoteModelType)}.fromJson(json) as T;
+}
+return _${allocate(partialModelType)}.fromJson(json) as T;
+''',
+            ),
         ),
       );
 
@@ -238,16 +257,16 @@ class ModelGenerator
           ),
         );
 
-      final fields = definition.fields.values.toList();
+      final fields = definition.schemaFields(ModelHierarchyType.partial);
 
       // Abstract getters for each field
-      for (final field in fields) {
+      for (final field in fields.values) {
         c.methods.add(
           Method(
             (m) => m
               ..returns = field.type.reference
               ..type = MethodType.getter
-              ..name = field.name,
+              ..name = field.dartName,
           ),
         );
       }
@@ -292,7 +311,11 @@ class ModelGenerator
             ..returns = DartTypes.core.list(DartTypes.core.object.nullable)
             ..type = MethodType.getter
             ..name = 'props'
-            ..body = literalList(fields.map((f) => refer(f.name))).code,
+            ..body = literalList(
+              fields.values.map(
+                (f) => refer(f.dartName),
+              ),
+            ).code,
         ),
       );
 
@@ -307,13 +330,17 @@ class ModelGenerator
             )
             ..name = 'toJson'
             ..body = literalMap({
-              for (final field in fields)
-                literalString(field.name): refer(field.name),
+              for (final field
+                  in definition.allFields(ModelHierarchyType.partial).values)
+                literalString(field.name): field.type.toJsonExp(
+                  refer(field.dartName),
+                ),
             }).code,
         ),
       );
 
       // `runtimeTypeName` to satisfy `AWSDebuggable`
+      // TODO(dnys1): Should this name be different for the three subtypes?
       c.methods.add(
         Method(
           (m) => m
@@ -350,26 +377,59 @@ class ModelGenerator
                   ..name = 'field',
               ),
             )
-            ..body = const Code('throw UnimplementedError();'),
+            ..body = Block((b) {
+              b.statements.add(
+                const Code(
+                  '''
+Object? value;
+switch (field.fieldName) {
+  ''',
+                ),
+              );
+              for (final field in definition.fields.values) {
+                b.statements.add(
+                  Code(
+                    '''
+  case r'${field.name}':
+    value = ${field.dartName};
+    break;''',
+                  ),
+                );
+              }
+              b.statements.add(
+                const Code(
+                  r'''
+}
+assert(
+  value is T,
+  'Invalid field ${field.fieldName}: $value (expected $T)',
+);
+return value as T;
+''',
+                ),
+              );
+            }),
         ),
       );
     });
 
     // Create the private implementation
+    final privateClassName = '_${partialModelType.symbol}';
     yield Class((c) {
       c
-        ..name = '_${partialModelType.symbol}'
+        ..name = privateClassName
         ..extend = partialModelType;
 
       final parameters = <Parameter>[];
-      for (final field in definition.fields.values) {
+      final allFields = definition.schemaFields(ModelHierarchyType.partial);
+      for (final field in allFields.values) {
         c.fields.add(
           Field(
             (f) => f
               ..annotations.add(DartTypes.core.override)
               ..modifier = FieldModifier.final$
               ..type = field.type.reference
-              ..name = field.name,
+              ..name = field.dartName,
           ),
         );
         parameters.add(
@@ -378,7 +438,7 @@ class ModelGenerator
               ..named = true
               ..required = field.type.isRequired
               ..toThis = true
-              ..name = field.name,
+              ..name = field.dartName,
           ),
         );
       }
@@ -405,7 +465,10 @@ class ModelGenerator
                   ..name = 'json',
               ),
             )
-            ..body = const Code('throw UnimplementedError();'),
+            ..body = fromJson(
+              refer(privateClassName),
+              definition.schemaFields(ModelHierarchyType.partial).values,
+            ),
         ),
       );
     });
@@ -444,21 +507,28 @@ class ModelGenerator
 
       final parameters = <Parameter>[];
       for (final field in definition.fields.values) {
+        final fieldType = field.type;
         c.methods.add(
           Method(
             (m) => m
-              ..returns = field.type.reference
+              ..returns = fieldType.reference
               ..type = MethodType.getter
-              ..name = field.name,
+              ..name = field.dartName,
           ),
         );
+
+        // Allow nullable `ID` parameters to the main constructor since these
+        // fields can be auto-generated.
+        final isIdField = fieldType is mipr.ScalarType &&
+            fieldType.value == mipr.AppSyncScalar.id;
         parameters.add(
           Parameter(
             (p) => p
               ..named = true
-              ..required = field.type.isRequired
-              ..type = field.type.reference
-              ..name = field.name,
+              ..required = fieldType.isRequired && !isIdField
+              ..type = fieldType.reference.typeRef
+                  .rebuild((t) => t.isNullable = t.isNullable! || isIdField)
+              ..name = field.dartName,
           ),
         );
       }
@@ -496,7 +566,10 @@ class ModelGenerator
                   ..name = 'json',
               ),
             )
-            ..body = const Code('throw UnimplementedError();'),
+            ..body = fromJson(
+              modelType,
+              definition.schemaFields(ModelHierarchyType.model).values,
+            ),
         ),
       );
     });
@@ -508,23 +581,39 @@ class ModelGenerator
         ..extend = modelType;
 
       final parameters = <Parameter>[];
+      final initializers = <Code>[];
       for (final field in definition.fields.values) {
+        final fieldType = field.type;
         c.fields.add(
           Field(
             (f) => f
               ..annotations.add(DartTypes.core.override)
               ..modifier = FieldModifier.final$
-              ..type = field.type.reference
-              ..name = field.name,
+              ..type = fieldType.reference
+              ..name = field.dartName,
           ),
         );
+
+        // Allow nullable `ID` parameters to the main constructor since these
+        // fields can be auto-generated.
+        final isIdField = fieldType is mipr.ScalarType &&
+            fieldType.value == mipr.AppSyncScalar.id;
+        if (isIdField) {
+          initializers.add(
+            Code.scope(
+              (allocate) => '${field.dartName} = ${field.dartName} ?? '
+                  '${allocate(DartTypes.awsCommon.uuid)}()',
+            ),
+          );
+        }
         parameters.add(
           Parameter(
             (p) => p
               ..named = true
-              ..required = field.type.isRequired
-              ..toThis = true
-              ..name = field.name,
+              ..required = fieldType.isRequired && !isIdField
+              ..type = isIdField ? fieldType.reference.nullable : null
+              ..toThis = !isIdField
+              ..name = field.dartName,
           ),
         );
       }
@@ -534,7 +623,10 @@ class ModelGenerator
         Constructor(
           (ctor) => ctor
             ..optionalParameters.addAll(parameters)
-            ..initializers.add(const Code('super._()')),
+            ..initializers.addAll([
+              ...initializers,
+              const Code('super._()'),
+            ]),
         ),
       );
     });
@@ -568,68 +660,22 @@ class ModelGenerator
     });
 
     // Create the private implementation
+    final privateClassName = '_Remote$modelName';
     yield Class((c) {
       c
-        ..name = '_Remote$modelName'
+        ..name = privateClassName
         ..extend = remoteModelType;
 
       final parameters = <Parameter>[];
-      final remoteMetadataFields = {
-        'version': ModelField(
-          name: 'version',
-          type: const mipr.SchemaType.scalar(
-            mipr.AppSyncScalar.int_,
-            isRequired: true,
-          ),
-        ),
-        'deleted': ModelField(
-          name: 'deleted',
-          type: const mipr.SchemaType.scalar(
-            mipr.AppSyncScalar.boolean,
-            isRequired: true,
-          ),
-        ),
-        'lastChangedAt': ModelField(
-          name: 'lastChangedAt',
-          type: const mipr.SchemaType.scalar(
-            mipr.AppSyncScalar.awsDateTime,
-            isRequired: true,
-          ),
-        ),
-      };
-      final fields = SplayTreeMap<String, ModelField>.from(
-        {
-          ...remoteMetadataFields,
-          ...definition.fields.toMap(),
-        },
-        (a, b) {
-          // Sort synthetic fields last.
-          final isSyntheticA = remoteMetadataFields.containsKey(a) &&
-              !definition.fields.containsKey(a);
-          final isSyntheticB = remoteMetadataFields.containsKey(b) &&
-              !definition.fields.containsKey(b);
-          if (isSyntheticA && isSyntheticB) {
-            // Use insertion order
-            return -1;
-          }
-          if (isSyntheticA) {
-            return 1;
-          }
-          if (isSyntheticB) {
-            return -1;
-          }
-          // Use insertion order
-          return -1;
-        },
-      );
-      for (final field in fields.values) {
+      final allFields = definition.allFields(ModelHierarchyType.remote);
+      for (final field in allFields.values) {
         c.fields.add(
           Field(
             (f) => f
               ..annotations.add(DartTypes.core.override)
               ..modifier = FieldModifier.final$
               ..type = field.type.reference
-              ..name = field.name,
+              ..name = field.dartName,
           ),
         );
         parameters.add(
@@ -638,7 +684,7 @@ class ModelGenerator
               ..named = true
               ..required = field.type.isRequired
               ..toThis = true
-              ..name = field.name,
+              ..name = field.dartName,
           ),
         );
       }
@@ -665,7 +711,10 @@ class ModelGenerator
                   ..name = 'json',
               ),
             )
-            ..body = const Code('throw UnimplementedError();'),
+            ..body = fromJson(
+              refer(privateClassName),
+              definition.allFields(ModelHierarchyType.remote).values,
+            ),
         ),
       );
     });

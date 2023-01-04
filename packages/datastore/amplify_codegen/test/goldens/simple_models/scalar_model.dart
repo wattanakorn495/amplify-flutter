@@ -28,7 +28,13 @@ class ScalarModelType
   @override
   T fromJson<T extends PartialModel<String, ScalarModel>>(
       Map<String, Object?> json) {
-    throw UnimplementedError();
+    if (T == ScalarModel || T == Model<String, ScalarModel>) {
+      return ScalarModel.fromJson(json) as T;
+    }
+    if (T == RemoteScalarModel || T == RemoteModel<String, ScalarModel>) {
+      return _RemoteScalarModel.fromJson(json) as T;
+    }
+    return _PartialScalarModel.fromJson(json) as T;
   }
 
   @override
@@ -41,31 +47,31 @@ abstract class PartialScalarModel extends PartialModel<String, ScalarModel>
 
   String get id;
   String? get str;
-  String get requiredStr;
+  String? get requiredStr;
   int? get integer;
-  int get requiredInteger;
+  int? get requiredInteger;
   double? get float;
-  double get requiredFloat;
+  double? get requiredFloat;
   bool? get boolean;
-  bool get requiredBoolean;
+  bool? get requiredBoolean;
   TemporalDate? get awsDate;
-  TemporalDate get requiredAwsDate;
+  TemporalDate? get requiredAwsDate;
   TemporalDateTime? get awsDateTime;
-  TemporalDateTime get requiredAwsDateTime;
+  TemporalDateTime? get requiredAwsDateTime;
   TemporalTime? get awsTime;
-  TemporalTime get requiredAwsTime;
+  TemporalTime? get requiredAwsTime;
   TemporalTimestamp? get awsTimestamp;
-  TemporalTimestamp get requiredAwsTimestamp;
+  TemporalTimestamp? get requiredAwsTimestamp;
   String? get awsEmail;
-  String get requiredAwsEmail;
+  String? get requiredAwsEmail;
   Object? get awsJson;
-  Object get requiredAwsJson;
+  Object? get requiredAwsJson;
   String? get awsPhone;
-  String get requiredAwsPhone;
+  String? get requiredAwsPhone;
   Uri? get awsUrl;
-  Uri get requiredAwsUrl;
+  Uri? get requiredAwsUrl;
   String? get awsIpAddress;
-  String get requiredAwsIpAddress;
+  String? get requiredAwsIpAddress;
   TemporalDateTime? get createdAt;
   TemporalDateTime? get updatedAt;
   @override
@@ -115,32 +121,129 @@ abstract class PartialScalarModel extends PartialModel<String, ScalarModel>
         'requiredFloat': requiredFloat,
         'boolean': boolean,
         'requiredBoolean': requiredBoolean,
-        'awsDate': awsDate,
-        'requiredAwsDate': requiredAwsDate,
-        'awsDateTime': awsDateTime,
-        'requiredAwsDateTime': requiredAwsDateTime,
-        'awsTime': awsTime,
-        'requiredAwsTime': requiredAwsTime,
-        'awsTimestamp': awsTimestamp,
-        'requiredAwsTimestamp': requiredAwsTimestamp,
+        'awsDate': awsDate?.format(),
+        'requiredAwsDate': requiredAwsDate?.format(),
+        'awsDateTime': awsDateTime?.format(),
+        'requiredAwsDateTime': requiredAwsDateTime?.format(),
+        'awsTime': awsTime?.format(),
+        'requiredAwsTime': requiredAwsTime?.format(),
+        'awsTimestamp': awsTimestamp?.toSeconds(),
+        'requiredAwsTimestamp': requiredAwsTimestamp?.toSeconds(),
         'awsEmail': awsEmail,
         'requiredAwsEmail': requiredAwsEmail,
         'awsJson': awsJson,
         'requiredAwsJson': requiredAwsJson,
         'awsPhone': awsPhone,
         'requiredAwsPhone': requiredAwsPhone,
-        'awsUrl': awsUrl,
-        'requiredAwsUrl': requiredAwsUrl,
+        'awsUrl': awsUrl?.toString(),
+        'requiredAwsUrl': requiredAwsUrl?.toString(),
         'awsIpAddress': awsIpAddress,
         'requiredAwsIpAddress': requiredAwsIpAddress,
-        'createdAt': createdAt,
-        'updatedAt': updatedAt,
+        'createdAt': createdAt?.format(),
+        'updatedAt': updatedAt?.format(),
+        'version': version,
+        'deleted': deleted,
+        'lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'ScalarModel';
   @override
   T valueFor<T extends Object?>(QueryField<String, ScalarModel, T> field) {
-    throw UnimplementedError();
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'str':
+        value = str;
+        break;
+      case r'requiredStr':
+        value = requiredStr;
+        break;
+      case r'integer':
+        value = integer;
+        break;
+      case r'requiredInteger':
+        value = requiredInteger;
+        break;
+      case r'float':
+        value = float;
+        break;
+      case r'requiredFloat':
+        value = requiredFloat;
+        break;
+      case r'boolean':
+        value = boolean;
+        break;
+      case r'requiredBoolean':
+        value = requiredBoolean;
+        break;
+      case r'awsDate':
+        value = awsDate;
+        break;
+      case r'requiredAwsDate':
+        value = requiredAwsDate;
+        break;
+      case r'awsDateTime':
+        value = awsDateTime;
+        break;
+      case r'requiredAwsDateTime':
+        value = requiredAwsDateTime;
+        break;
+      case r'awsTime':
+        value = awsTime;
+        break;
+      case r'requiredAwsTime':
+        value = requiredAwsTime;
+        break;
+      case r'awsTimestamp':
+        value = awsTimestamp;
+        break;
+      case r'requiredAwsTimestamp':
+        value = requiredAwsTimestamp;
+        break;
+      case r'awsEmail':
+        value = awsEmail;
+        break;
+      case r'requiredAwsEmail':
+        value = requiredAwsEmail;
+        break;
+      case r'awsJson':
+        value = awsJson;
+        break;
+      case r'requiredAwsJson':
+        value = requiredAwsJson;
+        break;
+      case r'awsPhone':
+        value = awsPhone;
+        break;
+      case r'requiredAwsPhone':
+        value = requiredAwsPhone;
+        break;
+      case r'awsUrl':
+        value = awsUrl;
+        break;
+      case r'requiredAwsUrl':
+        value = requiredAwsUrl;
+        break;
+      case r'awsIpAddress':
+        value = awsIpAddress;
+        break;
+      case r'requiredAwsIpAddress':
+        value = requiredAwsIpAddress;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
   }
 }
 
@@ -148,37 +251,140 @@ class _PartialScalarModel extends PartialScalarModel {
   _PartialScalarModel({
     required this.id,
     this.str,
-    required this.requiredStr,
+    this.requiredStr,
     this.integer,
-    required this.requiredInteger,
+    this.requiredInteger,
     this.float,
-    required this.requiredFloat,
+    this.requiredFloat,
     this.boolean,
-    required this.requiredBoolean,
+    this.requiredBoolean,
     this.awsDate,
-    required this.requiredAwsDate,
+    this.requiredAwsDate,
     this.awsDateTime,
-    required this.requiredAwsDateTime,
+    this.requiredAwsDateTime,
     this.awsTime,
-    required this.requiredAwsTime,
+    this.requiredAwsTime,
     this.awsTimestamp,
-    required this.requiredAwsTimestamp,
+    this.requiredAwsTimestamp,
     this.awsEmail,
-    required this.requiredAwsEmail,
+    this.requiredAwsEmail,
     this.awsJson,
-    required this.requiredAwsJson,
+    this.requiredAwsJson,
     this.awsPhone,
-    required this.requiredAwsPhone,
+    this.requiredAwsPhone,
     this.awsUrl,
-    required this.requiredAwsUrl,
+    this.requiredAwsUrl,
     this.awsIpAddress,
-    required this.requiredAwsIpAddress,
+    this.requiredAwsIpAddress,
     this.createdAt,
     this.updatedAt,
   }) : super._();
 
   factory _PartialScalarModel.fromJson(Map<String, Object?> json) {
-    throw UnimplementedError();
+    final id = json['id'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'id',
+          )
+        : (json['id'] as String);
+    final str = json['str'] == null ? null : (json['str'] as String?);
+    final requiredStr =
+        json['requiredStr'] == null ? null : (json['requiredStr'] as String?);
+    final integer = json['integer'] == null ? null : (json['integer'] as int?);
+    final requiredInteger = json['requiredInteger'] == null
+        ? null
+        : (json['requiredInteger'] as int?);
+    final float = json['float'] == null ? null : (json['float'] as double?);
+    final requiredFloat = json['requiredFloat'] == null
+        ? null
+        : (json['requiredFloat'] as double?);
+    final boolean = json['boolean'] == null ? null : (json['boolean'] as bool?);
+    final requiredBoolean = json['requiredBoolean'] == null
+        ? null
+        : (json['requiredBoolean'] as bool?);
+    final awsDate = json['awsDate'] == null
+        ? null
+        : TemporalDate.fromString((json['awsDate'] as String));
+    final requiredAwsDate = json['requiredAwsDate'] == null
+        ? null
+        : TemporalDate.fromString((json['requiredAwsDate'] as String));
+    final awsDateTime = json['awsDateTime'] == null
+        ? null
+        : TemporalDateTime.fromString((json['awsDateTime'] as String));
+    final requiredAwsDateTime = json['requiredAwsDateTime'] == null
+        ? null
+        : TemporalDateTime.fromString((json['requiredAwsDateTime'] as String));
+    final awsTime = json['awsTime'] == null
+        ? null
+        : TemporalTime.fromString((json['awsTime'] as String));
+    final requiredAwsTime = json['requiredAwsTime'] == null
+        ? null
+        : TemporalTime.fromString((json['requiredAwsTime'] as String));
+    final awsTimestamp = json['awsTimestamp'] == null
+        ? null
+        : TemporalTimestamp.fromSeconds((json['awsTimestamp'] as int));
+    final requiredAwsTimestamp = json['requiredAwsTimestamp'] == null
+        ? null
+        : TemporalTimestamp.fromSeconds((json['requiredAwsTimestamp'] as int));
+    final awsEmail =
+        json['awsEmail'] == null ? null : (json['awsEmail'] as String?);
+    final requiredAwsEmail = json['requiredAwsEmail'] == null
+        ? null
+        : (json['requiredAwsEmail'] as String?);
+    final awsJson = json['awsJson'];
+    final requiredAwsJson = json['requiredAwsJson'];
+    final awsPhone =
+        json['awsPhone'] == null ? null : (json['awsPhone'] as String?);
+    final requiredAwsPhone = json['requiredAwsPhone'] == null
+        ? null
+        : (json['requiredAwsPhone'] as String?);
+    final awsUrl =
+        json['awsUrl'] == null ? null : Uri.parse((json['awsUrl'] as String));
+    final requiredAwsUrl = json['requiredAwsUrl'] == null
+        ? null
+        : Uri.parse((json['requiredAwsUrl'] as String));
+    final awsIpAddress =
+        json['awsIpAddress'] == null ? null : (json['awsIpAddress'] as String?);
+    final requiredAwsIpAddress = json['requiredAwsIpAddress'] == null
+        ? null
+        : (json['requiredAwsIpAddress'] as String?);
+    final createdAt = json['createdAt'] == null
+        ? null
+        : TemporalDateTime.fromString((json['createdAt'] as String));
+    final updatedAt = json['updatedAt'] == null
+        ? null
+        : TemporalDateTime.fromString((json['updatedAt'] as String));
+    return _PartialScalarModel(
+      id: id,
+      str: str,
+      requiredStr: requiredStr,
+      integer: integer,
+      requiredInteger: requiredInteger,
+      float: float,
+      requiredFloat: requiredFloat,
+      boolean: boolean,
+      requiredBoolean: requiredBoolean,
+      awsDate: awsDate,
+      requiredAwsDate: requiredAwsDate,
+      awsDateTime: awsDateTime,
+      requiredAwsDateTime: requiredAwsDateTime,
+      awsTime: awsTime,
+      requiredAwsTime: requiredAwsTime,
+      awsTimestamp: awsTimestamp,
+      requiredAwsTimestamp: requiredAwsTimestamp,
+      awsEmail: awsEmail,
+      requiredAwsEmail: requiredAwsEmail,
+      awsJson: awsJson,
+      requiredAwsJson: requiredAwsJson,
+      awsPhone: awsPhone,
+      requiredAwsPhone: requiredAwsPhone,
+      awsUrl: awsUrl,
+      requiredAwsUrl: requiredAwsUrl,
+      awsIpAddress: awsIpAddress,
+      requiredAwsIpAddress: requiredAwsIpAddress,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
   }
 
   @override
@@ -188,79 +394,79 @@ class _PartialScalarModel extends PartialScalarModel {
   final String? str;
 
   @override
-  final String requiredStr;
+  final String? requiredStr;
 
   @override
   final int? integer;
 
   @override
-  final int requiredInteger;
+  final int? requiredInteger;
 
   @override
   final double? float;
 
   @override
-  final double requiredFloat;
+  final double? requiredFloat;
 
   @override
   final bool? boolean;
 
   @override
-  final bool requiredBoolean;
+  final bool? requiredBoolean;
 
   @override
   final TemporalDate? awsDate;
 
   @override
-  final TemporalDate requiredAwsDate;
+  final TemporalDate? requiredAwsDate;
 
   @override
   final TemporalDateTime? awsDateTime;
 
   @override
-  final TemporalDateTime requiredAwsDateTime;
+  final TemporalDateTime? requiredAwsDateTime;
 
   @override
   final TemporalTime? awsTime;
 
   @override
-  final TemporalTime requiredAwsTime;
+  final TemporalTime? requiredAwsTime;
 
   @override
   final TemporalTimestamp? awsTimestamp;
 
   @override
-  final TemporalTimestamp requiredAwsTimestamp;
+  final TemporalTimestamp? requiredAwsTimestamp;
 
   @override
   final String? awsEmail;
 
   @override
-  final String requiredAwsEmail;
+  final String? requiredAwsEmail;
 
   @override
   final Object? awsJson;
 
   @override
-  final Object requiredAwsJson;
+  final Object? requiredAwsJson;
 
   @override
   final String? awsPhone;
 
   @override
-  final String requiredAwsPhone;
+  final String? requiredAwsPhone;
 
   @override
   final Uri? awsUrl;
 
   @override
-  final Uri requiredAwsUrl;
+  final Uri? requiredAwsUrl;
 
   @override
   final String? awsIpAddress;
 
   @override
-  final String requiredAwsIpAddress;
+  final String? requiredAwsIpAddress;
 
   @override
   final TemporalDateTime? createdAt;
@@ -272,7 +478,7 @@ class _PartialScalarModel extends PartialScalarModel {
 abstract class ScalarModel extends PartialScalarModel
     implements Model<String, ScalarModel> {
   factory ScalarModel({
-    required String id,
+    String? id,
     String? str,
     required String requiredStr,
     int? integer,
@@ -306,7 +512,152 @@ abstract class ScalarModel extends PartialScalarModel
   const ScalarModel._() : super._();
 
   factory ScalarModel.fromJson(Map<String, Object?> json) {
-    throw UnimplementedError();
+    final id = json['id'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'id',
+          )
+        : (json['id'] as String);
+    final str = json['str'] == null ? null : (json['str'] as String?);
+    final requiredStr = json['requiredStr'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredStr',
+          )
+        : (json['requiredStr'] as String);
+    final integer = json['integer'] == null ? null : (json['integer'] as int?);
+    final requiredInteger = json['requiredInteger'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredInteger',
+          )
+        : (json['requiredInteger'] as int);
+    final float = json['float'] == null ? null : (json['float'] as double?);
+    final requiredFloat = json['requiredFloat'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredFloat',
+          )
+        : (json['requiredFloat'] as double);
+    final boolean = json['boolean'] == null ? null : (json['boolean'] as bool?);
+    final requiredBoolean = json['requiredBoolean'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredBoolean',
+          )
+        : (json['requiredBoolean'] as bool);
+    final awsDate = json['awsDate'] == null
+        ? null
+        : TemporalDate.fromString((json['awsDate'] as String));
+    final requiredAwsDate = json['requiredAwsDate'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsDate',
+          )
+        : TemporalDate.fromString((json['requiredAwsDate'] as String));
+    final awsDateTime = json['awsDateTime'] == null
+        ? null
+        : TemporalDateTime.fromString((json['awsDateTime'] as String));
+    final requiredAwsDateTime = json['requiredAwsDateTime'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsDateTime',
+          )
+        : TemporalDateTime.fromString((json['requiredAwsDateTime'] as String));
+    final awsTime = json['awsTime'] == null
+        ? null
+        : TemporalTime.fromString((json['awsTime'] as String));
+    final requiredAwsTime = json['requiredAwsTime'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsTime',
+          )
+        : TemporalTime.fromString((json['requiredAwsTime'] as String));
+    final awsTimestamp = json['awsTimestamp'] == null
+        ? null
+        : TemporalTimestamp.fromSeconds((json['awsTimestamp'] as int));
+    final requiredAwsTimestamp = json['requiredAwsTimestamp'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsTimestamp',
+          )
+        : TemporalTimestamp.fromSeconds((json['requiredAwsTimestamp'] as int));
+    final awsEmail =
+        json['awsEmail'] == null ? null : (json['awsEmail'] as String?);
+    final requiredAwsEmail = json['requiredAwsEmail'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsEmail',
+          )
+        : (json['requiredAwsEmail'] as String);
+    final awsJson = json['awsJson'];
+    final requiredAwsJson = json['requiredAwsJson'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsJson',
+          )
+        : (json['requiredAwsJson'] as Object);
+    final awsPhone =
+        json['awsPhone'] == null ? null : (json['awsPhone'] as String?);
+    final requiredAwsPhone = json['requiredAwsPhone'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsPhone',
+          )
+        : (json['requiredAwsPhone'] as String);
+    final awsUrl =
+        json['awsUrl'] == null ? null : Uri.parse((json['awsUrl'] as String));
+    final requiredAwsUrl = json['requiredAwsUrl'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsUrl',
+          )
+        : Uri.parse((json['requiredAwsUrl'] as String));
+    final awsIpAddress =
+        json['awsIpAddress'] == null ? null : (json['awsIpAddress'] as String?);
+    final requiredAwsIpAddress = json['requiredAwsIpAddress'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsIpAddress',
+          )
+        : (json['requiredAwsIpAddress'] as String);
+    final createdAt = json['createdAt'] == null
+        ? null
+        : TemporalDateTime.fromString((json['createdAt'] as String));
+    final updatedAt = json['updatedAt'] == null
+        ? null
+        : TemporalDateTime.fromString((json['updatedAt'] as String));
+    return ScalarModel(
+      id: id,
+      str: str,
+      requiredStr: requiredStr,
+      integer: integer,
+      requiredInteger: requiredInteger,
+      float: float,
+      requiredFloat: requiredFloat,
+      boolean: boolean,
+      requiredBoolean: requiredBoolean,
+      awsDate: awsDate,
+      requiredAwsDate: requiredAwsDate,
+      awsDateTime: awsDateTime,
+      requiredAwsDateTime: requiredAwsDateTime,
+      awsTime: awsTime,
+      requiredAwsTime: requiredAwsTime,
+      awsTimestamp: awsTimestamp,
+      requiredAwsTimestamp: requiredAwsTimestamp,
+      awsEmail: awsEmail,
+      requiredAwsEmail: requiredAwsEmail,
+      awsJson: awsJson,
+      requiredAwsJson: requiredAwsJson,
+      awsPhone: awsPhone,
+      requiredAwsPhone: requiredAwsPhone,
+      awsUrl: awsUrl,
+      requiredAwsUrl: requiredAwsUrl,
+      awsIpAddress: awsIpAddress,
+      requiredAwsIpAddress: requiredAwsIpAddress,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
   }
 
   static const ScalarModelType classType = ScalarModelType();
@@ -344,7 +695,7 @@ abstract class ScalarModel extends PartialScalarModel
 
 class _ScalarModel extends ScalarModel {
   _ScalarModel({
-    required this.id,
+    String? id,
     this.str,
     required this.requiredStr,
     this.integer,
@@ -373,7 +724,8 @@ class _ScalarModel extends ScalarModel {
     required this.requiredAwsIpAddress,
     this.createdAt,
     this.updatedAt,
-  }) : super._();
+  })  : id = id ?? uuid(),
+        super._();
 
   @override
   final String id;
@@ -505,7 +857,173 @@ class _RemoteScalarModel extends RemoteScalarModel {
   }) : super._();
 
   factory _RemoteScalarModel.fromJson(Map<String, Object?> json) {
-    throw UnimplementedError();
+    final id = json['id'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'id',
+          )
+        : (json['id'] as String);
+    final str = json['str'] == null ? null : (json['str'] as String?);
+    final requiredStr = json['requiredStr'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredStr',
+          )
+        : (json['requiredStr'] as String);
+    final integer = json['integer'] == null ? null : (json['integer'] as int?);
+    final requiredInteger = json['requiredInteger'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredInteger',
+          )
+        : (json['requiredInteger'] as int);
+    final float = json['float'] == null ? null : (json['float'] as double?);
+    final requiredFloat = json['requiredFloat'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredFloat',
+          )
+        : (json['requiredFloat'] as double);
+    final boolean = json['boolean'] == null ? null : (json['boolean'] as bool?);
+    final requiredBoolean = json['requiredBoolean'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredBoolean',
+          )
+        : (json['requiredBoolean'] as bool);
+    final awsDate = json['awsDate'] == null
+        ? null
+        : TemporalDate.fromString((json['awsDate'] as String));
+    final requiredAwsDate = json['requiredAwsDate'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsDate',
+          )
+        : TemporalDate.fromString((json['requiredAwsDate'] as String));
+    final awsDateTime = json['awsDateTime'] == null
+        ? null
+        : TemporalDateTime.fromString((json['awsDateTime'] as String));
+    final requiredAwsDateTime = json['requiredAwsDateTime'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsDateTime',
+          )
+        : TemporalDateTime.fromString((json['requiredAwsDateTime'] as String));
+    final awsTime = json['awsTime'] == null
+        ? null
+        : TemporalTime.fromString((json['awsTime'] as String));
+    final requiredAwsTime = json['requiredAwsTime'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsTime',
+          )
+        : TemporalTime.fromString((json['requiredAwsTime'] as String));
+    final awsTimestamp = json['awsTimestamp'] == null
+        ? null
+        : TemporalTimestamp.fromSeconds((json['awsTimestamp'] as int));
+    final requiredAwsTimestamp = json['requiredAwsTimestamp'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsTimestamp',
+          )
+        : TemporalTimestamp.fromSeconds((json['requiredAwsTimestamp'] as int));
+    final awsEmail =
+        json['awsEmail'] == null ? null : (json['awsEmail'] as String?);
+    final requiredAwsEmail = json['requiredAwsEmail'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsEmail',
+          )
+        : (json['requiredAwsEmail'] as String);
+    final awsJson = json['awsJson'];
+    final requiredAwsJson = json['requiredAwsJson'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsJson',
+          )
+        : (json['requiredAwsJson'] as Object);
+    final awsPhone =
+        json['awsPhone'] == null ? null : (json['awsPhone'] as String?);
+    final requiredAwsPhone = json['requiredAwsPhone'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsPhone',
+          )
+        : (json['requiredAwsPhone'] as String);
+    final awsUrl =
+        json['awsUrl'] == null ? null : Uri.parse((json['awsUrl'] as String));
+    final requiredAwsUrl = json['requiredAwsUrl'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsUrl',
+          )
+        : Uri.parse((json['requiredAwsUrl'] as String));
+    final awsIpAddress =
+        json['awsIpAddress'] == null ? null : (json['awsIpAddress'] as String?);
+    final requiredAwsIpAddress = json['requiredAwsIpAddress'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'requiredAwsIpAddress',
+          )
+        : (json['requiredAwsIpAddress'] as String);
+    final createdAt = json['createdAt'] == null
+        ? null
+        : TemporalDateTime.fromString((json['createdAt'] as String));
+    final updatedAt = json['updatedAt'] == null
+        ? null
+        : TemporalDateTime.fromString((json['updatedAt'] as String));
+    final version = json['version'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'version',
+          )
+        : (json['version'] as int);
+    final deleted = json['deleted'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'deleted',
+          )
+        : (json['deleted'] as bool);
+    final lastChangedAt = json['lastChangedAt'] == null
+        ? throw ModelFieldError(
+            'ScalarModel',
+            'lastChangedAt',
+          )
+        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+    return _RemoteScalarModel(
+      id: id,
+      str: str,
+      requiredStr: requiredStr,
+      integer: integer,
+      requiredInteger: requiredInteger,
+      float: float,
+      requiredFloat: requiredFloat,
+      boolean: boolean,
+      requiredBoolean: requiredBoolean,
+      awsDate: awsDate,
+      requiredAwsDate: requiredAwsDate,
+      awsDateTime: awsDateTime,
+      requiredAwsDateTime: requiredAwsDateTime,
+      awsTime: awsTime,
+      requiredAwsTime: requiredAwsTime,
+      awsTimestamp: awsTimestamp,
+      requiredAwsTimestamp: requiredAwsTimestamp,
+      awsEmail: awsEmail,
+      requiredAwsEmail: requiredAwsEmail,
+      awsJson: awsJson,
+      requiredAwsJson: requiredAwsJson,
+      awsPhone: awsPhone,
+      requiredAwsPhone: requiredAwsPhone,
+      awsUrl: awsUrl,
+      requiredAwsUrl: requiredAwsUrl,
+      awsIpAddress: awsIpAddress,
+      requiredAwsIpAddress: requiredAwsIpAddress,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      version: version,
+      deleted: deleted,
+      lastChangedAt: lastChangedAt,
+    );
   }
 
   @override

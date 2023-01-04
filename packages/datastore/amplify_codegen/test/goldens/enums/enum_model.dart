@@ -16,88 +16,58 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-library models.cpk_model;
+library models.enum_model;
 
 import 'package:amplify_core/amplify_core.dart';
 import 'package:aws_common/aws_common.dart';
-import 'package:meta/meta.dart';
 
-@immutable
-class CpkModelIdentifier
-    with
-        AWSEquatable<CpkModelIdentifier>,
-        AWSSerializable<Map<String, Object?>>,
-        AWSDebuggable {
-  const CpkModelIdentifier({
-    required this.firstName,
-    required this.lastName,
-  });
+import 'my_enum.dart';
 
-  final String firstName;
-
-  final String lastName;
+class EnumModelType extends ModelType<String, EnumModel, PartialEnumModel> {
+  const EnumModelType();
 
   @override
-  List<Object?> get props => [
-        firstName,
-        lastName,
-      ];
-  @override
-  Map<String, Object?> toJson() => {
-        'firstName': firstName,
-        'lastName': lastName,
-      };
-  @override
-  String get runtimeTypeName => 'CpkModelIdentifier';
-}
-
-class CpkModelType
-    extends ModelType<CpkModelIdentifier, CpkModel, PartialCpkModel> {
-  const CpkModelType();
-
-  @override
-  T fromJson<T extends PartialModel<CpkModelIdentifier, CpkModel>>(
+  T fromJson<T extends PartialModel<String, EnumModel>>(
       Map<String, Object?> json) {
-    if (T == CpkModel || T == Model<CpkModelIdentifier, CpkModel>) {
-      return CpkModel.fromJson(json) as T;
+    if (T == EnumModel || T == Model<String, EnumModel>) {
+      return EnumModel.fromJson(json) as T;
     }
-    if (T == RemoteCpkModel || T == RemoteModel<CpkModelIdentifier, CpkModel>) {
-      return _RemoteCpkModel.fromJson(json) as T;
+    if (T == RemoteEnumModel || T == RemoteModel<String, EnumModel>) {
+      return _RemoteEnumModel.fromJson(json) as T;
     }
-    return _PartialCpkModel.fromJson(json) as T;
+    return _PartialEnumModel.fromJson(json) as T;
   }
 
   @override
-  String get modelName => 'CPKModel';
+  String get modelName => 'EnumModel';
 }
 
-abstract class PartialCpkModel
-    extends PartialModel<CpkModelIdentifier, CpkModel>
-    with AWSEquatable<PartialCpkModel> {
-  const PartialCpkModel._();
+abstract class PartialEnumModel extends PartialModel<String, EnumModel>
+    with AWSEquatable<PartialEnumModel> {
+  const PartialEnumModel._();
 
-  String get firstName;
-  String get lastName;
+  String get id;
+  MyEnum? get enum_;
+  MyEnum? get requiredEnum;
   TemporalDateTime? get createdAt;
   TemporalDateTime? get updatedAt;
   @override
-  CpkModelIdentifier get modelIdentifier => CpkModelIdentifier(
-        firstName: firstName,
-        lastName: lastName,
-      );
+  String get modelIdentifier => id;
   @override
-  CpkModelType get modelType => CpkModel.classType;
+  EnumModelType get modelType => EnumModel.classType;
   @override
   List<Object?> get props => [
-        firstName,
-        lastName,
+        id,
+        enum_,
+        requiredEnum,
         createdAt,
         updatedAt,
       ];
   @override
   Map<String, Object?> toJson() => {
-        'firstName': firstName,
-        'lastName': lastName,
+        'id': id,
+        'enum': enum_?.value,
+        'requiredEnum': requiredEnum?.value,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
         'version': version,
@@ -105,17 +75,19 @@ abstract class PartialCpkModel
         'lastChangedAt': lastChangedAt?.format(),
       };
   @override
-  String get runtimeTypeName => 'CpkModel';
+  String get runtimeTypeName => 'EnumModel';
   @override
-  T valueFor<T extends Object?>(
-      QueryField<CpkModelIdentifier, CpkModel, T> field) {
+  T valueFor<T extends Object?>(QueryField<String, EnumModel, T> field) {
     Object? value;
     switch (field.fieldName) {
-      case r'firstName':
-        value = firstName;
+      case r'id':
+        value = id;
         break;
-      case r'lastName':
-        value = lastName;
+      case r'enum':
+        value = enum_;
+        break;
+      case r'requiredEnum':
+        value = requiredEnum;
         break;
       case r'createdAt':
         value = createdAt;
@@ -132,46 +104,50 @@ abstract class PartialCpkModel
   }
 }
 
-class _PartialCpkModel extends PartialCpkModel {
-  _PartialCpkModel({
-    required this.firstName,
-    required this.lastName,
+class _PartialEnumModel extends PartialEnumModel {
+  _PartialEnumModel({
+    required this.id,
+    this.enum_,
+    this.requiredEnum,
     this.createdAt,
     this.updatedAt,
   }) : super._();
 
-  factory _PartialCpkModel.fromJson(Map<String, Object?> json) {
-    final firstName = json['firstName'] == null
+  factory _PartialEnumModel.fromJson(Map<String, Object?> json) {
+    final id = json['id'] == null
         ? throw ModelFieldError(
-            'CpkModel',
-            'firstName',
+            'EnumModel',
+            'id',
           )
-        : (json['firstName'] as String);
-    final lastName = json['lastName'] == null
-        ? throw ModelFieldError(
-            'CpkModel',
-            'lastName',
-          )
-        : (json['lastName'] as String);
+        : (json['id'] as String);
+    final enum_ =
+        json['enum'] == null ? null : MyEnum.fromJson((json['enum'] as String));
+    final requiredEnum = json['requiredEnum'] == null
+        ? null
+        : MyEnum.fromJson((json['requiredEnum'] as String));
     final createdAt = json['createdAt'] == null
         ? null
         : TemporalDateTime.fromString((json['createdAt'] as String));
     final updatedAt = json['updatedAt'] == null
         ? null
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    return _PartialCpkModel(
-      firstName: firstName,
-      lastName: lastName,
+    return _PartialEnumModel(
+      id: id,
+      enum_: enum_,
+      requiredEnum: requiredEnum,
       createdAt: createdAt,
       updatedAt: updatedAt,
     );
   }
 
   @override
-  final String firstName;
+  final String id;
 
   @override
-  final String lastName;
+  final MyEnum? enum_;
+
+  @override
+  final MyEnum? requiredEnum;
 
   @override
   final TemporalDateTime? createdAt;
@@ -180,65 +156,75 @@ class _PartialCpkModel extends PartialCpkModel {
   final TemporalDateTime? updatedAt;
 }
 
-abstract class CpkModel extends PartialCpkModel
-    implements Model<CpkModelIdentifier, CpkModel> {
-  factory CpkModel({
-    required String firstName,
-    required String lastName,
+abstract class EnumModel extends PartialEnumModel
+    implements Model<String, EnumModel> {
+  factory EnumModel({
+    String? id,
+    MyEnum? enum_,
+    required MyEnum requiredEnum,
     TemporalDateTime? createdAt,
     TemporalDateTime? updatedAt,
-  }) = _CpkModel;
+  }) = _EnumModel;
 
-  const CpkModel._() : super._();
+  const EnumModel._() : super._();
 
-  factory CpkModel.fromJson(Map<String, Object?> json) {
-    final firstName = json['firstName'] == null
+  factory EnumModel.fromJson(Map<String, Object?> json) {
+    final id = json['id'] == null
         ? throw ModelFieldError(
-            'CpkModel',
-            'firstName',
+            'EnumModel',
+            'id',
           )
-        : (json['firstName'] as String);
-    final lastName = json['lastName'] == null
+        : (json['id'] as String);
+    final enum_ =
+        json['enum'] == null ? null : MyEnum.fromJson((json['enum'] as String));
+    final requiredEnum = json['requiredEnum'] == null
         ? throw ModelFieldError(
-            'CpkModel',
-            'lastName',
+            'EnumModel',
+            'requiredEnum',
           )
-        : (json['lastName'] as String);
+        : MyEnum.fromJson((json['requiredEnum'] as String));
     final createdAt = json['createdAt'] == null
         ? null
         : TemporalDateTime.fromString((json['createdAt'] as String));
     final updatedAt = json['updatedAt'] == null
         ? null
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    return CpkModel(
-      firstName: firstName,
-      lastName: lastName,
+    return EnumModel(
+      id: id,
+      enum_: enum_,
+      requiredEnum: requiredEnum,
       createdAt: createdAt,
       updatedAt: updatedAt,
     );
   }
 
-  static const CpkModelType classType = CpkModelType();
+  static const EnumModelType classType = EnumModelType();
 
-  String get firstName;
-  String get lastName;
+  String get id;
+  MyEnum? get enum_;
+  MyEnum get requiredEnum;
   TemporalDateTime? get createdAt;
   TemporalDateTime? get updatedAt;
 }
 
-class _CpkModel extends CpkModel {
-  _CpkModel({
-    required this.firstName,
-    required this.lastName,
+class _EnumModel extends EnumModel {
+  _EnumModel({
+    String? id,
+    this.enum_,
+    required this.requiredEnum,
     this.createdAt,
     this.updatedAt,
-  }) : super._();
+  })  : id = id ?? uuid(),
+        super._();
 
   @override
-  final String firstName;
+  final String id;
 
   @override
-  final String lastName;
+  final MyEnum? enum_;
+
+  @override
+  final MyEnum requiredEnum;
 
   @override
   final TemporalDateTime? createdAt;
@@ -247,15 +233,16 @@ class _CpkModel extends CpkModel {
   final TemporalDateTime? updatedAt;
 }
 
-abstract class RemoteCpkModel extends CpkModel
-    implements RemoteModel<CpkModelIdentifier, CpkModel> {
-  const RemoteCpkModel._() : super._();
+abstract class RemoteEnumModel extends EnumModel
+    implements RemoteModel<String, EnumModel> {
+  const RemoteEnumModel._() : super._();
 }
 
-class _RemoteCpkModel extends RemoteCpkModel {
-  _RemoteCpkModel({
-    required this.firstName,
-    required this.lastName,
+class _RemoteEnumModel extends RemoteEnumModel {
+  _RemoteEnumModel({
+    required this.id,
+    this.enum_,
+    required this.requiredEnum,
     this.createdAt,
     this.updatedAt,
     required this.version,
@@ -263,19 +250,21 @@ class _RemoteCpkModel extends RemoteCpkModel {
     required this.lastChangedAt,
   }) : super._();
 
-  factory _RemoteCpkModel.fromJson(Map<String, Object?> json) {
-    final firstName = json['firstName'] == null
+  factory _RemoteEnumModel.fromJson(Map<String, Object?> json) {
+    final id = json['id'] == null
         ? throw ModelFieldError(
-            'CpkModel',
-            'firstName',
+            'EnumModel',
+            'id',
           )
-        : (json['firstName'] as String);
-    final lastName = json['lastName'] == null
+        : (json['id'] as String);
+    final enum_ =
+        json['enum'] == null ? null : MyEnum.fromJson((json['enum'] as String));
+    final requiredEnum = json['requiredEnum'] == null
         ? throw ModelFieldError(
-            'CpkModel',
-            'lastName',
+            'EnumModel',
+            'requiredEnum',
           )
-        : (json['lastName'] as String);
+        : MyEnum.fromJson((json['requiredEnum'] as String));
     final createdAt = json['createdAt'] == null
         ? null
         : TemporalDateTime.fromString((json['createdAt'] as String));
@@ -284,25 +273,26 @@ class _RemoteCpkModel extends RemoteCpkModel {
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final version = json['version'] == null
         ? throw ModelFieldError(
-            'CpkModel',
+            'EnumModel',
             'version',
           )
         : (json['version'] as int);
     final deleted = json['deleted'] == null
         ? throw ModelFieldError(
-            'CpkModel',
+            'EnumModel',
             'deleted',
           )
         : (json['deleted'] as bool);
     final lastChangedAt = json['lastChangedAt'] == null
         ? throw ModelFieldError(
-            'CpkModel',
+            'EnumModel',
             'lastChangedAt',
           )
         : TemporalDateTime.fromString((json['lastChangedAt'] as String));
-    return _RemoteCpkModel(
-      firstName: firstName,
-      lastName: lastName,
+    return _RemoteEnumModel(
+      id: id,
+      enum_: enum_,
+      requiredEnum: requiredEnum,
       createdAt: createdAt,
       updatedAt: updatedAt,
       version: version,
@@ -312,10 +302,13 @@ class _RemoteCpkModel extends RemoteCpkModel {
   }
 
   @override
-  final String firstName;
+  final String id;
 
   @override
-  final String lastName;
+  final MyEnum? enum_;
+
+  @override
+  final MyEnum requiredEnum;
 
   @override
   final TemporalDateTime? createdAt;
