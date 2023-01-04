@@ -1,17 +1,5 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 import 'package:amplify_api/src/graphql/utils.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:collection/collection.dart';
@@ -76,17 +64,19 @@ class GraphQLRequestFactory {
     }).toList(); // e.g. ["id", "name", "createdAt"]
 
     // If belongsTo, also add selection set of parent.
-    final belongsToAssociation = getBelongsToFieldFromModelSchema(schema);
-    final belongsToModelName =
-        belongsToAssociation?.type.asLegacyType.ofModelName;
-    if (belongsToModelName != null && !ignoreParents) {
-      final parentSchema = getModelSchemaByModelName(belongsToModelName, null);
-      final parentSelectionSet = _getSelectionSetFromModelSchema(
-        parentSchema,
-        GraphQLRequestOperation.get,
-        ignoreParents: true,
-      ); // always format like a get, stop traversing parents
-      fields.add('${belongsToAssociation!.name} { $parentSelectionSet }');
+    final allBelongsTo = getBelongsToFieldsFromModelSchema(schema);
+    for (final belongsTo in allBelongsTo) {
+      final belongsToModelName = belongsTo.type.ofModelName;
+      if (belongsToModelName != null && !ignoreParents) {
+        final parentSchema =
+            getModelSchemaByModelName(belongsToModelName, null);
+        final parentSelectionSet = _getSelectionSetFromModelSchema(
+          parentSchema,
+          GraphQLRequestOperation.get,
+          ignoreParents: true,
+        ); // always format like a get, stop traversing parents
+        fields.add('${belongsTo.name} { $parentSelectionSet }');
+      }
     }
 
     final fieldSelection = fields.join(' '); // e.g. "id name createdAt"
@@ -109,7 +99,7 @@ class GraphQLRequestFactory {
   ) {
     var upperOutput = '';
     var lowerOutput = '';
-    var modelName = schema.name;
+    final modelName = schema.name;
 
     // build inputs based on request operation
     switch (operation) {
@@ -151,9 +141,10 @@ class GraphQLRequestFactory {
     required ModelType modelType,
     required GraphQLRequestType requestType,
     required GraphQLRequestOperation requestOperation,
+    required Map<String, dynamic> variables,
   }) {
     // retrieve schema from ModelType and validate required properties
-    var schema =
+    final schema =
         getModelSchemaByModelName(modelType.modelName, requestOperation);
 
     // e.g. "Blog" or "Blogs"
@@ -198,30 +189,10 @@ class GraphQLRequestFactory {
       document: document.document,
       variables: variables,
       modelType: modelType,
-      decodePath: document.decodePath,
-    );
-  }
-
-  GraphQLRequest<PaginatedResult<ModelIdentifier, M, P, M>> buildListRequest<
-      ModelIdentifier extends Object,
-      M extends Model<ModelIdentifier, M>,
-      P extends PartialModel<ModelIdentifier, M>>({
-    required ModelType<ModelIdentifier, M, P> modelType,
-    M? model,
-    required GraphQLRequestType requestType,
-    required GraphQLRequestOperation requestOperation,
-    required Map<String, dynamic> variables,
-  }) {
-    final document = _buildDocument(
-      modelType: modelType,
-      requestType: requestType,
-      requestOperation: requestOperation,
-    );
-    return _ListGraphQLRequest<ModelIdentifier, M, P>(
-      document: document.document,
-      variables: variables,
-      modelType: modelType,
-      decodePath: document.decodePath,
+      decodePath,: decodePath,
+      apiName: apiName,
+      authorizationMode: authorizationMode,
+      headers: headers,
     );
   }
 
@@ -260,7 +231,7 @@ class GraphQLRequestFactory {
     if (queryPredicate == null) {
       return null;
     }
-    var schema = getModelSchemaByModelName(modelType.modelName, null);
+    final schema = getModelSchemaByModelName(modelType.modelName, null);
 
     // e.g. { 'name': { 'eq': 'foo }}
     if (queryPredicate is QueryPredicateOperation) {
@@ -330,39 +301,36 @@ class GraphQLRequestFactory {
   /// When the model has a parent via a belongsTo, the id from the parent is added
   /// as a field similar to "blogID" where the value is `post.blog.id`.
   Map<String, dynamic> buildInputVariableForMutations(Model model) {
-    var schema = getModelSchemaByModelName(model.modelType.modelName, null);
+    final schema = getModelSchemaByModelName(model.modelType.modelName, null);
     final modelJson = model.toJson();
 
     // If the model has a parent in the schema, get the ID of parent and field name.
-    String? belongsToModelName; // e.g. "blog"
-    String? belongsToKey; // e.g. "blogID"
-    String? belongsToValue; // the ID value to use from `post.blog.id`
-    final belongsToAssociation = getBelongsToFieldFromModelSchema(schema);
-    if (belongsToAssociation != null) {
-      belongsToModelName = belongsToAssociation.name;
-      belongsToKey =
-          belongsToAssociation.association?.targetNames?.singleOrNull;
-      belongsToValue =
-          (modelJson[belongsToModelName] as Map?)?[idFieldName] as String?;
-    }
+  final allBelongsTo = getBelongsToFieldsFromModelSchema(schema);
+  for (final belongsTo in allBelongsTo) {
+    final belongsToModelName = belongsTo.name;
+    final belongsToKey = belongsTo.association?.targetName;
+    final belongsToValue =
+        (modelJson[belongsToModelName] as Map?)?[idFieldName] as String?;
 
-    // Remove any relational fields or readonly.
-    final fieldsToRemove = schema.fields.entries
-        .where(
-          (entry) => entry.value.association != null || entry.value.isReadOnly,
-        )
-        .map((entry) => entry.key)
-        .toSet();
-    modelJson.removeWhere((key, dynamic value) => fieldsToRemove.contains(key));
     // Assign the parent ID if the model has a parent.
-    if (belongsToKey != null && belongsToModelName != null) {
+    if (belongsToKey != null) {
       modelJson.remove(belongsToModelName);
       if (belongsToValue != null) {
         modelJson[belongsToKey] = belongsToValue;
       }
     }
+  }
 
-    return modelJson;
+  // Remove any relational fields or readonly.
+  final fieldsToRemove = schema.fields.entries
+      .where(
+        (entry) => entry.value.association != null || entry.value.isReadOnly,
+      )
+      .map((entry) => entry.key)
+      .toSet();
+  modelJson.removeWhere((key, dynamic value) => fieldsToRemove.contains(key));
+
+  return modelJson;
   }
 }
 
@@ -473,7 +441,7 @@ class _ListGraphQLRequest<
   });
 
   /// The GraphQL parameter for locating the next pagination token.
-  static const _nextToken = 'nextToken';
+  static const nextToken = 'nextToken';
 
   final ModelType<ModelIdentifier, M, PartialModel<ModelIdentifier, M>>
       modelType;
@@ -491,7 +459,7 @@ class _ListGraphQLRequest<
         .map((el) => el == null ? null : modelType.fromJson<M>(el.cast()))
         .toList();
 
-    final nextToken = json[_nextToken] as String?;
+    final nextToken = json[nextToken] as String?;
 
     return PaginatedResult(
       items: items,
@@ -500,7 +468,7 @@ class _ListGraphQLRequest<
           : _ListGraphQLRequest<ModelIdentifier, M, P>(
               apiName: apiName,
               document: document,
-              variables: {...variables, _nextToken: nextToken},
+              variables: {...variables, nextToken: nextToken},
               headers: headers,
               decodePath: decodePath,
               modelType: modelType,

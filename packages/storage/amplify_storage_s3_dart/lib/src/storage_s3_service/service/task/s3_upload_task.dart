@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 import 'dart:math';
@@ -24,6 +13,10 @@ import 'package:amplify_storage_s3_dart/src/storage_s3_service/transfer/transfer
 import 'package:async/async.dart';
 import 'package:meta/meta.dart';
 import 'package:smithy/smithy.dart';
+
+/// The fallback contentType.
+// https://www.iana.org/assignments/media-types/application/octet-stream
+const fallbackContentType = 'application/octet-stream';
 
 /// {@template amplify_storage_s3_dart.upload_task}
 /// A task created to fulfill an upload operation.
@@ -213,7 +206,7 @@ class S3UploadTask {
           _startPutObject(
             S3DataPayload.streaming(
               localFile.stream,
-              contentType: localFile.contentType,
+              contentType: await localFile.contentType,
             ),
           ),
         );
@@ -302,7 +295,7 @@ class S3UploadTask {
       builder
         ..bucket = _bucket
         ..body = body
-        ..contentType = body.contentType
+        ..contentType = body.contentType ?? fallbackContentType
         ..key = _resolvedKey
         ..metadata.addAll(_options.metadata ?? const {});
     });
@@ -448,10 +441,11 @@ class S3UploadTask {
   }
 
   Future<void> _createMultiPartUpload(AWSFile localFile) async {
+    final contentType = await localFile.contentType;
     final request = s3.CreateMultipartUploadRequest.build((builder) {
       builder
         ..bucket = _bucket
-        ..contentType = localFile.contentType
+        ..contentType = contentType ?? fallbackContentType
         ..key = _resolvedKey
         ..metadata.addAll(_options.metadata ?? const {});
     });

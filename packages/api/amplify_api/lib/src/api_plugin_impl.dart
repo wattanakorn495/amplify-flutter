@@ -1,52 +1,52 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
-library amplify_api;
+/// Amplify API for Dart
+library amplify_api_dart;
 
-import 'dart:io';
+import 'dart:async';
 
-import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_api/src/graphql/helpers/send_graphql_request.dart';
 import 'package:amplify_api/src/graphql/providers/app_sync_api_key_auth_provider.dart';
 import 'package:amplify_api/src/graphql/providers/oidc_function_api_auth_provider.dart';
-import 'package:amplify_api/src/graphql/ws/web_socket_connection.dart';
-import 'package:amplify_api/src/native_api_plugin.dart';
+import 'package:amplify_api/src/graphql/web_socket/blocs/web_socket_bloc.dart';
+import 'package:amplify_api/src/graphql/web_socket/services/web_socket_service.dart';
+import 'package:amplify_api/src/graphql/web_socket/state/web_socket_state.dart';
+import 'package:amplify_api/src/graphql/web_socket/types/connectivity_platform.dart';
 import 'package:amplify_api/src/util/amplify_api_config.dart';
 import 'package:amplify_api/src/util/amplify_authorization_rest_client.dart';
 import 'package:amplify_core/amplify_core.dart';
-import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
-/// {@template amplify_api.amplify_api_dart}
-/// The AWS implementation of the Amplify API category.
+export 'package:amplify_api/src/graphql/model_helpers/model_mutations.dart';
+export 'package:amplify_api/src/graphql/model_helpers/model_queries.dart';
+export 'package:amplify_api/src/graphql/model_helpers/model_subscriptions.dart';
+export 'package:amplify_api/src/graphql/web_socket/types/connectivity_platform.dart';
+export 'package:amplify_core/src/types/api/api_types.dart';
+
+/// {@template amplify_api_dart.amplify_api_dart}
+/// The AWS implementation of the Amplify API category in Dart.
 /// {@endtemplate}
-class AmplifyAPIDart extends AmplifyAPI {
-  /// {@macro amplify_api.amplify_api_dart}
+class AmplifyAPIDart extends APIPluginInterface with AWSDebuggable {
+  /// {@macro amplify_api_dart.amplify_api_dart}
   AmplifyAPIDart({
     List<APIAuthProvider> authProviders = const [],
+    ConnectivityPlatform connectivity = const ConnectivityPlatform(),
     AWSHttpClient? baseHttpClient,
     this.modelProvider,
     this.subscriptionOptions,
   })  : _baseHttpClient = baseHttpClient,
-        super.protected() {
+        _connectivity = connectivity {
     authProviders.forEach(registerAuthProvider);
+    Amplify.Hub.addChannel(HubChannel.Api, _hubEventController.stream);
   }
 
   late final AWSApiPluginConfig _apiConfig;
   final AWSHttpClient? _baseHttpClient;
   late final AmplifyAuthProviderRepository _authProviderRepo;
-  final _logger = AmplifyLogger.category(Category.api);
+
+  /// Creates a stream representing network connectivity at the hardware level.
+  final ConnectivityPlatform _connectivity;
 
   /// A map of the keys from the Amplify API config with auth modes to HTTP clients
   /// to use for requests to that endpoint/auth mode. e.g. { "myEndpoint.AWS_IAM": AWSHttpClient}
@@ -54,13 +54,29 @@ class AmplifyAPIDart extends AmplifyAPI {
 
   /// A map of the keys from the Amplify API config websocket connections to use
   /// for that endpoint.
-  final Map<String, WebSocketConnection> _webSocketConnectionPool = {};
+  final Map<String, WebSocketBloc> _webSocketBlocPool = {};
 
   /// The registered [APIAuthProvider] instances.
   final Map<APIAuthorizationType, APIAuthProvider> _authProviders = {};
 
+  final StreamController<ApiHubEvent> _hubEventController =
+      StreamController<ApiHubEvent>.broadcast();
+
   /// Subscription options
   final GraphQLSubscriptionOptions? subscriptionOptions;
+
+  @override
+  Future<void> reset() async {
+    for (final bloc in _webSocketBlocPool.values) {
+      bloc.add(const ShutdownEvent());
+    }
+
+    await Future.wait(
+      _webSocketBlocPool.values.map((bloc) => bloc.done.future),
+    );
+
+    await _hubEventController.close();
+  }
 
   @override
   Future<void> configure({
@@ -74,6 +90,15 @@ class AmplifyAPIDart extends AmplifyAPI {
         recoverySuggestion: 'Add API from the Amplify CLI. See '
             'https://docs.amplify.aws/lib/graphqlapi/getting-started/q/platform/flutter/#configure-api',
       );
+    }
+    for (final entry in apiConfig.endpoints.entries) {
+      if (!entry.value.endpoint.startsWith('https')) {
+        throw ApiException(
+          'Non-HTTPS endpoint found for ${entry.key} which is not supported.',
+          recoverySuggestion:
+              'Ensure the configured endpoint for ${entry.key} utilizes https.',
+        );
+      }
     }
     _apiConfig = apiConfig;
     _authProviderRepo = authProviderRepo;
@@ -107,35 +132,18 @@ class AmplifyAPIDart extends AmplifyAPI {
     }
   }
 
-  @override
-  Future<void> addPlugin({
-    required AmplifyAuthProviderRepository authProviderRepo,
-  }) async {
-    await super.addPlugin(authProviderRepo: authProviderRepo);
-
-    if (zIsWeb || !(Platform.isAndroid || Platform.isIOS)) {
-      return;
-    }
-
-    // Configure this plugin to act as a native iOS/Android plugin.
-    final nativePlugin = _NativeAmplifyApi(_authProviders);
-    NativeApiPlugin.setup(nativePlugin);
-
-    final nativeBridge = NativeApiBridge();
-    try {
-      final authProvidersList =
-          _authProviders.keys.map((key) => key.rawValue).toList();
-      await nativeBridge.addPlugin(authProvidersList);
-    } on PlatformException catch (e) {
-      if (e.code == 'AmplifyAlreadyConfiguredException' ||
-          e.code == 'AlreadyConfiguredException') {
-        throw const AmplifyAlreadyConfiguredException(
-          AmplifyExceptionMessages.alreadyConfiguredDefaultMessage,
-          recoverySuggestion:
-              AmplifyExceptionMessages.alreadyConfiguredDefaultSuggestion,
-        );
-      }
-      throw AmplifyException.fromMap((e.details as Map).cast());
+  // TODO(equartey): add [apiName] to event to distinguished when multiple blocs are running.
+  void _emitHubEvent(WebSocketState state) {
+    if (state is ConnectingState || state is ReconnectingState) {
+      _hubEventController.add(SubscriptionHubEvent.connecting());
+    } else if (state is ConnectedState) {
+      _hubEventController.add(SubscriptionHubEvent.connected());
+    } else if (state is PendingDisconnect) {
+      _hubEventController.add(SubscriptionHubEvent.pendingDisconnect());
+    } else if (state is DisconnectedState) {
+      _hubEventController.add(SubscriptionHubEvent.disconnected());
+    } else if (state is FailureState) {
+      _hubEventController.add(SubscriptionHubEvent.failed());
     }
   }
 
@@ -165,22 +173,34 @@ class AmplifyAPIDart extends AmplifyAPI {
     )..supportedProtocols = SupportedProtocols.http1;
   }
 
-  /// Returns the websocket connection to use for a given endpoint.
-  ///
-  /// Use [apiName] if there are multiple endpoints.
-  @visibleForTesting
-  WebSocketConnection getWebSocketConnection({String? apiName}) {
+  WebSocketBloc _webSocketBloc({String? apiName}) {
     final endpoint = _apiConfig.getEndpoint(
       type: EndpointType.graphQL,
       apiName: apiName,
     );
-    return _webSocketConnectionPool[endpoint.name] ??= WebSocketConnection(
-      endpoint.config,
-      _authProviderRepo,
-      subscriptionOptions: subscriptionOptions,
-      logger: _logger.createChild(
-        'ws_${endpoint.name}',
-      ),
+
+    return _webSocketBlocPool[endpoint.name] ??= createWebSocketBloc(endpoint)
+      ..stream.listen((event) {
+        _emitHubEvent(event);
+
+        if (event is PendingDisconnect) {
+          _webSocketBlocPool.remove(endpoint.name);
+        }
+      });
+  }
+
+  /// Returns the websocket bloc to use for a given endpoint.
+  ///
+  /// Use [endpoint] if there are multiple endpoints.
+  @visibleForTesting
+  WebSocketBloc createWebSocketBloc(EndpointConfig endpoint) {
+    return WebSocketBloc(
+      config: endpoint.config,
+      authProviderRepo: _authProviderRepo,
+      wsService: AmplifyWebSocketService(),
+      subscriptionOptions:
+          subscriptionOptions ?? const GraphQLSubscriptionOptions(),
+      connectivity: _connectivity,
     );
   }
 
@@ -251,8 +271,8 @@ class AmplifyAPIDart extends AmplifyAPI {
     GraphQLRequest<T> request, {
     void Function()? onEstablished,
   }) {
-    return getWebSocketConnection(apiName: request.apiName)
-        .subscribe(request, onEstablished);
+    final event = SubscribeEvent(request, onEstablished);
+    return _webSocketBloc(apiName: request.apiName).subscribe(event);
   }
 
   // ====== REST =======
@@ -366,32 +386,7 @@ class AmplifyAPIDart extends AmplifyAPI {
       ).send(client: client),
     );
   }
-}
-
-class _NativeAmplifyApi
-    with AWSDebuggable, AmplifyLoggerMixin
-    implements NativeApiPlugin {
-  _NativeAmplifyApi(this._authProviders);
-
-  /// The registered [APIAuthProvider] instances.
-  final Map<APIAuthorizationType, APIAuthProvider> _authProviders;
 
   @override
-  Future<String?> getLatestAuthToken(String providerName) {
-    final provider = APIAuthorizationTypeX.from(providerName);
-    if (provider == null) {
-      throw PlatformException(code: 'BAD_ARGUMENTS');
-    }
-    final authProvider = _authProviders[provider];
-    if (authProvider == null) {
-      throw PlatformException(
-        code: 'NO_PROVIDER',
-        message: 'No provider found for $authProvider',
-      );
-    }
-    return authProvider.getLatestAuthToken();
-  }
-
-  @override
-  String get runtimeTypeName => '_NativeAmplifyApi';
+  String get runtimeTypeName => 'AmplifyAPIDart';
 }

@@ -1,18 +1,8 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:aft/aft.dart';
@@ -77,9 +67,16 @@ class GenerateSdkCommand extends AmplifyCommand {
       processWorkingDir: cloneDir.path,
     );
     logger.trace('Successfully cloned models');
+    return cloneDir;
+  }
+
+  /// Organizes model files from [baseDir] into a new temporary directory.
+  ///
+  /// Returns the new directory.
+  Future<Directory> _organizeModels(Directory baseDir) async {
     final modelsDir = await Directory.systemTemp.createTemp('models');
     logger.trace('Organizing models in ${modelsDir.path}');
-    final services = cloneDir.list(followLinks: false).whereType<Directory>();
+    final services = baseDir.list(followLinks: false).whereType<Directory>();
     await for (final serviceDir in services) {
       final serviceName = p.basename(serviceDir.path);
       final artifacts = await serviceDir.list().whereType<Directory>().toList();
@@ -113,12 +110,13 @@ class GenerateSdkCommand extends AmplifyCommand {
     final modelsPath = args['models'] as String?;
     final Directory modelsDir;
     if (modelsPath != null) {
-      modelsDir = Directory(modelsPath);
+      modelsDir = await _organizeModels(Directory(modelsPath));
       if (!await modelsDir.exists()) {
         exitError('Model directory ($modelsDir) does not exist');
       }
     } else {
-      modelsDir = await _downloadModels(config.ref);
+      final cloneDir = await _downloadModels(config.ref);
+      modelsDir = await _organizeModels(cloneDir);
     }
 
     final outputPath = args['output'] as String;
@@ -171,7 +169,7 @@ class GenerateSdkCommand extends AmplifyCommand {
     }
 
     // Generate SDK for combined operations
-    final libraries = generateForAst(
+    final output = generateForAst(
       smithyAst,
       packageName: packageName,
       basePath: outputPath,
@@ -179,7 +177,7 @@ class GenerateSdkCommand extends AmplifyCommand {
     );
 
     final dependencies = <String>{};
-    for (final library in libraries) {
+    for (final library in output.values.expand((out) => out.libraries)) {
       final smithyLibrary = library.smithyLibrary;
       final outPath = p.join(
         'lib',
@@ -192,6 +190,33 @@ class GenerateSdkCommand extends AmplifyCommand {
       await outFile.writeAsString(output);
     }
 
+    for (final plugin in config.plugins) {
+      logger.stdout('Running plugin $plugin...');
+      final generatedShapes = ShapeMap(
+        Map.fromEntries(
+          output.values.expand((out) => out.context.shapes.entries),
+        ),
+      );
+      final generatedAst = SmithyAst(
+        (b) => b
+          ..shapes = generatedShapes
+          ..metadata.replace(smithyAst.metadata)
+          ..version = smithyAst.version,
+      );
+      final pluginCmd = await Process.start(
+        'dart',
+        [
+          plugin,
+          jsonEncode(generatedAst),
+        ],
+        mode: verbose ? ProcessStartMode.inheritStdio : ProcessStartMode.normal,
+      );
+      final exitCode = await pluginCmd.exitCode;
+      if (exitCode != 0) {
+        exitError('`dart $plugin <AST>` failed: $exitCode.');
+      }
+    }
+
     // Run built_value generator
     final buildRunnerCmd = await Process.start(
       'dart',
@@ -201,11 +226,8 @@ class GenerateSdkCommand extends AmplifyCommand {
         'build',
         '--delete-conflicting-outputs',
       ],
+      mode: verbose ? ProcessStartMode.inheritStdio : ProcessStartMode.normal,
     );
-    if (verbose) {
-      unawaited(buildRunnerCmd.stdout.pipe(stdout));
-      unawaited(buildRunnerCmd.stderr.pipe(stderr));
-    }
     final exitCode = await buildRunnerCmd.exitCode;
     if (exitCode != 0) {
       exitError('`dart run build_runner build` failed: $exitCode.');

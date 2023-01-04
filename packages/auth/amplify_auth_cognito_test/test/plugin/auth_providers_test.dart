@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 import 'dart:async';
 import 'dart:convert';
 
@@ -36,9 +25,8 @@ AWSHttpRequest _generateTestRequest() {
 class TestAmplifyAuthUserPoolOnly extends AmplifyAuthCognitoDart {
   @override
   Future<CognitoAuthSession> fetchAuthSession({
-    required AuthSessionRequest<AuthSessionOptions> request,
+    CognitoSessionOptions? options,
   }) async {
-    final options = request.options as CognitoSessionOptions?;
     final getAWSCredentials = options?.getAWSCredentials;
     if (getAWSCredentials != null && getAWSCredentials) {
       throw const InvalidAccountTypeException.noIdentityPool(
@@ -112,7 +100,7 @@ void main() {
             service: AWSService.appSync,
           ),
         ),
-        throwsA(isA<AmplifyException>()),
+        throwsA(isA<PluginError>()),
       );
     });
 
@@ -121,7 +109,7 @@ void main() {
       final authProvider = CognitoUserPoolsAuthProvider();
       await expectLater(
         authProvider.authorizeRequest(_generateTestRequest()),
-        throwsA(isA<AmplifyException>()),
+        throwsA(isA<PluginError>()),
       );
     });
   });

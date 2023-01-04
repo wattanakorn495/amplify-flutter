@@ -1,17 +1,5 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 
@@ -154,9 +142,14 @@ Future<void> adminCreateUser(
   }
 }
 
+class OtpResult {
+  OtpResult({required this.code});
+  Future<String> code;
+}
+
 /// Returns the OTP code for [username]. Must be called before the network call
 /// generating the OTP code.
-Future<String> getOtpCode(String username) async {
+Future<OtpResult> getOtpCode(String username) async {
   const subscriptionDocument = r'''
     subscription OnCreateMFACode($username: String!) {
       onCreateMFACode(username: $username) {
@@ -165,6 +158,7 @@ Future<String> getOtpCode(String username) async {
       }
     }''';
 
+  final establishedCompleter = Completer<void>();
   final Stream<GraphQLResponse<Map<String, Object?>>> operation =
       Amplify.API.subscribe(
     GraphQLRequest.raw(
@@ -173,11 +167,14 @@ Future<String> getOtpCode(String username) async {
         'username': username,
       },
     ),
-    onEstablished: () => _logger.debug('Established connection'),
+    onEstablished: () {
+      establishedCompleter.complete();
+      _logger.debug('Established connection');
+    },
   );
 
   // Collect code delivered via Lambda
-  return operation
+  final code = operation
       .tap(
         (event) => _logger.debug(
           'Got event: ${event.data}, errors: ${event.errors}',
@@ -192,12 +189,15 @@ Future<String> getOtpCode(String username) async {
       })
       .map((event) => event.code)
       .first;
+
+  await establishedCompleter.future;
+  return OtpResult(code: code);
 }
 
 /// Returns the stream of all OTP codes broadcast by Cognito.
 ///
 /// This is useful with aliases when the username is not known ahead of time.
-Stream<String> getOtpCodes() {
+Stream<String> getOtpCodes({void Function()? onEstablished}) {
   const subscriptionDocument = r'''
     subscription OnCreateMFACode {
       onCreateMFACode {
@@ -211,7 +211,10 @@ Stream<String> getOtpCodes() {
     GraphQLRequest.raw(
       document: subscriptionDocument,
     ),
-    onEstablished: () => _logger.debug('Established connection'),
+    onEstablished: () {
+      onEstablished?.call();
+      _logger.debug('Established connection');
+    },
   );
 
   // Collect code delivered via Lambda

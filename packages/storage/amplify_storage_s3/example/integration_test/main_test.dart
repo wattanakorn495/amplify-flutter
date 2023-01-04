@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 import 'dart:convert';
@@ -26,6 +15,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:integration_test/integration_test.dart';
 import 'package:path/path.dart' as path;
+
+import 'content_type_infer/content_type_infer.dart';
 
 class CustomPrefixResolver implements S3PrefixResolver {
   const CustomPrefixResolver();
@@ -169,11 +160,15 @@ void main() async {
 
         testWidgets('upload data with access level - guest',
             (WidgetTester tester) async {
+          const testContentType = 'text/plain';
           final s3Plugin =
               Amplify.Storage.getPlugin(AmplifyStorageS3.pluginKey);
           final result = await s3Plugin
               .uploadData(
-                data: S3DataPayload.bytes(testBytes),
+                data: S3DataPayload.bytes(
+                  testBytes,
+                  contentType: testContentType,
+                ),
                 key: testObjectKey1,
                 options: const S3UploadDataOptions(
                   accessLevel: StorageAccessLevel.guest,
@@ -184,6 +179,19 @@ void main() async {
                 ),
               )
               .result;
+
+          expect(
+            result,
+            isA<S3UploadDataResult>().having(
+              (o) => o.uploadedItem,
+              'uploadedItem',
+              isA<S3Item>().having(
+                (o) => o.contentType,
+                'contentType',
+                testContentType,
+              ),
+            ),
+          );
 
           expect(
             result,
@@ -220,6 +228,19 @@ void main() async {
             isA<S3UploadDataResult>().having(
               (o) => o.uploadedItem,
               'uploadedItem',
+              isA<S3Item>().having(
+                (o) => o.contentType,
+                'contentType',
+                'image/jpeg',
+              ),
+            ),
+          );
+
+          expect(
+            result,
+            isA<S3UploadDataResult>().having(
+              (o) => o.uploadedItem,
+              'uploadedItem',
               isA<S3Item>().having((o) => o.eTag, 'eTag', isNotEmpty),
             ),
           );
@@ -244,6 +265,19 @@ void main() async {
                 ),
               )
               .result;
+
+          expect(
+            result,
+            isA<S3UploadFileResult>().having(
+              (o) => o.uploadedItem,
+              'uploadedItem',
+              isA<S3Item>().having(
+                (o) => o.contentType,
+                'contentType',
+                'application/octet-stream',
+              ),
+            ),
+          );
 
           expect(
             result,
@@ -407,6 +441,11 @@ void main() async {
 
           expect(result.removedItem.key, testObject3CopyMoveKey);
         });
+
+        testContentTypeInferTest(
+          smallFileBytes: testBytes,
+          largeFileBytes: testLargeFileBytes,
+        );
       });
 
       group(
@@ -453,7 +492,10 @@ void main() async {
               ),
             );
 
-            await expectLater(operation.result, throwsA(isA<S3Exception>()));
+            await expectLater(
+              operation.result,
+              throwsA(isA<StorageKeyNotFoundException>()),
+            );
           });
 
           testWidgets('get url of object with access level guest',
@@ -494,7 +536,10 @@ void main() async {
               ),
             );
 
-            await expectLater(operation.result, throwsA(isA<S3Exception>()));
+            await expectLater(
+              operation.result,
+              throwsA(isA<StorageKeyNotFoundException>()),
+            );
           });
 
           testWidgets(
@@ -524,7 +569,10 @@ void main() async {
               ),
             );
 
-            await expectLater(operation.result, throwsA(isA<S3Exception>()));
+            await expectLater(
+              operation.result,
+              throwsA(isA<StorageKeyNotFoundException>()),
+            );
           });
 
           testWidgets(

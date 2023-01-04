@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:convert';
 
@@ -79,6 +68,7 @@ extension ShapeClassName on Shape {
         if (!isEnum) return null;
         break;
       case ShapeType.enum_:
+      case ShapeType.intEnum:
       case ShapeType.structure:
       case ShapeType.operation:
       case ShapeType.union:
@@ -568,6 +558,24 @@ extension OperationShapeUtil on OperationShape {
               .constInstanceNamed('environment', []).code,
       );
     }
+
+    // The requestInterceptors field.
+    yield ConfigParameter(
+      (p) => p
+        ..type = DartTypes.core.list(DartTypes.smithy.httpRequestInterceptor)
+        ..name = 'requestInterceptors'
+        ..location = ParameterLocation.constructor
+        ..defaultTo = const Code('const []'),
+    );
+
+    // The responseInterceptors field.
+    yield ConfigParameter(
+      (p) => p
+        ..type = DartTypes.core.list(DartTypes.smithy.httpResponseInterceptor)
+        ..name = 'responseInterceptors'
+        ..location = ParameterLocation.constructor
+        ..defaultTo = const Code('const []'),
+    );
   }
 
   /// Fields which should be generated for the operation and its service client

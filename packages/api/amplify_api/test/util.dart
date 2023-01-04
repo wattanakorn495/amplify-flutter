@@ -1,31 +1,20 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:amplify_api/src/graphql/providers/app_sync_api_key_auth_provider.dart';
-import 'package:amplify_api/src/graphql/ws/types/web_socket_types.dart';
-import 'package:amplify_api/src/graphql/ws/web_socket_connection.dart';
+import 'package:amplify_api/src/graphql/web_socket/blocs/web_socket_bloc.dart';
+import 'package:amplify_api/src/graphql/web_socket/services/web_socket_service.dart';
+import 'package:amplify_api/src/graphql/web_socket/state/web_socket_state.dart';
+import 'package:amplify_api/src/graphql/web_socket/types/connectivity_platform.dart';
+import 'package:amplify_api/src/graphql/web_socket/types/web_socket_types.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:async/async.dart';
+import 'package:aws_common/testing.dart';
 import 'package:aws_signature_v4/aws_signature_v4.dart';
-import 'package:collection/collection.dart';
-import 'package:connectivity_plus_platform_interface/connectivity_plus_platform_interface.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:stream_channel/stream_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -163,61 +152,38 @@ WebSocketMessage startAck(String subscriptionID) => WebSocketMessage(
       id: subscriptionID,
     );
 
-Future<void> assertWebSocketConnected(
-  MockWebSocketConnection connection,
-  String subscriptionID,
-) async {
-  await expectLater(connection.connectionPending, completes);
-
-  connection.channel!.sink.add(jsonEncode(mockAckMessage));
-
-  await expectLater(connection.ready, completes);
-
-  connection.channel!.sink.add(jsonEncode(startAck(subscriptionID)));
-}
-
-/// Extension of [WebSocketConnection] that stores messages internally instead
-/// of sending them.
-class MockWebSocketConnection extends WebSocketConnection {
-  MockWebSocketConnection(
-    super.config,
-    super.authProviderRepo, {
-    required super.logger,
-    super.subscriptionOptions,
+void initMockConnection(
+  MockWebSocketBloc bloc,
+  MockWebSocketService service,
+  String id,
+) {
+  bloc.stream.listen((event) {
+    final state = event;
+    if (state is ConnectingState &&
+        state.networkState == NetworkState.connected) {
+      service.channel.sink.add(jsonEncode(mockAckMessage));
+    } else if (state is ConnectedState) {
+      service.channel.sink.add(jsonEncode(startAck(id)));
+    }
   });
-
-  /// Instead of actually connecting, just set the URI here so it can be inspected
-  /// for testing.
-  Uri? connectedUri;
-
-  /// Instead of sending messages, they are pushed to end of list so they can be
-  /// inspected for testing.
-  final List<WebSocketMessage> sentMessages = [];
-
-  WebSocketMessage? get lastSentMessage => sentMessages.lastOrNull;
-
-  /// Pushes message in sentMessages and adds to stream (to support mocking result).
-  @override
-  void send(WebSocketMessage message) {
-    sentMessages.add(message);
-    super.send(message);
-  }
 }
 
 // Mock WebSocket
-
 class MockWebSocketSink extends DelegatingStreamSink<dynamic>
     implements WebSocketSink {
   MockWebSocketSink(super.sink);
 
   @override
-  Future<void> close([int? closeCode, String? closeReason]) => super.close();
+  Future<void> close([int? closeCode, String? closeReason]) async {
+    // The real sink takes some time to close which can cause race conditions.
+    // Mocking that delay here is needed to reproduce/test those conditions.
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    return super.close();
+  }
 }
 
 class MockWebSocketChannel extends WebSocketChannel {
-  MockWebSocketChannel() : super(streamChannel) {
-    // controller.sink.add(mockAckMessage);
-  }
+  MockWebSocketChannel() : super(streamChannel);
 
   // ignore: close_sinks
   final controller = StreamController<dynamic>.broadcast();
@@ -230,28 +196,6 @@ class MockWebSocketChannel extends WebSocketChannel {
 
   @override
   WebSocketSink get sink => MockWebSocketSink(controller.sink);
-}
-
-// Mock Connectivity Plus
-
-const ConnectivityResult kCheckConnectivityResult = ConnectivityResult.wifi;
-
-class MockConnectivityPlatform extends Mock
-    with MockPlatformInterfaceMixin
-    implements ConnectivityPlatform {
-  // ignore: close_sinks
-  final StreamController<ConnectivityResult> controller =
-      StreamController<ConnectivityResult>.broadcast();
-
-  @override
-  Future<ConnectivityResult> checkConnectivity() async {
-    return kCheckConnectivityResult;
-  }
-
-  @override
-  Stream<ConnectivityResult> get onConnectivityChanged {
-    return controller.stream;
-  }
 }
 
 // From https://docs.amplify.aws/lib/graphqlapi/authz/q/platform/flutter/#oidc
@@ -271,4 +215,93 @@ class CustomFunctionProvider extends FunctionAuthProvider {
 
   @override
   Future<String?> getLatestAuthToken() async => testFunctionToken;
+}
+
+class MockWebSocketBloc extends WebSocketBloc {
+  MockWebSocketBloc({
+    required super.config,
+    required super.authProviderRepo,
+    required super.wsService,
+    required super.subscriptionOptions,
+    required super.pollClientOverride,
+    required super.connectivity,
+  });
+}
+
+class MockWebSocketService extends AmplifyWebSocketService {
+  MockWebSocketService({this.badInit = false});
+
+  late MockWebSocketChannel channel;
+
+  /// fails init process
+  bool badInit;
+
+  @override
+  Stream<WebSocketEvent> init(WebSocketState state) {
+    if (badInit) {
+      return Stream.error(
+        WebSocketChannelException('Mock Web Socket Exception'),
+      );
+    }
+    channel = MockWebSocketChannel();
+
+    sink = channel.sink;
+
+    return transformStream(channel.stream);
+  }
+
+  @override
+  Future<void> unsubscribe(
+    String subscriptionId,
+  ) async {
+    await super.unsubscribe(subscriptionId);
+
+    final completeMessage =
+        jsonEncode({'id': subscriptionId, 'type': 'complete'});
+    channel.sink.add(completeMessage);
+  }
+}
+
+class MockPollClient {
+  MockPollClient({
+    this.induceTimeout = false,
+    this.sendUnhealthyResponse = false,
+    this.maxFailAttempts = 5,
+  });
+
+  bool induceTimeout;
+  bool sendUnhealthyResponse;
+  int maxFailAttempts;
+
+  MockAWSHttpClient get client {
+    var mockPollFailCount = 0;
+
+    return MockAWSHttpClient((request, _) async {
+      if (sendUnhealthyResponse) {
+        return AWSHttpResponse(
+          statusCode: 400,
+          body: utf8.encode('unhealthy'),
+        );
+      }
+
+      if (induceTimeout && mockPollFailCount++ <= maxFailAttempts) {
+        await Future<void>.delayed(const Duration(seconds: 10));
+      }
+
+      return AWSHttpResponse(
+        statusCode: 200,
+        body: utf8.encode('healthy'),
+      );
+    });
+  }
+}
+
+late StreamController<ConnectivityStatus> mockNetworkStreamController;
+
+class MockConnectivity extends ConnectivityPlatform {
+  const MockConnectivity();
+
+  @override
+  Stream<ConnectivityStatus> get onConnectivityChanged =>
+      mockNetworkStreamController.stream;
 }

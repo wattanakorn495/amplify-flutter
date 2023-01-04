@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
@@ -82,15 +71,15 @@ void main() {
       }
 
       if (enableMfa) {
-        final code = getOtpCode(username!);
+        final otpResult = await getOtpCode(username!);
         final signInRes = await Amplify.Auth.signIn(
           username: username!,
           password: password,
         );
-        if (signInRes.nextStep?.signInStep ==
+        if (signInRes.nextStep.signInStep ==
             'CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE') {
           final confirmSignInRes = await Amplify.Auth.confirmSignIn(
-            confirmationValue: await code,
+            confirmationValue: await otpResult.code,
           );
           expect(confirmSignInRes.isSignedIn, isTrue);
         } else {
@@ -147,45 +136,48 @@ void main() {
       });
     });
 
-    group('Opt-In (Device Tracking)', () {
-      setUpAll(() async {
-        await configureAuth(
-          additionalPlugins: [AmplifyAPI()],
-          config: amplifyEnvironments['device-tracking-opt-in'],
-        );
-      });
+    group(
+      'Opt-In (Device Tracking)',
+      () {
+        setUpAll(() async {
+          await configureAuth(
+            additionalPlugins: [AmplifyAPI()],
+            config: amplifyEnvironments['device-tracking-opt-in'],
+          );
+        });
 
-      setUp(() => signIn(enableMfa: true));
+        setUp(() => signIn(enableMfa: true));
 
-      asyncTest('cannot bypass MFA when device is not remembered', (_) async {
-        await signOutUser();
+        asyncTest('cannot bypass MFA when device is not remembered', (_) async {
+          await signOutUser();
 
-        final res = await Amplify.Auth.signIn(
-          username: username!,
-          password: password,
-        );
-        expect(
-          res.nextStep?.signInStep,
-          'CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE',
-          reason: 'Subsequent sign-in attempts should require MFA',
-        );
-      });
+          final res = await Amplify.Auth.signIn(
+            username: username!,
+            password: password,
+          );
+          expect(
+            res.nextStep.signInStep,
+            'CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE',
+            reason: 'Subsequent sign-in attempts should require MFA',
+          );
+        });
 
-      asyncTest('can bypass MFA when device is remembered', (_) async {
-        await Amplify.Auth.rememberDevice();
-        await signOutUser();
+        asyncTest('can bypass MFA when device is remembered', (_) async {
+          await Amplify.Auth.rememberDevice();
+          await signOutUser();
 
-        final res = await Amplify.Auth.signIn(
-          username: username!,
-          password: password,
-        );
-        expect(
-          res.isSignedIn,
-          isTrue,
-          reason: 'Subsequent sign-in attempts should not require MFA',
-        );
-      });
-    });
+          final res = await Amplify.Auth.signIn(
+            username: username!,
+            password: password,
+          );
+          expect(
+            res.isSignedIn,
+            isTrue,
+            reason: 'Subsequent sign-in attempts should not require MFA',
+          );
+        });
+      },
+    );
 
     group('Always', () {
       setUpAll(() async {

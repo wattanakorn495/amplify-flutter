@@ -1,17 +1,5 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'package:amplify_api/src/graphql/factories/model_mutations_factory.dart';
 import 'package:amplify_core/amplify_core.dart';
@@ -24,12 +12,22 @@ class ModelMutations {
   /// Generates a request to create a model.
   ///
   /// ```dart
-  /// Todo todo = Todo(name: 'my first todo', description: 'todo description');
+  /// final todo = Todo(name: 'my first todo', description: 'todo description');
   /// final request = ModelMutations.create(todo);
   /// ```
   static GraphQLRequest<M> create<ModelIdentifier extends Object,
-      M extends Model<ModelIdentifier, M>>(M model) {
-    return ModelMutationsFactory.instance.create(model);
+      M extends Model<ModelIdentifier, M>>(
+    M model, {
+    String? apiName,
+    APIAuthorizationType? authorizationMode,
+    Map<String, String>? headers,
+  }) {
+    return ModelMutationsFactory.instance.create<ModelIdentifier, M>(
+      model,
+      apiName: apiName,
+      authorizationMode: authorizationMode,
+      headers: headers,
+    );
   }
 
   /// Generates a request to delete a model.
@@ -44,8 +42,17 @@ class ModelMutations {
       M extends Model<ModelIdentifier, M>>(
     M model, {
     QueryPredicate<ModelIdentifier, M>? where,
+    String? apiName,
+    Map<String, String>? headers,
+    APIAuthorizationType? authorizationMode,
   }) {
-    return ModelMutationsFactory.instance.delete(model, where: where);
+    return ModelMutationsFactory.instance.delete<ModelIdentifier, M>(
+      model,
+      where: where,
+      apiName: apiName,
+      authorizationMode: authorizationMode,
+      headers: headers,
+    );
   }
 
   /// Generates a request to delete a model by ID.
@@ -62,11 +69,17 @@ class ModelMutations {
     ModelType<ModelIdentifier, M, P> modelType,
     ModelIdentifier id, {
     QueryPredicate<ModelIdentifier, M>? where,
+    String? apiName,
+    APIAuthorizationType? authorizationMode,
+    Map<String, String>? headers,
   }) {
-    return ModelMutationsFactory.instance.deleteById(
+    return ModelMutationsFactory.instance.deleteById<ModelIdentifier, M>(
       modelType,
       id,
       where: where,
+      apiName: apiName,
+      authorizationMode: authorizationMode,
+      headers: headers,
     );
   }
 
@@ -82,7 +95,16 @@ class ModelMutations {
       M extends Model<ModelIdentifier, M>>(
     M model, {
     QueryPredicate<ModelIdentifier, M>? where,
+    String? apiName,
+    APIAuthorizationType? authorizationMode,
+    Map<String, String>? headers,
   }) {
-    return ModelMutationsFactory.instance.update(model, where: where);
+    return ModelMutationsFactory.instance.update<ModelIdentifier, M>(
+      model,
+      where: where,
+      apiName: apiName,
+      authorizationMode: authorizationMode,
+      headers: headers,
+    );
   }
 }

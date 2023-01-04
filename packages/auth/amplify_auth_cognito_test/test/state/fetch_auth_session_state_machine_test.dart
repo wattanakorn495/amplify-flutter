@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'package:amplify_auth_cognito_dart/amplify_auth_cognito_dart.dart';
 import 'package:amplify_auth_cognito_dart/src/credentials/cognito_keys.dart';
@@ -18,90 +7,14 @@ import 'package:amplify_auth_cognito_dart/src/model/auth_configuration.dart';
 import 'package:amplify_auth_cognito_dart/src/sdk/cognito_identity.dart';
 import 'package:amplify_auth_cognito_dart/src/sdk/cognito_identity_provider.dart';
 import 'package:amplify_auth_cognito_dart/src/state/state.dart';
-import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_secure_storage_dart/amplify_secure_storage_dart.dart';
-import 'package:mockito/mockito.dart';
-import 'package:smithy/smithy.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:test/test.dart';
 
 import '../common/jwt.dart';
+import '../common/mock_clients.dart';
 import '../common/mock_config.dart';
 import '../common/mock_secure_storage.dart';
-
-class MockCognitoIdentityClient implements CognitoIdentityClient {
-  MockCognitoIdentityClient({
-    Future<GetCredentialsForIdentityResponse> Function()?
-        getCredentialsForIdentity,
-    Future<GetIdResponse> Function()? getId,
-  })  : _getCredentialsForIdentity = getCredentialsForIdentity,
-        _getId = getId;
-
-  final Future<GetIdResponse> Function()? _getId;
-  final Future<GetCredentialsForIdentityResponse> Function()?
-      _getCredentialsForIdentity;
-
-  @override
-  SmithyOperation<GetCredentialsForIdentityResponse> getCredentialsForIdentity(
-    GetCredentialsForIdentityInput input, {
-    AWSHttpClient? client,
-  }) {
-    if (_getCredentialsForIdentity == null) {
-      throw UnimplementedError();
-    }
-    return SmithyOperation(
-      CancelableOperation.fromFuture(
-        Future.value(_getCredentialsForIdentity!()),
-      ),
-      operationName: 'GetCredentialsForIdentity',
-      requestProgress: const Stream.empty(),
-      responseProgress: const Stream.empty(),
-    );
-  }
-
-  @override
-  SmithyOperation<GetIdResponse> getId(
-    GetIdInput input, {
-    AWSHttpClient? client,
-  }) {
-    if (_getId == null) {
-      throw UnimplementedError();
-    }
-    return SmithyOperation(
-      CancelableOperation.fromFuture(
-        Future.value(_getId!()),
-      ),
-      operationName: 'GetId',
-      requestProgress: const Stream.empty(),
-      responseProgress: const Stream.empty(),
-    );
-  }
-}
-
-class MockCognitoIdentityProviderClient extends Fake
-    implements CognitoIdentityProviderClient {
-  MockCognitoIdentityProviderClient({
-    required Future<InitiateAuthResponse> Function(InitiateAuthRequest)
-        initiateAuth,
-  }) : _initiateAuth = initiateAuth;
-
-  final Future<InitiateAuthResponse> Function(InitiateAuthRequest)
-      _initiateAuth;
-
-  @override
-  SmithyOperation<InitiateAuthResponse> initiateAuth(
-    InitiateAuthRequest input, {
-    AWSHttpClient? client,
-  }) =>
-      SmithyOperation(
-        CancelableOperation.fromFuture(
-          Future.value(_initiateAuth(input)),
-        ),
-        operationName: 'InitiateAuth',
-        requestProgress: const Stream.empty(),
-        responseProgress: const Stream.empty(),
-      );
-}
 
 void main() {
   group('FetchAuthSessionStateMachine', () {
@@ -381,9 +294,9 @@ void main() {
             stateMachine
               ..addInstance<CognitoIdentityProviderClient>(
                 MockCognitoIdentityProviderClient(
-                  initiateAuth: expectAsync1(
+                  initiateAuth: expectAsync0(
                     count: willRefresh ? 1 : 0,
-                    (request) async => InitiateAuthResponse(
+                    () async => InitiateAuthResponse(
                       authenticationResult: AuthenticationResultType(
                         accessToken: accessToken.raw,
                         refreshToken: refreshToken,
@@ -477,8 +390,8 @@ void main() {
           stateMachine
             ..addInstance<CognitoIdentityProviderClient>(
               MockCognitoIdentityProviderClient(
-                initiateAuth: expectAsync1(
-                  (request) async => throw _FetchAuthSessionException(),
+                initiateAuth: expectAsync0(
+                  () async => throw _FetchAuthSessionException(),
                 ),
               ),
             )
@@ -528,8 +441,8 @@ void main() {
           stateMachine
             ..addInstance<CognitoIdentityProviderClient>(
               MockCognitoIdentityProviderClient(
-                initiateAuth: expectAsync1(
-                  (request) async => InitiateAuthResponse(
+                initiateAuth: expectAsync0(
+                  () async => InitiateAuthResponse(
                     authenticationResult: AuthenticationResultType(
                       accessToken: createJwt(
                         type: TokenType.access,
@@ -674,8 +587,8 @@ void main() {
           stateMachine
             ..addInstance<CognitoIdentityProviderClient>(
               MockCognitoIdentityProviderClient(
-                initiateAuth: expectAsync1(
-                  (request) async => InitiateAuthResponse(
+                initiateAuth: expectAsync0(
+                  () async => InitiateAuthResponse(
                     authenticationResult: AuthenticationResultType(
                       accessToken: createJwt(
                         type: TokenType.access,

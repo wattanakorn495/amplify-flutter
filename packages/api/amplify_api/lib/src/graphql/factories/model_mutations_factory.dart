@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'package:amplify_api/src/graphql/factories/graphql_request_factory.dart';
 import 'package:amplify_core/amplify_core.dart';
@@ -28,7 +17,12 @@ class ModelMutationsFactory extends ModelMutationsInterface {
 
   @override
   GraphQLRequest<M> create<ModelIdentifier extends Object,
-      M extends Model<ModelIdentifier, M>>(M model) {
+      M extends Model<ModelIdentifier, M>>(
+    M model, {
+    String? apiName,
+    APIAuthorizationType? authorizationMode,
+    Map<String, String>? headers,
+  }) {
     final input =
         GraphQLRequestFactory.instance.buildInputVariableForMutations(model);
     // Does not use buildVariablesForMutationRequest because creations don't have conditions.
@@ -40,6 +34,9 @@ class ModelMutationsFactory extends ModelMutationsInterface {
       modelType: model.modelType,
       requestType: GraphQLRequestType.mutation,
       requestOperation: GraphQLRequestOperation.create,
+      apiName: apiName,
+      authorizationMode: authorizationMode,
+      headers: headers,
     );
   }
 
@@ -48,11 +45,17 @@ class ModelMutationsFactory extends ModelMutationsInterface {
       M extends Model<ModelIdentifier, M>>(
     M model, {
     QueryPredicate<ModelIdentifier, M>? where,
+    String? apiName,
+    APIAuthorizationType? authorizationMode,
+    Map<String, String>? headers,
   }) {
     return deleteById(
       model.modelType,
       model.modelIdentifier,
       where: where,
+      apiName: apiName,
+      authorizationMode: authorizationMode,
+      headers: headers,
     );
   }
 
@@ -64,6 +67,9 @@ class ModelMutationsFactory extends ModelMutationsInterface {
     ModelType<ModelIdentifier, M, P> modelType,
     ModelIdentifier id, {
     QueryPredicate<ModelIdentifier, M>? where,
+    String? apiName,
+    APIAuthorizationType? authorizationMode,
+    Map<String, String>? headers,
   }) {
     final condition = GraphQLRequestFactory.instance
         .queryPredicateToGraphQLFilter(where, modelType);
@@ -78,14 +84,21 @@ class ModelMutationsFactory extends ModelMutationsInterface {
       modelType: modelType,
       requestType: GraphQLRequestType.mutation,
       requestOperation: GraphQLRequestOperation.delete,
+      apiName: apiName,
+      authorizationMode: authorizationMode,
+      headers: headers,
     );
   }
 
+  @override
   @override
   GraphQLRequest<M> update<ModelIdentifier extends Object,
       M extends Model<ModelIdentifier, M>>(
     M model, {
     QueryPredicate<ModelIdentifier, M>? where,
+    String? apiName,
+    APIAuthorizationType? authorizationMode,
+    Map<String, String>? headers,
   }) {
     final condition =
         GraphQLRequestFactory.instance.queryPredicateToGraphQLFilter(
@@ -104,6 +117,9 @@ class ModelMutationsFactory extends ModelMutationsInterface {
       modelType: model.modelType,
       requestType: GraphQLRequestType.mutation,
       requestOperation: GraphQLRequestOperation.update,
+      apiName: apiName,
+      authorizationMode: authorizationMode,
+      headers: headers,
     );
   }
 }

@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 import 'dart:math';
@@ -23,7 +12,6 @@ import 'package:amplify_storage_s3_dart/src/sdk/src/s3/common/endpoint_resolver.
 import 'package:amplify_storage_s3_dart/src/storage_s3_service/storage_s3_service.dart';
 import 'package:amplify_storage_s3_dart/src/storage_s3_service/transfer/transfer.dart'
     as transfer;
-
 import 'package:aws_signature_v4/aws_signature_v4.dart';
 import 'package:meta/meta.dart';
 import 'package:smithy/smithy.dart' as smithy;
@@ -61,10 +49,6 @@ class StorageS3Service {
             ),
         _prefixResolver = prefixResolver,
         _logger = logger,
-        _signerScope = AWSCredentialScope(
-          region: defaultRegion,
-          service: AWSService.s3,
-        ),
         // dependencyManager.get() => AWSSigV4Signer is used for unit tests
         _awsSigV4Signer = dependencyManager.get() ??
             AWSSigV4Signer(credentialsProvider: credentialsProvider),
@@ -80,10 +64,14 @@ class StorageS3Service {
   final s3.S3Client _defaultS3Client;
   final S3PrefixResolver _prefixResolver;
   final AWSLogger _logger;
-  final AWSCredentialScope _signerScope;
   final AWSSigV4Signer _awsSigV4Signer;
   final DependencyManager _dependencyManager;
   final DateTime _serviceStartingTime;
+
+  AWSCredentialScope get _signerScope => AWSCredentialScope(
+        region: _defaultRegion,
+        service: AWSService.s3,
+      );
 
   transfer.TransferDatabase get _transferDatabase =>
       _dependencyManager.getOrCreate(transfer.TransferDatabase.token);
