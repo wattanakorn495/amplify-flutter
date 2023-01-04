@@ -45,32 +45,39 @@ class MyModelType extends ModelType<String, MyModel, PartialMyModel> {
 
 class MyModelQueryFields<ModelIdentifier extends Object,
     M extends Model<ModelIdentifier, M>> {
-  const MyModelQueryFields([this.root]);
+  const MyModelQueryFields([this._root]);
 
-  final QueryField<ModelIdentifier, M, MyModel>? root;
+  final QueryField<ModelIdentifier, M, MyModel>? _root;
 
   /// Query field for the [MyModel.createdAt] field.
-  QueryField<ModelIdentifier, M, TemporalDateTime?> get $createdAt =>
-      NestedQueryField<ModelIdentifier, M, String, MyModel, TemporalDateTime?>(
-          const QueryField<String, MyModel, TemporalDateTime?>(
-              fieldName: 'createdAt'));
+  QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
+      NestedQueryField<ModelIdentifier, M, String, MyModel, TemporalDateTime>(
+        const QueryField<String, MyModel, TemporalDateTime>(
+            fieldName: 'createdAt'),
+        root: _root,
+      );
 
   /// Query field for the [MyModel.updatedAt] field.
-  QueryField<ModelIdentifier, M, TemporalDateTime?> get $updatedAt =>
-      NestedQueryField<ModelIdentifier, M, String, MyModel, TemporalDateTime?>(
-          const QueryField<String, MyModel, TemporalDateTime?>(
-              fieldName: 'updatedAt'));
+  QueryField<ModelIdentifier, M, TemporalDateTime> get $updatedAt =>
+      NestedQueryField<ModelIdentifier, M, String, MyModel, TemporalDateTime>(
+        const QueryField<String, MyModel, TemporalDateTime>(
+            fieldName: 'updatedAt'),
+        root: _root,
+      );
 
   /// Query field for the [MyModel.id] field.
   QueryField<ModelIdentifier, M, String> get $id =>
       NestedQueryField<ModelIdentifier, M, String, MyModel, String>(
-          const QueryField<String, MyModel, String>(fieldName: 'id'));
+        const QueryField<String, MyModel, String>(fieldName: 'id'),
+        root: _root,
+      );
 
-  /// Query field for the `modelIdentifier` field.
+  /// Query field for the [MyModel] model identifier.
   QueryField<ModelIdentifier, M, String> get $modelIdentifier =>
       NestedQueryField<ModelIdentifier, M, String, MyModel, String>(
-          const QueryField<String, MyModel, String>(
-              fieldName: 'modelIdentifier'));
+        const QueryField<String, MyModel, String>(fieldName: 'modelIdentifier'),
+        root: _root,
+      );
 }
 
 abstract class PartialMyModel extends PartialModel<String, MyModel>
@@ -195,8 +202,6 @@ abstract class MyModel extends PartialMyModel
   factory MyModel({
     ScalarNonModel? embeddedNonModel,
     required ScalarNonModel requiredEmbeddedNonModel,
-    TemporalDateTime? createdAt,
-    TemporalDateTime? updatedAt,
     String? id,
   }) = _MyModel;
 
@@ -215,10 +220,16 @@ abstract class MyModel extends PartialMyModel
         : ScalarNonModel.fromJson(
             (json['requiredEmbeddedNonModel'] as Map<String, Object?>));
     final createdAt = json['createdAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'MyModel',
+            'createdAt',
+          ))
         : TemporalDateTime.fromString((json['createdAt'] as String));
     final updatedAt = json['updatedAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'MyModel',
+            'updatedAt',
+          ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final id = json['id'] == null
         ? (throw ModelFieldError(
@@ -226,7 +237,7 @@ abstract class MyModel extends PartialMyModel
             'id',
           ))
         : (json['id'] as String);
-    return MyModel(
+    return _MyModel._(
       embeddedNonModel: embeddedNonModel,
       requiredEmbeddedNonModel: requiredEmbeddedNonModel,
       createdAt: createdAt,
@@ -245,25 +256,9 @@ abstract class MyModel extends PartialMyModel
   @override
   ScalarNonModel get requiredEmbeddedNonModel;
   @override
-  TemporalDateTime? get createdAt;
-
-  /// Query field for the [createdAt] field.
-  QueryField<String, MyModel, TemporalDateTime?> get $createdAt =>
-      _queryFields.$createdAt;
-
-  /// Query field for the [createdAt] field.
-  @Deprecated(r'Use $createdAt instead')
-  QueryField<String, MyModel, TemporalDateTime?> get CREATED_AT => $createdAt;
+  TemporalDateTime get createdAt;
   @override
-  TemporalDateTime? get updatedAt;
-
-  /// Query field for the [updatedAt] field.
-  QueryField<String, MyModel, TemporalDateTime?> get $updatedAt =>
-      _queryFields.$updatedAt;
-
-  /// Query field for the [updatedAt] field.
-  @Deprecated(r'Use $updatedAt instead')
-  QueryField<String, MyModel, TemporalDateTime?> get UPDATED_AT => $updatedAt;
+  TemporalDateTime get updatedAt;
   @override
   String get id;
 
@@ -287,11 +282,19 @@ class _MyModel extends MyModel {
   _MyModel({
     this.embeddedNonModel,
     required this.requiredEmbeddedNonModel,
-    this.createdAt,
-    this.updatedAt,
     String? id,
-  })  : id = id ?? uuid(),
+  })  : createdAt = TemporalDateTime.now(),
+        updatedAt = TemporalDateTime.now(),
+        id = id ?? uuid(),
         super._();
+
+  const _MyModel._({
+    this.embeddedNonModel,
+    required this.requiredEmbeddedNonModel,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.id,
+  }) : super._();
 
   @override
   final ScalarNonModel? embeddedNonModel;
@@ -300,10 +303,10 @@ class _MyModel extends MyModel {
   final ScalarNonModel requiredEmbeddedNonModel;
 
   @override
-  final TemporalDateTime? createdAt;
+  final TemporalDateTime createdAt;
 
   @override
-  final TemporalDateTime? updatedAt;
+  final TemporalDateTime updatedAt;
 
   @override
   final String id;
@@ -318,8 +321,8 @@ class _RemoteMyModel extends RemoteMyModel {
   const _RemoteMyModel({
     this.embeddedNonModel,
     required this.requiredEmbeddedNonModel,
-    this.createdAt,
-    this.updatedAt,
+    required this.createdAt,
+    required this.updatedAt,
     required this.id,
     required this.version,
     required this.deleted,
@@ -339,10 +342,16 @@ class _RemoteMyModel extends RemoteMyModel {
         : ScalarNonModel.fromJson(
             (json['requiredEmbeddedNonModel'] as Map<String, Object?>));
     final createdAt = json['createdAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'MyModel',
+            'createdAt',
+          ))
         : TemporalDateTime.fromString((json['createdAt'] as String));
     final updatedAt = json['updatedAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'MyModel',
+            'updatedAt',
+          ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final id = json['id'] == null
         ? (throw ModelFieldError(
@@ -387,10 +396,10 @@ class _RemoteMyModel extends RemoteMyModel {
   final ScalarNonModel requiredEmbeddedNonModel;
 
   @override
-  final TemporalDateTime? createdAt;
+  final TemporalDateTime createdAt;
 
   @override
-  final TemporalDateTime? updatedAt;
+  final TemporalDateTime updatedAt;
 
   @override
   final String id;

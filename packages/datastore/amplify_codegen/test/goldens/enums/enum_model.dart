@@ -45,44 +45,54 @@ class EnumModelType extends ModelType<String, EnumModel, PartialEnumModel> {
 
 class EnumModelQueryFields<ModelIdentifier extends Object,
     M extends Model<ModelIdentifier, M>> {
-  const EnumModelQueryFields([this.root]);
+  const EnumModelQueryFields([this._root]);
 
-  final QueryField<ModelIdentifier, M, EnumModel>? root;
+  final QueryField<ModelIdentifier, M, EnumModel>? _root;
 
   /// Query field for the [EnumModel.id] field.
   QueryField<ModelIdentifier, M, String> get $id =>
       NestedQueryField<ModelIdentifier, M, String, EnumModel, String>(
-          const QueryField<String, EnumModel, String>(fieldName: 'id'));
+        const QueryField<String, EnumModel, String>(fieldName: 'id'),
+        root: _root,
+      );
 
   /// Query field for the [EnumModel.enum_] field.
   QueryField<ModelIdentifier, M, MyEnum?> get $enum_ =>
       NestedQueryField<ModelIdentifier, M, String, EnumModel, MyEnum?>(
-          const QueryField<String, EnumModel, MyEnum?>(fieldName: 'enum'));
+        const QueryField<String, EnumModel, MyEnum?>(fieldName: 'enum'),
+        root: _root,
+      );
 
   /// Query field for the [EnumModel.requiredEnum] field.
-  QueryField<ModelIdentifier, M, MyEnum> get $requiredEnum => NestedQueryField<
-          ModelIdentifier, M, String, EnumModel, MyEnum>(
-      const QueryField<String, EnumModel, MyEnum>(fieldName: 'requiredEnum'));
+  QueryField<ModelIdentifier, M, MyEnum> get $requiredEnum =>
+      NestedQueryField<ModelIdentifier, M, String, EnumModel, MyEnum>(
+        const QueryField<String, EnumModel, MyEnum>(fieldName: 'requiredEnum'),
+        root: _root,
+      );
 
   /// Query field for the [EnumModel.createdAt] field.
-  QueryField<ModelIdentifier, M, TemporalDateTime?> get $createdAt =>
-      NestedQueryField<ModelIdentifier, M, String, EnumModel,
-              TemporalDateTime?>(
-          const QueryField<String, EnumModel, TemporalDateTime?>(
-              fieldName: 'createdAt'));
+  QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
+      NestedQueryField<ModelIdentifier, M, String, EnumModel, TemporalDateTime>(
+        const QueryField<String, EnumModel, TemporalDateTime>(
+            fieldName: 'createdAt'),
+        root: _root,
+      );
 
   /// Query field for the [EnumModel.updatedAt] field.
-  QueryField<ModelIdentifier, M, TemporalDateTime?> get $updatedAt =>
-      NestedQueryField<ModelIdentifier, M, String, EnumModel,
-              TemporalDateTime?>(
-          const QueryField<String, EnumModel, TemporalDateTime?>(
-              fieldName: 'updatedAt'));
+  QueryField<ModelIdentifier, M, TemporalDateTime> get $updatedAt =>
+      NestedQueryField<ModelIdentifier, M, String, EnumModel, TemporalDateTime>(
+        const QueryField<String, EnumModel, TemporalDateTime>(
+            fieldName: 'updatedAt'),
+        root: _root,
+      );
 
-  /// Query field for the `modelIdentifier` field.
+  /// Query field for the [EnumModel] model identifier.
   QueryField<ModelIdentifier, M, String> get $modelIdentifier =>
       NestedQueryField<ModelIdentifier, M, String, EnumModel, String>(
-          const QueryField<String, EnumModel, String>(
-              fieldName: 'modelIdentifier'));
+        const QueryField<String, EnumModel, String>(
+            fieldName: 'modelIdentifier'),
+        root: _root,
+      );
 }
 
 abstract class PartialEnumModel extends PartialModel<String, EnumModel>
@@ -205,8 +215,6 @@ abstract class EnumModel extends PartialEnumModel
     String? id,
     MyEnum? enum_,
     required MyEnum requiredEnum,
-    TemporalDateTime? createdAt,
-    TemporalDateTime? updatedAt,
   }) = _EnumModel;
 
   const EnumModel._() : super._();
@@ -227,12 +235,18 @@ abstract class EnumModel extends PartialEnumModel
           ))
         : MyEnum.fromJson((json['requiredEnum'] as String));
     final createdAt = json['createdAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'EnumModel',
+            'createdAt',
+          ))
         : TemporalDateTime.fromString((json['createdAt'] as String));
     final updatedAt = json['updatedAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'EnumModel',
+            'updatedAt',
+          ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    return EnumModel(
+    return _EnumModel._(
       id: id,
       enum_: enum_,
       requiredEnum: requiredEnum,
@@ -275,25 +289,9 @@ abstract class EnumModel extends PartialEnumModel
   @Deprecated(r'Use $requiredEnum instead')
   QueryField<String, EnumModel, MyEnum> get REQUIRED_ENUM => $requiredEnum;
   @override
-  TemporalDateTime? get createdAt;
-
-  /// Query field for the [createdAt] field.
-  QueryField<String, EnumModel, TemporalDateTime?> get $createdAt =>
-      _queryFields.$createdAt;
-
-  /// Query field for the [createdAt] field.
-  @Deprecated(r'Use $createdAt instead')
-  QueryField<String, EnumModel, TemporalDateTime?> get CREATED_AT => $createdAt;
+  TemporalDateTime get createdAt;
   @override
-  TemporalDateTime? get updatedAt;
-
-  /// Query field for the [updatedAt] field.
-  QueryField<String, EnumModel, TemporalDateTime?> get $updatedAt =>
-      _queryFields.$updatedAt;
-
-  /// Query field for the [updatedAt] field.
-  @Deprecated(r'Use $updatedAt instead')
-  QueryField<String, EnumModel, TemporalDateTime?> get UPDATED_AT => $updatedAt;
+  TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
   QueryField<String, EnumModel, String> get $modelIdentifier =>
@@ -310,10 +308,18 @@ class _EnumModel extends EnumModel {
     String? id,
     this.enum_,
     required this.requiredEnum,
-    this.createdAt,
-    this.updatedAt,
   })  : id = id ?? uuid(),
+        createdAt = TemporalDateTime.now(),
+        updatedAt = TemporalDateTime.now(),
         super._();
+
+  const _EnumModel._({
+    required this.id,
+    this.enum_,
+    required this.requiredEnum,
+    required this.createdAt,
+    required this.updatedAt,
+  }) : super._();
 
   @override
   final String id;
@@ -325,10 +331,10 @@ class _EnumModel extends EnumModel {
   final MyEnum requiredEnum;
 
   @override
-  final TemporalDateTime? createdAt;
+  final TemporalDateTime createdAt;
 
   @override
-  final TemporalDateTime? updatedAt;
+  final TemporalDateTime updatedAt;
 }
 
 abstract class RemoteEnumModel extends EnumModel
@@ -341,8 +347,8 @@ class _RemoteEnumModel extends RemoteEnumModel {
     required this.id,
     this.enum_,
     required this.requiredEnum,
-    this.createdAt,
-    this.updatedAt,
+    required this.createdAt,
+    required this.updatedAt,
     required this.version,
     required this.deleted,
     required this.lastChangedAt,
@@ -364,10 +370,16 @@ class _RemoteEnumModel extends RemoteEnumModel {
           ))
         : MyEnum.fromJson((json['requiredEnum'] as String));
     final createdAt = json['createdAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'EnumModel',
+            'createdAt',
+          ))
         : TemporalDateTime.fromString((json['createdAt'] as String));
     final updatedAt = json['updatedAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'EnumModel',
+            'updatedAt',
+          ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final version = json['version'] == null
         ? (throw ModelFieldError(
@@ -409,10 +421,10 @@ class _RemoteEnumModel extends RemoteEnumModel {
   final MyEnum requiredEnum;
 
   @override
-  final TemporalDateTime? createdAt;
+  final TemporalDateTime createdAt;
 
   @override
-  final TemporalDateTime? updatedAt;
+  final TemporalDateTime updatedAt;
 
   @override
   final int version;

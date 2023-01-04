@@ -74,42 +74,52 @@ class CpkModelType
 
 class CpkModelQueryFields<ModelIdentifier extends Object,
     M extends Model<ModelIdentifier, M>> {
-  const CpkModelQueryFields([this.root]);
+  const CpkModelQueryFields([this._root]);
 
-  final QueryField<ModelIdentifier, M, CpkModel>? root;
+  final QueryField<ModelIdentifier, M, CpkModel>? _root;
 
   /// Query field for the [CpkModel.firstName] field.
   QueryField<ModelIdentifier, M, String> get $firstName => NestedQueryField<
           ModelIdentifier, M, CpkModelIdentifier, CpkModel, String>(
-      const QueryField<CpkModelIdentifier, CpkModel, String>(
-          fieldName: 'firstName'));
+        const QueryField<CpkModelIdentifier, CpkModel, String>(
+            fieldName: 'firstName'),
+        root: _root,
+      );
 
   /// Query field for the [CpkModel.lastName] field.
   QueryField<ModelIdentifier, M, String> get $lastName => NestedQueryField<
           ModelIdentifier, M, CpkModelIdentifier, CpkModel, String>(
-      const QueryField<CpkModelIdentifier, CpkModel, String>(
-          fieldName: 'lastName'));
+        const QueryField<CpkModelIdentifier, CpkModel, String>(
+            fieldName: 'lastName'),
+        root: _root,
+      );
 
   /// Query field for the [CpkModel.createdAt] field.
-  QueryField<ModelIdentifier, M, TemporalDateTime?> get $createdAt =>
+  QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, CpkModelIdentifier, CpkModel,
-              TemporalDateTime?>(
-          const QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime?>(
-              fieldName: 'createdAt'));
+          TemporalDateTime>(
+        const QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime>(
+            fieldName: 'createdAt'),
+        root: _root,
+      );
 
   /// Query field for the [CpkModel.updatedAt] field.
-  QueryField<ModelIdentifier, M, TemporalDateTime?> get $updatedAt =>
+  QueryField<ModelIdentifier, M, TemporalDateTime> get $updatedAt =>
       NestedQueryField<ModelIdentifier, M, CpkModelIdentifier, CpkModel,
-              TemporalDateTime?>(
-          const QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime?>(
-              fieldName: 'updatedAt'));
+          TemporalDateTime>(
+        const QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime>(
+            fieldName: 'updatedAt'),
+        root: _root,
+      );
 
-  /// Query field for the `modelIdentifier` field.
+  /// Query field for the [CpkModel] model identifier.
   QueryField<ModelIdentifier, M, CpkModelIdentifier> get $modelIdentifier =>
       NestedQueryField<ModelIdentifier, M, CpkModelIdentifier, CpkModel,
-              CpkModelIdentifier>(
-          const QueryField<CpkModelIdentifier, CpkModel, CpkModelIdentifier>(
-              fieldName: 'modelIdentifier'));
+          CpkModelIdentifier>(
+        const QueryField<CpkModelIdentifier, CpkModel, CpkModelIdentifier>(
+            fieldName: 'modelIdentifier'),
+        root: _root,
+      );
 }
 
 abstract class PartialCpkModel
@@ -226,8 +236,6 @@ abstract class CpkModel extends PartialCpkModel
   factory CpkModel({
     required String firstName,
     required String lastName,
-    TemporalDateTime? createdAt,
-    TemporalDateTime? updatedAt,
   }) = _CpkModel;
 
   const CpkModel._() : super._();
@@ -246,12 +254,18 @@ abstract class CpkModel extends PartialCpkModel
           ))
         : (json['lastName'] as String);
     final createdAt = json['createdAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'CpkModel',
+            'createdAt',
+          ))
         : TemporalDateTime.fromString((json['createdAt'] as String));
     final updatedAt = json['updatedAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'CpkModel',
+            'updatedAt',
+          ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    return CpkModel(
+    return _CpkModel._(
       firstName: firstName,
       lastName: lastName,
       createdAt: createdAt,
@@ -285,27 +299,9 @@ abstract class CpkModel extends PartialCpkModel
   @Deprecated(r'Use $lastName instead')
   QueryField<CpkModelIdentifier, CpkModel, String> get LAST_NAME => $lastName;
   @override
-  TemporalDateTime? get createdAt;
-
-  /// Query field for the [createdAt] field.
-  QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime?> get $createdAt =>
-      _queryFields.$createdAt;
-
-  /// Query field for the [createdAt] field.
-  @Deprecated(r'Use $createdAt instead')
-  QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime?> get CREATED_AT =>
-      $createdAt;
+  TemporalDateTime get createdAt;
   @override
-  TemporalDateTime? get updatedAt;
-
-  /// Query field for the [updatedAt] field.
-  QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime?> get $updatedAt =>
-      _queryFields.$updatedAt;
-
-  /// Query field for the [updatedAt] field.
-  @Deprecated(r'Use $updatedAt instead')
-  QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime?> get UPDATED_AT =>
-      $updatedAt;
+  TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
   QueryField<CpkModelIdentifier, CpkModel, CpkModelIdentifier>
@@ -321,8 +317,15 @@ class _CpkModel extends CpkModel {
   _CpkModel({
     required this.firstName,
     required this.lastName,
-    this.createdAt,
-    this.updatedAt,
+  })  : createdAt = TemporalDateTime.now(),
+        updatedAt = TemporalDateTime.now(),
+        super._();
+
+  const _CpkModel._({
+    required this.firstName,
+    required this.lastName,
+    required this.createdAt,
+    required this.updatedAt,
   }) : super._();
 
   @override
@@ -332,10 +335,10 @@ class _CpkModel extends CpkModel {
   final String lastName;
 
   @override
-  final TemporalDateTime? createdAt;
+  final TemporalDateTime createdAt;
 
   @override
-  final TemporalDateTime? updatedAt;
+  final TemporalDateTime updatedAt;
 }
 
 abstract class RemoteCpkModel extends CpkModel
@@ -347,8 +350,8 @@ class _RemoteCpkModel extends RemoteCpkModel {
   const _RemoteCpkModel({
     required this.firstName,
     required this.lastName,
-    this.createdAt,
-    this.updatedAt,
+    required this.createdAt,
+    required this.updatedAt,
     required this.version,
     required this.deleted,
     required this.lastChangedAt,
@@ -368,10 +371,16 @@ class _RemoteCpkModel extends RemoteCpkModel {
           ))
         : (json['lastName'] as String);
     final createdAt = json['createdAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'CpkModel',
+            'createdAt',
+          ))
         : TemporalDateTime.fromString((json['createdAt'] as String));
     final updatedAt = json['updatedAt'] == null
-        ? null
+        ? (throw ModelFieldError(
+            'CpkModel',
+            'updatedAt',
+          ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final version = json['version'] == null
         ? (throw ModelFieldError(
@@ -409,10 +418,10 @@ class _RemoteCpkModel extends RemoteCpkModel {
   final String lastName;
 
   @override
-  final TemporalDateTime? createdAt;
+  final TemporalDateTime createdAt;
 
   @override
-  final TemporalDateTime? updatedAt;
+  final TemporalDateTime updatedAt;
 
   @override
   final int version;

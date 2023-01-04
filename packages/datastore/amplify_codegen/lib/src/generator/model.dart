@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:amplify_codegen/src/generator/context.dart';
 import 'package:amplify_codegen/src/generator/structure.dart';
 import 'package:amplify_codegen/src/generator/types.dart';
 import 'package:amplify_codegen/src/helpers/field.dart';
@@ -20,6 +21,7 @@ import 'package:amplify_codegen/src/helpers/types.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 import 'package:code_builder/code_builder.dart';
+import 'package:collection/collection.dart';
 import 'package:smithy_codegen/src/util/symbol_ext.dart';
 
 /// {@template amplify_codegen.model_generator}
@@ -35,35 +37,18 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
     required super.definition,
   });
 
-  /// The class name for the model.
-  late final String modelName = className;
-
-  /// The class name for the model type.
-  late final String modelTypeName = '${modelName}Type';
-
-  /// The reference for the model.
-  late final Reference modelType = refer(modelName);
-
-  /// The reference for the partial model.
-  late final Reference partialModelType = refer('Partial$modelName');
-
-  /// The reference for the remote model.
-  late final Reference remoteModelType = refer('Remote$modelName');
+  late final ModelNames _names = definition.names;
+  late final ModelReferences _references = definition.references;
 
   /// The reference for the model identifier.
-  late final Reference modelIdentifierType = () {
-    final primaryIndex = definition.modelIdentifier;
-    final fields = primaryIndex.fields
-        .map(
-          (name) => definition.fields[name]!,
-        )
-        .toList();
-    assert(fields.isNotEmpty, 'Not enough fields');
-    if (fields.length == 1) {
-      return fields.single.typeReference();
+  late final Class? modelIdentifierType = () {
+    if (!definition.hasModelIdentifier) {
+      return null;
     }
-    final modelIdentifierName = '${modelName}Identifier';
-    final cls = Class((c) {
+    final fields =
+        definition.modelIdentifier.fields.map(definition.fieldNamed).toList();
+    final modelIdentifierName = _names.modelIdentifier;
+    return Class((c) {
       c
         ..name = modelIdentifierName
         ..annotations.add(DartTypes.meta.immutable)
@@ -142,13 +127,12 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
         ),
       );
     });
-    builder.body.add(cls);
-    return refer(modelIdentifierName);
   }();
 
   @override
   Library generate() {
     builder.body.addAll([
+      if (modelIdentifierType != null) modelIdentifierType!,
       modelTypeImpl,
       _queryFieldsImpl,
       ...partialModelImpl,
@@ -163,26 +147,26 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
   Class get modelTypeImpl {
     return Class((c) {
       c
-        ..name = modelTypeName
+        ..name = _names.modelType
         ..extend = DartTypes.amplifyCore.modelType(
-          modelIdentifierType,
-          modelType,
-          partialModelType,
+          _references.modelIdentifier,
+          _references.model,
+          _references.partialModel,
         )
         ..constructors.add(Constructor((ctor) => ctor.constant = true));
 
       // The `fromJson` method.
       final partialModelBound = DartTypes.amplifyCore.partialModel(
-        modelIdentifierType,
-        modelType,
+        _references.modelIdentifier,
+        _references.model,
       );
       final modelBound = DartTypes.amplifyCore.model(
-        modelIdentifierType,
-        modelType,
+        _references.modelIdentifier,
+        _references.model,
       );
       final remoteModelBound = DartTypes.amplifyCore.remoteModel(
-        modelIdentifierType,
-        modelType,
+        _references.modelIdentifier,
+        _references.model,
       );
       c.methods.add(
         Method(
@@ -207,13 +191,13 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
             ..lambda = false
             ..body = Code.scope(
               (allocate) => '''
-if (T == ${allocate(modelType)} || T == ${allocate(modelBound)}<${modelBound.types.map(allocate).join(', ')}>) {
-  return ${allocate(modelType)}.fromJson(json) as T;
+if (T == ${allocate(_references.model)} || T == ${allocate(modelBound)}<${modelBound.types.map(allocate).join(', ')}>) {
+  return ${allocate(_references.model)}.fromJson(json) as T;
 }
-if (T == ${allocate(remoteModelType)} || T == ${allocate(remoteModelBound)}<${remoteModelBound.types.map(allocate).join(', ')}>) {
-  return _${allocate(remoteModelType)}.fromJson(json) as T;
+if (T == ${allocate(_references.remoteModel)} || T == ${allocate(remoteModelBound)}<${remoteModelBound.types.map(allocate).join(', ')}>) {
+  return ${allocate(_references.remoteModelImpl)}.fromJson(json) as T;
 }
-return _${allocate(partialModelType)}.fromJson(json) as T;
+return ${allocate(_references.partialModelImpl)}.fromJson(json) as T;
 ''',
             ),
         ),
@@ -242,13 +226,13 @@ return _${allocate(partialModelType)}.fromJson(json) as T;
     yield Class((c) {
       c
         ..abstract = true
-        ..name = partialModelType.symbol
+        ..name = _names.partialModel
         ..extend = DartTypes.amplifyCore.partialModel(
-          modelIdentifierType,
-          modelType,
+          _references.modelIdentifier,
+          _references.model,
         )
         ..mixins.add(
-          DartTypes.awsCommon.awsEquatable(partialModelType),
+          DartTypes.awsCommon.awsEquatable(_references.partialModel),
         )
         ..constructors.add(
           Constructor(
@@ -273,17 +257,20 @@ return _${allocate(partialModelType)}.fromJson(json) as T;
       }
 
       // `modelIdentifier` to satisfy `PartialModel`
-      final modelIdentifierFields = definition.modelIdentifier.fields;
+      final modelIdentifierFields = definition.modelIdentifier.fields
+          .map(definition.fieldNamed)
+          .map((field) => field.dartName)
+          .toList();
       c.methods.add(
         Method(
           (m) => m
             ..annotations.add(DartTypes.core.override)
-            ..returns = modelIdentifierType
+            ..returns = _references.modelIdentifier
             ..type = MethodType.getter
             ..name = 'modelIdentifier'
             ..body = (modelIdentifierFields.length == 1
                     ? refer(modelIdentifierFields.single)
-                    : modelIdentifierType.newInstance([], {
+                    : _references.modelIdentifier.newInstance([], {
                         for (final field in modelIdentifierFields)
                           field: refer(field),
                       }))
@@ -296,11 +283,11 @@ return _${allocate(partialModelType)}.fromJson(json) as T;
         Method(
           (m) => m
             ..annotations.add(DartTypes.core.override)
-            ..returns = refer(modelTypeName)
+            ..returns = _references.modelType
             ..type = MethodType.getter
             ..name = 'modelType'
             ..lambda = true
-            ..body = modelType.property('classType').code,
+            ..body = _references.model.property('classType').code,
         ),
       );
 
@@ -349,7 +336,7 @@ return _${allocate(partialModelType)}.fromJson(json) as T;
             ..returns = DartTypes.core.string
             ..type = MethodType.getter
             ..name = 'runtimeTypeName'
-            ..body = literalString(modelName).code,
+            ..body = literalString(_names.model).code,
         ),
       );
 
@@ -371,8 +358,8 @@ return _${allocate(partialModelType)}.fromJson(json) as T;
               Parameter(
                 (p) => p
                   ..type = DartTypes.amplifyCore.queryField(
-                    modelIdentifierType,
-                    modelType,
+                    _references.modelIdentifier,
+                    _references.model,
                     refer('T'),
                   )
                   ..name = 'field',
@@ -415,11 +402,10 @@ return value as T;
     });
 
     // Create the private implementation
-    final privateClassName = '_${partialModelType.symbol}';
     yield Class((c) {
       c
-        ..name = privateClassName
-        ..extend = partialModelType;
+        ..name = _names.partialModelImpl
+        ..extend = _references.partialModel;
 
       final parameters = <Parameter>[];
       final allFields = definition.schemaFields(ModelHierarchyType.partial);
@@ -468,9 +454,11 @@ return value as T;
               ),
             )
             ..body = fromJson(
-              modelType: refer(privateClassName),
-              fields:
-                  definition.schemaFields(ModelHierarchyType.partial).values,
+              modelType: _references.partialModelImpl,
+              fields: definition
+                  .schemaFields(ModelHierarchyType.partial)
+                  .values
+                  .toList(),
               hierarchyType: ModelHierarchyType.partial,
             ),
         ),
@@ -488,12 +476,12 @@ return value as T;
     yield Class((c) {
       c
         ..abstract = true
-        ..name = modelName
-        ..extend = partialModelType
+        ..name = _names.model
+        ..extend = _references.partialModel
         ..implements.add(
           DartTypes.amplifyCore.model(
-            modelIdentifierType,
-            modelType,
+            _references.modelIdentifier,
+            _references.model,
           ),
         );
 
@@ -503,24 +491,24 @@ return value as T;
           (f) => f
             ..static = true
             ..modifier = FieldModifier.constant
-            ..type = refer(modelTypeName)
+            ..type = _references.modelType
             ..name = 'classType'
-            ..assignment = refer(modelTypeName).constInstance([]).code,
+            ..assignment = _references.modelType.constInstance([]).code,
         ),
       );
 
       // Add `_queryFields` for use below.
-      final queryFieldsType = refer('${modelName}QueryFields');
       c.fields.add(
         Field(
           (f) => f
             ..static = true
             ..modifier = FieldModifier.constant
-            ..type = queryFieldsType.typeRef.rebuild(
-              (t) => t.types.addAll([modelIdentifierType, modelType]),
+            ..type = _references.queryFields(
+              _references.modelIdentifier,
+              _references.model,
             )
             ..name = '_queryFields'
-            ..assignment = queryFieldsType.constInstance([]).code,
+            ..assignment = _references.queryFields().constInstance([]).code,
         ),
       );
 
@@ -535,11 +523,7 @@ return value as T;
               ..docs.add(
                 '/// Query field for the [$fieldName] field.',
               )
-              ..returns = DartTypes.amplifyCore.queryField(
-                modelIdentifierType,
-                modelType,
-                fieldType,
-              )
+              ..returns = fieldType
               ..type = MethodType.getter
               ..name = newFormName
               ..lambda = true
@@ -557,11 +541,7 @@ return value as T;
               ..docs.add(
                 '/// Query field for the [$fieldName] field.',
               )
-              ..returns = DartTypes.amplifyCore.queryField(
-                modelIdentifierType,
-                modelType,
-                fieldType,
-              )
+              ..returns = fieldType
               ..type = MethodType.getter
               ..name = oldFormName
               ..lambda = true
@@ -584,27 +564,61 @@ return value as T;
           ),
         );
 
+        // Read-only fields are not passable to the main constructor.
+        if (field.isReadOnly) {
+          continue;
+        }
+
         // Allow nullable `ID` parameters to the main constructor since these
         // fields can be auto-generated.
         final isIdField = fieldType is mipr.ScalarType &&
             fieldType.value == mipr.AppSyncScalar.id;
+        final isPrimaryKey =
+            definition.modelIdentifier.fields.contains(field.name);
+        final factoryTypeRef =
+            field.factoryType(ModelHierarchyType.model).typeRef.rebuild(
+                  (t) =>
+                      t.isNullable = t.isNullable! || isIdField && isPrimaryKey,
+                );
         parameters.add(
           Parameter(
             (p) => p
               ..named = true
-              ..required = fieldType.isRequired && !isIdField
-              ..type = fieldTypeRef.typeRef
-                  .rebuild((t) => t.isNullable = t.isNullable! || isIdField)
+              ..required = fieldType.isRequired && !(isIdField && isPrimaryKey)
+              ..type = factoryTypeRef
               ..name = field.dartName,
           ),
         );
         if (field.hasQueryField) {
+          Reference fieldTypeRef;
+          final queryFieldType =
+              fieldType is mipr.ListType ? fieldType.elementType : fieldType;
+          if (queryFieldType is mipr.ModelType) {
+            final model = context.modelNamed(queryFieldType.name);
+            fieldTypeRef = model.references.queryFields(
+              _references.modelIdentifier,
+              _references.model,
+            );
+          } else {
+            fieldTypeRef = DartTypes.amplifyCore.queryField(
+              _references.modelIdentifier,
+              _references.model,
+              queryFieldType.reference,
+            );
+          }
           addQueryField(field.dartName, fieldTypeRef);
         }
       }
 
       // Add a query field for the model identifier
-      addQueryField('modelIdentifier', modelIdentifierType);
+      addQueryField(
+        'modelIdentifier',
+        DartTypes.amplifyCore.queryField(
+          _references.modelIdentifier,
+          _references.model,
+          _references.modelIdentifier,
+        ),
+      );
 
       // The public factory constructor which redirects to the private impl.
       c.constructors.add(
@@ -612,7 +626,7 @@ return value as T;
           (ctor) => ctor
             ..factory = true
             ..optionalParameters.addAll(parameters)
-            ..redirect = refer('_$modelName'),
+            ..redirect = _references.modelImpl,
         ),
       );
 
@@ -640,8 +654,11 @@ return value as T;
               ),
             )
             ..body = fromJson(
-              modelType: modelType,
-              fields: definition.schemaFields(ModelHierarchyType.model).values,
+              modelType: _references.modelImpl.property('_'),
+              fields: definition
+                  .schemaFields(ModelHierarchyType.model)
+                  .values
+                  .toList(),
               hierarchyType: ModelHierarchyType.model,
             ),
         ),
@@ -651,10 +668,11 @@ return value as T;
     // Create the private implementation
     yield Class((c) {
       c
-        ..name = '_$modelName'
-        ..extend = modelType;
+        ..name = _names.modelImpl
+        ..extend = _references.model;
 
-      final parameters = <Parameter>[];
+      final privateParameters = <Parameter>[];
+      final factoryParameters = <Parameter>[];
       final initializers = <Code>[];
       for (final field in definition.fields.values) {
         final fieldType = field.type;
@@ -667,40 +685,93 @@ return value as T;
               ..name = field.dartName,
           ),
         );
-
-        // Allow nullable `ID` parameters to the main constructor since these
-        // fields can be auto-generated.
-        final isIdField = fieldType is mipr.ScalarType &&
-            fieldType.value == mipr.AppSyncScalar.id;
-        if (isIdField) {
-          initializers.add(
-            Code.scope(
-              (allocate) => '${field.dartName} = ${field.dartName} ?? '
-                  '${allocate(DartTypes.awsCommon.uuid)}()',
-            ),
-          );
-        }
-        parameters.add(
+        privateParameters.add(
           Parameter(
             (p) => p
               ..named = true
-              ..required = fieldType.isRequired && !isIdField
-              ..type = isIdField ? fieldType.reference.nullable : null
-              ..toThis = !isIdField
+              ..required = fieldType.isRequired
+              ..toThis = true
               ..name = field.dartName,
           ),
         );
+
+        final isIdField = fieldType is mipr.ScalarType &&
+            fieldType.value == mipr.AppSyncScalar.id;
+        final isPrimaryKey =
+            definition.modelIdentifier.fields.contains(field.name);
+        final factoryTypeRef =
+            field.factoryType(ModelHierarchyType.model).typeRef.rebuild(
+                  (t) =>
+                      t.isNullable = t.isNullable! || isIdField && isPrimaryKey,
+                );
+        var factoryInitializer = field.factoryInitializer(
+          isPrimaryKey: isPrimaryKey,
+        );
+        // If it's a target of a belongsTo field, initialize the field using the
+        // belongsTo model passed to the constructor. This allows us to not
+        // require both the belongsTo model and its identifier be passed to the
+        // constructor.
+        final belongsToField = definition.fields.values.singleWhereOrNull((f) {
+          final association = f.association;
+          return association != null &&
+              association.associationType == ModelAssociationType.belongsTo &&
+              association.targetNames!.contains(field.name);
+        });
+        if (belongsToField != null && field.isReadOnly) {
+          final targetNameIndex =
+              belongsToField.association!.targetNames!.indexOf(field.name);
+          final relatedProperty = context
+              .modelNamed(belongsToField.association!.associatedType)
+              .modelIdentifier
+              .fields[targetNameIndex];
+          factoryInitializer = refer(field.dartName)
+              .assign(
+                refer(belongsToField.dartName).nullableProperty(
+                  relatedProperty,
+                  !belongsToField.type.isRequired,
+                ),
+              )
+              .code;
+        }
+        final hasFactoryInitializer = factoryInitializer != null;
+        if (hasFactoryInitializer) {
+          initializers.add(factoryInitializer);
+        }
+        if (!field.isReadOnly) {
+          factoryParameters.add(
+            Parameter(
+              (p) => p
+                ..named = true
+                ..required =
+                    fieldType.isRequired && !(isIdField && isPrimaryKey)
+                ..type = hasFactoryInitializer ? factoryTypeRef : null
+                ..toThis = !hasFactoryInitializer
+                ..name = field.dartName,
+            ),
+          );
+        }
       }
 
       // The unnamed constructor.
       c.constructors.add(
         Constructor(
           (ctor) => ctor
-            ..optionalParameters.addAll(parameters)
+            ..optionalParameters.addAll(factoryParameters)
             ..initializers.addAll([
               ...initializers,
               const Code('super._()'),
             ]),
+        ),
+      );
+
+      // The private constructor
+      c.constructors.add(
+        Constructor(
+          (ctor) => ctor
+            ..constant = true
+            ..name = '_'
+            ..optionalParameters.addAll(privateParameters)
+            ..initializers.add(const Code('super._()')),
         ),
       );
     });
@@ -715,12 +786,12 @@ return value as T;
     yield Class((c) {
       c
         ..abstract = true
-        ..name = 'Remote$modelName'
-        ..extend = modelType
+        ..name = _names.remoteModel
+        ..extend = _references.model
         ..implements.add(
           DartTypes.amplifyCore.remoteModel(
-            modelIdentifierType,
-            modelType,
+            _references.modelIdentifier,
+            _references.model,
           ),
         )
         ..constructors.add(
@@ -734,11 +805,10 @@ return value as T;
     });
 
     // Create the private implementation
-    final privateClassName = '_Remote$modelName';
     yield Class((c) {
       c
-        ..name = privateClassName
-        ..extend = remoteModelType;
+        ..name = _names.remoteModelImpl
+        ..extend = _references.remoteModel;
 
       final parameters = <Parameter>[];
       final allFields = definition.allFields(ModelHierarchyType.remote);
@@ -787,8 +857,11 @@ return value as T;
               ),
             )
             ..body = fromJson(
-              modelType: refer(privateClassName),
-              fields: definition.allFields(ModelHierarchyType.remote).values,
+              modelType: _references.remoteModelImpl,
+              fields: definition
+                  .allFields(ModelHierarchyType.remote)
+                  .values
+                  .toList(),
               hierarchyType: ModelHierarchyType.remote,
             ),
         ),
@@ -802,7 +875,7 @@ return value as T;
       final modelIdentifierTypeParameter = refer('ModelIdentifier');
       final modelTypeParameter = refer('M');
       c
-        ..name = '${modelName}QueryFields'
+        ..name = _names.queryFields
         ..types.addAll([
           TypeReference(
             (t) => t
@@ -828,7 +901,7 @@ return value as T;
               Parameter(
                 (p) => p
                   ..toThis = true
-                  ..name = 'root',
+                  ..name = '_root',
               ),
             ),
         ),
@@ -843,10 +916,10 @@ return value as T;
                 .queryField(
                   modelIdentifierTypeParameter,
                   modelTypeParameter,
-                  modelType,
+                  _references.model,
                 )
                 .nullable
-            ..name = 'root',
+            ..name = '_root',
         ),
       );
 
@@ -854,11 +927,12 @@ return value as T;
         String schemaName,
         String dartName,
         Reference fieldType, {
+        Reference Function([Reference?, Reference?])? relatedQueryFields,
         String? docReference,
       }) {
         final queryFieldType = DartTypes.amplifyCore.queryField(
-          modelIdentifierType,
-          modelType,
+          _references.modelIdentifier,
+          _references.model,
           fieldType,
         );
         final queryField = queryFieldType.constInstance(
@@ -868,42 +942,67 @@ return value as T;
         final nestedQueryFieldType = DartTypes.amplifyCore.nestedQueryField(
           modelIdentifierTypeParameter,
           modelTypeParameter,
-          modelIdentifierType,
-          modelType,
+          _references.modelIdentifier,
+          _references.model,
           fieldType,
         );
 
         final queryFieldName = '\$$dartName';
-        docReference ??= '[$modelName.$dartName]';
+        docReference ??= '[${_names.model}.$dartName] field';
+
+        var queryFieldsInstance = nestedQueryFieldType.newInstance(
+          [queryField],
+          {'root': refer('_root')},
+        );
+        if (relatedQueryFields != null) {
+          queryFieldsInstance = relatedQueryFields().newInstance([
+            queryFieldsInstance,
+          ]);
+        }
         c.methods.add(
           Method(
             (m) => m
               ..docs.add(
-                '/// Query field for the $docReference field.',
+                '/// Query field for the $docReference.',
               )
-              ..returns = DartTypes.amplifyCore.queryField(
-                modelIdentifierTypeParameter,
-                modelTypeParameter,
-                fieldType,
-              )
+              ..returns = relatedQueryFields != null
+                  ? relatedQueryFields(
+                      modelIdentifierTypeParameter,
+                      modelTypeParameter,
+                    )
+                  : DartTypes.amplifyCore.queryField(
+                      modelIdentifierTypeParameter,
+                      modelTypeParameter,
+                      fieldType,
+                    )
               ..type = MethodType.getter
               ..name = queryFieldName
               ..lambda = true
-              ..body = nestedQueryFieldType.newInstance(
-                [queryField],
-                {
-                  // TODO(dnys1): Add nested model support
-                  // 'root': nested model fields
-                },
-              ).code,
+              ..body = queryFieldsInstance.code,
           ),
         );
       }
 
       for (final field in definition.fields.values) {
-        final fieldType = field.typeReference();
         if (field.hasQueryField) {
-          addQueryField(field.name, field.dartName, fieldType);
+          final fieldType = field.type;
+          final queryFieldType =
+              fieldType is mipr.ListType ? fieldType.elementType : fieldType;
+          Reference fieldTypeRef;
+          Reference Function([Reference?, Reference?])? relatedQueryFields;
+          if (queryFieldType is mipr.ModelType) {
+            final model = context.modelNamed(queryFieldType.name);
+            fieldTypeRef = model.references.model;
+            relatedQueryFields = model.references.queryFields;
+          } else {
+            fieldTypeRef = queryFieldType.reference;
+          }
+          addQueryField(
+            field.name,
+            field.dartName,
+            fieldTypeRef,
+            relatedQueryFields: relatedQueryFields,
+          );
         }
       }
 
@@ -911,8 +1010,8 @@ return value as T;
       addQueryField(
         'modelIdentifier',
         'modelIdentifier',
-        modelIdentifierType,
-        docReference: '`modelIdentifier`',
+        _references.modelIdentifier,
+        docReference: '[${_names.model}] model identifier',
       );
     });
   }

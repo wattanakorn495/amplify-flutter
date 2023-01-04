@@ -37,15 +37,30 @@ abstract class StructureGenerator<Definition extends StructureTypeDefinition>
   /// list of [fields].
   @protected
   Code fromJson({
-    required Reference modelType,
-    required Iterable<ModelField> fields,
+    required Expression modelType,
+    required List<ModelField> fields,
     ModelHierarchyType? hierarchyType,
   }) {
     return Block((b) {
-      for (final field in fields) {
+      final sortedFields = List.of(fields)
+        ..sort((a, b) {
+          if (a.association != null && b.association != null) {
+            return 0;
+          }
+          if (a.association != null) {
+            return 1;
+          }
+          if (b.association != null) {
+            return -1;
+          }
+          return fields.indexOf(a).compareTo(fields.indexOf(b));
+        });
+
+      for (final field in sortedFields) {
         final json = refer('json').index(literalString(field.name));
         final decodedField = field.fromJsonExp(
           json,
+          modelName: definition.name,
           hierarchyType: hierarchyType,
           orElse: () => CodeExpression(
             // Wrap the `throw` expression in parentheses so that it can be
@@ -68,7 +83,7 @@ abstract class StructureGenerator<Definition extends StructureTypeDefinition>
         );
       }
       b.addExpression(
-        modelType.newInstance([], {
+        modelType.call([], {
           for (final field in fields) field.dartName: refer(field.dartName),
         }).returned,
       );
