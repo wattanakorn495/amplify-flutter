@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:amplify_codegen/src/helpers/enum.dart';
+import 'package:amplify_codegen/src/helpers/field.dart';
+import 'package:amplify_codegen/src/helpers/model.dart';
+import 'package:amplify_codegen/src/helpers/types.dart';
 import 'package:amplify_codegen/src/parser/connection_info.dart';
-import 'package:amplify_codegen/src/parser/field.dart';
-import 'package:amplify_codegen/src/parser/model.dart';
-import 'package:amplify_codegen/src/parser/types.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:amplify_core/src/types/models/mipr.dart';
 import 'package:built_collection/built_collection.dart';
@@ -46,7 +47,12 @@ class _SchemaParser {
     const rootTypes = ['Query', 'Mutation', 'Subscription'];
     final doc = parseString(schema);
 
-    modelNodes = Map.fromEntries(
+    enumNodes = Map.fromEntries(
+      doc.definitions
+          .whereType<EnumTypeDefinitionNode>()
+          .map((node) => MapEntry(node.name.value, node)),
+    );
+    objectNodes = Map.fromEntries(
       doc.definitions
           .where(
             (definition) =>
@@ -61,16 +67,28 @@ class _SchemaParser {
 
   final String schema;
   final SchemaDefinitionBuilder builder = SchemaDefinitionBuilder();
-  late final Map<String, ObjectTypeDefinitionNode> modelNodes;
+
+  late final Map<String, EnumTypeDefinitionNode> enumNodes;
+  late final Map<String, ObjectTypeDefinitionNode> objectNodes;
 
   SchemaDefinition parse() {
+    // Compile enum types
+    for (final enumNode in enumNodes.values) {
+      final name = enumNode.name.value;
+      builder.typeDefinitions[name] = EnumTypeDefinition.build((b) {
+        b
+          ..name = name
+          ..values.addAll(
+            enumNode.values.map((v) => v.schemaName),
+          );
+      });
+    }
+
     // First pass to construct model graph with metadata
-    for (final modelNode in modelNodes.values) {
+    for (final modelNode in objectNodes.values) {
       final modelName = modelNode.name.value;
       final modelFields = Map<String, ModelField>.fromIterable(
-        modelNode.modelFields(
-          models: modelNodes,
-        ),
+        modelNode.modelFields(models: objectNodes, enums: enumNodes),
         key: (field) => (field as ModelField).name,
       );
       if (modelNode.isNonModel) {
@@ -107,7 +125,7 @@ class _SchemaParser {
     }
 
     // Second pass to establish relationships.
-    for (final modelNode in modelNodes.values) {
+    for (final modelNode in objectNodes.values) {
       if (modelNode.isNonModel) {
         continue;
       }
@@ -133,7 +151,7 @@ class _SchemaParser {
             final relatedModelName = fieldNode.type.typeName;
             final relatedModel = builder.typeDefinitions[relatedModelName]!
                 as ModelTypeDefinition;
-            final relatedModelNode = modelNodes[relatedModelName]!;
+            final relatedModelNode = objectNodes[relatedModelName]!;
 
             final relationship = ModelAssociationType.valueOf(
               relationshipDirective.name.value,
@@ -446,7 +464,7 @@ class _SchemaParser {
       ..associationType = ModelAssociationType.hasMany
       ..associatedType = relatedModel.name;
 
-    final relatedModelNode = modelNodes[relatedModel.name]!;
+    final relatedModelNode = objectNodes[relatedModel.name]!;
 
     // Look for `fields` argument on the `@hasMany` directive.
     final fields = fieldNode.connectionFields;
