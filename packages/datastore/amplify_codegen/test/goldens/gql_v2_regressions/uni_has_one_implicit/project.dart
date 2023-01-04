@@ -137,9 +137,9 @@ abstract class PartialProject extends PartialModel<String, Project>
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
         'projectTeamId': projectTeamId,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Project';
@@ -214,6 +214,7 @@ class _PartialProject extends PartialProject {
 }
 
 abstract class Project extends PartialProject
+    with LegacyModelFields<String, Project>
     implements Model<String, Project> {
   factory Project({
     String? id,
@@ -515,24 +516,20 @@ class _RemoteProject extends RemoteProject {
     final projectTeamId = json['projectTeamId'] == null
         ? null
         : (json['projectTeamId'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Project',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Project',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Project',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final team = json['team'] == null
         ? projectTeamId == null
             ? null

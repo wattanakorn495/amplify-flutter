@@ -123,9 +123,9 @@ abstract class PartialModelWithExplicitId
         'title': title,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'ModelWithExplicitId';
@@ -175,6 +175,7 @@ class _PartialModelWithExplicitId extends PartialModelWithExplicitId {
 }
 
 abstract class ModelWithExplicitId extends PartialModelWithExplicitId
+    with LegacyModelFields<String, ModelWithExplicitId>
     implements Model<String, ModelWithExplicitId> {
   factory ModelWithExplicitId({
     String? id,
@@ -409,24 +410,20 @@ class _RemoteModelWithExplicitId extends RemoteModelWithExplicitId {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitId',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitId',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'ModelWithExplicitId',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteModelWithExplicitId(
       id: id,
       title: title,

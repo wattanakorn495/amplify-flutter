@@ -128,9 +128,9 @@ abstract class PartialBlog7V2 extends PartialModel<String, Blog7V2>
         'posts': posts?.toJson(),
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Blog7V2';
@@ -200,6 +200,7 @@ class _PartialBlog7V2 extends PartialBlog7V2 {
 }
 
 abstract class Blog7V2 extends PartialBlog7V2
+    with LegacyModelFields<String, Blog7V2>
     implements Model<String, Blog7V2> {
   factory Blog7V2({
     String? id,
@@ -480,24 +481,20 @@ class _RemoteBlog7V2 extends RemoteBlog7V2 {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Blog7V2',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Blog7V2',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Blog7V2',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final posts = json['posts'] == null
         ? null
         : AsyncModelCollection<String, Post7V2, PartialPost7V2,

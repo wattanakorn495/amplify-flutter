@@ -161,9 +161,9 @@ abstract class PartialModelWithPrimaryKey
         'categoryID': categoryId,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'ModelWithPrimaryKey';
@@ -184,7 +184,7 @@ class _PartialModelWithPrimaryKey extends PartialModelWithPrimaryKey {
     final productId = json['productID'] == null
         ? (throw ModelFieldError(
             'ModelWithPrimaryKey',
-            'productId',
+            'productID',
           ))
         : (json['productID'] as String);
     final name = json['name'] == null ? null : (json['name'] as String);
@@ -234,9 +234,10 @@ class _PartialModelWithPrimaryKey extends PartialModelWithPrimaryKey {
 }
 
 abstract class ModelWithPrimaryKey extends PartialModelWithPrimaryKey
+    with LegacyModelFields<String, ModelWithPrimaryKey>
     implements Model<String, ModelWithPrimaryKey> {
   factory ModelWithPrimaryKey({
-    String? productId,
+    required String productId,
     required String name,
     String? content,
     required String albumId,
@@ -249,7 +250,7 @@ abstract class ModelWithPrimaryKey extends PartialModelWithPrimaryKey
     final productId = json['productID'] == null
         ? (throw ModelFieldError(
             'ModelWithPrimaryKey',
-            'productId',
+            'productID',
           ))
         : (json['productID'] as String);
     final name = json['name'] == null
@@ -263,13 +264,13 @@ abstract class ModelWithPrimaryKey extends PartialModelWithPrimaryKey
     final albumId = json['albumID'] == null
         ? (throw ModelFieldError(
             'ModelWithPrimaryKey',
-            'albumId',
+            'albumID',
           ))
         : (json['albumID'] as String);
     final categoryId = json['categoryID'] == null
         ? (throw ModelFieldError(
             'ModelWithPrimaryKey',
-            'categoryId',
+            'categoryID',
           ))
         : (json['categoryID'] as String);
     final createdAt = json['createdAt'] == null
@@ -499,13 +500,12 @@ abstract class ModelWithPrimaryKey extends PartialModelWithPrimaryKey
 
 class _ModelWithPrimaryKey extends ModelWithPrimaryKey {
   _ModelWithPrimaryKey({
-    String? productId,
+    required this.productId,
     required this.name,
     this.content,
     required this.albumId,
     required this.categoryId,
-  })  : productId = productId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         super._();
 
@@ -564,7 +564,7 @@ class _RemoteModelWithPrimaryKey extends RemoteModelWithPrimaryKey {
     final productId = json['productID'] == null
         ? (throw ModelFieldError(
             'ModelWithPrimaryKey',
-            'productId',
+            'productID',
           ))
         : (json['productID'] as String);
     final name = json['name'] == null
@@ -578,13 +578,13 @@ class _RemoteModelWithPrimaryKey extends RemoteModelWithPrimaryKey {
     final albumId = json['albumID'] == null
         ? (throw ModelFieldError(
             'ModelWithPrimaryKey',
-            'albumId',
+            'albumID',
           ))
         : (json['albumID'] as String);
     final categoryId = json['categoryID'] == null
         ? (throw ModelFieldError(
             'ModelWithPrimaryKey',
-            'categoryId',
+            'categoryID',
           ))
         : (json['categoryID'] as String);
     final createdAt = json['createdAt'] == null
@@ -599,24 +599,20 @@ class _RemoteModelWithPrimaryKey extends RemoteModelWithPrimaryKey {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'ModelWithPrimaryKey',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'ModelWithPrimaryKey',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'ModelWithPrimaryKey',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteModelWithPrimaryKey(
       productId: productId,
       name: name,

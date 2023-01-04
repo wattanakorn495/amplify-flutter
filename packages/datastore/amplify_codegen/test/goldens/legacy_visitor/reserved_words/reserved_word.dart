@@ -119,9 +119,9 @@ abstract class PartialReservedWord extends PartialModel<String, ReservedWord>
         'class': class_,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'ReservedWord';
@@ -171,6 +171,7 @@ class _PartialReservedWord extends PartialReservedWord {
 }
 
 abstract class ReservedWord extends PartialReservedWord
+    with LegacyModelFields<String, ReservedWord>
     implements Model<String, ReservedWord> {
   factory ReservedWord({
     String? id,
@@ -189,7 +190,7 @@ abstract class ReservedWord extends PartialReservedWord
     final class_ = json['class'] == null
         ? (throw ModelFieldError(
             'ReservedWord',
-            'class_',
+            'class',
           ))
         : (json['class'] as String);
     final createdAt = json['createdAt'] == null
@@ -387,7 +388,7 @@ class _RemoteReservedWord extends RemoteReservedWord {
     final class_ = json['class'] == null
         ? (throw ModelFieldError(
             'ReservedWord',
-            'class_',
+            'class',
           ))
         : (json['class'] as String);
     final createdAt = json['createdAt'] == null
@@ -402,24 +403,20 @@ class _RemoteReservedWord extends RemoteReservedWord {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'ReservedWord',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'ReservedWord',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'ReservedWord',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteReservedWord(
       id: id,
       class_: class_,

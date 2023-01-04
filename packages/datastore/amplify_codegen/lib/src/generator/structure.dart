@@ -28,7 +28,7 @@ import 'package:meta/meta.dart';
 abstract class StructureGenerator<Definition extends StructureTypeDefinition>
     extends LibraryGenerator<ObjectTypeDefinitionNode, Definition> {
   /// {@macro amplify_codegen.structure_generator}
-  StructureGenerator({required super.node, required super.definition});
+  StructureGenerator(super.definition);
 
   /// The class name for the generated type.
   late final String className = schemaName.pascalCase;
@@ -70,7 +70,7 @@ abstract class StructureGenerator<Definition extends StructureTypeDefinition>
               DartTypes.amplifyCore.modelFieldError
                   .newInstance([
                     literalString(className),
-                    literalString(field.dartName),
+                    literalString(field.name),
                   ])
                   .thrown
                   .code,

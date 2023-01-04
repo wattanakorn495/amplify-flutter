@@ -129,9 +129,9 @@ abstract class PartialPowerSource extends PartialModel<String, PowerSource>
         'volts': volts,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'PowerSource';
@@ -150,7 +150,7 @@ class _PartialPowerSource extends PartialPowerSource {
     final sourceId = json['sourceID'] == null
         ? (throw ModelFieldError(
             'PowerSource',
-            'sourceId',
+            'sourceID',
           ))
         : (json['sourceID'] as String);
     final amps = json['amps'] == null ? null : (json['amps'] as double);
@@ -187,9 +187,10 @@ class _PartialPowerSource extends PartialPowerSource {
 }
 
 abstract class PowerSource extends PartialPowerSource
+    with LegacyModelFields<String, PowerSource>
     implements Model<String, PowerSource> {
   factory PowerSource({
-    String? sourceId,
+    required String sourceId,
     required double amps,
     required double volts,
   }) = _PowerSource;
@@ -200,7 +201,7 @@ abstract class PowerSource extends PartialPowerSource
     final sourceId = json['sourceID'] == null
         ? (throw ModelFieldError(
             'PowerSource',
-            'sourceId',
+            'sourceID',
           ))
         : (json['sourceID'] as String);
     final amps = json['amps'] == null
@@ -379,11 +380,10 @@ abstract class PowerSource extends PartialPowerSource
 
 class _PowerSource extends PowerSource {
   _PowerSource({
-    String? sourceId,
+    required this.sourceId,
     required this.amps,
     required this.volts,
-  })  : sourceId = sourceId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         super._();
 
@@ -432,7 +432,7 @@ class _RemotePowerSource extends RemotePowerSource {
     final sourceId = json['sourceID'] == null
         ? (throw ModelFieldError(
             'PowerSource',
-            'sourceId',
+            'sourceID',
           ))
         : (json['sourceID'] as String);
     final amps = json['amps'] == null
@@ -459,24 +459,20 @@ class _RemotePowerSource extends RemotePowerSource {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'PowerSource',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'PowerSource',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'PowerSource',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemotePowerSource(
       sourceId: sourceId,
       amps: amps,

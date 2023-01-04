@@ -78,19 +78,8 @@ abstract class ModelField
   BuiltList<AuthRule> get authRules;
 
   @override
-  Map<String, Object?> toJson() {
-    // TODO(dnys1): Remove with platform channel code
-    return {
-      'name': name,
-      'type': type.asLegacyType.toMap(),
-      'isRequired': type.isRequired,
-      'isArray': type is ListType,
-      'isReadOnly': isReadOnly,
-      if (association != null) 'association': association?.toJson(),
-      if (authRules.isNotEmpty)
-        'authRules': authRules.map((x) => x.toJson()).toList(),
-    };
-  }
+  Map<String, Object?> toJson() =>
+      serializers.serializeWith(serializer, this) as Map<String, Object?>;
 
   /// The serializer for [ModelField].
   static Serializer<ModelField> get serializer => _$modelFieldSerializer;

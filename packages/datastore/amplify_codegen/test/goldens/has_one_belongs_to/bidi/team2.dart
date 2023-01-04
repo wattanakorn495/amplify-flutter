@@ -135,9 +135,9 @@ abstract class PartialTeam2 extends PartialModel<String, Team2>
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
         'team2ProjectId': team2ProjectId,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Team2';
@@ -204,7 +204,9 @@ class _PartialTeam2 extends PartialTeam2 {
   final String? team2ProjectId;
 }
 
-abstract class Team2 extends PartialTeam2 implements Model<String, Team2> {
+abstract class Team2 extends PartialTeam2
+    with LegacyModelFields<String, Team2>
+    implements Model<String, Team2> {
   factory Team2({
     String? id,
     required String name,
@@ -511,24 +513,20 @@ class _RemoteTeam2 extends RemoteTeam2 {
             'team2ProjectId',
           ))
         : (json['team2ProjectId'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Team2',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Team2',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Team2',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final project = json['project'] == null
         ? (throw ModelFieldError(
             'Team2',

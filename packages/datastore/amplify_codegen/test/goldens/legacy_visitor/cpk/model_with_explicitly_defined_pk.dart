@@ -126,9 +126,9 @@ abstract class PartialModelWithExplicitlyDefinedPk
         'title': title,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'ModelWithExplicitlyDefinedPk';
@@ -149,7 +149,7 @@ class _PartialModelWithExplicitlyDefinedPk
     final modelId = json['modelID'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPk',
-            'modelId',
+            'modelID',
           ))
         : (json['modelID'] as String);
     final title = json['title'] == null ? null : (json['title'] as String);
@@ -182,9 +182,10 @@ class _PartialModelWithExplicitlyDefinedPk
 
 abstract class ModelWithExplicitlyDefinedPk
     extends PartialModelWithExplicitlyDefinedPk
+    with LegacyModelFields<String, ModelWithExplicitlyDefinedPk>
     implements Model<String, ModelWithExplicitlyDefinedPk> {
   factory ModelWithExplicitlyDefinedPk({
-    String? modelId,
+    required String modelId,
     required String title,
   }) = _ModelWithExplicitlyDefinedPk;
 
@@ -194,7 +195,7 @@ abstract class ModelWithExplicitlyDefinedPk
     final modelId = json['modelID'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPk',
-            'modelId',
+            'modelID',
           ))
         : (json['modelID'] as String);
     final title = json['title'] == null
@@ -352,10 +353,9 @@ abstract class ModelWithExplicitlyDefinedPk
 
 class _ModelWithExplicitlyDefinedPk extends ModelWithExplicitlyDefinedPk {
   _ModelWithExplicitlyDefinedPk({
-    String? modelId,
+    required this.modelId,
     required this.title,
-  })  : modelId = modelId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         super._();
 
@@ -403,7 +403,7 @@ class _RemoteModelWithExplicitlyDefinedPk
     final modelId = json['modelID'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPk',
-            'modelId',
+            'modelID',
           ))
         : (json['modelID'] as String);
     final title = json['title'] == null
@@ -424,24 +424,20 @@ class _RemoteModelWithExplicitlyDefinedPk
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPk',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'ModelWithExplicitlyDefinedPk',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'ModelWithExplicitlyDefinedPk',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteModelWithExplicitlyDefinedPk(
       modelId: modelId,
       title: title,

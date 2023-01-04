@@ -1,0 +1,12 @@
+type Post @model {
+  id: ID! @primaryKey(sortKeyFields: ["title"])
+  title: String!
+  content: String
+  tags: [Tag] @manyToMany(relationName: "PostTags")
+}
+
+type Tag @model {
+  id: ID! @primaryKey(sortKeyFields: ["label"])
+  label: String!
+  posts: [Post] @manyToMany(relationName: "PostTags")
+}

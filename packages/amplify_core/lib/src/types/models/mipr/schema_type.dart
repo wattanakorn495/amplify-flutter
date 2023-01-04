@@ -163,35 +163,6 @@ class AppSyncScalar extends EnumClass {
   /// The [AppSyncScalar] value corresponding to [name].
   static AppSyncScalar valueOf(String name) => _$AppSyncScalarValueOf(name);
 
-  /// Bridge for legacy codegen.
-  // TODO(dnys1): Remove with platform channel code
-  static AppSyncScalar? fromLegacyType(ModelFieldTypeEnum type) {
-    switch (type) {
-      case ModelFieldTypeEnum.string:
-        return string;
-      case ModelFieldTypeEnum.int:
-        return int_;
-      case ModelFieldTypeEnum.double:
-        return float;
-      case ModelFieldTypeEnum.date:
-        return awsDate;
-      case ModelFieldTypeEnum.dateTime:
-        return awsDateTime;
-      case ModelFieldTypeEnum.time:
-        return awsTime;
-      case ModelFieldTypeEnum.timestamp:
-        return awsTimestamp;
-      case ModelFieldTypeEnum.bool:
-        return boolean;
-      case ModelFieldTypeEnum.enumeration:
-      case ModelFieldTypeEnum.model:
-      case ModelFieldTypeEnum.collection:
-      case ModelFieldTypeEnum.embedded:
-      case ModelFieldTypeEnum.embeddedCollection:
-        return null;
-    }
-  }
-
   /// The serializer for [AppSyncScalar].
   static Serializer<AppSyncScalar> get serializer => _$appSyncScalarSerializer;
 }
@@ -296,162 +267,11 @@ abstract class SchemaType with AWSSerializable<Map<String, Object?>> {
     bool isRequired,
   }) = ListType._;
 
-  /// Bridge method for legacy codegen.
-  // TODO(dnys1): Remove with platform channel code
-  factory SchemaType.fromLegacyType(
-    ModelFieldType type, {
-    required bool isRequired,
-    required bool isArray,
-  }) {
-    final SchemaType baseType;
-    switch (type.fieldType) {
-      case ModelFieldTypeEnum.string:
-      case ModelFieldTypeEnum.int:
-      case ModelFieldTypeEnum.double:
-      case ModelFieldTypeEnum.date:
-      case ModelFieldTypeEnum.dateTime:
-      case ModelFieldTypeEnum.time:
-      case ModelFieldTypeEnum.timestamp:
-      case ModelFieldTypeEnum.bool:
-        baseType = SchemaType.scalar(
-          AppSyncScalar.fromLegacyType(type.fieldType)!,
-          isRequired: isRequired,
-        );
-        break;
-      case ModelFieldTypeEnum.enumeration:
-        baseType = EnumType._(null, isRequired: isRequired);
-        break;
-      case ModelFieldTypeEnum.model:
-        baseType = SchemaType.model(
-          type.ofModelName!,
-          isRequired: isRequired,
-        );
-        break;
-      case ModelFieldTypeEnum.collection:
-        final modelType = type.ofModelName!;
-        if (modelType == 'enumeration') {
-          baseType = const EnumType._(null);
-        } else if (ModelFieldTypeEnum.values
-            .map((el) => el.name)
-            .contains(modelType)) {
-          baseType = SchemaType.scalar(
-            AppSyncScalar.fromLegacyType(
-              ModelFieldTypeEnum.values.byName(modelType),
-            )!,
-          );
-        } else {
-          baseType = SchemaType.model(modelType);
-        }
-        break;
-      case ModelFieldTypeEnum.embedded:
-        baseType = SchemaType.nonModel(
-          type.ofCustomTypeName!,
-          isRequired: isRequired,
-        );
-        break;
-      case ModelFieldTypeEnum.embeddedCollection:
-        final customTypeName = type.ofCustomTypeName!;
-        if (customTypeName == 'enumeration') {
-          baseType = const EnumType._(null);
-        } else {
-          baseType = SchemaType.nonModel(customTypeName);
-        }
-        break;
-    }
-
-    if (isArray) {
-      return SchemaType.list(baseType, isRequired: isRequired);
-    }
-    return baseType;
-  }
-
   /// The name of the type, as defined in the schema.
   String get name;
 
   /// Whether the type is required (non-nullable) in this context.
   bool get isRequired;
-
-  /// Bridge for legacy codegen.
-  // TODO(dnys1): Remove with platform channel code
-  ModelFieldType get asLegacyType {
-    late ModelFieldTypeEnum fieldType;
-    String? ofModelName;
-    String? ofCustomTypeName;
-    if (this is ScalarType) {
-      switch ((this as ScalarType).value) {
-        case AppSyncScalar.id:
-        case AppSyncScalar.string:
-        case AppSyncScalar.awsEmail:
-        case AppSyncScalar.awsIpAddress:
-        case AppSyncScalar.awsJson:
-        case AppSyncScalar.awsPhone:
-        case AppSyncScalar.awsUrl:
-          fieldType = ModelFieldTypeEnum.string;
-          break;
-        case AppSyncScalar.awsDate:
-          fieldType = ModelFieldTypeEnum.date;
-          break;
-        case AppSyncScalar.awsDateTime:
-          fieldType = ModelFieldTypeEnum.dateTime;
-          break;
-        case AppSyncScalar.awsTime:
-          fieldType = ModelFieldTypeEnum.time;
-          break;
-        case AppSyncScalar.awsTimestamp:
-          fieldType = ModelFieldTypeEnum.timestamp;
-          break;
-        case AppSyncScalar.boolean:
-          fieldType = ModelFieldTypeEnum.bool;
-          break;
-        case AppSyncScalar.float:
-          fieldType = ModelFieldTypeEnum.double;
-          break;
-        case AppSyncScalar.int_:
-          fieldType = ModelFieldTypeEnum.int;
-          break;
-      }
-    } else if (this is ModelType) {
-      fieldType = ModelFieldTypeEnum.model;
-      ofModelName = (this as ModelType).name;
-    } else if (this is NonModelType) {
-      fieldType = ModelFieldTypeEnum.embedded;
-      ofCustomTypeName = (this as NonModelType).name;
-    } else if (this is EnumType) {
-      fieldType = ModelFieldTypeEnum.enumeration;
-    } else if (this is ListType) {
-      final nestedType = (this as ListType).elementType.asLegacyType;
-      switch (nestedType.fieldType) {
-        case ModelFieldTypeEnum.string:
-        case ModelFieldTypeEnum.int:
-        case ModelFieldTypeEnum.double:
-        case ModelFieldTypeEnum.date:
-        case ModelFieldTypeEnum.dateTime:
-        case ModelFieldTypeEnum.time:
-        case ModelFieldTypeEnum.timestamp:
-        case ModelFieldTypeEnum.bool:
-        case ModelFieldTypeEnum.enumeration:
-          fieldType = ModelFieldTypeEnum.collection;
-          ofModelName = nestedType.fieldType.name;
-          break;
-        case ModelFieldTypeEnum.model:
-          fieldType = ModelFieldTypeEnum.collection;
-          ofModelName = nestedType.ofModelName;
-          break;
-        case ModelFieldTypeEnum.embedded:
-          fieldType = ModelFieldTypeEnum.embeddedCollection;
-          ofCustomTypeName = nestedType.ofCustomTypeName!;
-          break;
-        case ModelFieldTypeEnum.collection:
-        case ModelFieldTypeEnum.embeddedCollection:
-          throw StateError('Unreachable');
-      }
-    }
-    return ModelFieldType(
-      fieldType,
-      ofModelName: ofModelName,
-      ofCustomTypeName: ofCustomTypeName,
-    );
-  }
 
   SchemaType rebuild({
     bool? isRequired,
@@ -535,20 +355,16 @@ class NonModelType extends SchemaType with AWSEquatable<NonModelType> {
 /// {@macro amplify_core.models.enum_type}
 class EnumType extends SchemaType with AWSEquatable<EnumType> {
   /// {@macro amplify_core.models.enum_type}
-  const EnumType._(this._name, {this.isRequired = false});
-
-  /// Bridge for legacy codegen.
-  // TODO(dnys1): Remove with platform channel code
-  final String? _name;
+  const EnumType._(this.name, {this.isRequired = false});
 
   @override
-  String get name => _name!;
+  final String name;
 
   @override
   final bool isRequired;
 
   @override
-  List<Object?> get props => [_name, isRequired];
+  List<Object?> get props => [name, isRequired];
 
   @override
   SchemaType rebuild({bool? isRequired}) {

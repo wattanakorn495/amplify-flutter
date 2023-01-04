@@ -197,9 +197,9 @@ abstract class PartialModelWithIdPlusSortKeys extends PartialModel<
         'rating': rating,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'ModelWithIdPlusSortKeys';
@@ -265,6 +265,9 @@ class _PartialModelWithIdPlusSortKeys extends PartialModelWithIdPlusSortKeys {
 }
 
 abstract class ModelWithIdPlusSortKeys extends PartialModelWithIdPlusSortKeys
+    with
+        LegacyModelFields<ModelWithIdPlusSortKeysIdentifier,
+            ModelWithIdPlusSortKeys>
     implements
         Model<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys> {
   factory ModelWithIdPlusSortKeys({
@@ -555,24 +558,20 @@ class _RemoteModelWithIdPlusSortKeys extends RemoteModelWithIdPlusSortKeys {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'ModelWithIdPlusSortKeys',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'ModelWithIdPlusSortKeys',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'ModelWithIdPlusSortKeys',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteModelWithIdPlusSortKeys(
       id: id,
       title: title,

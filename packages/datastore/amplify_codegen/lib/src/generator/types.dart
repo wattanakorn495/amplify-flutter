@@ -113,6 +113,18 @@ class _AmplifyCore {
           ]),
       );
 
+  /// Creates an [amplify_core.LegacyModelFields] reference.
+  TypeReference legacyModelFields(
+    Reference modelIdentifierType,
+    Reference modelType,
+  ) =>
+      TypeReference(
+        (t) => t
+          ..symbol = 'LegacyModelFields'
+          ..url = _url
+          ..types.addAll([modelIdentifierType, modelType]),
+      );
+
   Mipr get mipr => const Mipr._();
 
   /// Creates an [amplify_core.Model] reference.

@@ -158,9 +158,9 @@ abstract class PartialCpkModel
         'lastName': lastName,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'CpkModel';
@@ -215,6 +215,7 @@ class _PartialCpkModel extends PartialCpkModel {
 }
 
 abstract class CpkModel extends PartialCpkModel
+    with LegacyModelFields<CpkModelIdentifier, CpkModel>
     implements Model<CpkModelIdentifier, CpkModel> {
   factory CpkModel({
     required String firstName,
@@ -449,24 +450,20 @@ class _RemoteCpkModel extends RemoteCpkModel {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'CpkModel',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'CpkModel',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'CpkModel',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteCpkModel(
       firstName: firstName,
       lastName: lastName,

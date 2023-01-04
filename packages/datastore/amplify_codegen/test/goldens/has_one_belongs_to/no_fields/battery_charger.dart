@@ -140,9 +140,9 @@ abstract class PartialBatteryCharger
         'updatedAt': updatedAt?.format(),
         'id': id,
         'batteryChargerPowerSourceId': batteryChargerPowerSourceId,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'BatteryCharger';
@@ -215,6 +215,7 @@ class _PartialBatteryCharger extends PartialBatteryCharger {
 }
 
 abstract class BatteryCharger extends PartialBatteryCharger
+    with LegacyModelFields<String, BatteryCharger>
     implements Model<String, BatteryCharger> {
   factory BatteryCharger({
     PowerSource? powerSource,
@@ -502,24 +503,20 @@ class _RemoteBatteryCharger extends RemoteBatteryCharger {
         json['batteryChargerPowerSourceId'] == null
             ? null
             : (json['batteryChargerPowerSourceId'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'BatteryCharger',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'BatteryCharger',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'BatteryCharger',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final powerSource = json['powerSource'] == null
         ? batteryChargerPowerSourceId == null
             ? null

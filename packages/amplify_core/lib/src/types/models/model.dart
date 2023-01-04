@@ -99,14 +99,18 @@ abstract class PartialModel<ModelIdentifier extends Object,
   /// {@macro amplify_core.models.partial_model}
   const PartialModel();
 
+  /// {@template amplify_core.models.model.model_identifier}
   /// The primary key for the model.
   ///
   /// Typically, this is an alias for the `id` field. However, when models
   /// set a custom using `@primaryKey` directive, this may alias a different
   /// field or construct a composite key from multiple fields.
+  /// {@endtemplate}
   ModelIdentifier get modelIdentifier;
 
+  /// {@template amplify_core.models.model.model_type}
   /// The model's type, typically used for deserialization.
+  /// {@endtemplate}
   ModelType<ModelIdentifier, M, PartialModel<ModelIdentifier, M>> get modelType;
 }
 
@@ -127,15 +131,25 @@ abstract class Model<ModelIdentifier extends Object,
   T valueFor<T extends Object?>(QueryField<ModelIdentifier, M, T> field);
 }
 
+/// Methods used in codegen V1, added to support interoperability.
 mixin LegacyModelFields<ModelIdentifier extends Object,
-    M extends Model<ModelIdentifier, M>> on Model<ModelIdentifier, M> {
+    M extends Model<ModelIdentifier, M>> on PartialModel<ModelIdentifier, M> {
+  /// {@macro amplify_core.models.model.model_type}
   @Deprecated('Use modelType instead')
   ModelType<ModelIdentifier, M, PartialModel<ModelIdentifier, M>>
       getInstanceType() => modelType;
 
+  /// {@macro amplify_core.models.model.model_identifier}
   @Deprecated('Use modelIdentifier instead')
-  String getId();
+  String getId() {
+    final id = modelIdentifier;
+    if (id is! String) {
+      throw StateError('Use modelIdentifier for custom primary keys');
+    }
+    return id;
+  }
 
+  /// Alias for [Object.==].
   @Deprecated('Use == instead')
   bool equals(Object other) => this == other;
 }

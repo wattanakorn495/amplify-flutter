@@ -33,10 +33,7 @@ import 'package:smithy_codegen/src/util/symbol_ext.dart';
 /// {@endtemplate}
 class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
   /// {@template amplify_codegen.model_generator}
-  ModelGenerator({
-    required super.node,
-    required super.definition,
-  });
+  ModelGenerator(super.definition);
 
   late final ModelNames _names = definition.names;
   late final ModelReferences _references = definition.references;
@@ -423,6 +420,12 @@ return ${allocate(_references.partialModelImpl)}.fromJson(json) as T;
             _references.modelIdentifier,
             _references.model,
           ),
+        )
+        ..mixins.add(
+          DartTypes.amplifyCore.legacyModelFields(
+            _references.modelIdentifier,
+            _references.model,
+          ),
         );
 
       // Add `classType` for model types
@@ -512,7 +515,8 @@ return ${allocate(_references.partialModelImpl)}.fromJson(json) as T;
         // Allow nullable `ID` parameters to the main constructor since these
         // fields can be auto-generated.
         final isIdField = fieldType is mipr.ScalarType &&
-            fieldType.value == mipr.AppSyncScalar.id;
+            fieldType.value == mipr.AppSyncScalar.id &&
+            field.name == 'id';
         final isPrimaryKey =
             definition.modelIdentifier.fields.contains(field.name);
         final factoryTypeRef =
@@ -758,7 +762,8 @@ return value as T;
         );
 
         final isIdField = fieldType is mipr.ScalarType &&
-            fieldType.value == mipr.AppSyncScalar.id;
+            fieldType.value == mipr.AppSyncScalar.id &&
+            field.name == 'id';
         final isPrimaryKey =
             definition.modelIdentifier.fields.contains(field.name);
         final factoryTypeRef =

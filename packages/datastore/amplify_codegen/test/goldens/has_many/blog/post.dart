@@ -148,9 +148,9 @@ abstract class PartialPost extends PartialModel<String, Post>
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
         'blogPostsId': blogPostsId,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Post';
@@ -235,7 +235,9 @@ class _PartialPost extends PartialPost {
   final String? blogPostsId;
 }
 
-abstract class Post extends PartialPost implements Model<String, Post> {
+abstract class Post extends PartialPost
+    with LegacyModelFields<String, Post>
+    implements Model<String, Post> {
   factory Post({
     String? id,
     required String title,
@@ -583,24 +585,20 @@ class _RemotePost extends RemotePost {
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final blogPostsId =
         json['blogPostsId'] == null ? null : (json['blogPostsId'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Post',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Post',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Post',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final blog = json['blog'] == null
         ? null
         : Blog.classType

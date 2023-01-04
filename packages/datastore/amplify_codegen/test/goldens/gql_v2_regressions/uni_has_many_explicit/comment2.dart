@@ -126,9 +126,9 @@ abstract class PartialComment2 extends PartialModel<String, Comment2>
         'content': content,
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Comment2';
@@ -185,6 +185,7 @@ class _PartialComment2 extends PartialComment2 {
 }
 
 abstract class Comment2 extends PartialComment2
+    with LegacyModelFields<String, Comment2>
     implements Model<String, Comment2> {
   factory Comment2({
     String? id,
@@ -204,7 +205,7 @@ abstract class Comment2 extends PartialComment2
     final postId = json['postID'] == null
         ? (throw ModelFieldError(
             'Comment2',
-            'postId',
+            'postID',
           ))
         : (json['postID'] as String);
     final content = json['content'] == null
@@ -441,7 +442,7 @@ class _RemoteComment2 extends RemoteComment2 {
     final postId = json['postID'] == null
         ? (throw ModelFieldError(
             'Comment2',
-            'postId',
+            'postID',
           ))
         : (json['postID'] as String);
     final content = json['content'] == null
@@ -462,24 +463,20 @@ class _RemoteComment2 extends RemoteComment2 {
             'updatedAt',
           ))
         : TemporalDateTime.fromString((json['updatedAt'] as String));
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Comment2',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Comment2',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Comment2',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteComment2(
       id: id,
       postId: postId,

@@ -76,7 +76,9 @@ class _FromJsonVisitor extends SchemaTypeVisitor<Expression> {
               defaultValue?.call() ?? (isRequired ? orElse() : literalNull),
               exp,
             )
-        : (isRequired ? _jsonRef.ifNullThen(orElse()) : _jsonRef);
+        : (isRequired
+            ? _jsonRef.ifNullThen(defaultValue?.call() ?? orElse())
+            : _jsonRef);
   }
 
   @override
@@ -252,9 +254,16 @@ class _FromJsonVisitor extends SchemaTypeVisitor<Expression> {
       case AppSyncScalar.string:
         break;
     }
+    Expression Function()? defaultValue;
+    // `_deleted` is nullable in the schema but if not present, we know it's
+    // `false`.
+    if (field.name == '_deleted') {
+      defaultValue = () => literalFalse;
+    }
     return _deserialize(
       type: type,
       asA: type.wireType.nonNull,
+      defaultValue: defaultValue,
       constructor:
           constructor == null ? null : (val) => constructor!.call([val]),
     );
@@ -478,9 +487,15 @@ extension ModelFieldHelpers on ModelField {
           }
           break;
         case AppSyncScalar.id:
-          // Allow nullable `ID` parameters to the main constructor since these
+          // Allow nullable `id` parameters to the main constructor since these
           // fields can be auto-generated.
-          if (isPrimaryKey) {
+          //
+          // The spec says only fields named "id" qualify for this
+          // auto-generation.
+          //
+          // Section "Identifier Generation":
+          // https://quip-amazon.com/Kx24A6l5CfuB/DataStore-correctness-specification-work#temp:C:JCV16d7c578c6ad4faf8bed29dcf
+          if (isPrimaryKey && name == 'id') {
             isRequired = false;
             defaultValue = DartTypes.awsCommon.uuid.call([]);
           }

@@ -56,17 +56,6 @@ abstract class StructureTypeDefinition implements SchemaTypeDefinition {
   );
 }
 
-/// {@template amplify_core.models.mipr.schema_type_definition_add_field}
-/// Adds a field to the type definition.
-/// {@endtemplate}
-// TODO(dnys1): Remove when codegen is updated
-extension StructureTypeDefinitionAddField on StructureTypeDefinitionBuilder {
-  /// {@macro amplify_core.models.mipr.schema_type_definition_add_field}
-  void addField(ModelFieldDefinition fieldDefinition) {
-    fields[fieldDefinition.name] = fieldDefinition.build();
-  }
-}
-
 /// {@template amplify_core.models.mipr.model_definition}
 /// The definition of a [ModelType].
 /// {@endtemplate}
@@ -128,19 +117,8 @@ abstract class ModelTypeDefinition
       indexes.singleWhere((index) => index.name == indexName);
 
   @override
-  Map<String, Object?> toJson() {
-    // TODO(dnys1): Remove when codegen is updated
-    return {
-      'name': name,
-      'pluralName': pluralName,
-      if (authRules.isNotEmpty)
-        'authRules': authRules.map((x) => x.toJson()).toList(),
-      'fields':
-          fields.map((key, value) => MapEntry(key, value.toJson())).toMap(),
-      if (indexes.isNotEmpty)
-        'indexes': indexes.map((value) => value.toJson()).toList(),
-    };
-  }
+  Map<String, Object?> toJson() =>
+      serializers.serializeWith(serializer, this) as Map<String, Object?>;
 
   /// The serializer for [ModelTypeDefinition].
   static Serializer<ModelTypeDefinition> get serializer =>
@@ -185,14 +163,8 @@ abstract class NonModelTypeDefinition
   BuiltMap<String, ModelField> get fields;
 
   @override
-  Map<String, Object?> toJson() {
-    // TODO(dnys1): Remove when codegen is updated
-    return {
-      'name': name,
-      'fields':
-          fields.map((key, value) => MapEntry(key, value.toJson())).toMap(),
-    };
-  }
+  Map<String, Object?> toJson() =>
+      serializers.serializeWith(serializer, this) as Map<String, Object?>;
 
   /// The serializer for [NonModelTypeDefinition].
   static Serializer<NonModelTypeDefinition> get serializer =>

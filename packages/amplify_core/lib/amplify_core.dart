@@ -94,8 +94,6 @@ export 'src/types/models/mipr/model_association.dart';
 export 'src/types/models/mipr/model_field.dart';
 export 'src/types/models/mipr/model_index.dart';
 export 'src/types/models/model.dart';
-export 'src/types/models/model_field_definition.dart';
-export 'src/types/models/model_field_type.dart';
 export 'src/types/models/model_provider.dart';
 
 /// Query

@@ -112,9 +112,9 @@ abstract class PartialTodo extends PartialModel<String, Todo>
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
         'id': id,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Todo';
@@ -164,7 +164,9 @@ class _PartialTodo extends PartialTodo {
   final String id;
 }
 
-abstract class Todo extends PartialTodo implements Model<String, Todo> {
+abstract class Todo extends PartialTodo
+    with LegacyModelFields<String, Todo>
+    implements Model<String, Todo> {
   factory Todo({
     String? content,
     String? id,
@@ -384,24 +386,20 @@ class _RemoteTodo extends RemoteTodo {
             'id',
           ))
         : (json['id'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Todo',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Todo',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Todo',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteTodo(
       content: content,
       createdAt: createdAt,

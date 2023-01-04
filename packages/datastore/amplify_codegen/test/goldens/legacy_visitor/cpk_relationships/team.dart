@@ -189,9 +189,9 @@ abstract class PartialTeam extends PartialModel<TeamIdentifier, Team>
         'updatedAt': updatedAt?.format(),
         'teamProjectProjectId': teamProjectProjectId,
         'teamProjectName': teamProjectName,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'Team';
@@ -271,9 +271,11 @@ class _PartialTeam extends PartialTeam {
   final String? teamProjectName;
 }
 
-abstract class Team extends PartialTeam implements Model<TeamIdentifier, Team> {
+abstract class Team extends PartialTeam
+    with LegacyModelFields<TeamIdentifier, Team>
+    implements Model<TeamIdentifier, Team> {
   factory Team({
-    String? teamId,
+    required String teamId,
     required String name,
     Project? project,
   }) = _Team;
@@ -512,11 +514,10 @@ abstract class Team extends PartialTeam implements Model<TeamIdentifier, Team> {
 
 class _Team extends Team {
   _Team({
-    String? teamId,
+    required this.teamId,
     required this.name,
     this.project,
-  })  : teamId = teamId ?? uuid(),
-        createdAt = TemporalDateTime.now(),
+  })  : createdAt = TemporalDateTime.now(),
         updatedAt = TemporalDateTime.now(),
         teamProjectProjectId = project?.projectId,
         teamProjectName = project?.name,
@@ -604,24 +605,20 @@ class _RemoteTeam extends RemoteTeam {
     final teamProjectName = json['teamProjectName'] == null
         ? null
         : (json['teamProjectName'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'Team',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'Team',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'Team',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     final project = json['project'] == null
         ? null
         : Project.classType

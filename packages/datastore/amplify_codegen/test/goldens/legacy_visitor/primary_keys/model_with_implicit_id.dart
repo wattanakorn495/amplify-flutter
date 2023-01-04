@@ -123,9 +123,9 @@ abstract class PartialModelWithImplicitId
         'createdAt': createdAt?.format(),
         'updatedAt': updatedAt?.format(),
         'id': id,
-        'version': version,
-        'deleted': deleted,
-        'lastChangedAt': lastChangedAt?.format(),
+        '_version': version,
+        '_deleted': deleted,
+        '_lastChangedAt': lastChangedAt?.format(),
       };
   @override
   String get runtimeTypeName => 'ModelWithImplicitId';
@@ -175,6 +175,7 @@ class _PartialModelWithImplicitId extends PartialModelWithImplicitId {
 }
 
 abstract class ModelWithImplicitId extends PartialModelWithImplicitId
+    with LegacyModelFields<String, ModelWithImplicitId>
     implements Model<String, ModelWithImplicitId> {
   factory ModelWithImplicitId({
     required String title,
@@ -409,24 +410,20 @@ class _RemoteModelWithImplicitId extends RemoteModelWithImplicitId {
             'id',
           ))
         : (json['id'] as String);
-    final version = json['version'] == null
+    final version = json['_version'] == null
         ? (throw ModelFieldError(
             'ModelWithImplicitId',
-            'version',
+            '_version',
           ))
-        : (json['version'] as int);
-    final deleted = json['deleted'] == null
+        : (json['_version'] as int);
+    final deleted =
+        json['_deleted'] == null ? false : (json['_deleted'] as bool);
+    final lastChangedAt = json['_lastChangedAt'] == null
         ? (throw ModelFieldError(
             'ModelWithImplicitId',
-            'deleted',
+            '_lastChangedAt',
           ))
-        : (json['deleted'] as bool);
-    final lastChangedAt = json['lastChangedAt'] == null
-        ? (throw ModelFieldError(
-            'ModelWithImplicitId',
-            'lastChangedAt',
-          ))
-        : TemporalDateTime.fromString((json['lastChangedAt'] as String));
+        : TemporalDateTime.fromString((json['_lastChangedAt'] as String));
     return _RemoteModelWithImplicitId(
       title: title,
       createdAt: createdAt,

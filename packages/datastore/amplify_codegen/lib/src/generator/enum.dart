@@ -26,13 +26,16 @@ import 'package:gql/ast.dart';
 class EnumGenerator
     extends LibraryGenerator<EnumTypeDefinitionNode, EnumTypeDefinition> {
   /// {@macro amplify_codegen.generator.enum_generator}
-  EnumGenerator({
-    required super.node,
-    required super.definition,
+  EnumGenerator(
+    super.definition, {
+    required this.node,
   });
 
   /// The Dart name of the enum.
   String get enumName => schemaName.pascalCase;
+
+  /// The raw GraphQL node.
+  final EnumTypeDefinitionNode node;
 
   @override
   GeneratedLibrary generate() {
