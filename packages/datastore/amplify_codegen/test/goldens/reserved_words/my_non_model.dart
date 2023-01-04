@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.my_non_model;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 class MyNonModel
     with
@@ -40,6 +41,22 @@ class MyNonModel
   }
 
   final String enum_;
+
+  static final mipr.NonModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.NonModelTypeDefinition.serializer,
+    const {
+      'name': 'MyNonModel',
+      'fields': {
+        'enum': {
+          'name': 'enum',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        }
+      },
+    },
+  )!;
 
   @override
   List<Object?> get props => [enum_];

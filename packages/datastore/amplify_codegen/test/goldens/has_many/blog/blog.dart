@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.blog;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 import 'post.dart';
 
@@ -63,17 +64,19 @@ class BlogQueryFields<ModelIdentifier extends Object,
       );
 
   /// Query field for the [Blog.posts] field.
-  PostQueryFields<ModelIdentifier, M> get $posts =>
-      PostQueryFields(NestedQueryField<ModelIdentifier, M, String, Blog, Post>(
-        const QueryField<String, Blog, Post>(fieldName: 'posts'),
-        root: _root,
-      ));
+  PostQueryFields<ModelIdentifier, M> get $posts => PostQueryFields(
+        NestedQueryField<ModelIdentifier, M, String, Blog, Post>(
+          const QueryField<String, Blog, Post>(fieldName: 'posts'),
+          root: _root,
+        ),
+      );
 
   /// Query field for the [Blog.createdAt] field.
   QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, String, Blog, TemporalDateTime>(
         const QueryField<String, Blog, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -81,7 +84,8 @@ class BlogQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDateTime> get $updatedAt =>
       NestedQueryField<ModelIdentifier, M, String, Blog, TemporalDateTime>(
         const QueryField<String, Blog, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -127,32 +131,6 @@ abstract class PartialBlog extends PartialModel<String, Blog>
       };
   @override
   String get runtimeTypeName => 'Blog';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, Blog, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'id':
-        value = id;
-        break;
-      case r'name':
-        value = name;
-        break;
-      case r'posts':
-        value = posts;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialBlog extends PartialBlog {
@@ -183,11 +161,14 @@ class _PartialBlog extends PartialBlog {
         : AsyncModelCollection<String, Post, PartialPost, PartialPost>.fromList(
             (json['posts'] as List<Object?>)
                 .cast<Map<String, Object?>?>()
-                .map((el) => el == null
-                    ? null
-                    : Post.classType.fromJson<PartialPost>(el))
+                .map(
+                  (el) => el == null
+                      ? null
+                      : Post.classType.fromJson<PartialPost>(el),
+                )
                 .whereType<PartialPost>()
-                .toList());
+                .toList(),
+          );
     return _PartialBlog(
       id: id,
       name: name,
@@ -249,12 +230,14 @@ abstract class Blog extends PartialBlog implements Model<String, Blog> {
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final posts = json['posts'] == null
         ? null
-        : AsyncModelCollection<String, Post, PartialPost, Post>.fromList((json[
-                'posts'] as List<Object?>)
-            .cast<Map<String, Object?>?>()
-            .map((el) => el == null ? null : Post.classType.fromJson<Post>(el))
-            .whereType<Post>()
-            .toList());
+        : AsyncModelCollection<String, Post, PartialPost, Post>.fromList(
+            (json['posts'] as List<Object?>)
+                .cast<Map<String, Object?>?>()
+                .map((el) =>
+                    el == null ? null : Post.classType.fromJson<Post>(el))
+                .whereType<Post>()
+                .toList(),
+          );
     return _Blog._(
       id: id,
       name: name,
@@ -267,6 +250,62 @@ abstract class Blog extends PartialBlog implements Model<String, Blog> {
   static const BlogType classType = BlogType();
 
   static const BlogQueryFields<String, Blog> _queryFields = BlogQueryFields();
+
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'Blog',
+      'pluralName': 'Blogs',
+      'fields': {
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'name': {
+          'name': 'name',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'posts': {
+          'name': 'posts',
+          'type': {
+            'list': {'model': 'Post'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+          'association': {
+            'associationType': 'HasMany',
+            'associatedType': 'Post',
+            'associatedFields': ['blog'],
+          },
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        }
+      ],
+    },
+  )!;
 
   @override
   String get id;
@@ -307,6 +346,50 @@ abstract class Blog extends PartialBlog implements Model<String, Blog> {
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, Blog, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  Blog copyWith({
+    String? id,
+    String? name,
+    List<Post>? posts,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return _Blog._(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      posts: posts == null ? this.posts : AsyncModelCollection.fromList(posts),
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, Blog, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'name':
+        value = name;
+        break;
+      case r'posts':
+        value = posts;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _Blog extends Blog {
@@ -408,10 +491,14 @@ class _RemoteBlog extends RemoteBlog {
         : AsyncModelCollection<String, Post, PartialPost, RemotePost>.fromList(
             (json['posts'] as List<Object?>)
                 .cast<Map<String, Object?>?>()
-                .map((el) =>
-                    el == null ? null : Post.classType.fromJson<RemotePost>(el))
+                .map(
+                  (el) => el == null
+                      ? null
+                      : Post.classType.fromJson<RemotePost>(el),
+                )
                 .whereType<RemotePost>()
-                .toList());
+                .toList(),
+          );
     return _RemoteBlog(
       id: id,
       name: name,

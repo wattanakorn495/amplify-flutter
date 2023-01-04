@@ -13,6 +13,8 @@
 // limitations under the License.
 
 import 'package:amplify_codegen/src/generator/allocator.dart';
+import 'package:amplify_codegen/src/helpers/types.dart';
+import 'package:amplify_core/amplify_core.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 
@@ -20,6 +22,10 @@ import 'package:dart_style/dart_style.dart';
 const ignores = [
   // TODO(dnys1): Remove when deprecated fields are removed.
   'non_constant_identifier_names',
+
+  // TODO(dnys1): Add recursive visitor with types or serialize schema
+  // differently
+  'inference_failure_on_collection_literal',
 ];
 
 /// Header for generated output.
@@ -51,7 +57,10 @@ final header = '''
 /// {@endtemplate}
 class GeneratedLibrary {
   /// {@macro amplify_codegen.generated_library}
-  const GeneratedLibrary(this.library);
+  GeneratedLibrary(
+    this.library, [
+    this.definition,
+  ]) : filename = definition?.filename ?? '${library.name!.split('.')[1]}.dart';
 
   /// The [DartFormatter] instance used to format Amplify codegen output.
   static final formatter = DartFormatter(fixes: StyleFix.all);
@@ -59,13 +68,19 @@ class GeneratedLibrary {
   /// Constructs a single-use [DartEmitter] using [AmplifyAllocator] for
   /// reference allocation.
   DartEmitter buildEmitter() => DartEmitter(
-        allocator: AmplifyAllocator(library.name!),
+        allocator: AmplifyAllocator(filename),
         orderDirectives: true,
         useNullSafetySyntax: true,
       );
 
+  /// The source definition.
+  final SchemaTypeDefinition? definition;
+
   /// The generated `code_builder` [Library].
   final Library library;
+
+  /// The file name of the generated output.
+  final String filename;
 
   /// Emits [library] as Dart source.
   String emit() {

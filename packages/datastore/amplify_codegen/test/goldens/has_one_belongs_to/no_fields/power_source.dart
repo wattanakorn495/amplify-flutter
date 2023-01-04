@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.power_source;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 class PowerSourceType
     extends ModelType<String, PowerSource, PartialPowerSource> {
@@ -28,7 +29,8 @@ class PowerSourceType
 
   @override
   T fromJson<T extends PartialModel<String, PowerSource>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == PowerSource || T == Model<String, PowerSource>) {
       return PowerSource.fromJson(json) as T;
     }
@@ -74,7 +76,8 @@ class PowerSourceQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, PowerSource,
           TemporalDateTime>(
         const QueryField<String, PowerSource, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -83,7 +86,8 @@ class PowerSourceQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, PowerSource,
           TemporalDateTime>(
         const QueryField<String, PowerSource, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -91,7 +95,8 @@ class PowerSourceQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $modelIdentifier =>
       NestedQueryField<ModelIdentifier, M, String, PowerSource, String>(
         const QueryField<String, PowerSource, String>(
-            fieldName: 'modelIdentifier'),
+          fieldName: 'modelIdentifier',
+        ),
         root: _root,
       );
 }
@@ -130,32 +135,6 @@ abstract class PartialPowerSource extends PartialModel<String, PowerSource>
       };
   @override
   String get runtimeTypeName => 'PowerSource';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, PowerSource, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'id':
-        value = id;
-        break;
-      case r'amps':
-        value = amps;
-        break;
-      case r'volts':
-        value = volts;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialPowerSource extends PartialPowerSource {
@@ -262,6 +241,55 @@ abstract class PowerSource extends PartialPowerSource
   static const PowerSourceQueryFields<String, PowerSource> _queryFields =
       PowerSourceQueryFields();
 
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'PowerSource',
+      'pluralName': 'PowerSources',
+      'fields': {
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'amps': {
+          'name': 'amps',
+          'type': {'scalar': 'Float'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'volts': {
+          'name': 'volts',
+          'type': {'scalar': 'Float'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        }
+      ],
+    },
+  )!;
+
   @override
   String get id;
 
@@ -302,6 +330,50 @@ abstract class PowerSource extends PartialPowerSource
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, PowerSource, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
+  PowerSource copyWith({
+    String? id,
+    double? amps,
+    double? volts,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return _PowerSource._(
+      id: id ?? this.id,
+      amps: amps ?? this.amps,
+      volts: volts ?? this.volts,
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, PowerSource, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'amps':
+        value = amps;
+        break;
+      case r'volts':
+        value = volts;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _PowerSource extends PowerSource {

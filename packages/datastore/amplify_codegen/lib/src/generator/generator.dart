@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:amplify_codegen/src/generator/generated_library.dart';
 import 'package:amplify_codegen/src/helpers/types.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:code_builder/code_builder.dart';
@@ -26,7 +27,7 @@ abstract class LibraryGenerator<Node extends TypeDefinitionNode,
   LibraryGenerator({
     required this.node,
     required this.definition,
-  }) : builder = LibraryBuilder()..name = 'models.${node.libraryName}';
+  }) : builder = LibraryBuilder()..name = 'models.${definition.libraryName}';
 
   /// The pre-configured builder for [generate]'s output.
   final LibraryBuilder builder;
@@ -41,5 +42,5 @@ abstract class LibraryGenerator<Node extends TypeDefinitionNode,
   String get schemaName => node.name.value;
 
   /// Generates a [Library] for [node] and [definition].
-  Library generate();
+  GeneratedLibrary generate();
 }

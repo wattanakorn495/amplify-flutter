@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.team;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 import 'package:meta/meta.dart';
 
 import 'project.dart';
@@ -59,7 +60,8 @@ class TeamType extends ModelType<TeamIdentifier, Team, PartialTeam> {
 
   @override
   T fromJson<T extends PartialModel<TeamIdentifier, Team>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == Team || T == Model<TeamIdentifier, Team>) {
       return Team.fromJson(json) as T;
     }
@@ -95,17 +97,19 @@ class TeamQueryFields<ModelIdentifier extends Object,
 
   /// Query field for the [Team.project] field.
   ProjectQueryFields<ModelIdentifier, M> get $project => ProjectQueryFields(
-          NestedQueryField<ModelIdentifier, M, TeamIdentifier, Team, Project>(
-        const QueryField<TeamIdentifier, Team, Project>(fieldName: 'project'),
-        root: _root,
-      ));
+        NestedQueryField<ModelIdentifier, M, TeamIdentifier, Team, Project>(
+          const QueryField<TeamIdentifier, Team, Project>(fieldName: 'project'),
+          root: _root,
+        ),
+      );
 
   /// Query field for the [Team.createdAt] field.
   QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, TeamIdentifier, Team,
           TemporalDateTime>(
         const QueryField<TeamIdentifier, Team, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -114,7 +118,8 @@ class TeamQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, TeamIdentifier, Team,
           TemporalDateTime>(
         const QueryField<TeamIdentifier, Team, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -122,7 +127,8 @@ class TeamQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $teamProjectProjectId =>
       NestedQueryField<ModelIdentifier, M, TeamIdentifier, Team, String?>(
         const QueryField<TeamIdentifier, Team, String?>(
-            fieldName: 'teamProjectProjectId'),
+          fieldName: 'teamProjectProjectId',
+        ),
         root: _root,
       );
 
@@ -130,7 +136,8 @@ class TeamQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $teamProjectName =>
       NestedQueryField<ModelIdentifier, M, TeamIdentifier, Team, String?>(
         const QueryField<TeamIdentifier, Team, String?>(
-            fieldName: 'teamProjectName'),
+          fieldName: 'teamProjectName',
+        ),
         root: _root,
       );
 
@@ -139,7 +146,8 @@ class TeamQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, TeamIdentifier, Team,
           TeamIdentifier>(
         const QueryField<TeamIdentifier, Team, TeamIdentifier>(
-            fieldName: 'modelIdentifier'),
+          fieldName: 'modelIdentifier',
+        ),
         root: _root,
       );
 }
@@ -187,38 +195,6 @@ abstract class PartialTeam extends PartialModel<TeamIdentifier, Team>
       };
   @override
   String get runtimeTypeName => 'Team';
-  @override
-  T valueFor<T extends Object?>(QueryField<TeamIdentifier, Team, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'teamId':
-        value = teamId;
-        break;
-      case r'name':
-        value = name;
-        break;
-      case r'project':
-        value = project;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-      case r'teamProjectProjectId':
-        value = teamProjectProjectId;
-        break;
-      case r'teamProjectName':
-        value = teamProjectName;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialTeam extends PartialTeam {
@@ -260,7 +236,8 @@ class _PartialTeam extends PartialTeam {
     final project = json['project'] == null
         ? null
         : Project.classType.fromJson<PartialProject>(
-            (json['project'] as Map<String, Object?>));
+            (json['project'] as Map<String, Object?>),
+          );
     return _PartialTeam(
       teamId: teamId,
       name: name,
@@ -354,6 +331,84 @@ abstract class Team extends PartialTeam implements Model<TeamIdentifier, Team> {
   static const TeamQueryFields<TeamIdentifier, Team> _queryFields =
       TeamQueryFields();
 
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'Team',
+      'pluralName': 'Teams',
+      'fields': {
+        'teamId': {
+          'name': 'teamId',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'name': {
+          'name': 'name',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'project': {
+          'name': 'project',
+          'type': {'model': 'Project'},
+          'isReadOnly': false,
+          'authRules': [],
+          'association': {
+            'associationType': 'BelongsTo',
+            'associatedType': 'Project',
+            'targetNames': [
+              'teamProjectProjectId',
+              'teamProjectName',
+            ],
+          },
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'teamProjectProjectId': {
+          'name': 'teamProjectProjectId',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'teamProjectName': {
+          'name': 'teamProjectName',
+          'type': {'scalar': 'String'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'teamId',
+          'sortKeyFields': ['name'],
+        },
+        {
+          'type': 'foreign',
+          'primaryField': 'project',
+          'sortKeyFields': [
+            'teamProjectProjectId',
+            'teamProjectName',
+          ],
+          'name': 'project',
+        },
+      ],
+    },
+  )!;
+
   @override
   String get teamId;
 
@@ -399,6 +454,60 @@ abstract class Team extends PartialTeam implements Model<TeamIdentifier, Team> {
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<TeamIdentifier, Team, TeamIdentifier> get MODEL_IDENTIFIER =>
       $modelIdentifier;
+  Team copyWith({
+    String? teamId,
+    String? name,
+    Project? project,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? teamProjectProjectId,
+    String? teamProjectName,
+  }) {
+    return _Team._(
+      teamId: teamId ?? this.teamId,
+      name: name ?? this.name,
+      project: project ?? this.project,
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+      teamProjectProjectId: teamProjectProjectId ?? this.teamProjectProjectId,
+      teamProjectName: teamProjectName ?? this.teamProjectName,
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<TeamIdentifier, Team, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'teamId':
+        value = teamId;
+        break;
+      case r'name':
+        value = name;
+        break;
+      case r'project':
+        value = project;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+      case r'teamProjectProjectId':
+        value = teamProjectProjectId;
+        break;
+      case r'teamProjectName':
+        value = teamProjectName;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _Team extends Team {

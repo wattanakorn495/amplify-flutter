@@ -41,13 +41,12 @@ void main() {
     );
     final outputDir = Directory(outputPath)..createSync(recursive: true);
     for (final entry in generated.entries) {
-      final filename = '${entry.key.split('.').last}.dart';
+      final filename = entry.key;
       stdout.writeln('  -- Generated $filename');
       File.fromUri(outputDir.uri.resolve(filename))
           .writeAsStringSync(entry.value.emit());
     }
   }
-  // TODO(dnys1): Re-enable when all APIs are implemented
-  // Process.runSync('dart', ['fix', '--apply', goldensDir.path]);
+  Process.runSync('dart', ['fix', '--apply', goldensDir.path]);
   Process.runSync('dart', ['format', '--fix', goldensDir.path]);
 }

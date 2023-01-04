@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.battery_charger;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 import 'power_source.dart';
 
@@ -30,7 +31,8 @@ class BatteryChargerType
 
   @override
   T fromJson<T extends PartialModel<String, BatteryCharger>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == BatteryCharger || T == Model<String, BatteryCharger>) {
       return BatteryCharger.fromJson(json) as T;
     }
@@ -54,7 +56,8 @@ class BatteryChargerQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $chargerId =>
       NestedQueryField<ModelIdentifier, M, String, BatteryCharger, String>(
         const QueryField<String, BatteryCharger, String>(
-            fieldName: 'chargerID'),
+          fieldName: 'chargerID',
+        ),
         root: _root,
       );
 
@@ -62,25 +65,30 @@ class BatteryChargerQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $powerSourceId =>
       NestedQueryField<ModelIdentifier, M, String, BatteryCharger, String?>(
         const QueryField<String, BatteryCharger, String?>(
-            fieldName: 'powerSourceID'),
+          fieldName: 'powerSourceID',
+        ),
         root: _root,
       );
 
   /// Query field for the [BatteryCharger.powerSource] field.
   PowerSourceQueryFields<ModelIdentifier, M> get $powerSource =>
-      PowerSourceQueryFields(NestedQueryField<ModelIdentifier, M, String,
-          BatteryCharger, PowerSource>(
-        const QueryField<String, BatteryCharger, PowerSource>(
-            fieldName: 'powerSource'),
-        root: _root,
-      ));
+      PowerSourceQueryFields(
+        NestedQueryField<ModelIdentifier, M, String, BatteryCharger,
+            PowerSource>(
+          const QueryField<String, BatteryCharger, PowerSource>(
+            fieldName: 'powerSource',
+          ),
+          root: _root,
+        ),
+      );
 
   /// Query field for the [BatteryCharger.createdAt] field.
   QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, String, BatteryCharger,
           TemporalDateTime>(
         const QueryField<String, BatteryCharger, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -89,7 +97,8 @@ class BatteryChargerQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, BatteryCharger,
           TemporalDateTime>(
         const QueryField<String, BatteryCharger, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -104,7 +113,8 @@ class BatteryChargerQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $modelIdentifier =>
       NestedQueryField<ModelIdentifier, M, String, BatteryCharger, String>(
         const QueryField<String, BatteryCharger, String>(
-            fieldName: 'modelIdentifier'),
+          fieldName: 'modelIdentifier',
+        ),
         root: _root,
       );
 }
@@ -148,35 +158,6 @@ abstract class PartialBatteryCharger
       };
   @override
   String get runtimeTypeName => 'BatteryCharger';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, BatteryCharger, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'chargerID':
-        value = chargerId;
-        break;
-      case r'powerSourceID':
-        value = powerSourceId;
-        break;
-      case r'powerSource':
-        value = powerSource;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-      case r'id':
-        value = id;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialBatteryCharger extends PartialBatteryCharger {
@@ -216,9 +197,11 @@ class _PartialBatteryCharger extends PartialBatteryCharger {
                 powerSourceId,
               )
         : AsyncModel<String, PowerSource, PartialPowerSource,
-                PartialPowerSource>.fromModel(
+            PartialPowerSource>.fromModel(
             PowerSource.classType.fromJson<PartialPowerSource>(
-                (json['powerSource'] as Map<String, Object?>)));
+              (json['powerSource'] as Map<String, Object?>),
+            ),
+          );
     return _PartialBatteryCharger(
       chargerId: chargerId,
       powerSourceId: powerSourceId,
@@ -297,9 +280,11 @@ abstract class BatteryCharger extends PartialBatteryCharger
                 powerSourceId,
               )
         : AsyncModel<String, PowerSource, PartialPowerSource,
-                PowerSource>.fromModel(
+            PowerSource>.fromModel(
             PowerSource.classType.fromJson<PowerSource>(
-                (json['powerSource'] as Map<String, Object?>)));
+              (json['powerSource'] as Map<String, Object?>),
+            ),
+          );
     return _BatteryCharger._(
       chargerId: chargerId,
       powerSourceId: powerSourceId,
@@ -314,6 +299,67 @@ abstract class BatteryCharger extends PartialBatteryCharger
 
   static const BatteryChargerQueryFields<String, BatteryCharger> _queryFields =
       BatteryChargerQueryFields();
+
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'BatteryCharger',
+      'pluralName': 'BatteryChargers',
+      'fields': {
+        'chargerID': {
+          'name': 'chargerID',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'powerSourceID': {
+          'name': 'powerSourceID',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'powerSource': {
+          'name': 'powerSource',
+          'type': {'model': 'PowerSource'},
+          'isReadOnly': false,
+          'authRules': [],
+          'association': {
+            'associationType': 'HasOne',
+            'associatedType': 'PowerSource',
+            'associatedFields': ['sourceID'],
+            'targetNames': ['powerSourceID'],
+          },
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        }
+      ],
+    },
+  )!;
 
   @override
   String get chargerId;
@@ -370,6 +416,57 @@ abstract class BatteryCharger extends PartialBatteryCharger
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, BatteryCharger, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
+  BatteryCharger copyWith({
+    String? chargerId,
+    String? powerSourceId,
+    PowerSource? powerSource,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? id,
+  }) {
+    return _BatteryCharger._(
+      chargerId: chargerId ?? this.chargerId,
+      powerSourceId: powerSourceId ?? this.powerSourceId,
+      powerSource: powerSource == null
+          ? this.powerSource
+          : AsyncModel.fromModel(powerSource),
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+      id: id ?? this.id,
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, BatteryCharger, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'chargerID':
+        value = chargerId;
+        break;
+      case r'powerSourceID':
+        value = powerSourceId;
+        break;
+      case r'powerSource':
+        value = powerSource;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+      case r'id':
+        value = id;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _BatteryCharger extends BatteryCharger {
@@ -487,9 +584,11 @@ class _RemoteBatteryCharger extends RemoteBatteryCharger {
                 powerSourceId,
               )
         : AsyncModel<String, PowerSource, PartialPowerSource,
-                RemotePowerSource>.fromModel(
+            RemotePowerSource>.fromModel(
             PowerSource.classType.fromJson<RemotePowerSource>(
-                (json['powerSource'] as Map<String, Object?>)));
+              (json['powerSource'] as Map<String, Object?>),
+            ),
+          );
     return _RemoteBatteryCharger(
       chargerId: chargerId,
       powerSourceId: powerSourceId,

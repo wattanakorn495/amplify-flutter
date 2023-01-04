@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.enum_model;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 import 'my_enum.dart';
 
@@ -29,7 +30,8 @@ class EnumModelType extends ModelType<String, EnumModel, PartialEnumModel> {
 
   @override
   T fromJson<T extends PartialModel<String, EnumModel>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == EnumModel || T == Model<String, EnumModel>) {
       return EnumModel.fromJson(json) as T;
     }
@@ -74,7 +76,8 @@ class EnumModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, String, EnumModel, TemporalDateTime>(
         const QueryField<String, EnumModel, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -82,7 +85,8 @@ class EnumModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDateTime> get $updatedAt =>
       NestedQueryField<ModelIdentifier, M, String, EnumModel, TemporalDateTime>(
         const QueryField<String, EnumModel, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -90,7 +94,8 @@ class EnumModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $modelIdentifier =>
       NestedQueryField<ModelIdentifier, M, String, EnumModel, String>(
         const QueryField<String, EnumModel, String>(
-            fieldName: 'modelIdentifier'),
+          fieldName: 'modelIdentifier',
+        ),
         root: _root,
       );
 }
@@ -129,32 +134,6 @@ abstract class PartialEnumModel extends PartialModel<String, EnumModel>
       };
   @override
   String get runtimeTypeName => 'EnumModel';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, EnumModel, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'id':
-        value = id;
-        break;
-      case r'enum':
-        value = enum_;
-        break;
-      case r'requiredEnum':
-        value = requiredEnum;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialEnumModel extends PartialEnumModel {
@@ -260,6 +239,55 @@ abstract class EnumModel extends PartialEnumModel
   static const EnumModelQueryFields<String, EnumModel> _queryFields =
       EnumModelQueryFields();
 
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'EnumModel',
+      'pluralName': 'EnumModels',
+      'fields': {
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'enum': {
+          'name': 'enum',
+          'type': {'enum': 'MY_ENUM'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredEnum': {
+          'name': 'requiredEnum',
+          'type': {'enum': 'MY_ENUM'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        }
+      ],
+    },
+  )!;
+
   @override
   String get id;
 
@@ -301,6 +329,50 @@ abstract class EnumModel extends PartialEnumModel
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, EnumModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
+  EnumModel copyWith({
+    String? id,
+    MyEnum? enum_,
+    MyEnum? requiredEnum,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return _EnumModel._(
+      id: id ?? this.id,
+      enum_: enum_ ?? this.enum_,
+      requiredEnum: requiredEnum ?? this.requiredEnum,
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, EnumModel, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'enum':
+        value = enum_;
+        break;
+      case r'requiredEnum':
+        value = requiredEnum;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _EnumModel extends EnumModel {

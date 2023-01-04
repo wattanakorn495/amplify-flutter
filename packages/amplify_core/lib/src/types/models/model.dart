@@ -108,9 +108,6 @@ abstract class PartialModel<ModelIdentifier extends Object,
 
   /// The model's type, typically used for deserialization.
   ModelType<ModelIdentifier, M, PartialModel<ModelIdentifier, M>> get modelType;
-
-  /// Returns the value of [field].
-  T valueFor<T extends Object?>(QueryField<ModelIdentifier, M, T> field);
 }
 
 /// {@template amplify_core.models.model}
@@ -125,6 +122,22 @@ abstract class Model<ModelIdentifier extends Object,
     extends PartialModel<ModelIdentifier, M> {
   /// {@macro amplify_core.models.model}
   const Model();
+
+  /// Returns the value of [field].
+  T valueFor<T extends Object?>(QueryField<ModelIdentifier, M, T> field);
+}
+
+mixin LegacyModelFields<ModelIdentifier extends Object,
+    M extends Model<ModelIdentifier, M>> on Model<ModelIdentifier, M> {
+  @Deprecated('Use modelType instead')
+  ModelType<ModelIdentifier, M, PartialModel<ModelIdentifier, M>>
+      getInstanceType() => modelType;
+
+  @Deprecated('Use modelIdentifier instead')
+  String getId();
+
+  @Deprecated('Use == instead')
+  bool equals(Object other) => this == other;
 }
 
 /// {@template amplify_core.models.remote_model}

@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.team2;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 import 'project2.dart';
 
@@ -64,16 +65,18 @@ class Team2QueryFields<ModelIdentifier extends Object,
 
   /// Query field for the [Team2.project] field.
   Project2QueryFields<ModelIdentifier, M> get $project => Project2QueryFields(
-          NestedQueryField<ModelIdentifier, M, String, Team2, Project2>(
-        const QueryField<String, Team2, Project2>(fieldName: 'project'),
-        root: _root,
-      ));
+        NestedQueryField<ModelIdentifier, M, String, Team2, Project2>(
+          const QueryField<String, Team2, Project2>(fieldName: 'project'),
+          root: _root,
+        ),
+      );
 
   /// Query field for the [Team2.createdAt] field.
   QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, String, Team2, TemporalDateTime>(
         const QueryField<String, Team2, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -81,7 +84,8 @@ class Team2QueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDateTime> get $updatedAt =>
       NestedQueryField<ModelIdentifier, M, String, Team2, TemporalDateTime>(
         const QueryField<String, Team2, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -137,35 +141,6 @@ abstract class PartialTeam2 extends PartialModel<String, Team2>
       };
   @override
   String get runtimeTypeName => 'Team2';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, Team2, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'id':
-        value = id;
-        break;
-      case r'name':
-        value = name;
-        break;
-      case r'project':
-        value = project;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-      case r'team2ProjectId':
-        value = team2ProjectId;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialTeam2 extends PartialTeam2 {
@@ -198,7 +173,8 @@ class _PartialTeam2 extends PartialTeam2 {
     final project = json['project'] == null
         ? null
         : Project2.classType.fromJson<PartialProject2>(
-            (json['project'] as Map<String, Object?>));
+            (json['project'] as Map<String, Object?>),
+          );
     return _PartialTeam2(
       id: id,
       name: name,
@@ -290,6 +266,72 @@ abstract class Team2 extends PartialTeam2 implements Model<String, Team2> {
   static const Team2QueryFields<String, Team2> _queryFields =
       Team2QueryFields();
 
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'Team2',
+      'pluralName': 'Team2s',
+      'fields': {
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'name': {
+          'name': 'name',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'project': {
+          'name': 'project',
+          'type': {'model': 'Project2'},
+          'isReadOnly': false,
+          'authRules': [],
+          'association': {
+            'associationType': 'BelongsTo',
+            'associatedType': 'Project2',
+            'targetNames': ['team2ProjectId'],
+          },
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'team2ProjectId': {
+          'name': 'team2ProjectId',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        },
+        {
+          'type': 'foreign',
+          'primaryField': 'project',
+          'sortKeyFields': ['team2ProjectId'],
+          'name': 'project',
+        },
+      ],
+    },
+  )!;
+
   @override
   String get id;
 
@@ -331,6 +373,55 @@ abstract class Team2 extends PartialTeam2 implements Model<String, Team2> {
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, Team2, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  Team2 copyWith({
+    String? id,
+    String? name,
+    Project2? project,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? team2ProjectId,
+  }) {
+    return _Team2._(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      project: project ?? this.project,
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+      team2ProjectId: team2ProjectId ?? this.team2ProjectId,
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, Team2, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'name':
+        value = name;
+        break;
+      case r'project':
+        value = project;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+      case r'team2ProjectId':
+        value = team2ProjectId;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _Team2 extends Team2 {
@@ -444,7 +535,8 @@ class _RemoteTeam2 extends RemoteTeam2 {
             'project',
           ))
         : Project2.classType.fromJson<RemoteProject2>(
-            (json['project'] as Map<String, Object?>));
+            (json['project'] as Map<String, Object?>),
+          );
     return _RemoteTeam2(
       id: id,
       name: name,

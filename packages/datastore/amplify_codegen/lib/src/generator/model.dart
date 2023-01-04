@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:amplify_codegen/src/generator/context.dart';
+import 'package:amplify_codegen/src/generator/generated_library.dart';
 import 'package:amplify_codegen/src/generator/structure.dart';
 import 'package:amplify_codegen/src/generator/types.dart';
 import 'package:amplify_codegen/src/helpers/field.dart';
@@ -95,7 +96,7 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
             ..returns = DartTypes.core.list(DartTypes.core.object.nullable)
             ..type = MethodType.getter
             ..name = 'props'
-            ..body = literalList(fields.map((f) => refer(f.name))).code,
+            ..body = literalList(fields.map((f) => refer(f.dartName))).code,
         ),
       );
 
@@ -130,7 +131,7 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
   }();
 
   @override
-  Library generate() {
+  GeneratedLibrary generate() {
     builder.body.addAll([
       if (modelIdentifierType != null) modelIdentifierType!,
       modelTypeImpl,
@@ -139,8 +140,7 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
       ...modelImpl,
       ...remoteModelImpl,
     ]);
-
-    return builder.build();
+    return GeneratedLibrary(builder.build(), definition);
   }
 
   /// The implementation of the model's `ModelType`.
@@ -337,66 +337,6 @@ return ${allocate(_references.partialModelImpl)}.fromJson(json) as T;
             ..type = MethodType.getter
             ..name = 'runtimeTypeName'
             ..body = literalString(_names.model).code,
-        ),
-      );
-
-      // `valueFor` to satisfy `PartialModel`
-      c.methods.add(
-        Method(
-          (m) => m
-            ..annotations.add(DartTypes.core.override)
-            ..returns = refer('T')
-            ..name = 'valueFor'
-            ..types.add(
-              TypeReference(
-                (t) => t
-                  ..symbol = 'T'
-                  ..bound = DartTypes.core.object.nullable,
-              ),
-            )
-            ..requiredParameters.add(
-              Parameter(
-                (p) => p
-                  ..type = DartTypes.amplifyCore.queryField(
-                    _references.modelIdentifier,
-                    _references.model,
-                    refer('T'),
-                  )
-                  ..name = 'field',
-              ),
-            )
-            ..body = Block((b) {
-              b.statements.add(
-                const Code(
-                  '''
-Object? value;
-switch (field.fieldName) {
-  ''',
-                ),
-              );
-              for (final field in definition.fields.values) {
-                b.statements.add(
-                  Code(
-                    '''
-  case r'${field.name}':
-    value = ${field.dartName};
-    break;''',
-                  ),
-                );
-              }
-              b.statements.add(
-                const Code(
-                  r'''
-}
-assert(
-  value is T,
-  'Invalid field ${field.fieldName}: $value (expected $T)',
-);
-return value as T;
-''',
-                ),
-              );
-            }),
         ),
       );
     });
@@ -620,6 +560,103 @@ return value as T;
         ),
       );
 
+      // `copyWith` implementation
+      c.methods.add(
+        Method((m) {
+          m
+            ..returns = _references.model
+            ..name = 'copyWith';
+          for (final field in definition.fields.values) {
+            m.optionalParameters.add(
+              Parameter(
+                (p) => p
+                  ..type = field.factoryType(ModelHierarchyType.model).nullable
+                  ..named = true
+                  ..name = field.dartName,
+              ),
+            );
+          }
+          m.body = Block((b) {
+            final fieldExpressions = <String, Expression>{};
+            for (final field in definition.fields.values) {
+              final builder = field.fromPrimitive;
+              final override = refer(field.dartName);
+              final property = refer('this').property(field.dartName);
+              fieldExpressions[field.dartName] = builder != null
+                  ? override
+                      .equalTo(literalNull)
+                      .conditional(property, builder(override))
+                  : override.ifNullThen(property);
+            }
+            b.addExpression(
+              _references.modelImpl
+                  .newInstanceNamed('_', [], fieldExpressions)
+                  .returned,
+            );
+          });
+        }),
+      );
+
+      // `valueFor` to satisfy `Model`
+      c.methods.add(
+        Method(
+          (m) => m
+            ..annotations.add(DartTypes.core.override)
+            ..returns = refer('T')
+            ..name = 'valueFor'
+            ..types.add(
+              TypeReference(
+                (t) => t
+                  ..symbol = 'T'
+                  ..bound = DartTypes.core.object.nullable,
+              ),
+            )
+            ..requiredParameters.add(
+              Parameter(
+                (p) => p
+                  ..type = DartTypes.amplifyCore.queryField(
+                    _references.modelIdentifier,
+                    _references.model,
+                    refer('T'),
+                  )
+                  ..name = 'field',
+              ),
+            )
+            ..body = Block((b) {
+              b.statements.add(
+                const Code(
+                  '''
+Object? value;
+switch (field.fieldName) {
+  ''',
+                ),
+              );
+              for (final field in definition.fields.values) {
+                b.statements.add(
+                  Code(
+                    '''
+  case r'${field.name}':
+    value = ${field.dartName};
+    break;''',
+                  ),
+                );
+              }
+              b.statements.add(
+                const Code(
+                  r'''
+}
+assert(
+  value is T,
+  'Invalid field ${field.fieldName}: $value (expected $T)',
+);
+return value as T;
+''',
+                ),
+              );
+            }),
+        ),
+      );
+
       // The public factory constructor which redirects to the private impl.
       c.constructors.add(
         Constructor(
@@ -661,6 +698,31 @@ return value as T;
                   .toList(),
               hierarchyType: ModelHierarchyType.model,
             ),
+        ),
+      );
+
+      // The static `schema` getter
+      c.fields.add(
+        Field(
+          (f) => f
+            ..modifier = FieldModifier.final$
+            ..static = true
+            ..type = DartTypes.amplifyCore.mipr.modelTypeDefinition
+            ..name = 'schema'
+            ..assignment = DartTypes.amplifyCore.mipr.serializers
+                .property('deserializeWith')
+                .call([
+                  DartTypes.amplifyCore.mipr.modelTypeDefinition
+                      .property('serializer'),
+                  literalConstMap(
+                    mipr.serializers.serializeWith(
+                      mipr.ModelTypeDefinition.serializer,
+                      definition,
+                    ) as Map,
+                  ),
+                ])
+                .nullChecked
+                .code,
         ),
       );
     });

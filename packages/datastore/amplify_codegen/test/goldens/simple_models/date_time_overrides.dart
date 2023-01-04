@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.date_time_overrides;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 class DateTimeOverridesType
     extends ModelType<String, DateTimeOverrides, PartialDateTimeOverrides> {
@@ -28,7 +29,8 @@ class DateTimeOverridesType
 
   @override
   T fromJson<T extends PartialModel<String, DateTimeOverrides>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == DateTimeOverrides || T == Model<String, DateTimeOverrides>) {
       return DateTimeOverrides.fromJson(json) as T;
     }
@@ -60,7 +62,8 @@ class DateTimeOverridesQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, String, DateTimeOverrides, String>(
         const QueryField<String, DateTimeOverrides, String>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -69,7 +72,8 @@ class DateTimeOverridesQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, DateTimeOverrides,
           TemporalDateTime>(
         const QueryField<String, DateTimeOverrides, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -77,7 +81,8 @@ class DateTimeOverridesQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $modelIdentifier =>
       NestedQueryField<ModelIdentifier, M, String, DateTimeOverrides, String>(
         const QueryField<String, DateTimeOverrides, String>(
-            fieldName: 'modelIdentifier'),
+          fieldName: 'modelIdentifier',
+        ),
         root: _root,
       );
 }
@@ -111,27 +116,6 @@ abstract class PartialDateTimeOverrides
       };
   @override
   String get runtimeTypeName => 'DateTimeOverrides';
-  @override
-  T valueFor<T extends Object?>(
-      QueryField<String, DateTimeOverrides, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'id':
-        value = id;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialDateTimeOverrides extends PartialDateTimeOverrides {
@@ -211,6 +195,43 @@ abstract class DateTimeOverrides extends PartialDateTimeOverrides
   static const DateTimeOverridesQueryFields<String, DateTimeOverrides>
       _queryFields = DateTimeOverridesQueryFields();
 
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'DateTimeOverrides',
+      'pluralName': 'DateTimeOverrides',
+      'fields': {
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        }
+      ],
+    },
+  )!;
+
   @override
   String get id;
 
@@ -250,6 +271,41 @@ abstract class DateTimeOverrides extends PartialDateTimeOverrides
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, DateTimeOverrides, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
+  DateTimeOverrides copyWith({
+    String? id,
+    String? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return _DateTimeOverrides._(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(
+    QueryField<String, DateTimeOverrides, T> field,
+  ) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _DateTimeOverrides extends DateTimeOverrides {

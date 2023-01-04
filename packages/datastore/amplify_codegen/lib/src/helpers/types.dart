@@ -152,8 +152,7 @@ extension SchemaTypeHelpers on SchemaType {
       AppSyncScalar.string,
     ];
     final type = this;
-    return (type is ScalarType && primitiveScalars.contains(type.value)) ||
-        type is EnumType;
+    return type is ScalarType && primitiveScalars.contains(type.value);
   }
 
   /// The Dart name for `this`.
@@ -177,11 +176,14 @@ extension SchemaTypeHelpers on SchemaType {
   }
 }
 
-/// Helpers for [TypeDefinitionNode].
-extension TypeDefinitionHelpers on TypeDefinitionNode {
+/// Helpers for [SchemaTypeDefinition].
+extension SchemaTypeDefinitionHelpers on SchemaTypeDefinition {
+  /// This name of the generated file.
+  String get filename => '${name.snakeCase}.dart';
+
   /// This type's name as a library name.
   String get libraryName {
-    final libName = name.value.snakeCase;
+    final libName = name.snakeCase;
     if (hardReservedWords.contains(libName)) {
       return '${libName}_';
     }

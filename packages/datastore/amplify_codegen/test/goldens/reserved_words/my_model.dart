@@ -16,18 +16,20 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.my_model;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 class MyModelType extends ModelType<String, MyModel, PartialMyModel> {
   const MyModelType();
 
   @override
   T fromJson<T extends PartialModel<String, MyModel>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == MyModel || T == Model<String, MyModel>) {
       return MyModel.fromJson(json) as T;
     }
@@ -58,7 +60,8 @@ class MyModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, String, MyModel, TemporalDateTime>(
         const QueryField<String, MyModel, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -66,7 +69,8 @@ class MyModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDateTime> get $updatedAt =>
       NestedQueryField<ModelIdentifier, M, String, MyModel, TemporalDateTime>(
         const QueryField<String, MyModel, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -116,29 +120,6 @@ abstract class PartialMyModel extends PartialModel<String, MyModel>
       };
   @override
   String get runtimeTypeName => 'MyModel';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, MyModel, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'enum':
-        value = enum_;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-      case r'id':
-        value = id;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialMyModel extends PartialMyModel {
@@ -231,6 +212,49 @@ abstract class MyModel extends PartialMyModel
   static const MyModelQueryFields<String, MyModel> _queryFields =
       MyModelQueryFields();
 
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'MyModel',
+      'pluralName': 'MyModels',
+      'fields': {
+        'enum': {
+          'name': 'enum',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        }
+      ],
+    },
+  )!;
+
   @override
   String get enum_;
 
@@ -261,6 +285,45 @@ abstract class MyModel extends PartialMyModel
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, MyModel, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  MyModel copyWith({
+    String? enum_,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? id,
+  }) {
+    return _MyModel._(
+      enum_: enum_ ?? this.enum_,
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+      id: id ?? this.id,
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, MyModel, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'enum':
+        value = enum_;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+      case r'id':
+        value = id;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _MyModel extends MyModel {

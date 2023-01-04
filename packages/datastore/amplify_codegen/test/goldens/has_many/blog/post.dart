@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.post;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 import 'blog.dart';
 import 'comment.dart';
@@ -64,24 +65,27 @@ class PostQueryFields<ModelIdentifier extends Object,
       );
 
   /// Query field for the [Post.blog] field.
-  BlogQueryFields<ModelIdentifier, M> get $blog =>
-      BlogQueryFields(NestedQueryField<ModelIdentifier, M, String, Post, Blog>(
-        const QueryField<String, Post, Blog>(fieldName: 'blog'),
-        root: _root,
-      ));
+  BlogQueryFields<ModelIdentifier, M> get $blog => BlogQueryFields(
+        NestedQueryField<ModelIdentifier, M, String, Post, Blog>(
+          const QueryField<String, Post, Blog>(fieldName: 'blog'),
+          root: _root,
+        ),
+      );
 
   /// Query field for the [Post.comments] field.
   CommentQueryFields<ModelIdentifier, M> get $comments => CommentQueryFields(
-          NestedQueryField<ModelIdentifier, M, String, Post, Comment>(
-        const QueryField<String, Post, Comment>(fieldName: 'comments'),
-        root: _root,
-      ));
+        NestedQueryField<ModelIdentifier, M, String, Post, Comment>(
+          const QueryField<String, Post, Comment>(fieldName: 'comments'),
+          root: _root,
+        ),
+      );
 
   /// Query field for the [Post.createdAt] field.
   QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, String, Post, TemporalDateTime>(
         const QueryField<String, Post, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -89,7 +93,8 @@ class PostQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDateTime> get $updatedAt =>
       NestedQueryField<ModelIdentifier, M, String, Post, TemporalDateTime>(
         const QueryField<String, Post, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -149,38 +154,6 @@ abstract class PartialPost extends PartialModel<String, Post>
       };
   @override
   String get runtimeTypeName => 'Post';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, Post, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'id':
-        value = id;
-        break;
-      case r'title':
-        value = title;
-        break;
-      case r'blog':
-        value = blog;
-        break;
-      case r'comments':
-        value = comments;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-      case r'blogPostsId':
-        value = blogPostsId;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialPost extends PartialPost {
@@ -217,14 +190,17 @@ class _PartialPost extends PartialPost {
     final comments = json['comments'] == null
         ? null
         : AsyncModelCollection<String, Comment, PartialComment,
-                PartialComment>.fromList(
+            PartialComment>.fromList(
             (json['comments'] as List<Object?>)
                 .cast<Map<String, Object?>?>()
-                .map((el) => el == null
-                    ? null
-                    : Comment.classType.fromJson<PartialComment>(el))
+                .map(
+                  (el) => el == null
+                      ? null
+                      : Comment.classType.fromJson<PartialComment>(el),
+                )
                 .whereType<PartialComment>()
-                .toList());
+                .toList(),
+          );
     return _PartialPost(
       id: id,
       title: title,
@@ -302,13 +278,17 @@ abstract class Post extends PartialPost implements Model<String, Post> {
     final comments = json['comments'] == null
         ? null
         : AsyncModelCollection<String, Comment, PartialComment,
-                Comment>.fromList(
+            Comment>.fromList(
             (json['comments'] as List<Object?>)
                 .cast<Map<String, Object?>?>()
-                .map((el) =>
-                    el == null ? null : Comment.classType.fromJson<Comment>(el))
+                .map(
+                  (el) => el == null
+                      ? null
+                      : Comment.classType.fromJson<Comment>(el),
+                )
                 .whereType<Comment>()
-                .toList());
+                .toList(),
+          );
     return _Post._(
       id: id,
       title: title,
@@ -323,6 +303,85 @@ abstract class Post extends PartialPost implements Model<String, Post> {
   static const PostType classType = PostType();
 
   static const PostQueryFields<String, Post> _queryFields = PostQueryFields();
+
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'Post',
+      'pluralName': 'Posts',
+      'fields': {
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'title': {
+          'name': 'title',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'blog': {
+          'name': 'blog',
+          'type': {'model': 'Blog'},
+          'isReadOnly': false,
+          'authRules': [],
+          'association': {
+            'associationType': 'BelongsTo',
+            'associatedType': 'Blog',
+            'targetNames': ['blogPostsId'],
+          },
+        },
+        'comments': {
+          'name': 'comments',
+          'type': {
+            'list': {'model': 'Comment'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+          'association': {
+            'associationType': 'HasMany',
+            'associatedType': 'Comment',
+            'associatedFields': ['post'],
+          },
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'blogPostsId': {
+          'name': 'blogPostsId',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        },
+        {
+          'type': 'foreign',
+          'primaryField': 'blog',
+          'sortKeyFields': ['blogPostsId'],
+          'name': 'blog',
+        },
+      ],
+    },
+  )!;
 
   @override
   String get id;
@@ -374,6 +433,62 @@ abstract class Post extends PartialPost implements Model<String, Post> {
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, Post, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  Post copyWith({
+    String? id,
+    String? title,
+    Blog? blog,
+    List<Comment>? comments,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? blogPostsId,
+  }) {
+    return _Post._(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      blog: blog ?? this.blog,
+      comments: comments == null
+          ? this.comments
+          : AsyncModelCollection.fromList(comments),
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+      blogPostsId: blogPostsId ?? this.blogPostsId,
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, Post, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'title':
+        value = title;
+        break;
+      case r'blog':
+        value = blog;
+        break;
+      case r'comments':
+        value = comments;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+      case r'blogPostsId':
+        value = blogPostsId;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _Post extends Post {
@@ -493,14 +608,17 @@ class _RemotePost extends RemotePost {
     final comments = json['comments'] == null
         ? null
         : AsyncModelCollection<String, Comment, PartialComment,
-                RemoteComment>.fromList(
+            RemoteComment>.fromList(
             (json['comments'] as List<Object?>)
                 .cast<Map<String, Object?>?>()
-                .map((el) => el == null
-                    ? null
-                    : Comment.classType.fromJson<RemoteComment>(el))
+                .map(
+                  (el) => el == null
+                      ? null
+                      : Comment.classType.fromJson<RemoteComment>(el),
+                )
                 .whereType<RemoteComment>()
-                .toList());
+                .toList(),
+          );
     return _RemotePost(
       id: id,
       title: title,

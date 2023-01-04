@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.scalar_model;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 class ScalarModelType
     extends ModelType<String, ScalarModel, PartialScalarModel> {
@@ -28,7 +29,8 @@ class ScalarModelType
 
   @override
   T fromJson<T extends PartialModel<String, ScalarModel>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == ScalarModel || T == Model<String, ScalarModel>) {
       return ScalarModel.fromJson(json) as T;
     }
@@ -80,7 +82,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, int> get $requiredInteger =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, int>(
         const QueryField<String, ScalarModel, int>(
-            fieldName: 'requiredInteger'),
+          fieldName: 'requiredInteger',
+        ),
         root: _root,
       );
 
@@ -95,7 +98,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, double> get $requiredFloat =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, double>(
         const QueryField<String, ScalarModel, double>(
-            fieldName: 'requiredFloat'),
+          fieldName: 'requiredFloat',
+        ),
         root: _root,
       );
 
@@ -110,7 +114,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, bool> get $requiredBoolean =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, bool>(
         const QueryField<String, ScalarModel, bool>(
-            fieldName: 'requiredBoolean'),
+          fieldName: 'requiredBoolean',
+        ),
         root: _root,
       );
 
@@ -118,7 +123,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDate?> get $awsDate =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, TemporalDate?>(
         const QueryField<String, ScalarModel, TemporalDate?>(
-            fieldName: 'awsDate'),
+          fieldName: 'awsDate',
+        ),
         root: _root,
       );
 
@@ -126,7 +132,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDate> get $requiredAwsDate =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, TemporalDate>(
         const QueryField<String, ScalarModel, TemporalDate>(
-            fieldName: 'requiredAwsDate'),
+          fieldName: 'requiredAwsDate',
+        ),
         root: _root,
       );
 
@@ -135,7 +142,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarModel,
           TemporalDateTime?>(
         const QueryField<String, ScalarModel, TemporalDateTime?>(
-            fieldName: 'awsDateTime'),
+          fieldName: 'awsDateTime',
+        ),
         root: _root,
       );
 
@@ -144,7 +152,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarModel,
           TemporalDateTime>(
         const QueryField<String, ScalarModel, TemporalDateTime>(
-            fieldName: 'requiredAwsDateTime'),
+          fieldName: 'requiredAwsDateTime',
+        ),
         root: _root,
       );
 
@@ -152,7 +161,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalTime?> get $awsTime =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, TemporalTime?>(
         const QueryField<String, ScalarModel, TemporalTime?>(
-            fieldName: 'awsTime'),
+          fieldName: 'awsTime',
+        ),
         root: _root,
       );
 
@@ -160,7 +170,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalTime> get $requiredAwsTime =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, TemporalTime>(
         const QueryField<String, ScalarModel, TemporalTime>(
-            fieldName: 'requiredAwsTime'),
+          fieldName: 'requiredAwsTime',
+        ),
         root: _root,
       );
 
@@ -169,7 +180,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarModel,
           TemporalTimestamp?>(
         const QueryField<String, ScalarModel, TemporalTimestamp?>(
-            fieldName: 'awsTimestamp'),
+          fieldName: 'awsTimestamp',
+        ),
         root: _root,
       );
 
@@ -178,7 +190,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarModel,
           TemporalTimestamp>(
         const QueryField<String, ScalarModel, TemporalTimestamp>(
-            fieldName: 'requiredAwsTimestamp'),
+          fieldName: 'requiredAwsTimestamp',
+        ),
         root: _root,
       );
 
@@ -193,7 +206,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $requiredAwsEmail =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, String>(
         const QueryField<String, ScalarModel, String>(
-            fieldName: 'requiredAwsEmail'),
+          fieldName: 'requiredAwsEmail',
+        ),
         root: _root,
       );
 
@@ -208,7 +222,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, Object> get $requiredAwsJson =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, Object>(
         const QueryField<String, ScalarModel, Object>(
-            fieldName: 'requiredAwsJson'),
+          fieldName: 'requiredAwsJson',
+        ),
         root: _root,
       );
 
@@ -223,7 +238,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $requiredAwsPhone =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, String>(
         const QueryField<String, ScalarModel, String>(
-            fieldName: 'requiredAwsPhone'),
+          fieldName: 'requiredAwsPhone',
+        ),
         root: _root,
       );
 
@@ -245,7 +261,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $awsIpAddress =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, String?>(
         const QueryField<String, ScalarModel, String?>(
-            fieldName: 'awsIpAddress'),
+          fieldName: 'awsIpAddress',
+        ),
         root: _root,
       );
 
@@ -253,7 +270,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $requiredAwsIpAddress =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, String>(
         const QueryField<String, ScalarModel, String>(
-            fieldName: 'requiredAwsIpAddress'),
+          fieldName: 'requiredAwsIpAddress',
+        ),
         root: _root,
       );
 
@@ -262,7 +280,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarModel,
           TemporalDateTime>(
         const QueryField<String, ScalarModel, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -271,7 +290,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarModel,
           TemporalDateTime>(
         const QueryField<String, ScalarModel, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -279,7 +299,8 @@ class ScalarModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $modelIdentifier =>
       NestedQueryField<ModelIdentifier, M, String, ScalarModel, String>(
         const QueryField<String, ScalarModel, String>(
-            fieldName: 'modelIdentifier'),
+          fieldName: 'modelIdentifier',
+        ),
         root: _root,
       );
 }
@@ -390,104 +411,6 @@ abstract class PartialScalarModel extends PartialModel<String, ScalarModel>
       };
   @override
   String get runtimeTypeName => 'ScalarModel';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, ScalarModel, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'id':
-        value = id;
-        break;
-      case r'str':
-        value = str;
-        break;
-      case r'requiredStr':
-        value = requiredStr;
-        break;
-      case r'integer':
-        value = integer;
-        break;
-      case r'requiredInteger':
-        value = requiredInteger;
-        break;
-      case r'float':
-        value = float;
-        break;
-      case r'requiredFloat':
-        value = requiredFloat;
-        break;
-      case r'boolean':
-        value = boolean;
-        break;
-      case r'requiredBoolean':
-        value = requiredBoolean;
-        break;
-      case r'awsDate':
-        value = awsDate;
-        break;
-      case r'requiredAwsDate':
-        value = requiredAwsDate;
-        break;
-      case r'awsDateTime':
-        value = awsDateTime;
-        break;
-      case r'requiredAwsDateTime':
-        value = requiredAwsDateTime;
-        break;
-      case r'awsTime':
-        value = awsTime;
-        break;
-      case r'requiredAwsTime':
-        value = requiredAwsTime;
-        break;
-      case r'awsTimestamp':
-        value = awsTimestamp;
-        break;
-      case r'requiredAwsTimestamp':
-        value = requiredAwsTimestamp;
-        break;
-      case r'awsEmail':
-        value = awsEmail;
-        break;
-      case r'requiredAwsEmail':
-        value = requiredAwsEmail;
-        break;
-      case r'awsJson':
-        value = awsJson;
-        break;
-      case r'requiredAwsJson':
-        value = requiredAwsJson;
-        break;
-      case r'awsPhone':
-        value = awsPhone;
-        break;
-      case r'requiredAwsPhone':
-        value = requiredAwsPhone;
-        break;
-      case r'awsUrl':
-        value = awsUrl;
-        break;
-      case r'requiredAwsUrl':
-        value = requiredAwsUrl;
-        break;
-      case r'awsIpAddress':
-        value = awsIpAddress;
-        break;
-      case r'requiredAwsIpAddress':
-        value = requiredAwsIpAddress;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialScalarModel extends PartialScalarModel {
@@ -912,6 +835,199 @@ abstract class ScalarModel extends PartialScalarModel
   static const ScalarModelQueryFields<String, ScalarModel> _queryFields =
       ScalarModelQueryFields();
 
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'ScalarModel',
+      'pluralName': 'ScalarModels',
+      'fields': {
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'str': {
+          'name': 'str',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredStr': {
+          'name': 'requiredStr',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'integer': {
+          'name': 'integer',
+          'type': {'scalar': 'Int'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredInteger': {
+          'name': 'requiredInteger',
+          'type': {'scalar': 'Int'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'float': {
+          'name': 'float',
+          'type': {'scalar': 'Float'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredFloat': {
+          'name': 'requiredFloat',
+          'type': {'scalar': 'Float'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'boolean': {
+          'name': 'boolean',
+          'type': {'scalar': 'Boolean'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredBoolean': {
+          'name': 'requiredBoolean',
+          'type': {'scalar': 'Boolean'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'awsDate': {
+          'name': 'awsDate',
+          'type': {'scalar': 'AWSDate'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredAwsDate': {
+          'name': 'requiredAwsDate',
+          'type': {'scalar': 'AWSDate'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'awsDateTime': {
+          'name': 'awsDateTime',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredAwsDateTime': {
+          'name': 'requiredAwsDateTime',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'awsTime': {
+          'name': 'awsTime',
+          'type': {'scalar': 'AWSTime'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredAwsTime': {
+          'name': 'requiredAwsTime',
+          'type': {'scalar': 'AWSTime'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'awsTimestamp': {
+          'name': 'awsTimestamp',
+          'type': {'scalar': 'AWSTimestamp'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredAwsTimestamp': {
+          'name': 'requiredAwsTimestamp',
+          'type': {'scalar': 'AWSTimestamp'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'awsEmail': {
+          'name': 'awsEmail',
+          'type': {'scalar': 'AWSEmail'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredAwsEmail': {
+          'name': 'requiredAwsEmail',
+          'type': {'scalar': 'AWSEmail'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'awsJson': {
+          'name': 'awsJson',
+          'type': {'scalar': 'AWSJSON'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredAwsJson': {
+          'name': 'requiredAwsJson',
+          'type': {'scalar': 'AWSJSON'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'awsPhone': {
+          'name': 'awsPhone',
+          'type': {'scalar': 'AWSPhone'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredAwsPhone': {
+          'name': 'requiredAwsPhone',
+          'type': {'scalar': 'AWSPhone'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'awsUrl': {
+          'name': 'awsUrl',
+          'type': {'scalar': 'AWSURL'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredAwsUrl': {
+          'name': 'requiredAwsUrl',
+          'type': {'scalar': 'AWSURL'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'awsIpAddress': {
+          'name': 'awsIpAddress',
+          'type': {'scalar': 'AWSIPAddress'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredAwsIpAddress': {
+          'name': 'requiredAwsIpAddress',
+          'type': {'scalar': 'AWSIPAddress'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        }
+      ],
+    },
+  )!;
+
   @override
   String get id;
 
@@ -1200,6 +1316,182 @@ abstract class ScalarModel extends PartialScalarModel
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, ScalarModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
+  ScalarModel copyWith({
+    String? id,
+    String? str,
+    String? requiredStr,
+    int? integer,
+    int? requiredInteger,
+    double? float,
+    double? requiredFloat,
+    bool? boolean,
+    bool? requiredBoolean,
+    DateTime? awsDate,
+    DateTime? requiredAwsDate,
+    DateTime? awsDateTime,
+    DateTime? requiredAwsDateTime,
+    DateTime? awsTime,
+    DateTime? requiredAwsTime,
+    DateTime? awsTimestamp,
+    DateTime? requiredAwsTimestamp,
+    String? awsEmail,
+    String? requiredAwsEmail,
+    Object? awsJson,
+    Object? requiredAwsJson,
+    String? awsPhone,
+    String? requiredAwsPhone,
+    Uri? awsUrl,
+    Uri? requiredAwsUrl,
+    String? awsIpAddress,
+    String? requiredAwsIpAddress,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return _ScalarModel._(
+      id: id ?? this.id,
+      str: str ?? this.str,
+      requiredStr: requiredStr ?? this.requiredStr,
+      integer: integer ?? this.integer,
+      requiredInteger: requiredInteger ?? this.requiredInteger,
+      float: float ?? this.float,
+      requiredFloat: requiredFloat ?? this.requiredFloat,
+      boolean: boolean ?? this.boolean,
+      requiredBoolean: requiredBoolean ?? this.requiredBoolean,
+      awsDate: awsDate == null ? this.awsDate : TemporalDate(awsDate),
+      requiredAwsDate: requiredAwsDate == null
+          ? this.requiredAwsDate
+          : TemporalDate(requiredAwsDate),
+      awsDateTime: awsDateTime == null
+          ? this.awsDateTime
+          : TemporalDateTime(awsDateTime),
+      requiredAwsDateTime: requiredAwsDateTime == null
+          ? this.requiredAwsDateTime
+          : TemporalDateTime(requiredAwsDateTime),
+      awsTime: awsTime == null ? this.awsTime : TemporalTime(awsTime),
+      requiredAwsTime: requiredAwsTime == null
+          ? this.requiredAwsTime
+          : TemporalTime(requiredAwsTime),
+      awsTimestamp: awsTimestamp == null
+          ? this.awsTimestamp
+          : TemporalTimestamp(awsTimestamp),
+      requiredAwsTimestamp: requiredAwsTimestamp == null
+          ? this.requiredAwsTimestamp
+          : TemporalTimestamp(requiredAwsTimestamp),
+      awsEmail: awsEmail ?? this.awsEmail,
+      requiredAwsEmail: requiredAwsEmail ?? this.requiredAwsEmail,
+      awsJson: awsJson ?? this.awsJson,
+      requiredAwsJson: requiredAwsJson ?? this.requiredAwsJson,
+      awsPhone: awsPhone ?? this.awsPhone,
+      requiredAwsPhone: requiredAwsPhone ?? this.requiredAwsPhone,
+      awsUrl: awsUrl ?? this.awsUrl,
+      requiredAwsUrl: requiredAwsUrl ?? this.requiredAwsUrl,
+      awsIpAddress: awsIpAddress ?? this.awsIpAddress,
+      requiredAwsIpAddress: requiredAwsIpAddress ?? this.requiredAwsIpAddress,
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, ScalarModel, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'str':
+        value = str;
+        break;
+      case r'requiredStr':
+        value = requiredStr;
+        break;
+      case r'integer':
+        value = integer;
+        break;
+      case r'requiredInteger':
+        value = requiredInteger;
+        break;
+      case r'float':
+        value = float;
+        break;
+      case r'requiredFloat':
+        value = requiredFloat;
+        break;
+      case r'boolean':
+        value = boolean;
+        break;
+      case r'requiredBoolean':
+        value = requiredBoolean;
+        break;
+      case r'awsDate':
+        value = awsDate;
+        break;
+      case r'requiredAwsDate':
+        value = requiredAwsDate;
+        break;
+      case r'awsDateTime':
+        value = awsDateTime;
+        break;
+      case r'requiredAwsDateTime':
+        value = requiredAwsDateTime;
+        break;
+      case r'awsTime':
+        value = awsTime;
+        break;
+      case r'requiredAwsTime':
+        value = requiredAwsTime;
+        break;
+      case r'awsTimestamp':
+        value = awsTimestamp;
+        break;
+      case r'requiredAwsTimestamp':
+        value = requiredAwsTimestamp;
+        break;
+      case r'awsEmail':
+        value = awsEmail;
+        break;
+      case r'requiredAwsEmail':
+        value = requiredAwsEmail;
+        break;
+      case r'awsJson':
+        value = awsJson;
+        break;
+      case r'requiredAwsJson':
+        value = requiredAwsJson;
+        break;
+      case r'awsPhone':
+        value = awsPhone;
+        break;
+      case r'requiredAwsPhone':
+        value = requiredAwsPhone;
+        break;
+      case r'awsUrl':
+        value = awsUrl;
+        break;
+      case r'requiredAwsUrl':
+        value = requiredAwsUrl;
+        break;
+      case r'awsIpAddress':
+        value = awsIpAddress;
+        break;
+      case r'requiredAwsIpAddress':
+        value = requiredAwsIpAddress;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _ScalarModel extends ScalarModel {

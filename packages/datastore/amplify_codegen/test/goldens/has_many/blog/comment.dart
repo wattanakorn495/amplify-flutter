@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.comment;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 import 'post.dart';
 
@@ -29,7 +30,8 @@ class CommentType extends ModelType<String, Comment, PartialComment> {
 
   @override
   T fromJson<T extends PartialModel<String, Comment>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == Comment || T == Model<String, Comment>) {
       return Comment.fromJson(json) as T;
     }
@@ -58,10 +60,11 @@ class CommentQueryFields<ModelIdentifier extends Object,
 
   /// Query field for the [Comment.post] field.
   PostQueryFields<ModelIdentifier, M> get $post => PostQueryFields(
-          NestedQueryField<ModelIdentifier, M, String, Comment, Post>(
-        const QueryField<String, Comment, Post>(fieldName: 'post'),
-        root: _root,
-      ));
+        NestedQueryField<ModelIdentifier, M, String, Comment, Post>(
+          const QueryField<String, Comment, Post>(fieldName: 'post'),
+          root: _root,
+        ),
+      );
 
   /// Query field for the [Comment.content] field.
   QueryField<ModelIdentifier, M, String> get $content =>
@@ -74,7 +77,8 @@ class CommentQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, String, Comment, TemporalDateTime>(
         const QueryField<String, Comment, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -82,7 +86,8 @@ class CommentQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, TemporalDateTime> get $updatedAt =>
       NestedQueryField<ModelIdentifier, M, String, Comment, TemporalDateTime>(
         const QueryField<String, Comment, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -138,35 +143,6 @@ abstract class PartialComment extends PartialModel<String, Comment>
       };
   @override
   String get runtimeTypeName => 'Comment';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, Comment, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'id':
-        value = id;
-        break;
-      case r'post':
-        value = post;
-        break;
-      case r'content':
-        value = content;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-      case r'postCommentsId':
-        value = postCommentsId;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialComment extends PartialComment {
@@ -286,6 +262,72 @@ abstract class Comment extends PartialComment
   static const CommentQueryFields<String, Comment> _queryFields =
       CommentQueryFields();
 
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'Comment',
+      'pluralName': 'Comments',
+      'fields': {
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'post': {
+          'name': 'post',
+          'type': {'model': 'Post'},
+          'isReadOnly': false,
+          'authRules': [],
+          'association': {
+            'associationType': 'BelongsTo',
+            'associatedType': 'Post',
+            'targetNames': ['postCommentsId'],
+          },
+        },
+        'content': {
+          'name': 'content',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'postCommentsId': {
+          'name': 'postCommentsId',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        },
+        {
+          'type': 'foreign',
+          'primaryField': 'post',
+          'sortKeyFields': ['postCommentsId'],
+          'name': 'post',
+        },
+      ],
+    },
+  )!;
+
   @override
   String get id;
 
@@ -327,6 +369,55 @@ abstract class Comment extends PartialComment
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, Comment, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  Comment copyWith({
+    String? id,
+    Post? post,
+    String? content,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? postCommentsId,
+  }) {
+    return _Comment._(
+      id: id ?? this.id,
+      post: post ?? this.post,
+      content: content ?? this.content,
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+      postCommentsId: postCommentsId ?? this.postCommentsId,
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, Comment, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'post':
+        value = post;
+        break;
+      case r'content':
+        value = content;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+      case r'postCommentsId':
+        value = postCommentsId;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _Comment extends Comment {

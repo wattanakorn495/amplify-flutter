@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.project;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 import 'package:meta/meta.dart';
 
 import 'team.dart';
@@ -60,7 +61,8 @@ class ProjectType
 
   @override
   T fromJson<T extends PartialModel<ProjectIdentifier, Project>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == Project || T == Model<ProjectIdentifier, Project>) {
       return Project.fromJson(json) as T;
     }
@@ -84,7 +86,8 @@ class ProjectQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $projectId =>
       NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project, String>(
         const QueryField<ProjectIdentifier, Project, String>(
-            fieldName: 'projectId'),
+          fieldName: 'projectId',
+        ),
         root: _root,
       );
 
@@ -96,29 +99,32 @@ class ProjectQueryFields<ModelIdentifier extends Object,
       );
 
   /// Query field for the [Project.devTeam] field.
-  TeamQueryFields<ModelIdentifier, M> get $devTeam =>
-      TeamQueryFields(NestedQueryField<ModelIdentifier, M, ProjectIdentifier,
-          Project, Team>(
-        const QueryField<ProjectIdentifier, Project, Team>(
-            fieldName: 'devTeam'),
-        root: _root,
-      ));
+  TeamQueryFields<ModelIdentifier, M> get $devTeam => TeamQueryFields(
+        NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project, Team>(
+          const QueryField<ProjectIdentifier, Project, Team>(
+            fieldName: 'devTeam',
+          ),
+          root: _root,
+        ),
+      );
 
   /// Query field for the [Project.productTeam] field.
-  TeamQueryFields<ModelIdentifier, M> get $productTeam =>
-      TeamQueryFields(NestedQueryField<ModelIdentifier, M, ProjectIdentifier,
-          Project, Team>(
-        const QueryField<ProjectIdentifier, Project, Team>(
-            fieldName: 'productTeam'),
-        root: _root,
-      ));
+  TeamQueryFields<ModelIdentifier, M> get $productTeam => TeamQueryFields(
+        NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project, Team>(
+          const QueryField<ProjectIdentifier, Project, Team>(
+            fieldName: 'productTeam',
+          ),
+          root: _root,
+        ),
+      );
 
   /// Query field for the [Project.createdAt] field.
   QueryField<ModelIdentifier, M, TemporalDateTime> get $createdAt =>
       NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project,
           TemporalDateTime>(
         const QueryField<ProjectIdentifier, Project, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -127,7 +133,8 @@ class ProjectQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project,
           TemporalDateTime>(
         const QueryField<ProjectIdentifier, Project, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -135,7 +142,8 @@ class ProjectQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $projectDevTeamTeamId =>
       NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project, String?>(
         const QueryField<ProjectIdentifier, Project, String?>(
-            fieldName: 'projectDevTeamTeamId'),
+          fieldName: 'projectDevTeamTeamId',
+        ),
         root: _root,
       );
 
@@ -143,7 +151,8 @@ class ProjectQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $projectDevTeamName =>
       NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project, String?>(
         const QueryField<ProjectIdentifier, Project, String?>(
-            fieldName: 'projectDevTeamName'),
+          fieldName: 'projectDevTeamName',
+        ),
         root: _root,
       );
 
@@ -151,7 +160,8 @@ class ProjectQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $projectProductTeamTeamId =>
       NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project, String?>(
         const QueryField<ProjectIdentifier, Project, String?>(
-            fieldName: 'projectProductTeamTeamId'),
+          fieldName: 'projectProductTeamTeamId',
+        ),
         root: _root,
       );
 
@@ -159,7 +169,8 @@ class ProjectQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $projectProductTeamName =>
       NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project, String?>(
         const QueryField<ProjectIdentifier, Project, String?>(
-            fieldName: 'projectProductTeamName'),
+          fieldName: 'projectProductTeamName',
+        ),
         root: _root,
       );
 
@@ -168,7 +179,8 @@ class ProjectQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, ProjectIdentifier, Project,
           ProjectIdentifier>(
         const QueryField<ProjectIdentifier, Project, ProjectIdentifier>(
-            fieldName: 'modelIdentifier'),
+          fieldName: 'modelIdentifier',
+        ),
         root: _root,
       );
 }
@@ -225,48 +237,6 @@ abstract class PartialProject extends PartialModel<ProjectIdentifier, Project>
       };
   @override
   String get runtimeTypeName => 'Project';
-  @override
-  T valueFor<T extends Object?>(
-      QueryField<ProjectIdentifier, Project, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'projectId':
-        value = projectId;
-        break;
-      case r'name':
-        value = name;
-        break;
-      case r'devTeam':
-        value = devTeam;
-        break;
-      case r'productTeam':
-        value = productTeam;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-      case r'projectDevTeamTeamId':
-        value = projectDevTeamTeamId;
-        break;
-      case r'projectDevTeamName':
-        value = projectDevTeamName;
-        break;
-      case r'projectProductTeamTeamId':
-        value = projectProductTeamTeamId;
-        break;
-      case r'projectProductTeamName':
-        value = projectProductTeamName;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialProject extends PartialProject {
@@ -327,7 +297,9 @@ class _PartialProject extends PartialProject {
               )
         : AsyncModel<TeamIdentifier, Team, PartialTeam, PartialTeam>.fromModel(
             Team.classType.fromJson<PartialTeam>(
-                (json['devTeam'] as Map<String, Object?>)));
+              (json['devTeam'] as Map<String, Object?>),
+            ),
+          );
     final productTeam = json['productTeam'] == null
         ? projectProductTeamTeamId == null || projectProductTeamName == null
             ? null
@@ -341,7 +313,9 @@ class _PartialProject extends PartialProject {
               )
         : AsyncModel<TeamIdentifier, Team, PartialTeam, PartialTeam>.fromModel(
             Team.classType.fromJson<PartialTeam>(
-                (json['productTeam'] as Map<String, Object?>)));
+              (json['productTeam'] as Map<String, Object?>),
+            ),
+          );
     return _PartialProject(
       projectId: projectId,
       name: name,
@@ -450,9 +424,10 @@ abstract class Project extends PartialProject
                   name: projectDevTeamName,
                 ),
               )
-        : AsyncModel<TeamIdentifier, Team, PartialTeam, Team>.fromModel(Team
-            .classType
-            .fromJson<Team>((json['devTeam'] as Map<String, Object?>)));
+        : AsyncModel<TeamIdentifier, Team, PartialTeam, Team>.fromModel(
+            Team.classType
+                .fromJson<Team>((json['devTeam'] as Map<String, Object?>)),
+          );
     final productTeam = json['productTeam'] == null
         ? projectProductTeamTeamId == null || projectProductTeamName == null
             ? null
@@ -464,9 +439,10 @@ abstract class Project extends PartialProject
                   name: projectProductTeamName,
                 ),
               )
-        : AsyncModel<TeamIdentifier, Team, PartialTeam, Team>.fromModel(Team
-            .classType
-            .fromJson<Team>((json['productTeam'] as Map<String, Object?>)));
+        : AsyncModel<TeamIdentifier, Team, PartialTeam, Team>.fromModel(
+            Team.classType
+                .fromJson<Team>((json['productTeam'] as Map<String, Object?>)),
+          );
     return _Project._(
       projectId: projectId,
       name: name,
@@ -485,6 +461,103 @@ abstract class Project extends PartialProject
 
   static const ProjectQueryFields<ProjectIdentifier, Project> _queryFields =
       ProjectQueryFields();
+
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'Project',
+      'pluralName': 'Projects',
+      'fields': {
+        'projectId': {
+          'name': 'projectId',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'name': {
+          'name': 'name',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'devTeam': {
+          'name': 'devTeam',
+          'type': {'model': 'Team'},
+          'isReadOnly': false,
+          'authRules': [],
+          'association': {
+            'associationType': 'HasOne',
+            'associatedType': 'Team',
+            'associatedFields': ['project'],
+            'targetNames': [
+              'projectDevTeamTeamId',
+              'projectDevTeamName',
+            ],
+          },
+        },
+        'productTeam': {
+          'name': 'productTeam',
+          'type': {'model': 'Team'},
+          'isReadOnly': false,
+          'authRules': [],
+          'association': {
+            'associationType': 'HasOne',
+            'associatedType': 'Team',
+            'associatedFields': ['project'],
+            'targetNames': [
+              'projectProductTeamTeamId',
+              'projectProductTeamName',
+            ],
+          },
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'projectDevTeamTeamId': {
+          'name': 'projectDevTeamTeamId',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'projectDevTeamName': {
+          'name': 'projectDevTeamName',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'projectProductTeamTeamId': {
+          'name': 'projectProductTeamTeamId',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'projectProductTeamName': {
+          'name': 'projectProductTeamName',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'projectId',
+          'sortKeyFields': ['name'],
+        }
+      ],
+    },
+  )!;
 
   @override
   String get projectId;
@@ -583,6 +656,81 @@ abstract class Project extends PartialProject
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<ProjectIdentifier, Project, ProjectIdentifier>
       get MODEL_IDENTIFIER => $modelIdentifier;
+  Project copyWith({
+    String? projectId,
+    String? name,
+    Team? devTeam,
+    Team? productTeam,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    String? projectDevTeamTeamId,
+    String? projectDevTeamName,
+    String? projectProductTeamTeamId,
+    String? projectProductTeamName,
+  }) {
+    return _Project._(
+      projectId: projectId ?? this.projectId,
+      name: name ?? this.name,
+      devTeam: devTeam == null ? this.devTeam : AsyncModel.fromModel(devTeam),
+      productTeam: productTeam == null
+          ? this.productTeam
+          : AsyncModel.fromModel(productTeam),
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+      projectDevTeamTeamId: projectDevTeamTeamId ?? this.projectDevTeamTeamId,
+      projectDevTeamName: projectDevTeamName ?? this.projectDevTeamName,
+      projectProductTeamTeamId:
+          projectProductTeamTeamId ?? this.projectProductTeamTeamId,
+      projectProductTeamName:
+          projectProductTeamName ?? this.projectProductTeamName,
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(
+    QueryField<ProjectIdentifier, Project, T> field,
+  ) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'projectId':
+        value = projectId;
+        break;
+      case r'name':
+        value = name;
+        break;
+      case r'devTeam':
+        value = devTeam;
+        break;
+      case r'productTeam':
+        value = productTeam;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+      case r'projectDevTeamTeamId':
+        value = projectDevTeamTeamId;
+        break;
+      case r'projectDevTeamName':
+        value = projectDevTeamName;
+        break;
+      case r'projectProductTeamTeamId':
+        value = projectProductTeamTeamId;
+        break;
+      case r'projectProductTeamName':
+        value = projectProductTeamName;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _Project extends Project {
@@ -737,7 +885,9 @@ class _RemoteProject extends RemoteProject {
               )
         : AsyncModel<TeamIdentifier, Team, PartialTeam, RemoteTeam>.fromModel(
             Team.classType.fromJson<RemoteTeam>(
-                (json['devTeam'] as Map<String, Object?>)));
+              (json['devTeam'] as Map<String, Object?>),
+            ),
+          );
     final productTeam = json['productTeam'] == null
         ? projectProductTeamTeamId == null || projectProductTeamName == null
             ? null
@@ -751,7 +901,9 @@ class _RemoteProject extends RemoteProject {
               )
         : AsyncModel<TeamIdentifier, Team, PartialTeam, RemoteTeam>.fromModel(
             Team.classType.fromJson<RemoteTeam>(
-                (json['productTeam'] as Map<String, Object?>)));
+              (json['productTeam'] as Map<String, Object?>),
+            ),
+          );
     return _RemoteProject(
       projectId: projectId,
       name: name,

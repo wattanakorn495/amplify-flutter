@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.scalar_list_model;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 
 class ScalarListModelType
     extends ModelType<String, ScalarListModel, PartialScalarListModel> {
@@ -28,7 +29,8 @@ class ScalarListModelType
 
   @override
   T fromJson<T extends PartialModel<String, ScalarListModel>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == ScalarListModel || T == Model<String, ScalarListModel>) {
       return ScalarListModel.fromJson(json) as T;
     }
@@ -60,7 +62,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $listOfString =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String?>(
         const QueryField<String, ScalarListModel, String?>(
-            fieldName: 'listOfString'),
+          fieldName: 'listOfString',
+        ),
         root: _root,
       );
 
@@ -68,7 +71,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $listOfRequiredString =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String>(
         const QueryField<String, ScalarListModel, String>(
-            fieldName: 'listOfRequiredString'),
+          fieldName: 'listOfRequiredString',
+        ),
         root: _root,
       );
 
@@ -76,7 +80,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $requiredListOfString =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String?>(
         const QueryField<String, ScalarListModel, String?>(
-            fieldName: 'requiredListOfString'),
+          fieldName: 'requiredListOfString',
+        ),
         root: _root,
       );
 
@@ -84,7 +89,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $requiredListOfRequiredString =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String>(
         const QueryField<String, ScalarListModel, String>(
-            fieldName: 'requiredListOfRequiredString'),
+          fieldName: 'requiredListOfRequiredString',
+        ),
         root: _root,
       );
 
@@ -92,7 +98,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, int?> get $listOfInteger =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, int?>(
         const QueryField<String, ScalarListModel, int?>(
-            fieldName: 'listOfInteger'),
+          fieldName: 'listOfInteger',
+        ),
         root: _root,
       );
 
@@ -100,7 +107,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, int> get $listOfRequiredInteger =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, int>(
         const QueryField<String, ScalarListModel, int>(
-            fieldName: 'listOfRequiredInteger'),
+          fieldName: 'listOfRequiredInteger',
+        ),
         root: _root,
       );
 
@@ -108,7 +116,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, int?> get $requiredListOfInteger =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, int?>(
         const QueryField<String, ScalarListModel, int?>(
-            fieldName: 'requiredListOfInteger'),
+          fieldName: 'requiredListOfInteger',
+        ),
         root: _root,
       );
 
@@ -116,7 +125,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, int> get $requiredListOfRequiredInteger =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, int>(
         const QueryField<String, ScalarListModel, int>(
-            fieldName: 'requiredListOfRequiredInteger'),
+          fieldName: 'requiredListOfRequiredInteger',
+        ),
         root: _root,
       );
 
@@ -124,7 +134,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, double?> get $listOfFloat =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, double?>(
         const QueryField<String, ScalarListModel, double?>(
-            fieldName: 'listOfFloat'),
+          fieldName: 'listOfFloat',
+        ),
         root: _root,
       );
 
@@ -132,7 +143,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, double> get $listOfRequiredFloat =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, double>(
         const QueryField<String, ScalarListModel, double>(
-            fieldName: 'listOfRequiredFloat'),
+          fieldName: 'listOfRequiredFloat',
+        ),
         root: _root,
       );
 
@@ -140,7 +152,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, double?> get $requiredListOfFloat =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, double?>(
         const QueryField<String, ScalarListModel, double?>(
-            fieldName: 'requiredListOfFloat'),
+          fieldName: 'requiredListOfFloat',
+        ),
         root: _root,
       );
 
@@ -148,7 +161,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, double> get $requiredListOfRequiredFloat =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, double>(
         const QueryField<String, ScalarListModel, double>(
-            fieldName: 'requiredListOfRequiredFloat'),
+          fieldName: 'requiredListOfRequiredFloat',
+        ),
         root: _root,
       );
 
@@ -156,7 +170,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, bool?> get $listOfBoolean =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, bool?>(
         const QueryField<String, ScalarListModel, bool?>(
-            fieldName: 'listOfBoolean'),
+          fieldName: 'listOfBoolean',
+        ),
         root: _root,
       );
 
@@ -164,7 +179,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, bool> get $listOfRequiredBoolean =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, bool>(
         const QueryField<String, ScalarListModel, bool>(
-            fieldName: 'listOfRequiredBoolean'),
+          fieldName: 'listOfRequiredBoolean',
+        ),
         root: _root,
       );
 
@@ -172,7 +188,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, bool?> get $requiredListOfBoolean =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, bool?>(
         const QueryField<String, ScalarListModel, bool?>(
-            fieldName: 'requiredListOfBoolean'),
+          fieldName: 'requiredListOfBoolean',
+        ),
         root: _root,
       );
 
@@ -180,7 +197,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, bool> get $requiredListOfRequiredBoolean =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, bool>(
         const QueryField<String, ScalarListModel, bool>(
-            fieldName: 'requiredListOfRequiredBoolean'),
+          fieldName: 'requiredListOfRequiredBoolean',
+        ),
         root: _root,
       );
 
@@ -189,7 +207,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalDate?>(
         const QueryField<String, ScalarListModel, TemporalDate?>(
-            fieldName: 'listOfAWSDate'),
+          fieldName: 'listOfAWSDate',
+        ),
         root: _root,
       );
 
@@ -198,7 +217,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalDate>(
         const QueryField<String, ScalarListModel, TemporalDate>(
-            fieldName: 'listOfRequiredAWSDate'),
+          fieldName: 'listOfRequiredAWSDate',
+        ),
         root: _root,
       );
 
@@ -207,7 +227,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalDate?>(
         const QueryField<String, ScalarListModel, TemporalDate?>(
-            fieldName: 'requiredListOfAWSDate'),
+          fieldName: 'requiredListOfAWSDate',
+        ),
         root: _root,
       );
 
@@ -216,7 +237,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       get $requiredListOfRequiredAwsDate => NestedQueryField<ModelIdentifier, M,
               String, ScalarListModel, TemporalDate>(
             const QueryField<String, ScalarListModel, TemporalDate>(
-                fieldName: 'requiredListOfRequiredAWSDate'),
+              fieldName: 'requiredListOfRequiredAWSDate',
+            ),
             root: _root,
           );
 
@@ -225,7 +247,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalDateTime?>(
         const QueryField<String, ScalarListModel, TemporalDateTime?>(
-            fieldName: 'listOfAWSDateTime'),
+          fieldName: 'listOfAWSDateTime',
+        ),
         root: _root,
       );
 
@@ -234,7 +257,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       get $listOfRequiredAwsDateTime => NestedQueryField<ModelIdentifier, M,
               String, ScalarListModel, TemporalDateTime>(
             const QueryField<String, ScalarListModel, TemporalDateTime>(
-                fieldName: 'listOfRequiredAWSDateTime'),
+              fieldName: 'listOfRequiredAWSDateTime',
+            ),
             root: _root,
           );
 
@@ -243,7 +267,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       get $requiredListOfAwsDateTime => NestedQueryField<ModelIdentifier, M,
               String, ScalarListModel, TemporalDateTime?>(
             const QueryField<String, ScalarListModel, TemporalDateTime?>(
-                fieldName: 'requiredListOfAWSDateTime'),
+              fieldName: 'requiredListOfAWSDateTime',
+            ),
             root: _root,
           );
 
@@ -252,7 +277,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       get $requiredListOfRequiredAwsDateTime => NestedQueryField<
               ModelIdentifier, M, String, ScalarListModel, TemporalDateTime>(
             const QueryField<String, ScalarListModel, TemporalDateTime>(
-                fieldName: 'requiredListOfRequiredAWSDateTime'),
+              fieldName: 'requiredListOfRequiredAWSDateTime',
+            ),
             root: _root,
           );
 
@@ -261,7 +287,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalTime?>(
         const QueryField<String, ScalarListModel, TemporalTime?>(
-            fieldName: 'listOfAWSTime'),
+          fieldName: 'listOfAWSTime',
+        ),
         root: _root,
       );
 
@@ -270,7 +297,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalTime>(
         const QueryField<String, ScalarListModel, TemporalTime>(
-            fieldName: 'listOfRequiredAWSTime'),
+          fieldName: 'listOfRequiredAWSTime',
+        ),
         root: _root,
       );
 
@@ -279,7 +307,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalTime?>(
         const QueryField<String, ScalarListModel, TemporalTime?>(
-            fieldName: 'requiredListOfAWSTime'),
+          fieldName: 'requiredListOfAWSTime',
+        ),
         root: _root,
       );
 
@@ -288,7 +317,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       get $requiredListOfRequiredAwsTime => NestedQueryField<ModelIdentifier, M,
               String, ScalarListModel, TemporalTime>(
             const QueryField<String, ScalarListModel, TemporalTime>(
-                fieldName: 'requiredListOfRequiredAWSTime'),
+              fieldName: 'requiredListOfRequiredAWSTime',
+            ),
             root: _root,
           );
 
@@ -297,7 +327,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalTimestamp?>(
         const QueryField<String, ScalarListModel, TemporalTimestamp?>(
-            fieldName: 'listOfAWSTimestamp'),
+          fieldName: 'listOfAWSTimestamp',
+        ),
         root: _root,
       );
 
@@ -306,7 +337,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       get $listOfRequiredAwsTimestamp => NestedQueryField<ModelIdentifier, M,
               String, ScalarListModel, TemporalTimestamp>(
             const QueryField<String, ScalarListModel, TemporalTimestamp>(
-                fieldName: 'listOfRequiredAWSTimestamp'),
+              fieldName: 'listOfRequiredAWSTimestamp',
+            ),
             root: _root,
           );
 
@@ -315,7 +347,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       get $requiredListOfAwsTimestamp => NestedQueryField<ModelIdentifier, M,
               String, ScalarListModel, TemporalTimestamp?>(
             const QueryField<String, ScalarListModel, TemporalTimestamp?>(
-                fieldName: 'requiredListOfAWSTimestamp'),
+              fieldName: 'requiredListOfAWSTimestamp',
+            ),
             root: _root,
           );
 
@@ -324,7 +357,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       get $requiredListOfRequiredAwsTimestamp => NestedQueryField<
               ModelIdentifier, M, String, ScalarListModel, TemporalTimestamp>(
             const QueryField<String, ScalarListModel, TemporalTimestamp>(
-                fieldName: 'requiredListOfRequiredAWSTimestamp'),
+              fieldName: 'requiredListOfRequiredAWSTimestamp',
+            ),
             root: _root,
           );
 
@@ -332,7 +366,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $listOfAwsEmail =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String?>(
         const QueryField<String, ScalarListModel, String?>(
-            fieldName: 'listOfAWSEmail'),
+          fieldName: 'listOfAWSEmail',
+        ),
         root: _root,
       );
 
@@ -340,7 +375,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $listOfRequiredAwsEmail =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String>(
         const QueryField<String, ScalarListModel, String>(
-            fieldName: 'listOfRequiredAWSEmail'),
+          fieldName: 'listOfRequiredAWSEmail',
+        ),
         root: _root,
       );
 
@@ -348,7 +384,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $requiredListOfAwsEmail =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String?>(
         const QueryField<String, ScalarListModel, String?>(
-            fieldName: 'requiredListOfAWSEmail'),
+          fieldName: 'requiredListOfAWSEmail',
+        ),
         root: _root,
       );
 
@@ -356,7 +393,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $requiredListOfRequiredAwsEmail =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String>(
         const QueryField<String, ScalarListModel, String>(
-            fieldName: 'requiredListOfRequiredAWSEmail'),
+          fieldName: 'requiredListOfRequiredAWSEmail',
+        ),
         root: _root,
       );
 
@@ -364,7 +402,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, Object?> get $listOfAwsjson =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, Object?>(
         const QueryField<String, ScalarListModel, Object?>(
-            fieldName: 'listOfAWSJSON'),
+          fieldName: 'listOfAWSJSON',
+        ),
         root: _root,
       );
 
@@ -372,7 +411,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, Object> get $listOfRequiredAwsjson =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, Object>(
         const QueryField<String, ScalarListModel, Object>(
-            fieldName: 'listOfRequiredAWSJSON'),
+          fieldName: 'listOfRequiredAWSJSON',
+        ),
         root: _root,
       );
 
@@ -380,7 +420,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, Object?> get $requiredListOfAwsjson =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, Object?>(
         const QueryField<String, ScalarListModel, Object?>(
-            fieldName: 'requiredListOfAWSJSON'),
+          fieldName: 'requiredListOfAWSJSON',
+        ),
         root: _root,
       );
 
@@ -388,7 +429,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, Object> get $requiredListOfRequiredAwsjson =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, Object>(
         const QueryField<String, ScalarListModel, Object>(
-            fieldName: 'requiredListOfRequiredAWSJSON'),
+          fieldName: 'requiredListOfRequiredAWSJSON',
+        ),
         root: _root,
       );
 
@@ -396,7 +438,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $listOfAwsPhone =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String?>(
         const QueryField<String, ScalarListModel, String?>(
-            fieldName: 'listOfAWSPhone'),
+          fieldName: 'listOfAWSPhone',
+        ),
         root: _root,
       );
 
@@ -404,7 +447,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $listOfRequiredAwsPhone =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String>(
         const QueryField<String, ScalarListModel, String>(
-            fieldName: 'listOfRequiredAWSPhone'),
+          fieldName: 'listOfRequiredAWSPhone',
+        ),
         root: _root,
       );
 
@@ -412,7 +456,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $requiredListOfAwsPhone =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String?>(
         const QueryField<String, ScalarListModel, String?>(
-            fieldName: 'requiredListOfAWSPhone'),
+          fieldName: 'requiredListOfAWSPhone',
+        ),
         root: _root,
       );
 
@@ -420,7 +465,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $requiredListOfRequiredAwsPhone =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String>(
         const QueryField<String, ScalarListModel, String>(
-            fieldName: 'requiredListOfRequiredAWSPhone'),
+          fieldName: 'requiredListOfRequiredAWSPhone',
+        ),
         root: _root,
       );
 
@@ -428,7 +474,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, Uri?> get $listOfAwsUrl =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, Uri?>(
         const QueryField<String, ScalarListModel, Uri?>(
-            fieldName: 'listOfAWSUrl'),
+          fieldName: 'listOfAWSUrl',
+        ),
         root: _root,
       );
 
@@ -436,7 +483,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, Uri> get $listOfRequiredAwsUrl =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, Uri>(
         const QueryField<String, ScalarListModel, Uri>(
-            fieldName: 'listOfRequiredAWSUrl'),
+          fieldName: 'listOfRequiredAWSUrl',
+        ),
         root: _root,
       );
 
@@ -444,7 +492,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, Uri?> get $requiredListOfAwsUrl =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, Uri?>(
         const QueryField<String, ScalarListModel, Uri?>(
-            fieldName: 'requiredListOfAWSUrl'),
+          fieldName: 'requiredListOfAWSUrl',
+        ),
         root: _root,
       );
 
@@ -452,7 +501,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, Uri> get $requiredListOfRequiredAwsUrl =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, Uri>(
         const QueryField<String, ScalarListModel, Uri>(
-            fieldName: 'requiredListOfRequiredAWSUrl'),
+          fieldName: 'requiredListOfRequiredAWSUrl',
+        ),
         root: _root,
       );
 
@@ -460,7 +510,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $listOfAwsIpAddress =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String?>(
         const QueryField<String, ScalarListModel, String?>(
-            fieldName: 'listOfAWSIpAddress'),
+          fieldName: 'listOfAWSIpAddress',
+        ),
         root: _root,
       );
 
@@ -468,7 +519,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $listOfRequiredAwsIpAddress =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String>(
         const QueryField<String, ScalarListModel, String>(
-            fieldName: 'listOfRequiredAWSIpAddress'),
+          fieldName: 'listOfRequiredAWSIpAddress',
+        ),
         root: _root,
       );
 
@@ -476,7 +528,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String?> get $requiredListOfAwsIpAddress =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String?>(
         const QueryField<String, ScalarListModel, String?>(
-            fieldName: 'requiredListOfAWSIpAddress'),
+          fieldName: 'requiredListOfAWSIpAddress',
+        ),
         root: _root,
       );
 
@@ -485,7 +538,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       get $requiredListOfRequiredAwsIpAddress =>
           NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String>(
             const QueryField<String, ScalarListModel, String>(
-                fieldName: 'requiredListOfRequiredAWSIpAddress'),
+              fieldName: 'requiredListOfRequiredAWSIpAddress',
+            ),
             root: _root,
           );
 
@@ -494,7 +548,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalDateTime>(
         const QueryField<String, ScalarListModel, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -503,7 +558,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel,
           TemporalDateTime>(
         const QueryField<String, ScalarListModel, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -511,7 +567,8 @@ class ScalarListModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $modelIdentifier =>
       NestedQueryField<ModelIdentifier, M, String, ScalarListModel, String>(
         const QueryField<String, ScalarListModel, String>(
-            fieldName: 'modelIdentifier'),
+          fieldName: 'modelIdentifier',
+        ),
         root: _root,
       );
 }
@@ -721,182 +778,6 @@ abstract class PartialScalarListModel
       };
   @override
   String get runtimeTypeName => 'ScalarListModel';
-  @override
-  T valueFor<T extends Object?>(QueryField<String, ScalarListModel, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'id':
-        value = id;
-        break;
-      case r'listOfString':
-        value = listOfString;
-        break;
-      case r'listOfRequiredString':
-        value = listOfRequiredString;
-        break;
-      case r'requiredListOfString':
-        value = requiredListOfString;
-        break;
-      case r'requiredListOfRequiredString':
-        value = requiredListOfRequiredString;
-        break;
-      case r'listOfInteger':
-        value = listOfInteger;
-        break;
-      case r'listOfRequiredInteger':
-        value = listOfRequiredInteger;
-        break;
-      case r'requiredListOfInteger':
-        value = requiredListOfInteger;
-        break;
-      case r'requiredListOfRequiredInteger':
-        value = requiredListOfRequiredInteger;
-        break;
-      case r'listOfFloat':
-        value = listOfFloat;
-        break;
-      case r'listOfRequiredFloat':
-        value = listOfRequiredFloat;
-        break;
-      case r'requiredListOfFloat':
-        value = requiredListOfFloat;
-        break;
-      case r'requiredListOfRequiredFloat':
-        value = requiredListOfRequiredFloat;
-        break;
-      case r'listOfBoolean':
-        value = listOfBoolean;
-        break;
-      case r'listOfRequiredBoolean':
-        value = listOfRequiredBoolean;
-        break;
-      case r'requiredListOfBoolean':
-        value = requiredListOfBoolean;
-        break;
-      case r'requiredListOfRequiredBoolean':
-        value = requiredListOfRequiredBoolean;
-        break;
-      case r'listOfAWSDate':
-        value = listOfAwsDate;
-        break;
-      case r'listOfRequiredAWSDate':
-        value = listOfRequiredAwsDate;
-        break;
-      case r'requiredListOfAWSDate':
-        value = requiredListOfAwsDate;
-        break;
-      case r'requiredListOfRequiredAWSDate':
-        value = requiredListOfRequiredAwsDate;
-        break;
-      case r'listOfAWSDateTime':
-        value = listOfAwsDateTime;
-        break;
-      case r'listOfRequiredAWSDateTime':
-        value = listOfRequiredAwsDateTime;
-        break;
-      case r'requiredListOfAWSDateTime':
-        value = requiredListOfAwsDateTime;
-        break;
-      case r'requiredListOfRequiredAWSDateTime':
-        value = requiredListOfRequiredAwsDateTime;
-        break;
-      case r'listOfAWSTime':
-        value = listOfAwsTime;
-        break;
-      case r'listOfRequiredAWSTime':
-        value = listOfRequiredAwsTime;
-        break;
-      case r'requiredListOfAWSTime':
-        value = requiredListOfAwsTime;
-        break;
-      case r'requiredListOfRequiredAWSTime':
-        value = requiredListOfRequiredAwsTime;
-        break;
-      case r'listOfAWSTimestamp':
-        value = listOfAwsTimestamp;
-        break;
-      case r'listOfRequiredAWSTimestamp':
-        value = listOfRequiredAwsTimestamp;
-        break;
-      case r'requiredListOfAWSTimestamp':
-        value = requiredListOfAwsTimestamp;
-        break;
-      case r'requiredListOfRequiredAWSTimestamp':
-        value = requiredListOfRequiredAwsTimestamp;
-        break;
-      case r'listOfAWSEmail':
-        value = listOfAwsEmail;
-        break;
-      case r'listOfRequiredAWSEmail':
-        value = listOfRequiredAwsEmail;
-        break;
-      case r'requiredListOfAWSEmail':
-        value = requiredListOfAwsEmail;
-        break;
-      case r'requiredListOfRequiredAWSEmail':
-        value = requiredListOfRequiredAwsEmail;
-        break;
-      case r'listOfAWSJSON':
-        value = listOfAwsjson;
-        break;
-      case r'listOfRequiredAWSJSON':
-        value = listOfRequiredAwsjson;
-        break;
-      case r'requiredListOfAWSJSON':
-        value = requiredListOfAwsjson;
-        break;
-      case r'requiredListOfRequiredAWSJSON':
-        value = requiredListOfRequiredAwsjson;
-        break;
-      case r'listOfAWSPhone':
-        value = listOfAwsPhone;
-        break;
-      case r'listOfRequiredAWSPhone':
-        value = listOfRequiredAwsPhone;
-        break;
-      case r'requiredListOfAWSPhone':
-        value = requiredListOfAwsPhone;
-        break;
-      case r'requiredListOfRequiredAWSPhone':
-        value = requiredListOfRequiredAwsPhone;
-        break;
-      case r'listOfAWSUrl':
-        value = listOfAwsUrl;
-        break;
-      case r'listOfRequiredAWSUrl':
-        value = listOfRequiredAwsUrl;
-        break;
-      case r'requiredListOfAWSUrl':
-        value = requiredListOfAwsUrl;
-        break;
-      case r'requiredListOfRequiredAWSUrl':
-        value = requiredListOfRequiredAwsUrl;
-        break;
-      case r'listOfAWSIpAddress':
-        value = listOfAwsIpAddress;
-        break;
-      case r'listOfRequiredAWSIpAddress':
-        value = listOfRequiredAwsIpAddress;
-        break;
-      case r'requiredListOfAWSIpAddress':
-        value = requiredListOfAwsIpAddress;
-        break;
-      case r'requiredListOfRequiredAWSIpAddress':
-        value = requiredListOfRequiredAwsIpAddress;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialScalarListModel extends PartialScalarListModel {
@@ -972,12 +853,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredString'] as List<Object?>)
             .cast<String?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredString',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredString',
+                  )),
+            )
             .toList();
     final requiredListOfString = json['requiredListOfString'] == null
         ? null
@@ -989,12 +872,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredString'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredString',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredString',
+                      )),
+                )
                 .toList();
     final listOfInteger = json['listOfInteger'] == null
         ? null
@@ -1003,12 +888,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredInteger'] as List<Object?>)
             .cast<int?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredInteger',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredInteger',
+                  )),
+            )
             .toList();
     final requiredListOfInteger = json['requiredListOfInteger'] == null
         ? null
@@ -1020,12 +907,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredInteger'] as List<Object?>)
                 .cast<int?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredInteger',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredInteger',
+                      )),
+                )
                 .toList();
     final listOfFloat = json['listOfFloat'] == null
         ? null
@@ -1034,12 +923,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredFloat'] as List<Object?>)
             .cast<double?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredFloat',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredFloat',
+                  )),
+            )
             .toList();
     final requiredListOfFloat = json['requiredListOfFloat'] == null
         ? null
@@ -1051,12 +942,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredFloat'] as List<Object?>)
                 .cast<double?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredFloat',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredFloat',
+                      )),
+                )
                 .toList();
     final listOfBoolean = json['listOfBoolean'] == null
         ? null
@@ -1065,12 +958,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredBoolean'] as List<Object?>)
             .cast<bool?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredBoolean',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredBoolean',
+                  )),
+            )
             .toList();
     final requiredListOfBoolean = json['requiredListOfBoolean'] == null
         ? null
@@ -1082,12 +977,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredBoolean'] as List<Object?>)
                 .cast<bool?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredBoolean',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredBoolean',
+                      )),
+                )
                 .toList();
     final listOfAwsDate = json['listOfAWSDate'] == null
         ? null
@@ -1099,12 +996,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredAWSDate'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsDate',
-                  ))
-                : TemporalDate.fromString(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsDate',
+                    ))
+                  : TemporalDate.fromString(el),
+            )
             .toList();
     final requiredListOfAwsDate = json['requiredListOfAWSDate'] == null
         ? null
@@ -1117,12 +1016,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredAWSDate'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsDate',
-                      ))
-                    : TemporalDate.fromString(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsDate',
+                        ))
+                      : TemporalDate.fromString(el),
+                )
                 .toList();
     final listOfAwsDateTime = json['listOfAWSDateTime'] == null
         ? null
@@ -1134,12 +1035,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredAWSDateTime'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsDateTime',
-                  ))
-                : TemporalDateTime.fromString(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsDateTime',
+                    ))
+                  : TemporalDateTime.fromString(el),
+            )
             .toList();
     final requiredListOfAwsDateTime = json['requiredListOfAWSDateTime'] == null
         ? null
@@ -1152,12 +1055,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredAWSDateTime'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsDateTime',
-                      ))
-                    : TemporalDateTime.fromString(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsDateTime',
+                        ))
+                      : TemporalDateTime.fromString(el),
+                )
                 .toList();
     final listOfAwsTime = json['listOfAWSTime'] == null
         ? null
@@ -1169,12 +1074,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredAWSTime'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsTime',
-                  ))
-                : TemporalTime.fromString(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsTime',
+                    ))
+                  : TemporalTime.fromString(el),
+            )
             .toList();
     final requiredListOfAwsTime = json['requiredListOfAWSTime'] == null
         ? null
@@ -1187,12 +1094,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredAWSTime'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsTime',
-                      ))
-                    : TemporalTime.fromString(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsTime',
+                        ))
+                      : TemporalTime.fromString(el),
+                )
                 .toList();
     final listOfAwsTimestamp = json['listOfAWSTimestamp'] == null
         ? null
@@ -1205,12 +1114,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['listOfRequiredAWSTimestamp'] as List<Object?>)
                 .cast<int?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'listOfRequiredAwsTimestamp',
-                      ))
-                    : TemporalTimestamp.fromSeconds(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'listOfRequiredAwsTimestamp',
+                        ))
+                      : TemporalTimestamp.fromSeconds(el),
+                )
                 .toList();
     final requiredListOfAwsTimestamp = json['requiredListOfAWSTimestamp'] ==
             null
@@ -1224,12 +1135,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredAWSTimestamp'] as List<Object?>)
                 .cast<int?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsTimestamp',
-                      ))
-                    : TemporalTimestamp.fromSeconds(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsTimestamp',
+                        ))
+                      : TemporalTimestamp.fromSeconds(el),
+                )
                 .toList();
     final listOfAwsEmail = json['listOfAWSEmail'] == null
         ? null
@@ -1238,12 +1151,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredAWSEmail'] as List<Object?>)
             .cast<String?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredAwsEmail',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredAwsEmail',
+                  )),
+            )
             .toList();
     final requiredListOfAwsEmail = json['requiredListOfAWSEmail'] == null
         ? null
@@ -1255,12 +1170,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredAWSEmail'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsEmail',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsEmail',
+                      )),
+                )
                 .toList();
     final listOfAwsjson = json['listOfAWSJSON'] == null
         ? null
@@ -1269,12 +1186,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredAWSJSON'] as List<Object?>)
             .cast<Object?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredAwsjson',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredAwsjson',
+                  )),
+            )
             .toList();
     final requiredListOfAwsjson = json['requiredListOfAWSJSON'] == null
         ? null
@@ -1286,12 +1205,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredAWSJSON'] as List<Object?>)
                 .cast<Object?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsjson',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsjson',
+                      )),
+                )
                 .toList();
     final listOfAwsPhone = json['listOfAWSPhone'] == null
         ? null
@@ -1300,12 +1221,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredAWSPhone'] as List<Object?>)
             .cast<String?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredAwsPhone',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredAwsPhone',
+                  )),
+            )
             .toList();
     final requiredListOfAwsPhone = json['requiredListOfAWSPhone'] == null
         ? null
@@ -1317,12 +1240,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredAWSPhone'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsPhone',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsPhone',
+                      )),
+                )
                 .toList();
     final listOfAwsUrl = json['listOfAWSUrl'] == null
         ? null
@@ -1334,12 +1259,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
         ? null
         : (json['listOfRequiredAWSUrl'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsUrl',
-                  ))
-                : Uri.parse(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsUrl',
+                    ))
+                  : Uri.parse(el),
+            )
             .toList();
     final requiredListOfAwsUrl = json['requiredListOfAWSUrl'] == null
         ? null
@@ -1352,12 +1279,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredAWSUrl'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsUrl',
-                      ))
-                    : Uri.parse(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsUrl',
+                        ))
+                      : Uri.parse(el),
+                )
                 .toList();
     final listOfAwsIpAddress = json['listOfAWSIpAddress'] == null
         ? null
@@ -1369,12 +1298,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['listOfRequiredAWSIpAddress'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'listOfRequiredAwsIpAddress',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'listOfRequiredAwsIpAddress',
+                      )),
+                )
                 .toList();
     final requiredListOfAwsIpAddress =
         json['requiredListOfAWSIpAddress'] == null
@@ -1387,12 +1318,14 @@ class _PartialScalarListModel extends PartialScalarListModel {
             ? null
             : (json['requiredListOfRequiredAWSIpAddress'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsIpAddress',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsIpAddress',
+                      )),
+                )
                 .toList();
     final createdAt = json['createdAt'] == null
         ? null
@@ -1699,12 +1632,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredString'] as List<Object?>)
             .cast<String?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredString',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredString',
+                  )),
+            )
             .toList();
     final requiredListOfString = json['requiredListOfString'] == null
         ? (throw ModelFieldError(
@@ -1722,12 +1657,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredString'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredString',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredString',
+                      )),
+                )
                 .toList();
     final listOfInteger = json['listOfInteger'] == null
         ? null
@@ -1736,12 +1673,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredInteger'] as List<Object?>)
             .cast<int?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredInteger',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredInteger',
+                  )),
+            )
             .toList();
     final requiredListOfInteger = json['requiredListOfInteger'] == null
         ? (throw ModelFieldError(
@@ -1759,12 +1698,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredInteger'] as List<Object?>)
                 .cast<int?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredInteger',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredInteger',
+                      )),
+                )
                 .toList();
     final listOfFloat = json['listOfFloat'] == null
         ? null
@@ -1773,12 +1714,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredFloat'] as List<Object?>)
             .cast<double?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredFloat',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredFloat',
+                  )),
+            )
             .toList();
     final requiredListOfFloat = json['requiredListOfFloat'] == null
         ? (throw ModelFieldError(
@@ -1796,12 +1739,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredFloat'] as List<Object?>)
                 .cast<double?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredFloat',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredFloat',
+                      )),
+                )
                 .toList();
     final listOfBoolean = json['listOfBoolean'] == null
         ? null
@@ -1810,12 +1755,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredBoolean'] as List<Object?>)
             .cast<bool?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredBoolean',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredBoolean',
+                  )),
+            )
             .toList();
     final requiredListOfBoolean = json['requiredListOfBoolean'] == null
         ? (throw ModelFieldError(
@@ -1833,12 +1780,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredBoolean'] as List<Object?>)
                 .cast<bool?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredBoolean',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredBoolean',
+                      )),
+                )
                 .toList();
     final listOfAwsDate = json['listOfAWSDate'] == null
         ? null
@@ -1850,12 +1799,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredAWSDate'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsDate',
-                  ))
-                : TemporalDate.fromString(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsDate',
+                    ))
+                  : TemporalDate.fromString(el),
+            )
             .toList();
     final requiredListOfAwsDate = json['requiredListOfAWSDate'] == null
         ? (throw ModelFieldError(
@@ -1874,12 +1825,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredAWSDate'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsDate',
-                      ))
-                    : TemporalDate.fromString(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsDate',
+                        ))
+                      : TemporalDate.fromString(el),
+                )
                 .toList();
     final listOfAwsDateTime = json['listOfAWSDateTime'] == null
         ? null
@@ -1891,12 +1844,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredAWSDateTime'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsDateTime',
-                  ))
-                : TemporalDateTime.fromString(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsDateTime',
+                    ))
+                  : TemporalDateTime.fromString(el),
+            )
             .toList();
     final requiredListOfAwsDateTime = json['requiredListOfAWSDateTime'] == null
         ? (throw ModelFieldError(
@@ -1915,12 +1870,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredAWSDateTime'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsDateTime',
-                      ))
-                    : TemporalDateTime.fromString(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsDateTime',
+                        ))
+                      : TemporalDateTime.fromString(el),
+                )
                 .toList();
     final listOfAwsTime = json['listOfAWSTime'] == null
         ? null
@@ -1932,12 +1889,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredAWSTime'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsTime',
-                  ))
-                : TemporalTime.fromString(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsTime',
+                    ))
+                  : TemporalTime.fromString(el),
+            )
             .toList();
     final requiredListOfAwsTime = json['requiredListOfAWSTime'] == null
         ? (throw ModelFieldError(
@@ -1956,12 +1915,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredAWSTime'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsTime',
-                      ))
-                    : TemporalTime.fromString(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsTime',
+                        ))
+                      : TemporalTime.fromString(el),
+                )
                 .toList();
     final listOfAwsTimestamp = json['listOfAWSTimestamp'] == null
         ? null
@@ -1974,12 +1935,14 @@ abstract class ScalarListModel extends PartialScalarListModel
             ? null
             : (json['listOfRequiredAWSTimestamp'] as List<Object?>)
                 .cast<int?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'listOfRequiredAwsTimestamp',
-                      ))
-                    : TemporalTimestamp.fromSeconds(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'listOfRequiredAwsTimestamp',
+                        ))
+                      : TemporalTimestamp.fromSeconds(el),
+                )
                 .toList();
     final requiredListOfAwsTimestamp = json['requiredListOfAWSTimestamp'] ==
             null
@@ -1999,12 +1962,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredAWSTimestamp'] as List<Object?>)
                 .cast<int?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsTimestamp',
-                      ))
-                    : TemporalTimestamp.fromSeconds(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsTimestamp',
+                        ))
+                      : TemporalTimestamp.fromSeconds(el),
+                )
                 .toList();
     final listOfAwsEmail = json['listOfAWSEmail'] == null
         ? null
@@ -2013,12 +1978,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredAWSEmail'] as List<Object?>)
             .cast<String?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredAwsEmail',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredAwsEmail',
+                  )),
+            )
             .toList();
     final requiredListOfAwsEmail = json['requiredListOfAWSEmail'] == null
         ? (throw ModelFieldError(
@@ -2036,12 +2003,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredAWSEmail'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsEmail',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsEmail',
+                      )),
+                )
                 .toList();
     final listOfAwsjson = json['listOfAWSJSON'] == null
         ? null
@@ -2050,12 +2019,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredAWSJSON'] as List<Object?>)
             .cast<Object?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredAwsjson',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredAwsjson',
+                  )),
+            )
             .toList();
     final requiredListOfAwsjson = json['requiredListOfAWSJSON'] == null
         ? (throw ModelFieldError(
@@ -2073,12 +2044,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredAWSJSON'] as List<Object?>)
                 .cast<Object?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsjson',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsjson',
+                      )),
+                )
                 .toList();
     final listOfAwsPhone = json['listOfAWSPhone'] == null
         ? null
@@ -2087,12 +2060,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredAWSPhone'] as List<Object?>)
             .cast<String?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredAwsPhone',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredAwsPhone',
+                  )),
+            )
             .toList();
     final requiredListOfAwsPhone = json['requiredListOfAWSPhone'] == null
         ? (throw ModelFieldError(
@@ -2110,12 +2085,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredAWSPhone'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsPhone',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsPhone',
+                      )),
+                )
                 .toList();
     final listOfAwsUrl = json['listOfAWSUrl'] == null
         ? null
@@ -2127,12 +2104,14 @@ abstract class ScalarListModel extends PartialScalarListModel
         ? null
         : (json['listOfRequiredAWSUrl'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsUrl',
-                  ))
-                : Uri.parse(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsUrl',
+                    ))
+                  : Uri.parse(el),
+            )
             .toList();
     final requiredListOfAwsUrl = json['requiredListOfAWSUrl'] == null
         ? (throw ModelFieldError(
@@ -2151,12 +2130,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredAWSUrl'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsUrl',
-                      ))
-                    : Uri.parse(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsUrl',
+                        ))
+                      : Uri.parse(el),
+                )
                 .toList();
     final listOfAwsIpAddress = json['listOfAWSIpAddress'] == null
         ? null
@@ -2168,12 +2149,14 @@ abstract class ScalarListModel extends PartialScalarListModel
             ? null
             : (json['listOfRequiredAWSIpAddress'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'listOfRequiredAwsIpAddress',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'listOfRequiredAwsIpAddress',
+                      )),
+                )
                 .toList();
     final requiredListOfAwsIpAddress =
         json['requiredListOfAWSIpAddress'] == null
@@ -2192,12 +2175,14 @@ abstract class ScalarListModel extends PartialScalarListModel
               ))
             : (json['requiredListOfRequiredAWSIpAddress'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsIpAddress',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsIpAddress',
+                      )),
+                )
                 .toList();
     final createdAt = json['createdAt'] == null
         ? (throw ModelFieldError(
@@ -2274,6 +2259,459 @@ abstract class ScalarListModel extends PartialScalarListModel
 
   static const ScalarListModelQueryFields<String, ScalarListModel>
       _queryFields = ScalarListModelQueryFields();
+
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'ScalarListModel',
+      'pluralName': 'ScalarListModels',
+      'fields': {
+        'id': {
+          'name': 'id',
+          'type': {'scalar': 'ID'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfString': {
+          'name': 'listOfString',
+          'type': {
+            'list': {'scalar': 'String'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredString': {
+          'name': 'listOfRequiredString',
+          'type': {
+            'list': {'scalar': 'String'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfString': {
+          'name': 'requiredListOfString',
+          'type': {
+            'list': {'scalar': 'String'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredString': {
+          'name': 'requiredListOfRequiredString',
+          'type': {
+            'list': {'scalar': 'String'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfInteger': {
+          'name': 'listOfInteger',
+          'type': {
+            'list': {'scalar': 'Int'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredInteger': {
+          'name': 'listOfRequiredInteger',
+          'type': {
+            'list': {'scalar': 'Int'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfInteger': {
+          'name': 'requiredListOfInteger',
+          'type': {
+            'list': {'scalar': 'Int'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredInteger': {
+          'name': 'requiredListOfRequiredInteger',
+          'type': {
+            'list': {'scalar': 'Int'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfFloat': {
+          'name': 'listOfFloat',
+          'type': {
+            'list': {'scalar': 'Float'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredFloat': {
+          'name': 'listOfRequiredFloat',
+          'type': {
+            'list': {'scalar': 'Float'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfFloat': {
+          'name': 'requiredListOfFloat',
+          'type': {
+            'list': {'scalar': 'Float'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredFloat': {
+          'name': 'requiredListOfRequiredFloat',
+          'type': {
+            'list': {'scalar': 'Float'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfBoolean': {
+          'name': 'listOfBoolean',
+          'type': {
+            'list': {'scalar': 'Boolean'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredBoolean': {
+          'name': 'listOfRequiredBoolean',
+          'type': {
+            'list': {'scalar': 'Boolean'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfBoolean': {
+          'name': 'requiredListOfBoolean',
+          'type': {
+            'list': {'scalar': 'Boolean'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredBoolean': {
+          'name': 'requiredListOfRequiredBoolean',
+          'type': {
+            'list': {'scalar': 'Boolean'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfAWSDate': {
+          'name': 'listOfAWSDate',
+          'type': {
+            'list': {'scalar': 'AWSDate'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredAWSDate': {
+          'name': 'listOfRequiredAWSDate',
+          'type': {
+            'list': {'scalar': 'AWSDate'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfAWSDate': {
+          'name': 'requiredListOfAWSDate',
+          'type': {
+            'list': {'scalar': 'AWSDate'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredAWSDate': {
+          'name': 'requiredListOfRequiredAWSDate',
+          'type': {
+            'list': {'scalar': 'AWSDate'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfAWSDateTime': {
+          'name': 'listOfAWSDateTime',
+          'type': {
+            'list': {'scalar': 'AWSDateTime'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredAWSDateTime': {
+          'name': 'listOfRequiredAWSDateTime',
+          'type': {
+            'list': {'scalar': 'AWSDateTime'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfAWSDateTime': {
+          'name': 'requiredListOfAWSDateTime',
+          'type': {
+            'list': {'scalar': 'AWSDateTime'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredAWSDateTime': {
+          'name': 'requiredListOfRequiredAWSDateTime',
+          'type': {
+            'list': {'scalar': 'AWSDateTime'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfAWSTime': {
+          'name': 'listOfAWSTime',
+          'type': {
+            'list': {'scalar': 'AWSTime'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredAWSTime': {
+          'name': 'listOfRequiredAWSTime',
+          'type': {
+            'list': {'scalar': 'AWSTime'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfAWSTime': {
+          'name': 'requiredListOfAWSTime',
+          'type': {
+            'list': {'scalar': 'AWSTime'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredAWSTime': {
+          'name': 'requiredListOfRequiredAWSTime',
+          'type': {
+            'list': {'scalar': 'AWSTime'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfAWSTimestamp': {
+          'name': 'listOfAWSTimestamp',
+          'type': {
+            'list': {'scalar': 'AWSTimestamp'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredAWSTimestamp': {
+          'name': 'listOfRequiredAWSTimestamp',
+          'type': {
+            'list': {'scalar': 'AWSTimestamp'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfAWSTimestamp': {
+          'name': 'requiredListOfAWSTimestamp',
+          'type': {
+            'list': {'scalar': 'AWSTimestamp'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredAWSTimestamp': {
+          'name': 'requiredListOfRequiredAWSTimestamp',
+          'type': {
+            'list': {'scalar': 'AWSTimestamp'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfAWSEmail': {
+          'name': 'listOfAWSEmail',
+          'type': {
+            'list': {'scalar': 'AWSEmail'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredAWSEmail': {
+          'name': 'listOfRequiredAWSEmail',
+          'type': {
+            'list': {'scalar': 'AWSEmail'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfAWSEmail': {
+          'name': 'requiredListOfAWSEmail',
+          'type': {
+            'list': {'scalar': 'AWSEmail'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredAWSEmail': {
+          'name': 'requiredListOfRequiredAWSEmail',
+          'type': {
+            'list': {'scalar': 'AWSEmail'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfAWSJSON': {
+          'name': 'listOfAWSJSON',
+          'type': {
+            'list': {'scalar': 'AWSJSON'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredAWSJSON': {
+          'name': 'listOfRequiredAWSJSON',
+          'type': {
+            'list': {'scalar': 'AWSJSON'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfAWSJSON': {
+          'name': 'requiredListOfAWSJSON',
+          'type': {
+            'list': {'scalar': 'AWSJSON'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredAWSJSON': {
+          'name': 'requiredListOfRequiredAWSJSON',
+          'type': {
+            'list': {'scalar': 'AWSJSON'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfAWSPhone': {
+          'name': 'listOfAWSPhone',
+          'type': {
+            'list': {'scalar': 'AWSPhone'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredAWSPhone': {
+          'name': 'listOfRequiredAWSPhone',
+          'type': {
+            'list': {'scalar': 'AWSPhone'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfAWSPhone': {
+          'name': 'requiredListOfAWSPhone',
+          'type': {
+            'list': {'scalar': 'AWSPhone'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredAWSPhone': {
+          'name': 'requiredListOfRequiredAWSPhone',
+          'type': {
+            'list': {'scalar': 'AWSPhone'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfAWSUrl': {
+          'name': 'listOfAWSUrl',
+          'type': {
+            'list': {'scalar': 'AWSURL'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredAWSUrl': {
+          'name': 'listOfRequiredAWSUrl',
+          'type': {
+            'list': {'scalar': 'AWSURL'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfAWSUrl': {
+          'name': 'requiredListOfAWSUrl',
+          'type': {
+            'list': {'scalar': 'AWSURL'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredAWSUrl': {
+          'name': 'requiredListOfRequiredAWSUrl',
+          'type': {
+            'list': {'scalar': 'AWSURL'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfAWSIpAddress': {
+          'name': 'listOfAWSIpAddress',
+          'type': {
+            'list': {'scalar': 'AWSIPAddress'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'listOfRequiredAWSIpAddress': {
+          'name': 'listOfRequiredAWSIpAddress',
+          'type': {
+            'list': {'scalar': 'AWSIPAddress'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfAWSIpAddress': {
+          'name': 'requiredListOfAWSIpAddress',
+          'type': {
+            'list': {'scalar': 'AWSIPAddress'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'requiredListOfRequiredAWSIpAddress': {
+          'name': 'requiredListOfRequiredAWSIpAddress',
+          'type': {
+            'list': {'scalar': 'AWSIPAddress'}
+          },
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'id',
+          'sortKeyFields': [],
+        }
+      ],
+    },
+  )!;
 
   @override
   String get id;
@@ -2888,6 +3326,333 @@ abstract class ScalarListModel extends PartialScalarListModel
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<String, ScalarListModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
+  ScalarListModel copyWith({
+    String? id,
+    List<String?>? listOfString,
+    List<String>? listOfRequiredString,
+    List<String?>? requiredListOfString,
+    List<String>? requiredListOfRequiredString,
+    List<int?>? listOfInteger,
+    List<int>? listOfRequiredInteger,
+    List<int?>? requiredListOfInteger,
+    List<int>? requiredListOfRequiredInteger,
+    List<double?>? listOfFloat,
+    List<double>? listOfRequiredFloat,
+    List<double?>? requiredListOfFloat,
+    List<double>? requiredListOfRequiredFloat,
+    List<bool?>? listOfBoolean,
+    List<bool>? listOfRequiredBoolean,
+    List<bool?>? requiredListOfBoolean,
+    List<bool>? requiredListOfRequiredBoolean,
+    List<TemporalDate?>? listOfAwsDate,
+    List<TemporalDate>? listOfRequiredAwsDate,
+    List<TemporalDate?>? requiredListOfAwsDate,
+    List<TemporalDate>? requiredListOfRequiredAwsDate,
+    List<TemporalDateTime?>? listOfAwsDateTime,
+    List<TemporalDateTime>? listOfRequiredAwsDateTime,
+    List<TemporalDateTime?>? requiredListOfAwsDateTime,
+    List<TemporalDateTime>? requiredListOfRequiredAwsDateTime,
+    List<TemporalTime?>? listOfAwsTime,
+    List<TemporalTime>? listOfRequiredAwsTime,
+    List<TemporalTime?>? requiredListOfAwsTime,
+    List<TemporalTime>? requiredListOfRequiredAwsTime,
+    List<TemporalTimestamp?>? listOfAwsTimestamp,
+    List<TemporalTimestamp>? listOfRequiredAwsTimestamp,
+    List<TemporalTimestamp?>? requiredListOfAwsTimestamp,
+    List<TemporalTimestamp>? requiredListOfRequiredAwsTimestamp,
+    List<String?>? listOfAwsEmail,
+    List<String>? listOfRequiredAwsEmail,
+    List<String?>? requiredListOfAwsEmail,
+    List<String>? requiredListOfRequiredAwsEmail,
+    List<Object?>? listOfAwsjson,
+    List<Object>? listOfRequiredAwsjson,
+    List<Object?>? requiredListOfAwsjson,
+    List<Object>? requiredListOfRequiredAwsjson,
+    List<String?>? listOfAwsPhone,
+    List<String>? listOfRequiredAwsPhone,
+    List<String?>? requiredListOfAwsPhone,
+    List<String>? requiredListOfRequiredAwsPhone,
+    List<Uri?>? listOfAwsUrl,
+    List<Uri>? listOfRequiredAwsUrl,
+    List<Uri?>? requiredListOfAwsUrl,
+    List<Uri>? requiredListOfRequiredAwsUrl,
+    List<String?>? listOfAwsIpAddress,
+    List<String>? listOfRequiredAwsIpAddress,
+    List<String?>? requiredListOfAwsIpAddress,
+    List<String>? requiredListOfRequiredAwsIpAddress,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return _ScalarListModel._(
+      id: id ?? this.id,
+      listOfString: listOfString ?? this.listOfString,
+      listOfRequiredString: listOfRequiredString ?? this.listOfRequiredString,
+      requiredListOfString: requiredListOfString ?? this.requiredListOfString,
+      requiredListOfRequiredString:
+          requiredListOfRequiredString ?? this.requiredListOfRequiredString,
+      listOfInteger: listOfInteger ?? this.listOfInteger,
+      listOfRequiredInteger:
+          listOfRequiredInteger ?? this.listOfRequiredInteger,
+      requiredListOfInteger:
+          requiredListOfInteger ?? this.requiredListOfInteger,
+      requiredListOfRequiredInteger:
+          requiredListOfRequiredInteger ?? this.requiredListOfRequiredInteger,
+      listOfFloat: listOfFloat ?? this.listOfFloat,
+      listOfRequiredFloat: listOfRequiredFloat ?? this.listOfRequiredFloat,
+      requiredListOfFloat: requiredListOfFloat ?? this.requiredListOfFloat,
+      requiredListOfRequiredFloat:
+          requiredListOfRequiredFloat ?? this.requiredListOfRequiredFloat,
+      listOfBoolean: listOfBoolean ?? this.listOfBoolean,
+      listOfRequiredBoolean:
+          listOfRequiredBoolean ?? this.listOfRequiredBoolean,
+      requiredListOfBoolean:
+          requiredListOfBoolean ?? this.requiredListOfBoolean,
+      requiredListOfRequiredBoolean:
+          requiredListOfRequiredBoolean ?? this.requiredListOfRequiredBoolean,
+      listOfAwsDate: listOfAwsDate ?? this.listOfAwsDate,
+      listOfRequiredAwsDate:
+          listOfRequiredAwsDate ?? this.listOfRequiredAwsDate,
+      requiredListOfAwsDate:
+          requiredListOfAwsDate ?? this.requiredListOfAwsDate,
+      requiredListOfRequiredAwsDate:
+          requiredListOfRequiredAwsDate ?? this.requiredListOfRequiredAwsDate,
+      listOfAwsDateTime: listOfAwsDateTime ?? this.listOfAwsDateTime,
+      listOfRequiredAwsDateTime:
+          listOfRequiredAwsDateTime ?? this.listOfRequiredAwsDateTime,
+      requiredListOfAwsDateTime:
+          requiredListOfAwsDateTime ?? this.requiredListOfAwsDateTime,
+      requiredListOfRequiredAwsDateTime: requiredListOfRequiredAwsDateTime ??
+          this.requiredListOfRequiredAwsDateTime,
+      listOfAwsTime: listOfAwsTime ?? this.listOfAwsTime,
+      listOfRequiredAwsTime:
+          listOfRequiredAwsTime ?? this.listOfRequiredAwsTime,
+      requiredListOfAwsTime:
+          requiredListOfAwsTime ?? this.requiredListOfAwsTime,
+      requiredListOfRequiredAwsTime:
+          requiredListOfRequiredAwsTime ?? this.requiredListOfRequiredAwsTime,
+      listOfAwsTimestamp: listOfAwsTimestamp ?? this.listOfAwsTimestamp,
+      listOfRequiredAwsTimestamp:
+          listOfRequiredAwsTimestamp ?? this.listOfRequiredAwsTimestamp,
+      requiredListOfAwsTimestamp:
+          requiredListOfAwsTimestamp ?? this.requiredListOfAwsTimestamp,
+      requiredListOfRequiredAwsTimestamp: requiredListOfRequiredAwsTimestamp ??
+          this.requiredListOfRequiredAwsTimestamp,
+      listOfAwsEmail: listOfAwsEmail ?? this.listOfAwsEmail,
+      listOfRequiredAwsEmail:
+          listOfRequiredAwsEmail ?? this.listOfRequiredAwsEmail,
+      requiredListOfAwsEmail:
+          requiredListOfAwsEmail ?? this.requiredListOfAwsEmail,
+      requiredListOfRequiredAwsEmail:
+          requiredListOfRequiredAwsEmail ?? this.requiredListOfRequiredAwsEmail,
+      listOfAwsjson: listOfAwsjson ?? this.listOfAwsjson,
+      listOfRequiredAwsjson:
+          listOfRequiredAwsjson ?? this.listOfRequiredAwsjson,
+      requiredListOfAwsjson:
+          requiredListOfAwsjson ?? this.requiredListOfAwsjson,
+      requiredListOfRequiredAwsjson:
+          requiredListOfRequiredAwsjson ?? this.requiredListOfRequiredAwsjson,
+      listOfAwsPhone: listOfAwsPhone ?? this.listOfAwsPhone,
+      listOfRequiredAwsPhone:
+          listOfRequiredAwsPhone ?? this.listOfRequiredAwsPhone,
+      requiredListOfAwsPhone:
+          requiredListOfAwsPhone ?? this.requiredListOfAwsPhone,
+      requiredListOfRequiredAwsPhone:
+          requiredListOfRequiredAwsPhone ?? this.requiredListOfRequiredAwsPhone,
+      listOfAwsUrl: listOfAwsUrl ?? this.listOfAwsUrl,
+      listOfRequiredAwsUrl: listOfRequiredAwsUrl ?? this.listOfRequiredAwsUrl,
+      requiredListOfAwsUrl: requiredListOfAwsUrl ?? this.requiredListOfAwsUrl,
+      requiredListOfRequiredAwsUrl:
+          requiredListOfRequiredAwsUrl ?? this.requiredListOfRequiredAwsUrl,
+      listOfAwsIpAddress: listOfAwsIpAddress ?? this.listOfAwsIpAddress,
+      listOfRequiredAwsIpAddress:
+          listOfRequiredAwsIpAddress ?? this.listOfRequiredAwsIpAddress,
+      requiredListOfAwsIpAddress:
+          requiredListOfAwsIpAddress ?? this.requiredListOfAwsIpAddress,
+      requiredListOfRequiredAwsIpAddress: requiredListOfRequiredAwsIpAddress ??
+          this.requiredListOfRequiredAwsIpAddress,
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(QueryField<String, ScalarListModel, T> field) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'id':
+        value = id;
+        break;
+      case r'listOfString':
+        value = listOfString;
+        break;
+      case r'listOfRequiredString':
+        value = listOfRequiredString;
+        break;
+      case r'requiredListOfString':
+        value = requiredListOfString;
+        break;
+      case r'requiredListOfRequiredString':
+        value = requiredListOfRequiredString;
+        break;
+      case r'listOfInteger':
+        value = listOfInteger;
+        break;
+      case r'listOfRequiredInteger':
+        value = listOfRequiredInteger;
+        break;
+      case r'requiredListOfInteger':
+        value = requiredListOfInteger;
+        break;
+      case r'requiredListOfRequiredInteger':
+        value = requiredListOfRequiredInteger;
+        break;
+      case r'listOfFloat':
+        value = listOfFloat;
+        break;
+      case r'listOfRequiredFloat':
+        value = listOfRequiredFloat;
+        break;
+      case r'requiredListOfFloat':
+        value = requiredListOfFloat;
+        break;
+      case r'requiredListOfRequiredFloat':
+        value = requiredListOfRequiredFloat;
+        break;
+      case r'listOfBoolean':
+        value = listOfBoolean;
+        break;
+      case r'listOfRequiredBoolean':
+        value = listOfRequiredBoolean;
+        break;
+      case r'requiredListOfBoolean':
+        value = requiredListOfBoolean;
+        break;
+      case r'requiredListOfRequiredBoolean':
+        value = requiredListOfRequiredBoolean;
+        break;
+      case r'listOfAWSDate':
+        value = listOfAwsDate;
+        break;
+      case r'listOfRequiredAWSDate':
+        value = listOfRequiredAwsDate;
+        break;
+      case r'requiredListOfAWSDate':
+        value = requiredListOfAwsDate;
+        break;
+      case r'requiredListOfRequiredAWSDate':
+        value = requiredListOfRequiredAwsDate;
+        break;
+      case r'listOfAWSDateTime':
+        value = listOfAwsDateTime;
+        break;
+      case r'listOfRequiredAWSDateTime':
+        value = listOfRequiredAwsDateTime;
+        break;
+      case r'requiredListOfAWSDateTime':
+        value = requiredListOfAwsDateTime;
+        break;
+      case r'requiredListOfRequiredAWSDateTime':
+        value = requiredListOfRequiredAwsDateTime;
+        break;
+      case r'listOfAWSTime':
+        value = listOfAwsTime;
+        break;
+      case r'listOfRequiredAWSTime':
+        value = listOfRequiredAwsTime;
+        break;
+      case r'requiredListOfAWSTime':
+        value = requiredListOfAwsTime;
+        break;
+      case r'requiredListOfRequiredAWSTime':
+        value = requiredListOfRequiredAwsTime;
+        break;
+      case r'listOfAWSTimestamp':
+        value = listOfAwsTimestamp;
+        break;
+      case r'listOfRequiredAWSTimestamp':
+        value = listOfRequiredAwsTimestamp;
+        break;
+      case r'requiredListOfAWSTimestamp':
+        value = requiredListOfAwsTimestamp;
+        break;
+      case r'requiredListOfRequiredAWSTimestamp':
+        value = requiredListOfRequiredAwsTimestamp;
+        break;
+      case r'listOfAWSEmail':
+        value = listOfAwsEmail;
+        break;
+      case r'listOfRequiredAWSEmail':
+        value = listOfRequiredAwsEmail;
+        break;
+      case r'requiredListOfAWSEmail':
+        value = requiredListOfAwsEmail;
+        break;
+      case r'requiredListOfRequiredAWSEmail':
+        value = requiredListOfRequiredAwsEmail;
+        break;
+      case r'listOfAWSJSON':
+        value = listOfAwsjson;
+        break;
+      case r'listOfRequiredAWSJSON':
+        value = listOfRequiredAwsjson;
+        break;
+      case r'requiredListOfAWSJSON':
+        value = requiredListOfAwsjson;
+        break;
+      case r'requiredListOfRequiredAWSJSON':
+        value = requiredListOfRequiredAwsjson;
+        break;
+      case r'listOfAWSPhone':
+        value = listOfAwsPhone;
+        break;
+      case r'listOfRequiredAWSPhone':
+        value = listOfRequiredAwsPhone;
+        break;
+      case r'requiredListOfAWSPhone':
+        value = requiredListOfAwsPhone;
+        break;
+      case r'requiredListOfRequiredAWSPhone':
+        value = requiredListOfRequiredAwsPhone;
+        break;
+      case r'listOfAWSUrl':
+        value = listOfAwsUrl;
+        break;
+      case r'listOfRequiredAWSUrl':
+        value = listOfRequiredAwsUrl;
+        break;
+      case r'requiredListOfAWSUrl':
+        value = requiredListOfAwsUrl;
+        break;
+      case r'requiredListOfRequiredAWSUrl':
+        value = requiredListOfRequiredAwsUrl;
+        break;
+      case r'listOfAWSIpAddress':
+        value = listOfAwsIpAddress;
+        break;
+      case r'listOfRequiredAWSIpAddress':
+        value = listOfRequiredAwsIpAddress;
+        break;
+      case r'requiredListOfAWSIpAddress':
+        value = requiredListOfAwsIpAddress;
+        break;
+      case r'requiredListOfRequiredAWSIpAddress':
+        value = requiredListOfRequiredAwsIpAddress;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _ScalarListModel extends ScalarListModel {
@@ -3255,12 +4020,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredString'] as List<Object?>)
             .cast<String?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredString',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredString',
+                  )),
+            )
             .toList();
     final requiredListOfString = json['requiredListOfString'] == null
         ? (throw ModelFieldError(
@@ -3278,12 +4045,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredString'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredString',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredString',
+                      )),
+                )
                 .toList();
     final listOfInteger = json['listOfInteger'] == null
         ? null
@@ -3292,12 +4061,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredInteger'] as List<Object?>)
             .cast<int?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredInteger',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredInteger',
+                  )),
+            )
             .toList();
     final requiredListOfInteger = json['requiredListOfInteger'] == null
         ? (throw ModelFieldError(
@@ -3315,12 +4086,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredInteger'] as List<Object?>)
                 .cast<int?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredInteger',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredInteger',
+                      )),
+                )
                 .toList();
     final listOfFloat = json['listOfFloat'] == null
         ? null
@@ -3329,12 +4102,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredFloat'] as List<Object?>)
             .cast<double?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredFloat',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredFloat',
+                  )),
+            )
             .toList();
     final requiredListOfFloat = json['requiredListOfFloat'] == null
         ? (throw ModelFieldError(
@@ -3352,12 +4127,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredFloat'] as List<Object?>)
                 .cast<double?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredFloat',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredFloat',
+                      )),
+                )
                 .toList();
     final listOfBoolean = json['listOfBoolean'] == null
         ? null
@@ -3366,12 +4143,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredBoolean'] as List<Object?>)
             .cast<bool?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredBoolean',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredBoolean',
+                  )),
+            )
             .toList();
     final requiredListOfBoolean = json['requiredListOfBoolean'] == null
         ? (throw ModelFieldError(
@@ -3389,12 +4168,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredBoolean'] as List<Object?>)
                 .cast<bool?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredBoolean',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredBoolean',
+                      )),
+                )
                 .toList();
     final listOfAwsDate = json['listOfAWSDate'] == null
         ? null
@@ -3406,12 +4187,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredAWSDate'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsDate',
-                  ))
-                : TemporalDate.fromString(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsDate',
+                    ))
+                  : TemporalDate.fromString(el),
+            )
             .toList();
     final requiredListOfAwsDate = json['requiredListOfAWSDate'] == null
         ? (throw ModelFieldError(
@@ -3430,12 +4213,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredAWSDate'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsDate',
-                      ))
-                    : TemporalDate.fromString(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsDate',
+                        ))
+                      : TemporalDate.fromString(el),
+                )
                 .toList();
     final listOfAwsDateTime = json['listOfAWSDateTime'] == null
         ? null
@@ -3447,12 +4232,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredAWSDateTime'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsDateTime',
-                  ))
-                : TemporalDateTime.fromString(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsDateTime',
+                    ))
+                  : TemporalDateTime.fromString(el),
+            )
             .toList();
     final requiredListOfAwsDateTime = json['requiredListOfAWSDateTime'] == null
         ? (throw ModelFieldError(
@@ -3471,12 +4258,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredAWSDateTime'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsDateTime',
-                      ))
-                    : TemporalDateTime.fromString(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsDateTime',
+                        ))
+                      : TemporalDateTime.fromString(el),
+                )
                 .toList();
     final listOfAwsTime = json['listOfAWSTime'] == null
         ? null
@@ -3488,12 +4277,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredAWSTime'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsTime',
-                  ))
-                : TemporalTime.fromString(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsTime',
+                    ))
+                  : TemporalTime.fromString(el),
+            )
             .toList();
     final requiredListOfAwsTime = json['requiredListOfAWSTime'] == null
         ? (throw ModelFieldError(
@@ -3512,12 +4303,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredAWSTime'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsTime',
-                      ))
-                    : TemporalTime.fromString(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsTime',
+                        ))
+                      : TemporalTime.fromString(el),
+                )
                 .toList();
     final listOfAwsTimestamp = json['listOfAWSTimestamp'] == null
         ? null
@@ -3530,12 +4323,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
             ? null
             : (json['listOfRequiredAWSTimestamp'] as List<Object?>)
                 .cast<int?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'listOfRequiredAwsTimestamp',
-                      ))
-                    : TemporalTimestamp.fromSeconds(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'listOfRequiredAwsTimestamp',
+                        ))
+                      : TemporalTimestamp.fromSeconds(el),
+                )
                 .toList();
     final requiredListOfAwsTimestamp = json['requiredListOfAWSTimestamp'] ==
             null
@@ -3555,12 +4350,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredAWSTimestamp'] as List<Object?>)
                 .cast<int?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsTimestamp',
-                      ))
-                    : TemporalTimestamp.fromSeconds(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsTimestamp',
+                        ))
+                      : TemporalTimestamp.fromSeconds(el),
+                )
                 .toList();
     final listOfAwsEmail = json['listOfAWSEmail'] == null
         ? null
@@ -3569,12 +4366,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredAWSEmail'] as List<Object?>)
             .cast<String?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredAwsEmail',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredAwsEmail',
+                  )),
+            )
             .toList();
     final requiredListOfAwsEmail = json['requiredListOfAWSEmail'] == null
         ? (throw ModelFieldError(
@@ -3592,12 +4391,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredAWSEmail'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsEmail',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsEmail',
+                      )),
+                )
                 .toList();
     final listOfAwsjson = json['listOfAWSJSON'] == null
         ? null
@@ -3606,12 +4407,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredAWSJSON'] as List<Object?>)
             .cast<Object?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredAwsjson',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredAwsjson',
+                  )),
+            )
             .toList();
     final requiredListOfAwsjson = json['requiredListOfAWSJSON'] == null
         ? (throw ModelFieldError(
@@ -3629,12 +4432,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredAWSJSON'] as List<Object?>)
                 .cast<Object?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsjson',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsjson',
+                      )),
+                )
                 .toList();
     final listOfAwsPhone = json['listOfAWSPhone'] == null
         ? null
@@ -3643,12 +4448,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredAWSPhone'] as List<Object?>)
             .cast<String?>()
-            .map((el) =>
-                el ??
-                (throw ModelFieldError(
-                  'ScalarListModel',
-                  'listOfRequiredAwsPhone',
-                )))
+            .map(
+              (el) =>
+                  el ??
+                  (throw ModelFieldError(
+                    'ScalarListModel',
+                    'listOfRequiredAwsPhone',
+                  )),
+            )
             .toList();
     final requiredListOfAwsPhone = json['requiredListOfAWSPhone'] == null
         ? (throw ModelFieldError(
@@ -3666,12 +4473,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredAWSPhone'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsPhone',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsPhone',
+                      )),
+                )
                 .toList();
     final listOfAwsUrl = json['listOfAWSUrl'] == null
         ? null
@@ -3683,12 +4492,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
         ? null
         : (json['listOfRequiredAWSUrl'] as List<Object?>)
             .cast<String?>()
-            .map((el) => el == null
-                ? (throw ModelFieldError(
-                    'ScalarListModel',
-                    'listOfRequiredAwsUrl',
-                  ))
-                : Uri.parse(el))
+            .map(
+              (el) => el == null
+                  ? (throw ModelFieldError(
+                      'ScalarListModel',
+                      'listOfRequiredAwsUrl',
+                    ))
+                  : Uri.parse(el),
+            )
             .toList();
     final requiredListOfAwsUrl = json['requiredListOfAWSUrl'] == null
         ? (throw ModelFieldError(
@@ -3707,12 +4518,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredAWSUrl'] as List<Object?>)
                 .cast<String?>()
-                .map((el) => el == null
-                    ? (throw ModelFieldError(
-                        'ScalarListModel',
-                        'requiredListOfRequiredAwsUrl',
-                      ))
-                    : Uri.parse(el))
+                .map(
+                  (el) => el == null
+                      ? (throw ModelFieldError(
+                          'ScalarListModel',
+                          'requiredListOfRequiredAwsUrl',
+                        ))
+                      : Uri.parse(el),
+                )
                 .toList();
     final listOfAwsIpAddress = json['listOfAWSIpAddress'] == null
         ? null
@@ -3724,12 +4537,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
             ? null
             : (json['listOfRequiredAWSIpAddress'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'listOfRequiredAwsIpAddress',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'listOfRequiredAwsIpAddress',
+                      )),
+                )
                 .toList();
     final requiredListOfAwsIpAddress =
         json['requiredListOfAWSIpAddress'] == null
@@ -3748,12 +4563,14 @@ class _RemoteScalarListModel extends RemoteScalarListModel {
               ))
             : (json['requiredListOfRequiredAWSIpAddress'] as List<Object?>)
                 .cast<String?>()
-                .map((el) =>
-                    el ??
-                    (throw ModelFieldError(
-                      'ScalarListModel',
-                      'requiredListOfRequiredAwsIpAddress',
-                    )))
+                .map(
+                  (el) =>
+                      el ??
+                      (throw ModelFieldError(
+                        'ScalarListModel',
+                        'requiredListOfRequiredAwsIpAddress',
+                      )),
+                )
                 .toList();
     final createdAt = json['createdAt'] == null
         ? (throw ModelFieldError(

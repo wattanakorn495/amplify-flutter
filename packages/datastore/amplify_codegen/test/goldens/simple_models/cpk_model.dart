@@ -16,11 +16,12 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names,inference_failure_on_collection_literal
 
 library models.cpk_model;
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 import 'package:meta/meta.dart';
 
 @immutable
@@ -58,7 +59,8 @@ class CpkModelType
 
   @override
   T fromJson<T extends PartialModel<CpkModelIdentifier, CpkModel>>(
-      Map<String, Object?> json) {
+    Map<String, Object?> json,
+  ) {
     if (T == CpkModel || T == Model<CpkModelIdentifier, CpkModel>) {
       return CpkModel.fromJson(json) as T;
     }
@@ -82,7 +84,8 @@ class CpkModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $firstName => NestedQueryField<
           ModelIdentifier, M, CpkModelIdentifier, CpkModel, String>(
         const QueryField<CpkModelIdentifier, CpkModel, String>(
-            fieldName: 'firstName'),
+          fieldName: 'firstName',
+        ),
         root: _root,
       );
 
@@ -90,7 +93,8 @@ class CpkModelQueryFields<ModelIdentifier extends Object,
   QueryField<ModelIdentifier, M, String> get $lastName => NestedQueryField<
           ModelIdentifier, M, CpkModelIdentifier, CpkModel, String>(
         const QueryField<CpkModelIdentifier, CpkModel, String>(
-            fieldName: 'lastName'),
+          fieldName: 'lastName',
+        ),
         root: _root,
       );
 
@@ -99,7 +103,8 @@ class CpkModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, CpkModelIdentifier, CpkModel,
           TemporalDateTime>(
         const QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime>(
-            fieldName: 'createdAt'),
+          fieldName: 'createdAt',
+        ),
         root: _root,
       );
 
@@ -108,7 +113,8 @@ class CpkModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, CpkModelIdentifier, CpkModel,
           TemporalDateTime>(
         const QueryField<CpkModelIdentifier, CpkModel, TemporalDateTime>(
-            fieldName: 'updatedAt'),
+          fieldName: 'updatedAt',
+        ),
         root: _root,
       );
 
@@ -117,7 +123,8 @@ class CpkModelQueryFields<ModelIdentifier extends Object,
       NestedQueryField<ModelIdentifier, M, CpkModelIdentifier, CpkModel,
           CpkModelIdentifier>(
         const QueryField<CpkModelIdentifier, CpkModel, CpkModelIdentifier>(
-            fieldName: 'modelIdentifier'),
+          fieldName: 'modelIdentifier',
+        ),
         root: _root,
       );
 }
@@ -157,30 +164,6 @@ abstract class PartialCpkModel
       };
   @override
   String get runtimeTypeName => 'CpkModel';
-  @override
-  T valueFor<T extends Object?>(
-      QueryField<CpkModelIdentifier, CpkModel, T> field) {
-    Object? value;
-    switch (field.fieldName) {
-      case r'firstName':
-        value = firstName;
-        break;
-      case r'lastName':
-        value = lastName;
-        break;
-      case r'createdAt':
-        value = createdAt;
-        break;
-      case r'updatedAt':
-        value = updatedAt;
-        break;
-    }
-    assert(
-      value is T,
-      'Invalid field ${field.fieldName}: $value (expected $T)',
-    );
-    return value as T;
-  }
 }
 
 class _PartialCpkModel extends PartialCpkModel {
@@ -278,6 +261,49 @@ abstract class CpkModel extends PartialCpkModel
   static const CpkModelQueryFields<CpkModelIdentifier, CpkModel> _queryFields =
       CpkModelQueryFields();
 
+  static final mipr.ModelTypeDefinition schema =
+      mipr.serializers.deserializeWith(
+    mipr.ModelTypeDefinition.serializer,
+    const {
+      'name': 'CPKModel',
+      'pluralName': 'CPKModels',
+      'fields': {
+        'firstName': {
+          'name': 'firstName',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'lastName': {
+          'name': 'lastName',
+          'type': {'scalar': 'String'},
+          'isReadOnly': false,
+          'authRules': [],
+        },
+        'createdAt': {
+          'name': 'createdAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+        'updatedAt': {
+          'name': 'updatedAt',
+          'type': {'scalar': 'AWSDateTime'},
+          'isReadOnly': true,
+          'authRules': [],
+        },
+      },
+      'authRules': [],
+      'indexes': [
+        {
+          'type': 'primary',
+          'primaryField': 'firstName',
+          'sortKeyFields': ['lastName'],
+        }
+      ],
+    },
+  )!;
+
   @override
   String get firstName;
 
@@ -311,6 +337,47 @@ abstract class CpkModel extends PartialCpkModel
   @Deprecated(r'Use $modelIdentifier instead')
   QueryField<CpkModelIdentifier, CpkModel, CpkModelIdentifier>
       get MODEL_IDENTIFIER => $modelIdentifier;
+  CpkModel copyWith({
+    String? firstName,
+    String? lastName,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return _CpkModel._(
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      createdAt:
+          createdAt == null ? this.createdAt : TemporalDateTime(createdAt),
+      updatedAt:
+          updatedAt == null ? this.updatedAt : TemporalDateTime(updatedAt),
+    );
+  }
+
+  @override
+  T valueFor<T extends Object?>(
+    QueryField<CpkModelIdentifier, CpkModel, T> field,
+  ) {
+    Object? value;
+    switch (field.fieldName) {
+      case r'firstName':
+        value = firstName;
+        break;
+      case r'lastName':
+        value = lastName;
+        break;
+      case r'createdAt':
+        value = createdAt;
+        break;
+      case r'updatedAt':
+        value = updatedAt;
+        break;
+    }
+    assert(
+      value is T,
+      'Invalid field ${field.fieldName}: $value (expected $T)',
+    );
+    return value as T;
+  }
 }
 
 class _CpkModel extends CpkModel {
