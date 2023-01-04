@@ -12,18 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Model Intermediate Platform Representation (MIPR)
-///
-/// The MIPR is a platform-independent representation of an Amplify schema. It
-/// represents the semantic understanding of a schema, its models, and their
-/// relationships.
-library amplify_core.models.mipr;
+/// Temporary codegen package for vNext.
+library amplify_codegen;
 
-export 'mipr/auth_rule.dart';
-export 'mipr/model.dart';
-export 'mipr/model_association.dart';
-export 'mipr/model_field.dart';
-export 'mipr/model_index.dart';
-export 'mipr/schema.dart';
-export 'mipr/schema_type.dart';
-export 'mipr/serializers.dart';
+export 'src/parser/parser.dart' hide makeConnectionAttributeName;

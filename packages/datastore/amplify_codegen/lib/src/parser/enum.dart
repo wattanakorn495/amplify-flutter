@@ -12,18 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Model Intermediate Platform Representation (MIPR)
-///
-/// The MIPR is a platform-independent representation of an Amplify schema. It
-/// represents the semantic understanding of a schema, its models, and their
-/// relationships.
-library amplify_core.models.mipr;
+import 'package:aws_common/aws_common.dart';
+import 'package:gql/ast.dart';
 
-export 'mipr/auth_rule.dart';
-export 'mipr/model.dart';
-export 'mipr/model_association.dart';
-export 'mipr/model_field.dart';
-export 'mipr/model_index.dart';
-export 'mipr/schema.dart';
-export 'mipr/schema_type.dart';
-export 'mipr/serializers.dart';
+/// Helpers for [EnumValueDefinitionNode].
+extension EnumHelpers on EnumValueDefinitionNode {
+  /// The name of the enum value as defined in the schema.
+  String get wireValue => name.value;
+
+  /// The Dart name of the enum value.
+  String get dartName => wireValue.camelCase;
+}
