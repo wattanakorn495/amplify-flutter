@@ -22,10 +22,10 @@ const _serializedData = 'serializedData';
 const items = 'items';
 
 class _RelatedFields {
+  _RelatedFields(this.singleFields, this.hasManyFields);
+
   final Iterable<ModelField> singleFields;
   final Iterable<ModelField> hasManyFields;
-
-  _RelatedFields(this.singleFields, this.hasManyFields);
 }
 
 _RelatedFields _getRelatedFieldsUncached(ModelTypeDefinition modelSchema) {
@@ -124,15 +124,21 @@ Map<String, dynamic> transformAppSyncJsonToModelJson(
         if (parentData is List) {
           // only used for embeddedCollection
           return parentData
-              .map((dynamic e) => {
-                    _serializedData: transformAppSyncJsonToModelJson(
-                        e as Map<String, dynamic>, parentSchema)
-                  })
+              .map(
+                (dynamic e) => {
+                  _serializedData: transformAppSyncJsonToModelJson(
+                    e as Map<String, dynamic>,
+                    parentSchema,
+                  )
+                },
+              )
               .toList();
         }
         return {
           _serializedData: transformAppSyncJsonToModelJson(
-              parentData as Map<String, dynamic>, parentSchema)
+            parentData as Map<String, dynamic>,
+            parentSchema,
+          )
         };
       });
     }
@@ -148,10 +154,14 @@ Map<String, dynamic> transformAppSyncJsonToModelJson(
     if (inputItems is List && ofModelName != null) {
       final childSchema = getModelSchemaByModelName(ofModelName, null);
       final transformedItems = inputItems
-          .map((dynamic item) => {
-                _serializedData: transformAppSyncJsonToModelJson(
-                    item as Map<String, dynamic>, childSchema)
-              })
+          .map(
+            (dynamic item) => {
+              _serializedData: transformAppSyncJsonToModelJson(
+                item as Map<String, dynamic>,
+                childSchema,
+              )
+            },
+          )
           .toList();
       input.update(childField.name, (dynamic value) => transformedItems);
     }

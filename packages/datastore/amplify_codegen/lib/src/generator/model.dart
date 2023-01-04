@@ -663,6 +663,103 @@ return value as T;
         ),
       );
 
+      // `copyWith` implementation
+      c.methods.add(
+        Method((m) {
+          m
+            ..returns = _references.model
+            ..name = 'copyWith';
+          for (final field in definition.fields.values) {
+            m.optionalParameters.add(
+              Parameter(
+                (p) => p
+                  ..type = field.factoryType(ModelHierarchyType.model).nullable
+                  ..named = true
+                  ..name = field.dartName,
+              ),
+            );
+          }
+          m.body = Block((b) {
+            final fieldExpressions = <String, Expression>{};
+            for (final field in definition.fields.values) {
+              final builder = field.fromPrimitive;
+              final override = refer(field.dartName);
+              final property = refer('this').property(field.dartName);
+              fieldExpressions[field.dartName] = builder != null
+                  ? override
+                      .equalTo(literalNull)
+                      .conditional(property, builder(override))
+                  : override.ifNullThen(property);
+            }
+            b.addExpression(
+              _references.modelImpl
+                  .newInstanceNamed('_', [], fieldExpressions)
+                  .returned,
+            );
+          });
+        }),
+      );
+
+      // `valueFor` to satisfy `Model`
+      c.methods.add(
+        Method(
+          (m) => m
+            ..annotations.add(DartTypes.core.override)
+            ..returns = refer('T')
+            ..name = 'valueFor'
+            ..types.add(
+              TypeReference(
+                (t) => t
+                  ..symbol = 'T'
+                  ..bound = DartTypes.core.object.nullable,
+              ),
+            )
+            ..requiredParameters.add(
+              Parameter(
+                (p) => p
+                  ..type = DartTypes.amplifyCore.queryField(
+                    _references.modelIdentifier,
+                    _references.model,
+                    refer('T'),
+                  )
+                  ..name = 'field',
+              ),
+            )
+            ..body = Block((b) {
+              b.statements.add(
+                const Code(
+                  '''
+Object? value;
+switch (field.fieldName) {
+  ''',
+                ),
+              );
+              for (final field in definition.fields.values) {
+                b.statements.add(
+                  Code(
+                    '''
+  case r'${field.name}':
+    value = ${field.dartName};
+    break;''',
+                  ),
+                );
+              }
+              b.statements.add(
+                const Code(
+                  r'''
+}
+assert(
+  value is T,
+  'Invalid field ${field.fieldName}: $value (expected $T)',
+);
+return value as T;
+''',
+                ),
+              );
+            }),
+        ),
+      );
+
       // The public factory constructor which redirects to the private impl.
       c.constructors.add(
         Constructor(

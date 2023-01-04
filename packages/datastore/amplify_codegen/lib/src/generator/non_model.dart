@@ -121,6 +121,31 @@ class NonModelGenerator extends StructureGenerator<NonModelTypeDefinition> {
         ),
       );
 
+      // The static `schema` getter
+      c.fields.add(
+        Field(
+          (f) => f
+            ..modifier = FieldModifier.final$
+            ..static = true
+            ..type = DartTypes.amplifyCore.mipr.nonModelTypeDefinition
+            ..name = 'schema'
+            ..assignment = DartTypes.amplifyCore.mipr.serializers
+                .property('deserializeWith')
+                .call([
+                  DartTypes.amplifyCore.mipr.nonModelTypeDefinition
+                      .property('serializer'),
+                  literalConstMap(
+                    mipr.serializers.serializeWith(
+                      mipr.NonModelTypeDefinition.serializer,
+                      definition,
+                    ) as Map,
+                  ),
+                ])
+                .nullChecked
+                .code,
+        ),
+      );
+
       // `props` to satisfy `AWSEquatable`
       c.methods.add(
         Method(

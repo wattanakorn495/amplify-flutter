@@ -99,7 +99,8 @@ class PostQueryFields<ModelIdentifier extends Object,
   CommentQueryFields<ModelIdentifier, M> get $comments => CommentQueryFields(
         NestedQueryField<ModelIdentifier, M, PostIdentifier, Post, Comment>(
           const QueryField<PostIdentifier, Post, Comment>(
-              fieldName: 'comments'),
+            fieldName: 'comments',
+          ),
           root: _root,
         ),
       );

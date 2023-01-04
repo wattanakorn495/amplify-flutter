@@ -235,8 +235,9 @@ abstract class Blog extends PartialBlog
         : AsyncModelCollection<String, Post, PartialPost, Post>.fromList(
             (json['posts'] as List<Object?>)
                 .cast<Map<String, Object?>?>()
-                .map((el) =>
-                    el == null ? null : Post.classType.fromJson<Post>(el))
+                .map(
+                  (el) => el == null ? null : Post.classType.fromJson<Post>(el),
+                )
                 .whereType<Post>()
                 .toList(),
           );
