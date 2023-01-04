@@ -60,7 +60,7 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
         .toList();
     assert(fields.isNotEmpty, 'Not enough fields');
     if (fields.length == 1) {
-      return fields.single.type.reference;
+      return fields.single.typeReference();
     }
     final modelIdentifierName = '${modelName}Identifier';
     final cls = Class((c) {
@@ -77,7 +77,7 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
             Field(
               (f) => f
                 ..name = field.dartName
-                ..type = field.type.reference
+                ..type = field.typeReference()
                 ..modifier = FieldModifier.final$,
             )
         ]);
@@ -123,7 +123,7 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
             ..name = 'toJson'
             ..body = literalMap({
               for (final field in fields)
-                literalString(field.name): field.type.toJsonExp(
+                literalString(field.name): field.toJsonExp(
                   refer(field.dartName),
                 ),
             }).code,
@@ -150,6 +150,7 @@ class ModelGenerator extends StructureGenerator<ModelTypeDefinition> {
   Library generate() {
     builder.body.addAll([
       modelTypeImpl,
+      _queryFieldsImpl,
       ...partialModelImpl,
       ...modelImpl,
       ...remoteModelImpl,
@@ -264,7 +265,7 @@ return _${allocate(partialModelType)}.fromJson(json) as T;
         c.methods.add(
           Method(
             (m) => m
-              ..returns = field.type.reference
+              ..returns = field.typeReference(ModelHierarchyType.partial)
               ..type = MethodType.getter
               ..name = field.dartName,
           ),
@@ -332,7 +333,7 @@ return _${allocate(partialModelType)}.fromJson(json) as T;
             ..body = literalMap({
               for (final field
                   in definition.allFields(ModelHierarchyType.partial).values)
-                literalString(field.name): field.type.toJsonExp(
+                literalString(field.name): field.toJsonExp(
                   refer(field.dartName),
                 ),
             }).code,
@@ -428,7 +429,7 @@ return value as T;
             (f) => f
               ..annotations.add(DartTypes.core.override)
               ..modifier = FieldModifier.final$
-              ..type = field.type.reference
+              ..type = field.typeReference(ModelHierarchyType.partial)
               ..name = field.dartName,
           ),
         );
@@ -447,6 +448,7 @@ return value as T;
       c.constructors.add(
         Constructor(
           (ctor) => ctor
+            ..constant = true
             ..optionalParameters.addAll(parameters)
             ..initializers.add(const Code('super._()')),
         ),
@@ -466,8 +468,10 @@ return value as T;
               ),
             )
             ..body = fromJson(
-              refer(privateClassName),
-              definition.schemaFields(ModelHierarchyType.partial).values,
+              modelType: refer(privateClassName),
+              fields:
+                  definition.schemaFields(ModelHierarchyType.partial).values,
+              hierarchyType: ModelHierarchyType.partial,
             ),
         ),
       );
@@ -505,13 +509,76 @@ return value as T;
         ),
       );
 
+      // Add `_queryFields` for use below.
+      final queryFieldsType = refer('${modelName}QueryFields');
+      c.fields.add(
+        Field(
+          (f) => f
+            ..static = true
+            ..modifier = FieldModifier.constant
+            ..type = queryFieldsType.typeRef.rebuild(
+              (t) => t.types.addAll([modelIdentifierType, modelType]),
+            )
+            ..name = '_queryFields'
+            ..assignment = queryFieldsType.constInstance([]).code,
+        ),
+      );
+
+      void addQueryField(String fieldName, Reference fieldType) {
+        final newFormName = '\$$fieldName';
+        final oldFormName = fieldName.screamingCase;
+
+        // The new `$fieldName` form.
+        c.methods.addAll([
+          Method(
+            (m) => m
+              ..docs.add(
+                '/// Query field for the [$fieldName] field.',
+              )
+              ..returns = DartTypes.amplifyCore.queryField(
+                modelIdentifierType,
+                modelType,
+                fieldType,
+              )
+              ..type = MethodType.getter
+              ..name = newFormName
+              ..lambda = true
+              ..body = refer('_queryFields').property(newFormName).code,
+          ),
+
+          // The deprecated `FIELD_NAME` form.
+          Method(
+            (m) => m
+              ..annotations.add(
+                DartTypes.core.deprecated.newInstance([
+                  literalString('Use $newFormName instead', raw: true),
+                ]),
+              )
+              ..docs.add(
+                '/// Query field for the [$fieldName] field.',
+              )
+              ..returns = DartTypes.amplifyCore.queryField(
+                modelIdentifierType,
+                modelType,
+                fieldType,
+              )
+              ..type = MethodType.getter
+              ..name = oldFormName
+              ..lambda = true
+              ..body = refer(newFormName).code,
+          ),
+        ]);
+      }
+
       final parameters = <Parameter>[];
       for (final field in definition.fields.values) {
         final fieldType = field.type;
+        final fieldTypeRef = field.typeReference(ModelHierarchyType.model);
         c.methods.add(
           Method(
             (m) => m
-              ..returns = fieldType.reference
+              ..annotations.add(DartTypes.core.override)
+              ..returns = fieldTypeRef
               ..type = MethodType.getter
               ..name = field.dartName,
           ),
@@ -526,12 +593,18 @@ return value as T;
             (p) => p
               ..named = true
               ..required = fieldType.isRequired && !isIdField
-              ..type = fieldType.reference.typeRef
+              ..type = fieldTypeRef.typeRef
                   .rebuild((t) => t.isNullable = t.isNullable! || isIdField)
               ..name = field.dartName,
           ),
         );
+        if (field.hasQueryField) {
+          addQueryField(field.dartName, fieldTypeRef);
+        }
       }
+
+      // Add a query field for the model identifier
+      addQueryField('modelIdentifier', modelIdentifierType);
 
       // The public factory constructor which redirects to the private impl.
       c.constructors.add(
@@ -567,8 +640,9 @@ return value as T;
               ),
             )
             ..body = fromJson(
-              modelType,
-              definition.schemaFields(ModelHierarchyType.model).values,
+              modelType: modelType,
+              fields: definition.schemaFields(ModelHierarchyType.model).values,
+              hierarchyType: ModelHierarchyType.model,
             ),
         ),
       );
@@ -589,7 +663,7 @@ return value as T;
             (f) => f
               ..annotations.add(DartTypes.core.override)
               ..modifier = FieldModifier.final$
-              ..type = fieldType.reference
+              ..type = field.typeReference(ModelHierarchyType.model)
               ..name = field.dartName,
           ),
         );
@@ -674,7 +748,7 @@ return value as T;
             (f) => f
               ..annotations.add(DartTypes.core.override)
               ..modifier = FieldModifier.final$
-              ..type = field.type.reference
+              ..type = field.typeReference(ModelHierarchyType.remote)
               ..name = field.dartName,
           ),
         );
@@ -693,6 +767,7 @@ return value as T;
       c.constructors.add(
         Constructor(
           (ctor) => ctor
+            ..constant = true
             ..optionalParameters.addAll(parameters)
             ..initializers.add(const Code('super._()')),
         ),
@@ -712,10 +787,132 @@ return value as T;
               ),
             )
             ..body = fromJson(
-              refer(privateClassName),
-              definition.allFields(ModelHierarchyType.remote).values,
+              modelType: refer(privateClassName),
+              fields: definition.allFields(ModelHierarchyType.remote).values,
+              hierarchyType: ModelHierarchyType.remote,
             ),
         ),
+      );
+    });
+  }
+
+  /// The query fields implementation.
+  Class get _queryFieldsImpl {
+    return Class((c) {
+      final modelIdentifierTypeParameter = refer('ModelIdentifier');
+      final modelTypeParameter = refer('M');
+      c
+        ..name = '${modelName}QueryFields'
+        ..types.addAll([
+          TypeReference(
+            (t) => t
+              ..symbol = 'ModelIdentifier'
+              ..bound = DartTypes.core.object,
+          ),
+          TypeReference(
+            (t) => t
+              ..symbol = 'M'
+              ..bound = DartTypes.amplifyCore.model(
+                modelIdentifierTypeParameter,
+                modelTypeParameter,
+              ),
+          )
+        ]);
+
+      // const MODELQueryFields([this.root]);
+      c.constructors.add(
+        Constructor(
+          (c) => c
+            ..constant = true
+            ..optionalParameters.add(
+              Parameter(
+                (p) => p
+                  ..toThis = true
+                  ..name = 'root',
+              ),
+            ),
+        ),
+      );
+
+      // final QueryField<ModelIdentifier, M, MODEL>? root;
+      c.fields.add(
+        Field(
+          (f) => f
+            ..modifier = FieldModifier.final$
+            ..type = DartTypes.amplifyCore
+                .queryField(
+                  modelIdentifierTypeParameter,
+                  modelTypeParameter,
+                  modelType,
+                )
+                .nullable
+            ..name = 'root',
+        ),
+      );
+
+      void addQueryField(
+        String schemaName,
+        String dartName,
+        Reference fieldType, {
+        String? docReference,
+      }) {
+        final queryFieldType = DartTypes.amplifyCore.queryField(
+          modelIdentifierType,
+          modelType,
+          fieldType,
+        );
+        final queryField = queryFieldType.constInstance(
+          [],
+          {'fieldName': literalString(schemaName)},
+        );
+        final nestedQueryFieldType = DartTypes.amplifyCore.nestedQueryField(
+          modelIdentifierTypeParameter,
+          modelTypeParameter,
+          modelIdentifierType,
+          modelType,
+          fieldType,
+        );
+
+        final queryFieldName = '\$$dartName';
+        docReference ??= '[$modelName.$dartName]';
+        c.methods.add(
+          Method(
+            (m) => m
+              ..docs.add(
+                '/// Query field for the $docReference field.',
+              )
+              ..returns = DartTypes.amplifyCore.queryField(
+                modelIdentifierTypeParameter,
+                modelTypeParameter,
+                fieldType,
+              )
+              ..type = MethodType.getter
+              ..name = queryFieldName
+              ..lambda = true
+              ..body = nestedQueryFieldType.newInstance(
+                [queryField],
+                {
+                  // TODO(dnys1): Add nested model support
+                  // 'root': nested model fields
+                },
+              ).code,
+          ),
+        );
+      }
+
+      for (final field in definition.fields.values) {
+        final fieldType = field.typeReference();
+        if (field.hasQueryField) {
+          addQueryField(field.name, field.dartName, fieldType);
+        }
+      }
+
+      // Add an additional query field for the model helper
+      addQueryField(
+        'modelIdentifier',
+        'modelIdentifier',
+        modelIdentifierType,
+        docReference: '`modelIdentifier`',
       );
     });
   }

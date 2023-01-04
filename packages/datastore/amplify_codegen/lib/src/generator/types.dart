@@ -75,6 +75,44 @@ class _AmplifyCore {
 
   static const _url = 'package:amplify_core/amplify_core.dart';
 
+  /// Creates an [amplify_core.AsyncModel] reference.
+  TypeReference asyncModel(
+    Reference modelIdentifierType,
+    Reference modelType,
+    Reference partialModelType,
+    Reference selectedModelType,
+  ) =>
+      TypeReference(
+        (t) => t
+          ..symbol = 'AsyncModel'
+          ..url = _url
+          ..types.addAll([
+            modelIdentifierType,
+            modelType,
+            partialModelType,
+            selectedModelType,
+          ]),
+      );
+
+  /// Creates an [amplify_core.AsyncModelCollection] reference.
+  TypeReference asyncModelCollection(
+    Reference modelIdentifierType,
+    Reference modelType,
+    Reference partialModelType,
+    Reference selectedModelType,
+  ) =>
+      TypeReference(
+        (t) => t
+          ..symbol = 'AsyncModelCollection'
+          ..url = _url
+          ..types.addAll([
+            modelIdentifierType,
+            modelType,
+            partialModelType,
+            selectedModelType,
+          ]),
+      );
+
   _AmplifyCoreMipr get mipr => const _AmplifyCoreMipr();
 
   /// Creates an [amplify_core.Model] reference.
@@ -115,6 +153,27 @@ class _AmplifyCore {
           ..symbol = 'PartialModel'
           ..url = _url
           ..types.addAll([modelIdentifierType, modelType]),
+      );
+
+  /// Creates an [amplify_core.NestedQueryField] reference.
+  TypeReference nestedQueryField(
+    Reference rootModelIdentifierType,
+    Reference rootModelType,
+    Reference modelIdentifierType,
+    Reference modelType,
+    Reference fieldType,
+  ) =>
+      TypeReference(
+        (t) => t
+          ..symbol = 'NestedQueryField'
+          ..url = _url
+          ..types.addAll([
+            rootModelIdentifierType,
+            rootModelType,
+            modelIdentifierType,
+            modelType,
+            fieldType,
+          ]),
       );
 
   /// Creates an [amplify_core.QueryField] reference.
@@ -165,7 +224,7 @@ class _AmplifyCoreMipr {
 class _AwsCommon {
   const _AwsCommon();
 
-  static const _url = 'package:aws_common/aws_common.dart';
+  static const _url = 'package:amplify_core/amplify_core.dart';
 
   /// Creates an [aws_common.AWSDebuggable] reference.
   Reference get awsDebuggable => const Reference('AWSDebuggable', _url);

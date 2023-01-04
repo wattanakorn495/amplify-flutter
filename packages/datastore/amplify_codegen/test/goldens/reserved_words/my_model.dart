@@ -16,10 +16,11 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
+// ignore_for_file: non_constant_identifier_names
+
 library models.my_model;
 
 import 'package:amplify_core/amplify_core.dart';
-import 'package:aws_common/aws_common.dart';
 
 class MyModelType extends ModelType<String, MyModel, PartialMyModel> {
   const MyModelType();
@@ -38,6 +39,41 @@ class MyModelType extends ModelType<String, MyModel, PartialMyModel> {
 
   @override
   String get modelName => 'MyModel';
+}
+
+class MyModelQueryFields<ModelIdentifier extends Object,
+    M extends Model<ModelIdentifier, M>> {
+  const MyModelQueryFields([this.root]);
+
+  final QueryField<ModelIdentifier, M, MyModel>? root;
+
+  /// Query field for the [MyModel.enum_] field.
+  QueryField<ModelIdentifier, M, String> get $enum_ =>
+      NestedQueryField<ModelIdentifier, M, String, MyModel, String>(
+          const QueryField<String, MyModel, String>(fieldName: 'enum'));
+
+  /// Query field for the [MyModel.createdAt] field.
+  QueryField<ModelIdentifier, M, TemporalDateTime?> get $createdAt =>
+      NestedQueryField<ModelIdentifier, M, String, MyModel, TemporalDateTime?>(
+          const QueryField<String, MyModel, TemporalDateTime?>(
+              fieldName: 'createdAt'));
+
+  /// Query field for the [MyModel.updatedAt] field.
+  QueryField<ModelIdentifier, M, TemporalDateTime?> get $updatedAt =>
+      NestedQueryField<ModelIdentifier, M, String, MyModel, TemporalDateTime?>(
+          const QueryField<String, MyModel, TemporalDateTime?>(
+              fieldName: 'updatedAt'));
+
+  /// Query field for the [MyModel.id] field.
+  QueryField<ModelIdentifier, M, String> get $id =>
+      NestedQueryField<ModelIdentifier, M, String, MyModel, String>(
+          const QueryField<String, MyModel, String>(fieldName: 'id'));
+
+  /// Query field for the `modelIdentifier` field.
+  QueryField<ModelIdentifier, M, String> get $modelIdentifier =>
+      NestedQueryField<ModelIdentifier, M, String, MyModel, String>(
+          const QueryField<String, MyModel, String>(
+              fieldName: 'modelIdentifier'));
 }
 
 abstract class PartialMyModel extends PartialModel<String, MyModel>
@@ -97,7 +133,7 @@ abstract class PartialMyModel extends PartialModel<String, MyModel>
 }
 
 class _PartialMyModel extends PartialMyModel {
-  _PartialMyModel({
+  const _PartialMyModel({
     this.enum_,
     this.createdAt,
     this.updatedAt,
@@ -105,7 +141,7 @@ class _PartialMyModel extends PartialMyModel {
   }) : super._();
 
   factory _PartialMyModel.fromJson(Map<String, Object?> json) {
-    final enum_ = json['enum'] == null ? null : (json['enum'] as String?);
+    final enum_ = json['enum'] == null ? null : (json['enum'] as String);
     final createdAt = json['createdAt'] == null
         ? null
         : TemporalDateTime.fromString((json['createdAt'] as String));
@@ -113,10 +149,10 @@ class _PartialMyModel extends PartialMyModel {
         ? null
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final id = json['id'] == null
-        ? throw ModelFieldError(
+        ? (throw ModelFieldError(
             'MyModel',
             'id',
-          )
+          ))
         : (json['id'] as String);
     return _PartialMyModel(
       enum_: enum_,
@@ -152,10 +188,10 @@ abstract class MyModel extends PartialMyModel
 
   factory MyModel.fromJson(Map<String, Object?> json) {
     final enum_ = json['enum'] == null
-        ? throw ModelFieldError(
+        ? (throw ModelFieldError(
             'MyModel',
             'enum_',
-          )
+          ))
         : (json['enum'] as String);
     final createdAt = json['createdAt'] == null
         ? null
@@ -164,10 +200,10 @@ abstract class MyModel extends PartialMyModel
         ? null
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final id = json['id'] == null
-        ? throw ModelFieldError(
+        ? (throw ModelFieldError(
             'MyModel',
             'id',
-          )
+          ))
         : (json['id'] as String);
     return MyModel(
       enum_: enum_,
@@ -179,10 +215,55 @@ abstract class MyModel extends PartialMyModel
 
   static const MyModelType classType = MyModelType();
 
+  static const MyModelQueryFields<String, MyModel> _queryFields =
+      MyModelQueryFields();
+
+  @override
   String get enum_;
+
+  /// Query field for the [enum_] field.
+  QueryField<String, MyModel, String> get $enum_ => _queryFields.$enum_;
+
+  /// Query field for the [enum_] field.
+  @Deprecated(r'Use $enum_ instead')
+  QueryField<String, MyModel, String> get ENUM => $enum_;
+  @override
   TemporalDateTime? get createdAt;
+
+  /// Query field for the [createdAt] field.
+  QueryField<String, MyModel, TemporalDateTime?> get $createdAt =>
+      _queryFields.$createdAt;
+
+  /// Query field for the [createdAt] field.
+  @Deprecated(r'Use $createdAt instead')
+  QueryField<String, MyModel, TemporalDateTime?> get CREATED_AT => $createdAt;
+  @override
   TemporalDateTime? get updatedAt;
+
+  /// Query field for the [updatedAt] field.
+  QueryField<String, MyModel, TemporalDateTime?> get $updatedAt =>
+      _queryFields.$updatedAt;
+
+  /// Query field for the [updatedAt] field.
+  @Deprecated(r'Use $updatedAt instead')
+  QueryField<String, MyModel, TemporalDateTime?> get UPDATED_AT => $updatedAt;
+  @override
   String get id;
+
+  /// Query field for the [id] field.
+  QueryField<String, MyModel, String> get $id => _queryFields.$id;
+
+  /// Query field for the [id] field.
+  @Deprecated(r'Use $id instead')
+  QueryField<String, MyModel, String> get ID => $id;
+
+  /// Query field for the [modelIdentifier] field.
+  QueryField<String, MyModel, String> get $modelIdentifier =>
+      _queryFields.$modelIdentifier;
+
+  /// Query field for the [modelIdentifier] field.
+  @Deprecated(r'Use $modelIdentifier instead')
+  QueryField<String, MyModel, String> get MODEL_IDENTIFIER => $modelIdentifier;
 }
 
 class _MyModel extends MyModel {
@@ -213,7 +294,7 @@ abstract class RemoteMyModel extends MyModel
 }
 
 class _RemoteMyModel extends RemoteMyModel {
-  _RemoteMyModel({
+  const _RemoteMyModel({
     required this.enum_,
     this.createdAt,
     this.updatedAt,
@@ -225,10 +306,10 @@ class _RemoteMyModel extends RemoteMyModel {
 
   factory _RemoteMyModel.fromJson(Map<String, Object?> json) {
     final enum_ = json['enum'] == null
-        ? throw ModelFieldError(
+        ? (throw ModelFieldError(
             'MyModel',
             'enum_',
-          )
+          ))
         : (json['enum'] as String);
     final createdAt = json['createdAt'] == null
         ? null
@@ -237,28 +318,28 @@ class _RemoteMyModel extends RemoteMyModel {
         ? null
         : TemporalDateTime.fromString((json['updatedAt'] as String));
     final id = json['id'] == null
-        ? throw ModelFieldError(
+        ? (throw ModelFieldError(
             'MyModel',
             'id',
-          )
+          ))
         : (json['id'] as String);
     final version = json['version'] == null
-        ? throw ModelFieldError(
+        ? (throw ModelFieldError(
             'MyModel',
             'version',
-          )
+          ))
         : (json['version'] as int);
     final deleted = json['deleted'] == null
-        ? throw ModelFieldError(
+        ? (throw ModelFieldError(
             'MyModel',
             'deleted',
-          )
+          ))
         : (json['deleted'] as bool);
     final lastChangedAt = json['lastChangedAt'] == null
-        ? throw ModelFieldError(
+        ? (throw ModelFieldError(
             'MyModel',
             'lastChangedAt',
-          )
+          ))
         : TemporalDateTime.fromString((json['lastChangedAt'] as String));
     return _RemoteMyModel(
       enum_: enum_,

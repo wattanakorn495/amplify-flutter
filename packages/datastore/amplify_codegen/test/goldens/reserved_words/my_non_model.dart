@@ -16,10 +16,11 @@
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
+// ignore_for_file: non_constant_identifier_names
+
 library models.my_non_model;
 
 import 'package:amplify_core/amplify_core.dart';
-import 'package:aws_common/aws_common.dart';
 
 class MyNonModel
     with
@@ -30,10 +31,10 @@ class MyNonModel
 
   factory MyNonModel.fromJson(Map<String, Object?> json) {
     final enum_ = json['enum'] == null
-        ? throw ModelFieldError(
+        ? (throw ModelFieldError(
             'MyNonModel',
             'enum_',
-          )
+          ))
         : (json['enum'] as String);
     return MyNonModel(enum_: enum_);
   }
