@@ -138,18 +138,14 @@ class GraphQLRequestFactory {
     return DocumentInputs(upperOutput, lowerOutput);
   }
 
-  /// Example:
-  ///   query getBlog($id: ID!, $content: String) { getBlog(id: $id, content: $content) { id name createdAt } }
-  GraphQLRequest<T> buildRequest<T extends Model>(
-      {required ModelType modelType,
-      Model? model,
-      required GraphQLRequestType requestType,
-      required GraphQLRequestOperation requestOperation,
-      required Map<String, dynamic> variables,
-      int depth = 0}) {
+  GraphQLDocument _buildDocument({
+    required ModelType modelType,
+    required GraphQLRequestType requestType,
+    required GraphQLRequestOperation requestOperation,
+  }) {
     // retrieve schema from ModelType and validate required properties
     ModelTypeDefinition schema =
-        getModelSchemaByModelName(modelType.modelName(), requestOperation);
+        getModelSchemaByModelName(modelType.modelName, requestOperation);
 
     // e.g. "Blog" or "Blogs"
     String name = _getName(schema, requestOperation);
@@ -170,11 +166,58 @@ class GraphQLRequestFactory {
     // e.g "listBlogs"
     String decodePath = requestName;
 
-    return GraphQLRequest<T>(
-        document: document,
-        variables: variables,
-        modelType: modelType,
-        decodePath: decodePath);
+    return GraphQLDocument(document: document, decodePath: decodePath);
+  }
+
+  /// Example:
+  ///   query getBlog($id: ID!, $content: String) { getBlog(id: $id, content: $content) { id name createdAt } }
+  GraphQLRequest<T> buildRequest<
+      ModelIdentifier extends Object,
+      M extends Model<ModelIdentifier, M>,
+      P extends PartialModel<ModelIdentifier, M>,
+      T extends PartialModel<ModelIdentifier, M>>({
+    required ModelType<ModelIdentifier, M, P> modelType,
+    M? model,
+    required GraphQLRequestType requestType,
+    required GraphQLRequestOperation requestOperation,
+    required Map<String, dynamic> variables,
+    int depth = 0,
+  }) {
+    final document = _buildDocument(
+      modelType: modelType,
+      requestType: requestType,
+      requestOperation: requestOperation,
+    );
+    return GraphQLRequest.model<ModelIdentifier, M, P, T>(
+      document: document.document,
+      variables: variables,
+      modelType: modelType,
+      decodePath: document.decodePath,
+    );
+  }
+
+  GraphQLRequest<PaginatedResult<ModelIdentifier, M, P, T>> buildListRequest<
+      ModelIdentifier extends Object,
+      M extends Model<ModelIdentifier, M>,
+      P extends PartialModel<ModelIdentifier, M>,
+      T extends PartialModel<ModelIdentifier, M>>({
+    required ModelType<ModelIdentifier, M, P> modelType,
+    M? model,
+    required GraphQLRequestType requestType,
+    required GraphQLRequestOperation requestOperation,
+    required Map<String, dynamic> variables,
+  }) {
+    final document = _buildDocument(
+      modelType: modelType,
+      requestType: requestType,
+      requestOperation: requestOperation,
+    );
+    return GraphQLRequest.list<ModelIdentifier, M, P, T>(
+      document: document.document,
+      variables: variables,
+      modelType: modelType,
+      decodePath: document.decodePath,
+    );
   }
 
   Map<String, dynamic> buildVariablesForListRequest(
@@ -199,13 +242,16 @@ class GraphQLRequestFactory {
   /// `queryPredicateToGraphQLFilter(Blog.NAME.eq('foo'));` // =>
   /// `{'name': {'eq': 'foo'}}`. In the case of a mutation, it will apply to
   /// the "condition" field rather than "filter."
-  Map<String, dynamic>? queryPredicateToGraphQLFilter(
-      QueryPredicate? queryPredicate, ModelType modelType) {
+  Map<String, dynamic>? queryPredicateToGraphQLFilter<
+      ModelIdentifier extends Object, M extends Model<ModelIdentifier, M>>(
+    QueryPredicate? queryPredicate,
+    ModelType<ModelIdentifier, M, dynamic> modelType,
+  ) {
     if (queryPredicate == null) {
       return null;
     }
     ModelTypeDefinition schema =
-        getModelSchemaByModelName(modelType.modelName(), null);
+        getModelSchemaByModelName(modelType.modelName, null);
 
     // e.g. { 'name': { 'eq': 'foo }}
     if (queryPredicate is QueryPredicateOperation) {
@@ -270,7 +316,7 @@ class GraphQLRequestFactory {
   /// as a field similar to "blogID" where the value is `post.blog.id`.
   Map<String, dynamic> buildInputVariableForMutations(Model model) {
     ModelTypeDefinition schema =
-        getModelSchemaByModelName(model.getInstanceType().modelName(), null);
+        getModelSchemaByModelName(model.modelType.modelName, null);
     final modelJson = model.toJson();
 
     // If the model has a parent in the schema, get the ID of parent and field name.
@@ -363,4 +409,15 @@ dynamic _getSerializedValue(dynamic value) {
     return describeEnum(value);
   }
   return value;
+}
+
+// TODO(dnys1): Replace with gql AST
+class GraphQLDocument {
+  const GraphQLDocument({
+    required this.document,
+    required this.decodePath,
+  });
+
+  final String document;
+  final String decodePath;
 }

@@ -69,8 +69,8 @@ ModelTypeDefinition getModelSchemaByModelName(
           'Pass in a modelProvider instance while instantiating APIPlugin',
     );
   }
-  final schema = (provider.modelSchemas + provider.customTypeSchemas)
-      .firstWhere((elem) => elem.name == modelName,
+  final schema =
+      provider.modelSchemas.firstWhere((elem) => elem.name == modelName,
           orElse: () => throw ApiException(
                 'No schema found for the ModelType provided: $modelName',
                 recoverySuggestion:
@@ -86,14 +86,6 @@ ModelTypeDefinition getModelSchemaByModelName(
     );
   }
 
-  if (operation == GraphQLRequestOperation.list && schema.pluralName == null) {
-    throw const ApiException(
-      'No schema name found',
-      recoverySuggestion: 'Pass in a valid modelProvider instance while '
-          'instantiating APIPlugin or provide a valid ModelType',
-    );
-  }
-
   return schema;
 }
 
@@ -106,11 +98,13 @@ Map<String, dynamic> transformAppSyncJsonToModelJson(
   input = <String, dynamic>{...input}; // avoid mutating original
 
   // check for list at top-level and tranform each entry
-  if (isPaginated && input[items] is List) {
+  if (input[items] is List) {
     final transformedItems = (input[items] as List)
         .map((dynamic e) => e != null
             ? transformAppSyncJsonToModelJson(
-                e as Map<String, dynamic>, modelSchema)
+                e as Map<String, dynamic>,
+                modelSchema,
+              )
             : null)
         .toList();
     input.update(items, (dynamic value) => transformedItems);
