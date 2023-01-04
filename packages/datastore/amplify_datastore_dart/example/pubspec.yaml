@@ -1,0 +1,22 @@
+name: amplify_datastore_dart_example
+description: An absolute bare-bones web app.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+
+dependencies:
+  amplify_core:
+    path: ../../../amplify_core
+  amplify_datastore_dart:
+    path: ../
+  meta: ^1.8.0
+
+dev_dependencies:
+  amplify_codegen:
+    path: ../../amplify_codegen
+  amplify_lints:
+    path: ../../../amplify_lints
+  build_runner: ^2.1.4
+  build_web_compilers: ^3.2.1

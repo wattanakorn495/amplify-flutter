@@ -470,6 +470,7 @@ return ${allocate(_references.partialModelImpl)}.fromJson(json) as T;
               ..type = MethodType.getter
               ..name = newFormName
               ..lambda = true
+              ..static = true
               ..body = refer('_queryFields').property(newFormName).code,
           ),
 
@@ -488,6 +489,7 @@ return ${allocate(_references.partialModelImpl)}.fromJson(json) as T;
               ..type = MethodType.getter
               ..name = oldFormName
               ..lambda = true
+              ..static = true
               ..body = refer(newFormName).code,
           ),
         ]);
