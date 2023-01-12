@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 
@@ -33,15 +22,19 @@ abstract class ServiceConfiguration {
   const factory ServiceConfiguration({
     bool? normalizePath,
     bool? omitSessionToken,
+    bool? doubleEncodePathSegments,
+    bool? signBody,
   }) = BaseServiceConfiguration;
 
   const ServiceConfiguration._({
     bool? normalizePath,
     bool? omitSessionToken,
     bool? doubleEncodePathSegments,
+    bool? signBody,
   })  : normalizePath = normalizePath ?? true,
         omitSessionToken = omitSessionToken ?? false,
-        doubleEncodePathSegments = doubleEncodePathSegments ?? true;
+        doubleEncodePathSegments = doubleEncodePathSegments ?? true,
+        signBody = signBody ?? true;
 
   /// Whether to normalize paths in the canonical request.
   ///
@@ -59,6 +52,12 @@ abstract class ServiceConfiguration {
   ///
   /// Defaults to `true`.
   final bool doubleEncodePathSegments;
+
+  /// Whether to sign the body of requests and include the hash in the request's
+  /// headers.
+  ///
+  /// Defaults to `true`.
+  final bool signBody;
 
   /// Applies service-specific keys to [headers] for signed header requests.
   @mustCallSuper
@@ -97,7 +96,7 @@ abstract class ServiceConfiguration {
   });
 
   /// Transforms the request body using the [signingKey] and [seedSignature].
-  Stream<List<int>> signBody({
+  Stream<List<int>> transformBody({
     required AWSAlgorithm algorithm,
     required int contentLength,
     required List<int> signingKey,
@@ -116,6 +115,7 @@ class BaseServiceConfiguration extends ServiceConfiguration {
     super.normalizePath,
     super.omitSessionToken,
     super.doubleEncodePathSegments,
+    super.signBody,
   }) : super._();
 
   @override
@@ -127,12 +127,11 @@ class BaseServiceConfiguration extends ServiceConfiguration {
     required String payloadHash,
     required int contentLength,
   }) {
-    final includeBodyHash = contentLength > 0;
     headers.addAll({
       if (!request.headers.containsKey(AWSHeaders.host))
         AWSHeaders.host: request.host,
       AWSHeaders.date: credentialScope.dateTime.formatFull(),
-      if (includeBodyHash) AWSHeaders.contentSHA256: payloadHash,
+      if (signBody) AWSHeaders.contentSHA256: payloadHash,
       if (credentials.sessionToken != null && !omitSessionToken)
         AWSHeaders.securityToken: credentials.sessionToken!,
     });
@@ -194,7 +193,7 @@ class BaseServiceConfiguration extends ServiceConfiguration {
   }
 
   @override
-  Stream<List<int>> signBody({
+  Stream<List<int>> transformBody({
     required AWSAlgorithm algorithm,
     required int contentLength,
     required List<int> signingKey,
@@ -202,7 +201,7 @@ class BaseServiceConfiguration extends ServiceConfiguration {
     required AWSCredentialScope credentialScope,
     required CanonicalRequest canonicalRequest,
   }) {
-    // By default, the body is not signed.
+    // By default, the body is not transformed.
     return canonicalRequest.request.body;
   }
 }

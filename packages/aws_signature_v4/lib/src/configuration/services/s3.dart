@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 import 'dart:convert';
@@ -43,7 +32,7 @@ enum S3PayloadEncoding {
 class S3ServiceConfiguration extends BaseServiceConfiguration {
   /// {@macro aws_signature_v4.s3_service_configuration}
   S3ServiceConfiguration({
-    this.signPayload = true,
+    bool signPayload = true,
     this.chunked = false,
     int chunkSize = _defaultChunkSize,
     this.encoding = S3PayloadEncoding.none,
@@ -56,6 +45,7 @@ class S3ServiceConfiguration extends BaseServiceConfiguration {
           normalizePath: false,
           omitSessionToken: false,
           doubleEncodePathSegments: false,
+          signBody: signPayload,
         );
 
   // 8 KB is the minimum chunk size.
@@ -72,9 +62,6 @@ class S3ServiceConfiguration extends BaseServiceConfiguration {
 
   static final _sigSep = Uint8List.fromList(';chunk-signature='.codeUnits);
   static final _sep = Uint8List.fromList('\r\n'.codeUnits);
-
-  /// Whether to sign the payload (body).
-  final bool signPayload;
 
   /// Whether the request should be chunked.
   final bool chunked;
@@ -147,7 +134,7 @@ class S3ServiceConfiguration extends BaseServiceConfiguration {
       }
     }
 
-    if (signPayload) {
+    if (signBody) {
       headers[AWSHeaders.contentSHA256] = payloadHash;
     } else {
       headers[AWSHeaders.contentSHA256] = unsignedPayloadHash;
@@ -160,7 +147,7 @@ class S3ServiceConfiguration extends BaseServiceConfiguration {
     required bool presignedUrl,
   }) async {
     // Only unchunked, signed requests are hashed as other services would be.
-    if (signPayload && !_shouldChunk(request)) {
+    if (signBody && !_shouldChunk(request)) {
       return super.hashPayload(request, presignedUrl: presignedUrl);
     }
     return hashPayloadSync(request, presignedUrl: presignedUrl);
@@ -171,7 +158,7 @@ class S3ServiceConfiguration extends BaseServiceConfiguration {
     AWSBaseHttpRequest request, {
     required bool presignedUrl,
   }) {
-    if (presignedUrl || !signPayload) {
+    if (presignedUrl || !signBody) {
       return unsignedPayloadHash;
     }
     if (_shouldChunk(request)) {
@@ -181,7 +168,7 @@ class S3ServiceConfiguration extends BaseServiceConfiguration {
   }
 
   @override
-  Stream<List<int>> signBody({
+  Stream<List<int>> transformBody({
     required AWSAlgorithm algorithm,
     required int contentLength,
     required List<int> signingKey,
@@ -190,9 +177,9 @@ class S3ServiceConfiguration extends BaseServiceConfiguration {
     required CanonicalRequest canonicalRequest,
   }) async* {
     if (canonicalRequest.presignedUrl ||
-        !signPayload ||
+        !signBody ||
         !_shouldChunk(canonicalRequest.request)) {
-      yield* super.signBody(
+      yield* super.transformBody(
         algorithm: algorithm,
         contentLength: contentLength,
         signingKey: signingKey,

@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:convert';
 
@@ -25,6 +14,7 @@ import 'package:integration_test/integration_test.dart';
 
 import 'utils/mock_data.dart';
 import 'utils/setup_utils.dart';
+import 'utils/test_utils.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +59,7 @@ void main() {
         username: username,
         password: password,
       );
-      expect(signInResult.nextStep?.signInStep, 'DONE');
+      expect(signInResult.nextStep.signInStep, 'DONE');
 
       final userPoolTokens =
           (await cognitoPlugin.fetchAuthSession()).userPoolTokens!;
@@ -87,14 +77,14 @@ void main() {
       );
     }
 
-    test('throws when signed in', () async {
+    asyncTest('throws when signed in', (_) async {
       final signInResult = await cognitoPlugin.signIn(
         username: username,
         password: password,
       );
-      expect(signInResult.nextStep?.signInStep, 'DONE');
+      expect(signInResult.nextStep.signInStep, 'DONE');
 
-      expect(
+      await expectLater(
         cognitoPlugin.federateToIdentityPool(
           token: 'dummyToken',
           provider: provider,
@@ -109,11 +99,11 @@ void main() {
       );
     });
 
-    test('federates to external provider', () async {
+    asyncTest('federates to external provider', (_) async {
       await expectLater(federateToIdentityPool(), completes);
     });
 
-    test('replaces unauthenticated identity', () async {
+    asyncTest('replaces unauthenticated identity', (_) async {
       // Get unauthenticated identity
       final unauthSession = await cognitoPlugin.fetchAuthSession(
         options: const CognitoSessionOptions(getAWSCredentials: true),
@@ -132,7 +122,7 @@ void main() {
       );
     });
 
-    test('can specify identity ID', () async {
+    asyncTest('can specify identity ID', (_) async {
       // Get unauthenticated identity (doesn't matter, just need identity ID)
       final unauthSession = await cognitoPlugin.fetchAuthSession(
         options: const CognitoSessionOptions(getAWSCredentials: true),
@@ -143,7 +133,7 @@ void main() {
         username: username,
         password: password,
       );
-      expect(signInResult.nextStep?.signInStep, 'DONE');
+      expect(signInResult.nextStep.signInStep, 'DONE');
 
       final userPoolTokens =
           (await cognitoPlugin.fetchAuthSession()).userPoolTokens!;
@@ -169,7 +159,7 @@ void main() {
       );
     });
 
-    test('can refresh federated credentials', () async {
+    asyncTest('can refresh federated credentials', (_) async {
       final authSession = await federateToIdentityPool();
       final newAuthSession = await federateToIdentityPool();
 
@@ -185,7 +175,7 @@ void main() {
       );
     });
 
-    test('can clear federation', () async {
+    asyncTest('can clear federation', (_) async {
       await federateToIdentityPool();
 
       await expectLater(
@@ -206,7 +196,7 @@ void main() {
       );
     });
 
-    test('can clear nonexistent federation', () async {
+    asyncTest('can clear nonexistent federation', (_) async {
       await expectLater(
         cognitoPlugin.clearFederationToIdentityPool(),
         completes,

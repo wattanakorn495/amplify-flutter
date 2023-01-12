@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'package:amplify_core/amplify_core.dart';
 
@@ -30,7 +19,7 @@ abstract class AmplifyPluginKey<P extends AmplifyPluginInterface>
 /// {@endtemplate}
 abstract class AuthPluginKey<
     PluginAuthUser extends AuthUser,
-    PluginUserAttributeKey extends UserAttributeKey,
+    PluginUserAttributeKey extends AuthUserAttributeKey,
     PluginAuthUserAttribute extends AuthUserAttribute<PluginUserAttributeKey>,
     PluginAuthDevice extends AuthDevice,
     PluginSignUpOptions extends SignUpOptions,
@@ -103,4 +92,58 @@ abstract class AuthPluginKey<
     P> {
   /// {@macro amplify_core.plugin.auth_plugin_key}
   const AuthPluginKey();
+}
+
+// TODO(HuiSF): Define generic parameters for all API types
+abstract class StoragePluginKey<
+    PluginStorageListOperation extends StorageListOperation,
+    PluginStorageListOptions extends StorageListOptions,
+    PluginStorageGetPropertiesOperation extends StorageGetPropertiesOperation,
+    PluginStorageGetPropertiesOptions extends StorageGetPropertiesOptions,
+    PluginStorageGetUrlOperation extends StorageGetUrlOperation,
+    PluginStorageGetUrlOptions extends StorageGetUrlOptions,
+    PluginStorageUploadDataOperation extends StorageUploadDataOperation,
+    PluginStorageUploadDataOptions extends StorageUploadDataOptions,
+    PluginStorageUploadFileOperation extends StorageUploadFileOperation,
+    PluginStorageUploadFileOptions extends StorageUploadFileOptions,
+    PluginStorageDownloadDataOperation extends StorageDownloadDataOperation,
+    PluginStorageDownloadDataOptions extends StorageDownloadDataOptions,
+    PluginStorageDownloadFileOperation extends StorageDownloadFileOperation,
+    PluginStorageDownloadFileOptions extends StorageDownloadFileOptions,
+    PluginStorageCopyOperation extends StorageCopyOperation,
+    PluginStorageCopyOptions extends StorageCopyOptions,
+    PluginStorageMoveOperation extends StorageMoveOperation,
+    PluginStorageMoveOptions extends StorageMoveOptions,
+    PluginStorageRemoveOperation extends StorageRemoveOperation,
+    PluginStorageRemoveOptions extends StorageRemoveOptions,
+    PluginStorageRemoveManyOperation extends StorageRemoveManyOperation,
+    PluginStorageRemoveManyOptions extends StorageRemoveManyOptions,
+    PluginStorageItem extends StorageItem,
+    PluginTransferProgress extends StorageTransferProgress,
+    P extends StoragePluginInterface<
+        PluginStorageListOperation,
+        PluginStorageListOptions,
+        PluginStorageGetPropertiesOperation,
+        PluginStorageGetPropertiesOptions,
+        PluginStorageGetUrlOperation,
+        PluginStorageGetUrlOptions,
+        PluginStorageUploadDataOperation,
+        PluginStorageUploadDataOptions,
+        PluginStorageUploadFileOperation,
+        PluginStorageUploadFileOptions,
+        PluginStorageDownloadDataOperation,
+        PluginStorageDownloadDataOptions,
+        PluginStorageDownloadFileOperation,
+        PluginStorageDownloadFileOptions,
+        PluginStorageCopyOperation,
+        PluginStorageCopyOptions,
+        PluginStorageMoveOperation,
+        PluginStorageMoveOptions,
+        PluginStorageRemoveOperation,
+        PluginStorageRemoveOptions,
+        PluginStorageRemoveManyOperation,
+        PluginStorageRemoveManyOptions,
+        PluginStorageItem,
+        PluginTransferProgress>> extends AmplifyPluginKey<P> {
+  const StoragePluginKey();
 }

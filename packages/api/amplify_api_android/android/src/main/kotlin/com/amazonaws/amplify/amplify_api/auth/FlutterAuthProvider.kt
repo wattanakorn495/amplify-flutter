@@ -1,20 +1,9 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 package com.amazonaws.amplify.amplify_api.auth
 
 import android.os.Looper
+import com.amazonaws.amplify.amplify_api.NativeApiPluginBindings
 import com.amazonaws.amplify.exception.ExceptionMessages
 import com.amplifyframework.api.ApiException
 import com.amplifyframework.api.aws.ApiAuthProviders
@@ -34,7 +23,8 @@ import kotlinx.coroutines.withTimeout
  * Manages the shared state of all [FlutterAuthProvider] instances.
  */
 class FlutterAuthProviders(
-    private val authProviders: List<AuthorizationType>
+    private val authProviders: List<AuthorizationType>,
+    private val nativeApiPlugin: NativeApiPluginBindings.NativeApiPlugin
 ) {
     private companion object {
         /**
@@ -51,19 +41,6 @@ class FlutterAuthProviders(
          * Name for suspending block in [getToken]. Used for debugging
          */
         val coroutineName = CoroutineName(tag)
-    }
-
-    /**
-     * The method channel used for Android -> Flutter communication. Should be cleared when the API
-     * plugin is detached from Flutter and set when it is reattached.
-     */
-    private var methodChannel: MethodChannel? = null
-
-    /**
-     * Configures the method channel for API authorization.
-     */
-    fun setMethodChannel(methodChannel: MethodChannel?) {
-        this.methodChannel = methodChannel
     }
 
     /**
@@ -90,10 +67,11 @@ class FlutterAuthProviders(
     fun getToken(authType: AuthorizationType): String? {
         // Not blocking the main thread is required for making platform channel calls without
         // deadlock.
-        if (Thread.currentThread() == Looper.getMainLooper().thread || methodChannel == null) {
+        if (Thread.currentThread() == Looper.getMainLooper().thread) {
             Log.e(tag, ExceptionMessages.createGithubIssueString)
             return null
         }
+
         try {
             return runBlocking(coroutineName) {
                 val completer = Job()
@@ -125,11 +103,10 @@ class FlutterAuthProviders(
                     }
                 }
                 launch(Dispatchers.Main) {
-                    methodChannel!!.invokeMethod(
-                        "getLatestAuthToken",
-                        authType.name,
-                        result
-                    )
+
+                    nativeApiPlugin.getLatestAuthToken(authType.name) { resultToken ->
+                        result.success(resultToken)
+                    }
                 }
 
                 withTimeout(getTokenTimeoutMillis) {

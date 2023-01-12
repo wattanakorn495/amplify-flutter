@@ -1,17 +1,5 @@
-/*
- * Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'package:amplify_core/amplify_core.dart';
 import 'package:aws_signature_v4/aws_signature_v4.dart';
@@ -19,6 +7,7 @@ import 'package:test/test.dart';
 
 const _testAuthKey = 'TestAuthKey';
 const _testToken = 'abc123-fake-token';
+const _testIdentityId = 'identity-id-321';
 
 AWSHttpRequest _generateTestRequest() {
   return AWSHttpRequest(
@@ -73,6 +62,18 @@ class TestTokenProvider extends TokenAmplifyAuthProvider {
   }
 }
 
+class TestTokenIdentityProvider extends TokenIdentityAmplifyAuthProvider {
+  @override
+  Future<String> getLatestAuthToken() async {
+    return _testToken;
+  }
+
+  @override
+  Future<String> getIdentityId() async {
+    return _testIdentityId;
+  }
+}
+
 void main() {
   final authProvider = TestAuthProvider();
 
@@ -93,11 +94,25 @@ void main() {
     });
   });
 
+  group('TokenIdentityAmplifyAuthProvider', () {
+    test('will assign the token to the "Authorization" header', () async {
+      final tokenAuthProvider = TestTokenProvider();
+      final authorizedRequest =
+          await tokenAuthProvider.authorizeRequest(_generateTestRequest());
+      expect(authorizedRequest.headers[AWSHeaders.authorization], _testToken);
+    });
+
+    test('identityId() returns identityId', () async {
+      final identityId = await TestTokenIdentityProvider().getIdentityId();
+      expect(identityId, _testIdentityId);
+    });
+  });
+
   group('AmplifyAuthProviderRepository', () {
     test('can register a valid auth provider and use to retrieve', () async {
       final authRepo = AmplifyAuthProviderRepository();
 
-      const providerKey = AmplifyAuthProviderToken();
+      const providerKey = AmplifyAuthProviderToken('');
       authRepo.registerAuthProvider(providerKey, authProvider);
       final actualAuthProvider = authRepo.getAuthProvider(providerKey);
       final authorizedRequest =
@@ -109,7 +124,8 @@ void main() {
       final authRepo = AmplifyAuthProviderRepository();
 
       final credentialAuthProvider = TestAWSCredentialsAuthProvider();
-      const providerKey = AmplifyAuthProviderToken<AWSIamAmplifyAuthProvider>();
+      const providerKey =
+          AmplifyAuthProviderToken<AWSIamAmplifyAuthProvider>('');
       authRepo.registerAuthProvider(providerKey, credentialAuthProvider);
       AWSIamAmplifyAuthProvider? actualAuthProvider =
           authRepo.getAuthProvider(providerKey);
@@ -119,7 +135,7 @@ void main() {
     test('will overwrite previous provider in same key', () async {
       final authRepo = AmplifyAuthProviderRepository();
 
-      const providerKey = AmplifyAuthProviderToken();
+      const providerKey = AmplifyAuthProviderToken('');
       authRepo.registerAuthProvider(providerKey, authProvider);
       authRepo.registerAuthProvider(providerKey, SecondTestAuthProvider());
       final actualAuthProvider = authRepo.getAuthProvider(providerKey);
@@ -127,6 +143,12 @@ void main() {
       final authorizedRequest =
           await actualAuthProvider!.authorizeRequest(_generateTestRequest());
       expect(authorizedRequest.headers[_testAuthKey], 'bar');
+    });
+
+    test('2 AmplifyAuthProviderToken of same type are not the same', () async {
+      const token1 = AmplifyAuthProviderToken<TokenAmplifyAuthProvider>('1');
+      const token2 = AmplifyAuthProviderToken<TokenAmplifyAuthProvider>('2');
+      expect(token1, isNot(token2));
     });
   });
 }

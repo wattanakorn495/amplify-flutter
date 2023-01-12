@@ -1,4 +1,7 @@
 #!/bin/bash
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+
 set -e
 
-APP_ID=$AFS_STORAGE_APP_ID ../../../../build-support/pull_backend_by_app_id.sh 
+aws s3 cp s3://$AFS_STORAGE_BUCKET_NAME/amplifyconfiguration.dart lib/amplifyconfiguration.dart 

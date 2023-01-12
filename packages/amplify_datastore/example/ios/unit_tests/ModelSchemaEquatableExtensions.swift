@@ -1,22 +1,10 @@
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import Amplify
 
-extension ModelSchema : Equatable {
+extension ModelSchema: Equatable {
     public static func == (lhs: ModelSchema, rhs: ModelSchema) -> Bool {
         return
             lhs.name == rhs.name &&
@@ -26,7 +14,7 @@ extension ModelSchema : Equatable {
     }
 }
 
-extension AuthRule : Equatable {
+extension AuthRule: Equatable {
     public static func == (lhs: AuthRule, rhs: AuthRule) -> Bool {
         return
             lhs.allow == rhs.allow &&
@@ -39,16 +27,17 @@ extension AuthRule : Equatable {
     }
 }
 
-extension ModelOperation : Comparable {
+extension ModelOperation: Comparable {
     public static func < (lhs: ModelOperation, rhs: ModelOperation) -> Bool {
         return String(describing: lhs) < String(describing: rhs)
     }
+
     public static func == (lhs: ModelOperation, rhs: ModelOperation) -> Bool {
         return String(describing: lhs) < String(describing: rhs)
     }
 }
 
-extension ModelField : Equatable {
+extension ModelField: Equatable {
     public static func == (lhs: ModelField, rhs: ModelField) -> Bool {
         return
             lhs.name == rhs.name &&
@@ -56,9 +45,9 @@ extension ModelField : Equatable {
     }
 }
 
-extension ModelFieldType : Equatable {
+extension ModelFieldType: Equatable {
     public static func == (lhs: ModelFieldType, rhs: ModelFieldType) -> Bool {
-        switch(lhs, rhs) {
+        switch (lhs, rhs) {
             case (.string, .string):
                 return true
             case (.int, .int):
@@ -98,6 +87,6 @@ extension ModelFieldType : Equatable {
 
 extension Array where Element: Comparable {
     func containsSameElements(as other: [Element]) -> Bool {
-        return self.count == other.count && self.sorted() == other.sorted()
+        return count == other.count && sorted() == other.sorted()
     }
 }

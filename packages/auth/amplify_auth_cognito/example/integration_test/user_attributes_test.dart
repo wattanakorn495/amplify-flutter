@@ -1,17 +1,5 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -22,9 +10,10 @@ import 'package:integration_test/integration_test.dart';
 
 import 'utils/mock_data.dart';
 import 'utils/setup_utils.dart';
+import 'utils/test_utils.dart';
 
 extension on List<AuthUserAttribute> {
-  String? valueOf(UserAttributeKey key) =>
+  String? valueOf(AuthUserAttributeKey key) =>
       singleWhereOrNull((el) => el.userAttributeKey == key)?.value;
 }
 
@@ -70,7 +59,7 @@ void main() {
     tearDownAll(Amplify.reset);
 
     group('fetchUserAttributes', () {
-      test('should fetch a users attributes', () async {
+      asyncTest('should fetch a users attributes', (_) async {
         final userAttributes = await Amplify.Auth.fetchUserAttributes();
 
         expect(
@@ -89,7 +78,7 @@ void main() {
     });
 
     group('updateUserAttribute', () {
-      test('should update a single users attribute', () async {
+      asyncTest('should update a single users attribute', (_) async {
         final updatedName = generateNameAttribute();
         final res = await Amplify.Auth.updateUserAttribute(
           userAttributeKey: CognitoUserAttributeKey.name,
@@ -105,11 +94,11 @@ void main() {
         );
       });
 
-      test(
+      asyncTest(
         'should throw an InvalidParameterException for an invalid '
         'attribute key',
-        () async {
-          expect(
+        (_) async {
+          await expectLater(
             Amplify.Auth.updateUserAttribute(
               userAttributeKey: CognitoUserAttributeKey.parse('fake-key-name'),
               value: 'mock-value',
@@ -119,12 +108,12 @@ void main() {
         },
       );
 
-      test(
+      asyncTest(
         'should throw an InvalidParameterException for an invalid '
         'attribute value',
-        () async {
+        (_) async {
           const invalidEmailAddress = 'invalidEmailFormat.com';
-          expect(
+          await expectLater(
             Amplify.Auth.updateUserAttribute(
               userAttributeKey: CognitoUserAttributeKey.email,
               value: invalidEmailAddress,
@@ -136,7 +125,7 @@ void main() {
     });
 
     group('updateUserAttributes', () {
-      test('should update multiple users attributes', () async {
+      asyncTest('should update multiple users attributes', (_) async {
         final updatedName = generateNameAttribute();
         final updatedGivenName = generateNameAttribute();
         await Amplify.Auth.updateUserAttributes(
@@ -165,10 +154,10 @@ void main() {
         );
       });
 
-      test(
+      asyncTest(
         'should throw an InvalidParameterException and not update any '
         'attributes if one is invalid',
-        () async {
+        (_) async {
           // set initial state
           await Amplify.Auth.updateUserAttribute(
             userAttributeKey: CognitoUserAttributeKey.name,

@@ -1,22 +1,11 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:amplify_auth_cognito_dart/amplify_auth_cognito_dart.dart'
-    hide UpdateUserAttributesRequest;
+import 'package:amplify_auth_cognito_dart/amplify_auth_cognito_dart.dart';
+import 'package:amplify_auth_cognito_dart/src/credentials/cognito_keys.dart';
 import 'package:amplify_auth_cognito_dart/src/credentials/device_metadata_repository.dart';
 import 'package:amplify_auth_cognito_dart/src/flows/constants.dart';
 import 'package:amplify_auth_cognito_dart/src/flows/device/confirm_device_worker.dart';
@@ -32,8 +21,7 @@ import 'package:amplify_auth_cognito_dart/src/sdk/cognito_identity_provider.dart
     hide InvalidParameterException;
 import 'package:amplify_auth_cognito_dart/src/sdk/sdk_bridge.dart';
 import 'package:amplify_auth_cognito_dart/src/state/state.dart';
-import 'package:amplify_core/amplify_core.dart'
-    hide UpdateUserAttributesRequest;
+import 'package:amplify_core/amplify_core.dart';
 import 'package:async/async.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:meta/meta.dart';
@@ -183,7 +171,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
       return password;
     }
 
-    authFlowType = event.authFlowType ?? defaultAuthFlowType;
+    authFlowType = event.authFlowType?.sdkValue ?? defaultAuthFlowType;
     switch (authFlowType) {
       case AuthFlowType.userSrpAuth:
         expectPassword();
@@ -233,12 +221,12 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
     final username = parameters.username;
     final password = parameters.password;
     if (password == null || password.isEmpty) {
-      throw const SrpSignInInputValidationException('No password given');
+      throw const AuthValidationException('No password given');
     }
 
     final initResult = _initResult;
     if (initResult == null) {
-      throw const SrpSignInCalculationException('Must call init first');
+      throw const AuthValidationException('Must call init first');
     }
 
     final worker = await passwordVerifierWorker;
@@ -265,7 +253,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
   Future<RespondToAuthChallengeRequest> createDeviceSrpAuthRequest() async {
     final initResult = _initResult;
     if (initResult == null) {
-      throw const SrpSignInCalculationException('Must call init first');
+      throw StateError('Must call init first');
     }
     return RespondToAuthChallengeRequest.build((b) {
       b
@@ -298,7 +286,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
     final username = parameters.username;
     final password = parameters.password;
     if (password == null || password.isEmpty) {
-      throw const SrpSignInInputValidationException('No password given');
+      throw const AuthValidationException('No password given');
     }
 
     final worker = await devicePasswordVerifierWorker;
@@ -477,9 +465,37 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
   /// Initiates a custom auth flow.
   @protected
   Future<InitiateAuthRequest> initiateCustomAuth(SignInInitiate event) async {
-    // If a password is provided, start the SRP flow by including
-    // `CHALLENGE_NAME` in the auth parameters.
-    if (parameters.password != null) {
+    // If a password is provided or the user chose the SRP route, start the SRP
+    // flow by including `CHALLENGE_NAME` in the auth parameters.
+    final password = parameters.password;
+    switch (event.authFlowType) {
+      case AuthenticationFlowType.customAuthWithSrp:
+        if (password == null) {
+          throw const AuthValidationException(
+            'No password was given but customAuthWithSrp was chosen for '
+            'authentication flow',
+            recoverySuggestion:
+                'Include a password in your call to Amplify.Auth.signIn',
+          );
+        }
+        break;
+      case AuthenticationFlowType.customAuthWithoutSrp:
+        if (password != null) {
+          throw const AuthValidationException(
+            'A password was given but customAuthWithoutSrp was chosen for '
+            'authentication flow',
+            recoverySuggestion:
+                'Do not include a password in your call to Amplify.Auth.signIn',
+          );
+        }
+        break;
+      // ignore: deprecated_member_use
+      case AuthenticationFlowType.customAuth:
+      default:
+        break;
+    }
+    if (event.authFlowType == AuthenticationFlowType.customAuthWithSrp ||
+        password != null) {
       final initRequest = await initiateSrpAuth(event);
       return initRequest.rebuild(
         (b) => b
@@ -588,12 +604,18 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
       ),
     );
 
-    // Upgrade anonymous credentials, if there were any, or fetch authenticated
+    // Clear anonymous credentials, if there were any, and fetch authenticated
     // credentials.
     if (hasIdentityPool) {
       await dispatch(
+        CredentialStoreEvent.clearCredentials(
+          CognitoIdentityPoolKeys(identityPoolConfig!),
+        ),
+      );
+
+      await dispatch(
         const FetchAuthSessionEvent.fetch(
-          CognitoSessionOptions(getAWSCredentials: true, forceRefresh: true),
+          CognitoSessionOptions(getAWSCredentials: true),
         ),
       );
 
@@ -832,6 +854,7 @@ class SignInStateMachine extends StateMachine<SignInEvent, SignInState> {
         emit(SignInState.success(event.user));
         return;
       case SignInEventType.failed:
+        // TODO(dnys1): Transition to challenge state for CodeMismatchException
         event as SignInFailed;
         emit(SignInState.failure(event.exception));
         return;

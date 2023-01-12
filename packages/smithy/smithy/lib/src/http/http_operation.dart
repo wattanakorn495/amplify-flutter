@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 
@@ -220,45 +209,18 @@ abstract class HttpOperation<InputPayload, Input, OutputPayload, Output>
   }) {
     final requestProgress = StreamController<int>.broadcast(sync: true);
     final responseProgress = StreamController<int>.broadcast(sync: true);
-    final completer = CancelableCompleter<Output>(
-      onCancel: () {
-        requestProgress.close();
-        responseProgress.close();
-      },
-    );
     final operation = retryer.retry<Output>(
       () {
         // Recreate the request on each retry to perform signing again, etc.
         final httpRequest = createRequest();
-        final operation = httpRequest.send(
-          client: client,
-          onCancel: completer.operation.cancel,
+        final operation = httpRequest.send(client: client);
+        operation.requestProgress.forward(
+          requestProgress,
+          closeWhenDone: false,
         );
-        operation.requestProgress.listen(
-          (progress) {
-            if (!requestProgress.isClosed) {
-              requestProgress.add(progress);
-            }
-          },
-          onDone: () {
-            if (operation.operation.isCanceled ||
-                operation.operation.isCompleted) {
-              requestProgress.close();
-            }
-          },
-        );
-        operation.responseProgress.listen(
-          (progress) {
-            if (!responseProgress.isClosed) {
-              responseProgress.add(progress);
-            }
-          },
-          onDone: () {
-            if (operation.operation.isCanceled ||
-                operation.operation.isCompleted) {
-              responseProgress.close();
-            }
-          },
+        operation.responseProgress.forward(
+          responseProgress,
+          closeWhenDone: false,
         );
         return operation.operation.then(
           (response) => deserializeOutput(
@@ -267,32 +229,30 @@ abstract class HttpOperation<InputPayload, Input, OutputPayload, Output>
           ),
         );
       },
-      onCancel: completer.operation.cancel,
-      onRetry: (e, [delay]) {
-        debugNumRetries++;
-      },
-    );
-    operation.then(
-      (output) {
-        requestProgress.close();
-        responseProgress.close();
-        completer.complete(output);
-      },
-      onError: (e, st) {
-        requestProgress.close();
-        responseProgress.close();
-        completer.completeError(e, st);
-      },
-    );
-    return SmithyOperation(
-      completer.operation,
-      operationName: runtimeTypeName,
-      requestProgress: requestProgress.stream,
-      responseProgress: responseProgress.stream,
       onCancel: () {
         requestProgress.close();
         responseProgress.close();
       },
+      onRetry: (e, [delay]) {
+        debugNumRetries++;
+      },
+    );
+    return SmithyOperation(
+      operation.then(
+        (output) {
+          requestProgress.close();
+          responseProgress.close();
+          return output;
+        },
+        onError: (e, st) {
+          requestProgress.close();
+          responseProgress.close();
+          Error.throwWithStackTrace(e, st);
+        },
+      ),
+      operationName: runtimeTypeName,
+      requestProgress: requestProgress.stream,
+      responseProgress: responseProgress.stream,
     );
   }
 

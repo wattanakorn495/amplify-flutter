@@ -1,17 +1,5 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 package com.amazonaws.amplify.amplify_datastore
 
@@ -26,18 +14,18 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class AmplifyModelSchemaTest {
 
-    var schemasMap: Map<String, Any> = (
-        readMapFromFile(
-            "model_schema",
-            "model_schema_maps.json",
-            HashMap::class.java
-        ) as HashMap<String, Any>
-        )
+    private var schemasMap: Map<String, Any> = (
+            readMapFromFile(
+                "model_schema",
+                "model_schema_maps.json",
+                HashMap::class.java
+            ) as HashMap<String, Any>
+            )
 
     @Test
     fun test_schema_blog_with_hasMany() {
-        var inputMap = schemasMap["BlogSchema"] as Map<String, Any>
-        var modelSchema = FlutterModelSchema(inputMap)
+        val inputMap = schemasMap["BlogSchema"] as Map<String, Any>
+        val modelSchema = FlutterModelSchema(inputMap)
         // Verify result
         assertEquals(
             modelSchema.convertToNativeModelSchema(),
@@ -47,8 +35,8 @@ class AmplifyModelSchemaTest {
 
     @Test
     fun test_schema_comment_with_belongsTo() {
-        var inputMap = schemasMap["CommentSchema"] as Map<String, Any>
-        var modelSchema = FlutterModelSchema(inputMap)
+        val inputMap = schemasMap["CommentSchema"] as Map<String, Any>
+        val modelSchema = FlutterModelSchema(inputMap)
         // Verify result
         assertEquals(
             modelSchema.convertToNativeModelSchema(),
@@ -58,8 +46,8 @@ class AmplifyModelSchemaTest {
 
     @Test
     fun test_schema_post_with_datetime_int_hasMany_belongsTo() {
-        var inputMap = schemasMap["PostSchema"] as Map<String, Any>
-        var modelSchema = FlutterModelSchema(inputMap)
+        val inputMap = schemasMap["PostSchema"] as Map<String, Any>
+        val modelSchema = FlutterModelSchema(inputMap)
         // Verify result
         assertEquals(
             modelSchema.convertToNativeModelSchema(),
@@ -70,8 +58,8 @@ class AmplifyModelSchemaTest {
     @Test
     fun test_schema_postAuthComplex_with_authRules() {
         // Generate Flutter ModelSchema from map input
-        var inputMap = schemasMap["PostAuthComplexSchema"] as Map<String, Any>
-        var modelSchema = FlutterModelSchema(inputMap)
+        val inputMap = schemasMap["PostAuthComplexSchema"] as Map<String, Any>
+        val modelSchema = FlutterModelSchema(inputMap)
         // Verify result
         assertEquals(
             modelSchema.convertToNativeModelSchema(),
@@ -82,8 +70,8 @@ class AmplifyModelSchemaTest {
     @Test
     fun test_schema_postAuthComplex_with_authRules_with_provider_userpools() {
         // Generate Flutter ModelSchema from map input
-        var inputMap = schemasMap["PostAuthComplexWithProviderUserPoolsSchema"] as Map<String, Any>
-        var modelSchema = FlutterModelSchema(inputMap)
+        val inputMap = schemasMap["PostAuthComplexWithProviderUserPoolsSchema"] as Map<String, Any>
+        val modelSchema = FlutterModelSchema(inputMap)
         // Verify result
         assertEquals(
             modelSchema.convertToNativeModelSchema(),
@@ -94,8 +82,8 @@ class AmplifyModelSchemaTest {
     @Test
     fun test_schema_postAuthComplex_with_authRules_with_provider_apikey() {
         // Generate Flutter ModelSchema from map input
-        var inputMap = schemasMap["PostAuthComplexWithProviderApiKeySchema"] as Map<String, Any>
-        var modelSchema = FlutterModelSchema(inputMap)
+        val inputMap = schemasMap["PostAuthComplexWithProviderApiKeySchema"] as Map<String, Any>
+        val modelSchema = FlutterModelSchema(inputMap)
         // Verify result
         assertEquals(
             modelSchema.convertToNativeModelSchema(),
@@ -106,8 +94,8 @@ class AmplifyModelSchemaTest {
     @Test
     fun test_schema_allTypeModel() {
         // Generate Flutter ModelSchema from map input
-        var inputMap = schemasMap["AllTypeModelSchema"] as Map<String, Any>
-        var modelSchema = FlutterModelSchema(inputMap)
+        val inputMap = schemasMap["AllTypeModelSchema"] as Map<String, Any>
+        val modelSchema = FlutterModelSchema(inputMap)
         // Verify result
         assertEquals(
             modelSchema.convertToNativeModelSchema(),
@@ -126,6 +114,19 @@ class AmplifyModelSchemaTest {
         assertEquals(
             convertedModelSchema,
             personSchema
+        )
+    }
+
+    @Test
+    fun test_custom_primary_key_model_schema() {
+        val inputMap = schemasMap["InventoryModelSchema"] as Map<String, Any>
+        val modelSchema = FlutterModelSchema(inputMap)
+        val convertedModelSchema = modelSchema.convertToNativeModelSchema()
+
+        // Verify result
+        assertEquals(
+            convertedModelSchema,
+            inventorySchema
         )
     }
 }

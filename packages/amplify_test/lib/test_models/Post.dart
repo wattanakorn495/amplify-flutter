@@ -1,55 +1,49 @@
-/*
-* Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-*
-* Licensed under the Apache License, Version 2.0 (the "License").
-* You may not use this file except in compliance with the License.
-* A copy of the License is located at
-*
-*  http://aws.amazon.com/apache2.0
-*
-* or in the "license" file accompanying this file. This file is distributed
-* on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-* express or implied. See the License for the specific language governing
-* permissions and limitations under the License.
-*/
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 // NOTE: This file is generated and may not follow lint rules defined in your app
 // Generated files can be excluded from analysis in analysis_options.yaml
 // For more info, see: https://dart.dev/guides/language/analysis-options#excluding-code-from-analysis
 
-// ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code, implicit_dynamic_parameter, implicit_dynamic_map_literal, implicit_dynamic_type
-
-import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
-/** This is an auto generated class representing the Post type in your schema. */
+// ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously, implicit_dynamic_parameter, implicit_dynamic_map_literal, implicit_dynamic_type
+
+import 'ModelProvider.dart';
+
+/// This is an auto generated class representing the Post type in your schema.
 @immutable
 class Post extends Model {
-  static const classType = const _PostModelType();
+  static const classType = _PostModelType();
   final String id;
   final String? _title;
   final int? _rating;
   final TemporalDateTime? _created;
+  final int? _likeCount;
   final Blog? _blog;
   final List<Comment>? _comments;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
   @override
-  getInstanceType() => classType;
+  _PostModelType getInstanceType() => classType;
 
+  @Deprecated(
+      '[getId] is being deprecated in favor of custom primary key feature. Use getter [modelIdentifier] to get model identifier.')
   @override
-  String getId() {
-    return id;
+  String getId() => id;
+
+  PostModelIdentifier get modelIdentifier {
+    return PostModelIdentifier(id: id);
   }
 
   String get title {
     try {
       return _title!;
     } catch (e) {
-      throw new AmplifyCodeGenModelException(
+      throw AmplifyCodeGenModelException(
           AmplifyExceptionMessages
               .codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion: AmplifyExceptionMessages
@@ -62,7 +56,7 @@ class Post extends Model {
     try {
       return _rating!;
     } catch (e) {
-      throw new AmplifyCodeGenModelException(
+      throw AmplifyCodeGenModelException(
           AmplifyExceptionMessages
               .codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion: AmplifyExceptionMessages
@@ -73,6 +67,10 @@ class Post extends Model {
 
   TemporalDateTime? get created {
     return _created;
+  }
+
+  int? get likeCount {
+    return _likeCount;
   }
 
   Blog? get blog {
@@ -91,28 +89,12 @@ class Post extends Model {
     return _updatedAt;
   }
 
-  const Post._internal(
-      {required this.id,
-      required title,
-      required rating,
-      created,
-      blog,
-      comments,
-      createdAt,
-      updatedAt})
-      : _title = title,
-        _rating = rating,
-        _created = created,
-        _blog = blog,
-        _comments = comments,
-        _createdAt = createdAt,
-        _updatedAt = updatedAt;
-
   factory Post(
       {String? id,
       required String title,
       required int rating,
       TemporalDateTime? created,
+      int? likeCount,
       Blog? blog,
       List<Comment>? comments}) {
     return Post._internal(
@@ -120,10 +102,30 @@ class Post extends Model {
         title: title,
         rating: rating,
         created: created,
+        likeCount: likeCount,
         blog: blog,
         comments:
             comments != null ? List<Comment>.unmodifiable(comments) : comments);
   }
+
+  const Post._internal(
+      {required this.id,
+      required title,
+      required rating,
+      created,
+      likeCount,
+      blog,
+      comments,
+      createdAt,
+      updatedAt})
+      : _title = title,
+        _rating = rating,
+        _created = created,
+        _likeCount = likeCount,
+        _blog = blog,
+        _comments = comments,
+        _createdAt = createdAt,
+        _updatedAt = updatedAt;
 
   bool equals(Object other) {
     return this == other;
@@ -137,6 +139,7 @@ class Post extends Model {
         _title == other._title &&
         _rating == other._rating &&
         _created == other._created &&
+        _likeCount == other._likeCount &&
         _blog == other._blog &&
         DeepCollectionEquality().equals(_comments, other._comments);
   }
@@ -146,38 +149,42 @@ class Post extends Model {
 
   @override
   String toString() {
-    var buffer = new StringBuffer();
+    var buffer = StringBuffer();
 
-    buffer.write("Post {");
-    buffer.write("id=" + "$id" + ", ");
-    buffer.write("title=" + "$_title" + ", ");
+    buffer.write('Post {');
+    buffer.write('id=' + '$id' + ', ');
+    buffer.write('title=' + '$_title' + ', ');
     buffer.write(
-        "rating=" + (_rating != null ? _rating!.toString() : "null") + ", ");
+        'rating=' + (_rating != null ? _rating!.toString() : 'null') + ', ');
     buffer.write(
-        "created=" + (_created != null ? _created!.format() : "null") + ", ");
-    buffer.write("blog=" + (_blog != null ? _blog!.toString() : "null") + ", ");
-    buffer.write("createdAt=" +
-        (_createdAt != null ? _createdAt!.format() : "null") +
-        ", ");
+        'created=' + (_created != null ? _created!.format() : 'null') + ', ');
+    buffer.write('likeCount=' +
+        (_likeCount != null ? _likeCount!.toString() : 'null') +
+        ', ');
+    buffer.write('blog=' + (_blog != null ? _blog!.toString() : 'null') + ', ');
+    buffer.write('createdAt=' +
+        (_createdAt != null ? _createdAt!.format() : 'null') +
+        ', ');
     buffer.write(
-        "updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
-    buffer.write("}");
+        'updatedAt=' + (_updatedAt != null ? _updatedAt!.format() : 'null'));
+    buffer.write('}');
 
     return buffer.toString();
   }
 
   Post copyWith(
-      {String? id,
-      String? title,
+      {String? title,
       int? rating,
       TemporalDateTime? created,
+      int? likeCount,
       Blog? blog,
       List<Comment>? comments}) {
     return Post._internal(
-        id: id ?? this.id,
+        id: id,
         title: title ?? this.title,
         rating: rating ?? this.rating,
         created: created ?? this.created,
+        likeCount: likeCount ?? this.likeCount,
         blog: blog ?? this.blog,
         comments: comments ?? this.comments);
   }
@@ -189,15 +196,16 @@ class Post extends Model {
         _created = json['created'] != null
             ? TemporalDateTime.fromString(json['created'])
             : null,
+        _likeCount = (json['likeCount'] as num?)?.toInt(),
         _blog = json['blog']?['serializedData'] != null
             ? Blog.fromJson(
-                new Map<String, dynamic>.from(json['blog']['serializedData']))
+                Map<String, dynamic>.from(json['blog']['serializedData']))
             : null,
         _comments = json['comments'] is List
             ? (json['comments'] as List)
                 .where((e) => e?['serializedData'] != null)
                 .map((e) => Comment.fromJson(
-                    new Map<String, dynamic>.from(e['serializedData'])))
+                    Map<String, dynamic>.from(e['serializedData'])))
                 .toList()
             : null,
         _createdAt = json['createdAt'] != null
@@ -212,28 +220,35 @@ class Post extends Model {
         'title': _title,
         'rating': _rating,
         'created': _created?.format(),
+        'likeCount': _likeCount,
         'blog': _blog?.toJson(),
         'comments': _comments?.map((Comment? e) => e?.toJson()).toList(),
         'createdAt': _createdAt?.format(),
         'updatedAt': _updatedAt?.format()
       };
 
-  static final QueryField ID = QueryField(fieldName: "post.id");
-  static final QueryField TITLE = QueryField(fieldName: "title");
-  static final QueryField RATING = QueryField(fieldName: "rating");
-  static final QueryField CREATED = QueryField(fieldName: "created");
+  static final QueryModelIdentifier MODEL_IDENTIFIER = QueryModelIdentifier();
+  static final QueryField ID = QueryField(fieldName: 'post.id');
+  static final QueryField TITLE = QueryField(fieldName: 'title');
+  static final QueryField RATING = QueryField(fieldName: 'rating');
+  static final QueryField CREATED = QueryField(fieldName: 'created');
+  static final QueryField LIKECOUNT = QueryField(fieldName: 'likeCount');
   static final QueryField BLOG = QueryField(
-      fieldName: "blog",
+      fieldName: 'blog',
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
           ofModelName: (Blog).toString()));
   static final QueryField COMMENTS = QueryField(
-      fieldName: "comments",
+      fieldName: 'comments',
       fieldType: ModelFieldType(ModelFieldTypeEnum.model,
           ofModelName: (Comment).toString()));
-  static var schema =
+  static ModelSchema schema =
       Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Post";
-    modelSchemaDefinition.pluralName = "Posts";
+    modelSchemaDefinition.name = 'Post';
+    modelSchemaDefinition.pluralName = 'Posts';
+
+    modelSchemaDefinition.indexes = [
+      ModelIndex(fields: const ['blogID'], name: 'byBlog')
+    ];
 
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
 
@@ -252,10 +267,19 @@ class Post extends Model {
         isRequired: false,
         ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)));
 
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+        key: Post.LIKECOUNT,
+        isRequired: false,
+        ofType: ModelFieldType(ModelFieldTypeEnum.int)));
+
     modelSchemaDefinition.addField(ModelFieldDefinition.belongsTo(
         key: Post.BLOG,
         isRequired: false,
-        targetName: "blogID",
+        // TODO(Jordan-Nelson): Remove `targetName` when API category has been
+        // updated to support CPK changes. This was added manually.
+        // ignore: deprecated_member_use
+        targetName: 'blogID',
+        targetNames: ['blogID'],
         ofModelName: (Blog).toString()));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
@@ -285,4 +309,41 @@ class _PostModelType extends ModelType<Post> {
   Post fromJson(Map<String, dynamic> jsonData) {
     return Post.fromJson(jsonData);
   }
+}
+
+/// This is an auto generated class representing the model identifier
+/// of [Post] in your schema.
+@immutable
+class PostModelIdentifier implements ModelIdentifier<Post> {
+  final String id;
+
+  /// Create an instance of PostModelIdentifier using [id] the primary key.
+  const PostModelIdentifier({required this.id});
+
+  @override
+  Map<String, dynamic> serializeAsMap() => (<String, dynamic>{'id': id});
+
+  @override
+  List<Map<String, dynamic>> serializeAsList() => serializeAsMap()
+      .entries
+      .map((entry) => (<String, dynamic>{entry.key: entry.value}))
+      .toList();
+
+  @override
+  String serializeAsString() => serializeAsMap().values.join('#');
+
+  @override
+  String toString() => 'PostModelIdentifier(id: $id)';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+
+    return other is PostModelIdentifier && id == other.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

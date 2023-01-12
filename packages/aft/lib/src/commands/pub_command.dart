@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 import 'dart:io';
@@ -78,7 +67,7 @@ class PubSubcommand extends AmplifyCommand {
     final allPackages = await this.allPackages;
     await pubAction(
       action: action,
-      allPackages: allPackages,
+      allPackages: allPackages.values,
       verbose: verbose,
       logger: logger,
       createPubRunner: createPubRunner,
@@ -94,7 +83,7 @@ class PubSubcommand extends AmplifyCommand {
 
 Future<void> pubAction({
   required PubAction action,
-  required Map<String, PackageInfo> allPackages,
+  required Iterable<PackageInfo> allPackages,
   required bool verbose,
   required PubCommandRunner Function() createPubRunner,
   required http.Client httpClient,
@@ -106,7 +95,10 @@ Future<void> pubAction({
   final progress =
       logger?.progress('Running `pub ${action.name}` in all packages');
   final results = <String, Result<void>>{};
-  for (final package in allPackages.values) {
+  for (final package in allPackages) {
+    if (package.skipChecks) {
+      continue;
+    }
     final packageProgress = logger?.progress(package.name);
     switch (package.flavor) {
       case PackageFlavor.flutter:

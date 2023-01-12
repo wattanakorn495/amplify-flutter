@@ -1,17 +1,5 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'package:amplify_core/amplify_core.dart';
 
@@ -150,7 +138,9 @@ class ModelFieldDefinition {
       bool isRequired = true,
       required String ofModelName,
       QueryField? associatedKey,
-      String? targetName}) {
+      @Deprecated('Please use the latest version of Amplify CLI to regenerate models')
+          String? targetName,
+      List<String>? targetNames}) {
     // Extra code needed due to lack of nullability support
     String? associatedName;
     String? associatedType;
@@ -165,7 +155,11 @@ class ModelFieldDefinition {
             ModelFieldType(ModelFieldTypeEnum.model, ofModelName: ofModelName),
         association: ModelAssociation(
             associationType: ModelAssociationEnum.BelongsTo,
+            // TODO(Jordan-Nelson): Remove `targetName` when API category has been
+            // updated to support CPK changes. This was added manually.
+            // ignore:, deprecated_member_use_from_same_package
             targetName: targetName,
+            targetNames: targetNames,
             associatedName: associatedName,
             associatedType: associatedType));
   }

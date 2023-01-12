@@ -1,17 +1,5 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 package com.amazonaws.amplify.amplify_datastore
 
@@ -19,16 +7,20 @@ import com.amplifyframework.core.model.SerializedCustomType
 import com.amplifyframework.core.model.SerializedModel
 
 val blogSerializedModel = SerializedModel.builder()
+    .modelSchema(
+        blogSchema
+    )
     .serializedData(
         mapOf(
             "id" to "999",
             "name" to "blog name"
         )
-    ).modelSchema(
-        blogSchema
     ).build()
 
 var commentSerializedModel = SerializedModel.builder()
+    .modelSchema(
+        commentSchema
+    )
     .serializedData(
         mapOf(
             "id" to "999",
@@ -37,11 +29,12 @@ var commentSerializedModel = SerializedModel.builder()
             ),
             "content" to "content"
         )
-    ).modelSchema(
-        commentSchema
     ).build()
 
 var postSerializedModel = SerializedModel.builder()
+    .modelSchema(
+        postSchema
+    )
     .serializedData(
         mapOf(
             "id" to "999",
@@ -51,11 +44,12 @@ var postSerializedModel = SerializedModel.builder()
                 "id" to "555"
             )
         )
-    ).modelSchema(
-        postSchema
     ).build()
 
 var allTypeModelSerializedModel = SerializedModel.builder()
+    .modelSchema(
+        allTypeModelSchema
+    )
     .serializedData(
         mapOf(
             "id" to "999",
@@ -69,11 +63,10 @@ var allTypeModelSerializedModel = SerializedModel.builder()
             "timestampType" to 999,
             "enumType" to "maybe"
         )
-    ).modelSchema(
-        allTypeModelSchema
     ).build()
 
 val personSerializedModel = SerializedModel.builder()
+    .modelSchema(personSchema)
     .serializedData(
         mapOf(
             "id" to "123",
@@ -138,5 +131,4 @@ val personSerializedModel = SerializedModel.builder()
             )
         )
     )
-    .modelSchema(personSchema)
     .build()

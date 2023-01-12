@@ -1,3 +1,6 @@
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
 import 'package:aws_common/aws_common.dart';
 import 'package:aws_signature_v4/aws_signature_v4.dart';
 import 'package:test/test.dart';
@@ -43,6 +46,19 @@ void main() {
         CaseInsensitiveSet(presignedRequest.signedHeaders),
         contains(AWSHeaders.host),
       );
+    });
+  });
+
+  group('CanonicalPath', () {
+    test('normalizes empty path', () {
+      final uri = Uri.parse('https://example.com');
+      final path = uri.path;
+      final canonicalPath = CanonicalPath.canonicalize(
+        path,
+        serviceConfiguration: const BaseServiceConfiguration(),
+      );
+      expect(path, '');
+      expect(canonicalPath, '/');
     });
   });
 }

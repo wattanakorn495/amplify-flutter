@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 @JS()
 library amplify_secure_storage_dart.js.indexed_db;
@@ -35,7 +24,8 @@ class DOMStringList {}
 /// {@macro amplify_secure_storage_dart.dom_string_list}
 extension PropsDOMStringList on DOMStringList {
   /// Checks if the given string is in the list.
-  external bool contains(String string);
+  bool contains(String string) =>
+      js_util.callMethod(this, 'contains', [string]);
 }
 
 /// {@template amplify_secure_storage_dart.idb_version_change_event}
@@ -50,7 +40,7 @@ class IDBVersionChangeEvent extends Event {}
 /// {@macro amplify_secure_storage_dart.idb_version_change_event}
 extension PropsIDBVersionChangeEvent on IDBVersionChangeEvent {
   /// The target of this event, the DB open request.
-  external IDBOpenDBRequest get target;
+  IDBOpenDBRequest get target => js_util.getProperty(this, 'target');
 }
 
 /// {@template amplify_secure_storage_dart.idb_request}
@@ -125,7 +115,11 @@ class IDBFactory {}
 /// {@macro amplify_secure_storage_dart.idb_factory}
 extension PropsIDBFactory on IDBFactory {
   /// The current method to request opening a connection to a database.
-  external IDBOpenDBRequest open(String name, [int? version]);
+  IDBOpenDBRequest open(String name, [int? version]) =>
+      js_util.callMethod(this, 'open', [
+        name,
+        if (version != null) version,
+      ]);
 }
 
 /// {@template amplify_secure_storage_dart.idb_database}
@@ -141,7 +135,8 @@ class IDBDatabase {}
 /// {@macro amplify_secure_storage_dart.idb_database}
 extension PropsIDBDatabase on IDBDatabase {
   /// The list of the names of object stores in the database.
-  external DOMStringList get objectStoreNames;
+  DOMStringList get objectStoreNames =>
+      js_util.getProperty(this, 'objectStoreNames');
 
   /// Returns a new transaction with the given mode (`readonly` or `readwrite`)
   /// and scope which can be a single object store name or an array of names.
@@ -156,7 +151,8 @@ extension PropsIDBDatabase on IDBDatabase {
   ///
   /// Throws an `InvalidStateError` DOMException if not called within an upgrade
   /// transaction.
-  external IDBObjectStore createObjectStore(String name);
+  IDBObjectStore createObjectStore(String name) =>
+      js_util.callMethod(this, 'createObjectStore', [name]);
 }
 
 /// {@template amplify_secure_storage_dart.idb_object_store}
@@ -177,27 +173,30 @@ extension PropsIDBObjectStore on IDBObjectStore {
   ///
   /// This is for updating existing records in an object store when the
   /// transaction's mode is `readwrite`.
-  external IDBRequest<void> put(String value, String key);
+  IDBRequest<void> put(String value, String key) =>
+      js_util.callMethod(this, 'put', [value, key]);
 
   /// Returns an [IDBRequest] object, and, in a separate thread, creates a
   /// structured clone of the value, and stores the cloned value in the object
   /// store.
   ///
   /// This is for adding new records to an object store.
-  external IDBRequest<void> add(String value, String key);
+  IDBRequest<void> add(String value, String key) =>
+      js_util.callMethod(this, 'add', [value, key]);
 
   /// Returns an [IDBRequest] object, and, in a separate thread, deletes the
   /// store object selected by the specified key.
   ///
   /// This is for deleting individual records out of an object store.
-  external IDBRequest<void> delete(String query);
+  IDBRequest<void> delete(String query) =>
+      js_util.callMethod(this, 'delete', [query]);
 
   /// Returns an [IDBRequest] object, and, in a separate thread, returns the
   /// store object store selected by the specified key.
   ///
   /// This is for retrieving specific records from an object store.
-  @JS('get')
-  external IDBRequest<String?> getObject(String query);
+  IDBRequest<String?> getObject(String query) =>
+      js_util.callMethod(this, 'get', [query]);
 }
 
 /// {@template amplify_secure_storage_dart.idb_transaction}
@@ -213,7 +212,8 @@ class IDBTransaction {}
 /// {@macro amplify_secure_storage_dart.idb_transaction}
 extension PropsIDBTransaction on IDBTransaction {
   /// Returns an [IDBObjectStore] in the transaction's scope.
-  external IDBObjectStore objectStore(String name);
+  IDBObjectStore objectStore(String name) =>
+      js_util.callMethod(this, 'objectStore', [name]);
 }
 
 /// The mode for isolating access to data in the object stores that are in the

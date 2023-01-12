@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 
@@ -160,7 +149,10 @@ class FetchAuthSessionStateMachine extends FetchAuthSessionStateMachineBase {
   /// Compares [expiration] against the current time.
   ///
   /// Returns `true` if difference is within the threshold.
-  bool _isExpired(DateTime expiration) {
+  bool _isExpired(DateTime? expiration) {
+    // No determination can be made.
+    if (expiration == null) return false;
+
     // Buffer to account for clock drift/differences.
     const threshold = Duration(seconds: 10);
 
@@ -177,16 +169,16 @@ class FetchAuthSessionStateMachine extends FetchAuthSessionStateMachineBase {
         .getCredentialsResult();
 
     final userPoolTokens = result.data.userPoolTokens;
-    final userPoolTokensExpiration = userPoolTokens?.expirationTime;
+    final accessTokenExpiration = userPoolTokens?.accessToken.claims.expiration;
+    final idTokenExpiration = userPoolTokens?.idToken.claims.expiration;
     // Only force refresh user pool tokens when we have tokens to refresh and
     // we are not also refreshing AWS credentials.
     final forceRefreshUserPoolTokens = userPoolTokens != null &&
         options.forceRefresh &&
         !options.getAWSCredentials;
     final refreshUserPoolTokens = forceRefreshUserPoolTokens ||
-        (userPoolTokensExpiration != null
-            ? _isExpired(userPoolTokensExpiration)
-            : false);
+        _isExpired(accessTokenExpiration) ||
+        _isExpired(idTokenExpiration);
 
     final hasIdentityPool = _identityPoolConfig != null;
     final awsCredentials = result.data.awsCredentials;
@@ -195,10 +187,8 @@ class FetchAuthSessionStateMachine extends FetchAuthSessionStateMachineBase {
     // true in order to allow the case of just refreshing the user pool tokens.
     final forceRefreshAwsCredentials =
         options.getAWSCredentials && options.forceRefresh;
-    final refreshAwsCredentials = forceRefreshAwsCredentials ||
-        (awsCredentialsExpiration != null
-            ? _isExpired(awsCredentialsExpiration)
-            : false);
+    final refreshAwsCredentials =
+        forceRefreshAwsCredentials || _isExpired(awsCredentialsExpiration);
     final retrieveAwsCredentials =
         awsCredentials == null && options.getAWSCredentials;
     if ((refreshAwsCredentials || retrieveAwsCredentials) && !hasIdentityPool) {
@@ -347,7 +337,7 @@ class FetchAuthSessionStateMachine extends FetchAuthSessionStateMachineBase {
           .getCredentialsResult();
 
       return _AwsCredentialsResult(awsCredentials, identityId);
-    } on NotAuthorizedException {
+    } on AuthNotAuthorizedException {
       // If expired credentials were cached and trying to refresh them throws
       // a NotAuthorizedException, clear any AWS credentials which were being
       // refreshed, since they may have been from an authenticated user whose
@@ -412,7 +402,7 @@ class FetchAuthSessionStateMachine extends FetchAuthSessionStateMachineBase {
           .getCredentialsResult();
 
       return newTokens;
-    } on NotAuthorizedException {
+    } on AuthNotAuthorizedException {
       late Iterable<String> keys;
       switch (userPoolTokens.signInMethod) {
         case CognitoSignInMethod.default$:

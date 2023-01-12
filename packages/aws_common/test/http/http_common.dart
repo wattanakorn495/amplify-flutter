@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 
@@ -47,18 +36,18 @@ void clientTest(
   }) {
     group(testName, skip: skip, () {
       group('${protocol.value} (secure: $secure)', () {
-        late final String host;
-        late final AWSHttpClient client;
+        late String host;
+        late AWSHttpClient client;
         AWSHttpClient getClient() => client;
-        late final StreamChannel<Object?> httpServerChannel;
+        late StreamChannel<Object?> httpServerChannel;
         StreamChannel<Object?> getHttpServerChannel() => httpServerChannel;
-        late final StreamQueue<Object?> httpServerQueue;
+        late StreamQueue<Object?> httpServerQueue;
         StreamQueue<Object?> getHttpServerQueue() => httpServerQueue;
 
         Uri createUri(String path) =>
             (secure ? Uri.https : Uri.http)(host, path);
 
-        setUpAll(() async {
+        setUp(() async {
           httpServerChannel = await startServer()
             ..sink.add(protocol.value)
             ..sink.add(secure);
@@ -66,7 +55,7 @@ void clientTest(
           host = 'localhost:${await httpServerQueue.next}';
           client = debugClient..supportedProtocols = supportedProtocols;
         });
-        tearDownAll(() async {
+        tearDown(() async {
           httpServerChannel.sink.add(null);
           // await Future<void>.delayed(const Duration(seconds: 30));
         });

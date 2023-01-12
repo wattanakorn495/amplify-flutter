@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:convert';
 
@@ -34,7 +23,11 @@ class AmplifyHybridImpl extends AmplifyClassImpl {
     );
     await Future.wait(
       [
+        ...API.plugins,
         ...Auth.plugins,
+        ...Analytics.plugins,
+        ...Storage.plugins,
+        ...DataStore.plugins,
       ].map(
         (p) => p.configure(
           config: amplifyConfig,
@@ -90,7 +83,7 @@ class AmplifyHybridImpl extends AmplifyClassImpl {
       } else if (plugin is APIPluginInterface) {
         await API.addPlugin(plugin, authProviderRepo: authProviderRepo);
       } else {
-        throw AmplifyException(
+        throw PluginError(
           'The type of plugin ${plugin.runtimeType} is not yet supported '
           'in Amplify.',
           recoverySuggestion:
@@ -101,7 +94,7 @@ class AmplifyHybridImpl extends AmplifyClassImpl {
       return;
     } on Exception catch (e) {
       safePrint('Amplify plugin was not added');
-      throw AmplifyException(
+      throw PluginError(
         'Amplify plugin ${plugin.runtimeType} was not added successfully.',
         recoverySuggestion: AmplifyExceptionMessages.missingRecoverySuggestion,
         underlyingException: e,

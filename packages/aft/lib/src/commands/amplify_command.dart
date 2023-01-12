@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:convert';
 import 'dart:io';
@@ -55,10 +44,10 @@ abstract class AmplifyCommand extends Command<void> implements Closeable {
   /// The root directory of the Amplify Flutter repo.
   Future<Directory> get rootDir => _rootDirMemo.runOnce(() async {
         var dir = workingDirectory;
-        while (dir.parent != dir) {
+        while (p.absolute(dir.parent.path) != p.absolute(dir.path)) {
           final files = dir.list(followLinks: false).whereType<File>();
           await for (final file in files) {
-            if (p.basename(file.path) == 'mono_repo.yaml') {
+            if (p.basename(file.path) == 'aft.yaml') {
               return dir;
             }
           }
@@ -97,16 +86,24 @@ abstract class AmplifyCommand extends Command<void> implements Closeable {
         });
       });
 
-  final _aftConfigMemo = AsyncMemoizer<AftConfig>();
+  /// The absolute path to the `aft.yaml` document.
+  Future<String> get aftConfigPath async {
+    final rootDir = await this.rootDir;
+    return p.join(rootDir.path, 'aft.yaml');
+  }
+
+  /// The `aft.yaml` document.
+  Future<String> get aftConfigYaml async {
+    final configFile = File(await aftConfigPath);
+    assert(configFile.existsSync(), 'Could not find aft.yaml');
+    return configFile.readAsStringSync();
+  }
 
   /// The global `aft` configuration for the repo.
-  Future<AftConfig> get aftConfig => _aftConfigMemo.runOnce(() async {
-        final rootDir = await this.rootDir;
-        final configFile = File(p.join(rootDir.path, 'aft.yaml'));
-        assert(configFile.existsSync(), 'Could not find aft.yaml');
-        final configYaml = configFile.readAsStringSync();
-        return checkedYamlDecode(configYaml, AftConfig.fromJson);
-      });
+  Future<AftConfig> get aftConfig async {
+    final configYaml = await aftConfigYaml;
+    return checkedYamlDecode(configYaml, AftConfig.fromJson);
+  }
 
   /// A command runner for `pub`.
   PubCommandRunner createPubRunner() => PubCommandRunner(

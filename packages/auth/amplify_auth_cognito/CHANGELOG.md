@@ -1,3 +1,44 @@
+## 1.0.0-next.2+1
+
+### Fixes
+- fix(auth): Add `no-store` cache control header
+
+## 1.0.0-next.2
+
+### Fixes
+- fix(auth): Can't resubmit verification code ([#2468](https://github.com/aws-amplify/amplify-flutter/pull/2468))
+
+### Breaking Changes
+- chore(auth)!: Make sign in result's `nextStep` non-null ([#2462](https://github.com/aws-amplify/amplify-flutter/pull/2462))
+
+### Features
+- feat(auth): Add user ID to `CognitoSignUpResult` ([#2437](https://github.com/aws-amplify/amplify-flutter/pull/2437))
+
+## 1.0.0-next.1+1
+
+- Minor bug fixes and improvements
+
+## 1.0.0-next.1
+
+- Minor bug fixes and improvements
+
+## 1.0.0-next.0+7
+
+### Fixes
+- fix(auth): Support Cognito proxies
+
+### Features
+- feat(auth): SignInDetails
+
+## 1.0.0-next.0+6
+
+### Fixes
+- fix(auth): Retain unauthenticated identities
+- fix(auth, secure_storage): update generated java pigeon code ([#2184](https://github.com/aws-amplify/amplify-flutter/pull/2184))
+
+### Features
+- feat(auth): Federated sign-in
+
 ## 1.0.0-next.0+5
 
 ### Features

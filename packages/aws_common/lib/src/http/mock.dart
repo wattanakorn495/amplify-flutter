@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 
@@ -19,7 +8,8 @@ import 'package:stream_transform/stream_transform.dart';
 
 /// A mock request handler for use with [MockAWSHttpClient].
 typedef MockRequestHandler = FutureOr<AWSBaseHttpResponse> Function(
-  AWSHttpRequest,
+  AWSHttpRequest request,
+  bool Function() isCancelled,
 );
 
 /// {@template aws_common.http.aws_mock_http_client}
@@ -38,13 +28,17 @@ class MockAWSHttpClient extends AWSCustomHttpClient {
   }) {
     final requestProgress = StreamController<int>.broadcast();
     final responseProgress = StreamController<int>.broadcast();
+    var isCancelled = false;
     return AWSHttpOperation(
       CancelableOperation.fromFuture(
         Future(() async {
           final readRequest = await request.read();
           requestProgress.add(readRequest.bodyBytes.length);
           unawaited(requestProgress.close());
-          final response = await _handler(readRequest);
+          final response = await _handler(
+            readRequest,
+            () => isCancelled,
+          );
           if (response is AWSHttpResponse) {
             responseProgress.add(response.bodyBytes.length);
             unawaited(responseProgress.close());
@@ -60,6 +54,7 @@ class MockAWSHttpClient extends AWSCustomHttpClient {
           );
         }),
         onCancel: () {
+          isCancelled = true;
           requestProgress.close();
           responseProgress.close();
           return onCancel?.call();

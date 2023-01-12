@@ -1,17 +1,5 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
@@ -21,6 +9,7 @@ import 'package:integration_test/integration_test.dart';
 
 import 'utils/mock_data.dart';
 import 'utils/setup_utils.dart';
+import 'utils/test_utils.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -56,7 +45,7 @@ void main() {
       expect(res.isSignedIn, isTrue);
     });
 
-    test('should update a user\'s password', () async {
+    asyncTest("should update a user's password", (_) async {
       // change password
       final newPassword = generatePassword();
       await Amplify.Auth.updatePassword(
@@ -73,28 +62,28 @@ void main() {
       expect(res.isSignedIn, isTrue);
     });
 
-    test(
+    asyncTest(
       'should throw a NotAuthorizedException for an incorrect '
       'current password',
-      () async {
+      (_) async {
         final incorrectPassword = generatePassword();
         final newPassword = generatePassword();
-        expect(
+        await expectLater(
           Amplify.Auth.updatePassword(
             oldPassword: incorrectPassword,
             newPassword: newPassword,
           ),
-          throwsA(isA<NotAuthorizedException>()),
+          throwsA(isA<AuthNotAuthorizedException>()),
         );
       },
     );
 
-    test(
+    asyncTest(
       'should throw an InvalidPasswordException for a new password that '
       "doesn't meet password requirements",
-      () async {
+      (_) async {
         const invalidPassword = '123';
-        expect(
+        await expectLater(
           Amplify.Auth.updatePassword(
             oldPassword: password,
             newPassword: invalidPassword,

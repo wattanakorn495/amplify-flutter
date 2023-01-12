@@ -1,20 +1,10 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:io';
 
 import 'package:aft/src/flutter_platform.dart';
+import 'package:aft/src/util.dart';
 import 'package:aws_common/aws_common.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as p;
@@ -27,7 +17,25 @@ part 'models.g.dart';
 
 /// Packages which report as an example app, but should be considered as
 /// publishable for some purposes.
-const falsePositiveExamples = ['aft', 'smithy_codegen'];
+const falsePositiveExamples = [
+  'aft',
+  'smithy_codegen',
+  'smoke_test',
+  'amplify_auth_cognito_test',
+  'amplify_secure_storage_test',
+
+  // Smithy Golden packages
+  'aws_json1_0_v1',
+  'aws_json1_1_v1',
+  'rest_json1_v1',
+  'rest_xml_v1',
+  'rest_xml_with_namespace_v1',
+  'aws_json1_0_v2',
+  'aws_json1_1_v2',
+  'rest_json1_v2',
+  'rest_xml_v2',
+  'rest_xml_with_namespace_v2',
+];
 
 /// The flavor of a package, e.g. Dart/Flutter.
 enum PackageFlavor {
@@ -50,7 +58,6 @@ class PackageInfo
   const PackageInfo({
     required this.name,
     required this.path,
-    required this.usesMonoRepo,
     required this.pubspecInfo,
     required this.flavor,
   });
@@ -65,7 +72,6 @@ class PackageInfo
     return PackageInfo(
       name: pubspec.name,
       path: dir.path,
-      usesMonoRepo: dir.usesMonoRepo,
       pubspecInfo: pubspecInfo,
       flavor: pubspec.flavor,
     );
@@ -76,9 +82,6 @@ class PackageInfo
 
   /// Absolute path to the package.
   final String path;
-
-  /// Whether the package uses the mono_repo tool.
-  final bool usesMonoRepo;
 
   /// The package's pubspec.
   final PubspecInfo pubspecInfo;
@@ -143,11 +146,20 @@ class PackageInfo
             falsePositiveExamples.contains(name));
   }
 
+  /// Skip package checks for Flutter packages when running in CI without
+  /// Flutter, which may happen when testing Dart-only packages or specific
+  /// Dart versions.
+  bool get skipChecks {
+    final isCI = getEnv('CI') == 'true' || getEnv('CI') == '1';
+    return isCI &&
+        getEnv('FLUTTER_ROOT') == null &&
+        flavor == PackageFlavor.flutter;
+  }
+
   @override
   List<Object?> get props => [
         name,
         path,
-        usesMonoRepo,
         pubspecInfo,
         flavor,
       ];
@@ -194,12 +206,6 @@ enum DependencyType {
 }
 
 extension DirectoryX on Directory {
-  /// Whether the package in this directory uses the `mono_repo` tool.
-  bool get usesMonoRepo {
-    final monoPkgPath = p.join(path, 'mono_pkg.yaml');
-    return File(monoPkgPath).existsSync();
-  }
-
   /// The pubspec for the package in this directory, if any.
   PubspecInfo? get pubspec {
     final pubspecPath = p.join(path, 'pubspec.yaml');
@@ -260,8 +266,9 @@ class SdkConfig
         AWSSerializable<Map<String, Object?>>,
         AWSDebuggable {
   const SdkConfig({
-    this.ref = 'main',
+    this.ref = 'master',
     required this.apis,
+    this.plugins = const [],
   });
 
   factory SdkConfig.fromJson(Map<Object?, Object?>? json) =>
@@ -269,15 +276,16 @@ class SdkConfig
 
   /// The `aws-models` ref to pull.
   ///
-  /// Defaults to `main`.
+  /// Defaults to `master`.
   final String ref;
   final Map<String, List<ShapeId>?> apis;
+  final List<String> plugins;
 
   @override
   Map<String, Object?> toJson() => _$SdkConfigToJson(this);
 
   @override
-  List<Object?> get props => [apis];
+  List<Object?> get props => [ref, apis, plugins];
 
   @override
   String get runtimeTypeName => 'SdkConfig';

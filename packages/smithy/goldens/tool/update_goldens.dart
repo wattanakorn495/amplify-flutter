@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:convert';
 import 'dart:io';
@@ -103,7 +92,7 @@ Future<void> _generateFor(
   final packageName = '${protocolName.snakeCase}_${version.name}';
   final ast = parseAstJson(astJson);
 
-  final libraries = generateForAst(
+  final outputs = generateForAst(
     ast,
     packageName: packageName,
     additionalShapes: const [
@@ -113,7 +102,7 @@ Future<void> _generateFor(
   );
 
   final Set<String> dependencies = {};
-  for (var library in libraries) {
+  for (var library in outputs.values.expand((out) => out.libraries)) {
     final smithyLibrary = library.smithyLibrary;
     final outPath = path.join(outputPath, smithyLibrary.projectRelativePath);
     final output = library.emit();
@@ -143,45 +132,17 @@ analyzer:
   errors:
     avoid_unused_constructor_parameters: ignore
     non_constant_identifier_names: ignore
+    prefer_interpolation_to_compose_strings: ignore
 ''');
 
   // Create mono_pkg for testing
-  final monoPkgPath = path.join(outputPath, 'mono_pkg.yaml');
   final dartTestPath = path.join(outputPath, 'dart_test.yaml');
-  final monoPkg = StringBuffer('''
-sdk:
-  - stable
-  - dev
-
-stages:
-  - analyze_and_format:
-      - group:
-          - format
-          - analyze: --fatal-infos .
-''');
-  if (Directory(path.join(outputPath, 'test')).existsSync()) {
-    monoPkg.write('''
-  - unit_test:
-      - test:
-        os:
-          - linux
-      - test: -p chrome
-  - unit_test_native:
-      - test:
-        os:
-          - macos
-          - windows
-      - test: -p firefox
-''');
-
-    File(dartTestPath).writeAsStringSync('''
+  File(dartTestPath).writeAsStringSync('''
 override_platforms:
   firefox:
     settings:
       arguments: -headless
 ''');
-  }
-  File(monoPkgPath).writeAsStringSync(monoPkg.toString());
 
   // Run `dart pub get`
   final pubGetRes = await Process.run(

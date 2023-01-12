@@ -1,25 +1,12 @@
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
+import 'package:amplify_test/test_models/ModelProvider.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'test_models/ModelProvider.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -122,6 +109,69 @@ void main() {
 
       expect(testPredicate.serializeAsMap(),
           await getJsonFromFile('temporal_predicate.json'));
+    });
+
+    test('when query by model identifier with eq()', () async {
+      final testPredicate = Inventory.MODEL_IDENTIFIER.eq(
+        InventoryModelIdentifier(
+          productID: 'product-id',
+          name: 'product-name',
+          warehouseID: 'warehouse-id',
+          region: 'some region',
+        ),
+      );
+
+      final serialized = testPredicate.serializeAsMap();
+      expect(serialized, await getJsonFromFile('model_identifier_equals.json'));
+    });
+
+    test('when query by model identifier with ne()', () async {
+      final testPredicate = Inventory.MODEL_IDENTIFIER.ne(
+        InventoryModelIdentifier(
+          productID: 'product-id',
+          name: 'product-name',
+          warehouseID: 'warehouse-id',
+          region: 'some region',
+        ),
+      );
+
+      final serialized = testPredicate.serializeAsMap();
+      expect(serialized,
+          await getJsonFromFile('model_identifier_not_equals.json'));
+    });
+
+    test('when query by model identifier with not(eq())', () async {
+      final testPredicate = not(
+        Inventory.MODEL_IDENTIFIER.eq(
+          InventoryModelIdentifier(
+            productID: 'product-id',
+            name: 'product-name',
+            warehouseID: 'warehouse-id',
+            region: 'some region',
+          ),
+        ),
+      );
+
+      final serialized = testPredicate.serializeAsMap();
+      expect(serialized,
+          await getJsonFromFile('model_identifier_group_not_equals.json'));
+    });
+
+    test('when query by model identifier with not(ne())', () async {
+      final testPredicate = not(
+        Inventory.MODEL_IDENTIFIER.ne(
+          InventoryModelIdentifier(
+            productID: 'product-id',
+            name: 'product-name',
+            warehouseID: 'warehouse-id',
+            region: 'some region',
+          ),
+        ),
+      );
+
+      final serialized = testPredicate.serializeAsMap();
+      expect(serialized,
+          await getJsonFromFile('model_identifier_group_equals.json'));
     });
   });
 
@@ -275,4 +325,6 @@ void main() {
       });
     });
   });
+
+  group("query by model identifier predicate", () {});
 }

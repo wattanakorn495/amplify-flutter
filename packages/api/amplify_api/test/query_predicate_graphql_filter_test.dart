@@ -1,4 +1,7 @@
-import 'package:amplify_api/src/graphql/graphql_request_factory.dart';
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
+
+import 'package:amplify_api/src/graphql/factories/graphql_request_factory.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_flutter/src/amplify_impl.dart';
 import 'package:amplify_test/test_models/ModelProvider.dart';
@@ -22,16 +25,18 @@ void main() {
     });
 
     // helper method for all the tests
-    void _testQueryPredicateTranslation(
-        QueryPredicate? queryPredicate, Map<String, dynamic>? expectedFilter,
-        {ModelType modelType = Blog.classType}) {
+    void testQueryPredicateTranslation(
+      QueryPredicate? queryPredicate,
+      Map<String, dynamic>? expectedFilter, {
+      ModelType modelType = Blog.classType,
+    }) {
       final resultFilter = GraphQLRequestFactory.instance
           .queryPredicateToGraphQLFilter(queryPredicate, modelType);
       expect(resultFilter, expectedFilter);
     }
 
     test('should be null safe', () {
-      _testQueryPredicateTranslation(null, null);
+      testQueryPredicateTranslation(null, null);
     });
 
     test('simple query predicate converts to expected filter', () {
@@ -41,7 +46,7 @@ void main() {
       };
 
       final queryPredicate = Blog.NAME.eq(expectedTitle);
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test('and query with string, and date', () {
@@ -58,7 +63,7 @@ void main() {
           },
         ]
       };
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test('not query converts to expected filter', () {
@@ -68,7 +73,7 @@ void main() {
           'id': {'eq': 'id'}
         }
       };
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test(
@@ -118,7 +123,7 @@ void main() {
           }
         ]
       };
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test('nested and(or()) operator converts to expected filter', () {
@@ -141,7 +146,7 @@ void main() {
           }
         ]
       };
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test('nested or(and()) operator converts to expected filter', () {
@@ -164,7 +169,7 @@ void main() {
           },
         ]
       };
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test('TemporalDateTime query converts to expected filter', () {
@@ -175,7 +180,7 @@ void main() {
       };
       final queryPredicate = Blog.CREATEDAT.le(exampleValue);
 
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test('TemporalDate query converts to expected filter', () {
@@ -186,7 +191,7 @@ void main() {
       };
       final queryPredicate = Blog.CREATEDAT.le(exampleValue);
 
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test('TemporalTime query converts to expected filter', () {
@@ -197,7 +202,7 @@ void main() {
       };
       final queryPredicate = Blog.CREATEDAT.le(exampleValue);
 
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test('DateTime converted to TemporalDateTime query', () {
@@ -208,7 +213,7 @@ void main() {
       };
       final queryPredicate = Blog.CREATEDAT.le(exampleValue);
 
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter);
+      testQueryPredicateTranslation(queryPredicate, expectedFilter);
     });
 
     test('query child by parent ID', () {
@@ -218,8 +223,11 @@ void main() {
         'blogID': {'eq': blogId}
       };
 
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter,
-          modelType: Post.classType);
+      testQueryPredicateTranslation(
+        queryPredicate,
+        expectedFilter,
+        modelType: Post.classType,
+      );
     });
 
     test('query with enum should serialize to string', () {
@@ -230,8 +238,11 @@ void main() {
         'title': {'eq': describeEnum(Size.medium)}
       };
 
-      _testQueryPredicateTranslation(queryPredicate, expectedFilter,
-          modelType: Post.classType);
+      testQueryPredicateTranslation(
+        queryPredicate,
+        expectedFilter,
+        modelType: Post.classType,
+      );
     });
   });
 }

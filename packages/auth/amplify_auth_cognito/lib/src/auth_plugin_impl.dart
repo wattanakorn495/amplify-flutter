@@ -1,16 +1,5 @@
-// Copyright 2022 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import 'dart:async';
 import 'dart:io';
@@ -123,7 +112,7 @@ class AmplifyAuthCognito extends AmplifyAuthCognitoDart with AWSDebuggable {
               AmplifyExceptionMessages.alreadyConfiguredDefaultSuggestion,
         );
       }
-      throw AmplifyException(
+      throw ConfigurationError(
         e.message ?? 'An unknown error occurred',
         underlyingException: e,
       );
@@ -168,7 +157,9 @@ class AmplifyAuthCognito extends AmplifyAuthCognitoDart with AWSDebuggable {
 
   @override
   Future<CognitoSignUpResult> signUp({
-    required SignUpRequest request,
+    required String username,
+    required String password,
+    CognitoSignUpOptions? options,
   }) async {
     Map<String, String>? validationData;
     if (!zIsWeb && (Platform.isAndroid || Platform.isIOS)) {
@@ -176,20 +167,18 @@ class AmplifyAuthCognito extends AmplifyAuthCognitoDart with AWSDebuggable {
           await stateMachine.expect<NativeAuthBridge>().getValidationData();
       validationData = nativeValidationData.cast();
     }
-    var options =
-        request.options as CognitoSignUpOptions? ?? CognitoSignUpOptions();
+    options ??= CognitoSignUpOptions();
     options = options.copyWith(
       validationData: {
         ...?validationData,
         ...?options.validationData,
       },
     );
-    request = SignUpRequest(
-      username: request.username,
-      password: request.password,
+    return super.signUp(
+      username: username,
+      password: password,
       options: options,
     );
-    return super.signUp(request: request);
   }
 
   @override
@@ -209,9 +198,7 @@ class _NativeAmplifyAuthCognito
   ) async {
     try {
       final authSession = await _basePlugin.fetchAuthSession(
-        request: AuthSessionRequest(
-          options: CognitoSessionOptions(getAWSCredentials: getAwsCredentials),
-        ),
+        options: CognitoSessionOptions(getAWSCredentials: getAwsCredentials),
       );
       final nativeAuthSession = NativeAuthSession(
         isSignedIn: authSession.isSignedIn,

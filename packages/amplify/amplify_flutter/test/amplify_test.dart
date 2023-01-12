@@ -1,34 +1,30 @@
-/*
- * Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
-import 'package:amplify_analytics_pinpoint/method_channel_amplify.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_flutter/src/amplify_impl.dart';
-import 'package:amplify_storage_s3/method_channel_storage_s3.dart';
+import 'package:amplify_test/test_models/ModelProvider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+final throwsConfigurationError = throwsA(isA<ConfigurationError>());
+final throwsPluginError = throwsA(isA<PluginError>());
+final throwsPluginNotAddedError = throwsA(
+  isA<PluginError>().having(
+    (e) => e.message,
+    'message',
+    contains('plugin has not been added to Amplify'),
+  ),
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   Amplify = MethodChannelAmplify();
 
   const MethodChannel channel = MethodChannel('com.amazonaws.amplify/amplify');
-  const MethodChannel storageChannel =
-      MethodChannel('com.amazonaws.amplify/storage_s3');
-  const MethodChannel analyticsChannel =
-      MethodChannel('com.amazonaws.amplify/analytics_pinpoint');
+  const MethodChannel dataStoreChannel =
+      MethodChannel('com.amazonaws.amplify/datastore');
   var platformConfigured = false;
 
   // Test data
@@ -46,11 +42,6 @@ void main() {
           recoverySuggestion:
               'Check if Amplify is already configured using Amplify.isConfigured.');
 
-  const pluginNotAddedException = AmplifyException(
-      'Auth plugin has not been added to Amplify',
-      recoverySuggestion:
-          'Add Auth plugin to Amplify and call configure before calling Auth related APIs');
-
   // Class under test
   late AmplifyClass amplify;
 
@@ -62,10 +53,7 @@ void main() {
         throw PlatformException(code: 'AmplifyAlreadyConfiguredException');
       }
     });
-    storageChannel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return true;
-    });
-    analyticsChannel.setMockMethodCallHandler((MethodCall methodCall) async {
+    dataStoreChannel.setMockMethodCallHandler((MethodCall methodCall) async {
       return true;
     });
     // We want to instantiate a new instance for each test so we start
@@ -73,16 +61,15 @@ void main() {
     amplify = MethodChannelAmplify();
     AmplifyClass.instance = amplify;
 
-    // We only use Auth and Analytics category for testing this class.
+    // We only use Auth and DataStore category for testing this class.
     // Clear out their plugins before each test for a fresh state.
     Amplify.Auth.reset();
-    Amplify.Analytics.reset();
+    Amplify.DataStore.reset();
   });
 
   tearDown(() {
     channel.setMockMethodCallHandler(null);
-    storageChannel.setMockMethodCallHandler(null);
-    analyticsChannel.setMockMethodCallHandler(null);
+    dataStoreChannel.setMockMethodCallHandler(null);
   });
 
   test('before calling configure, isConfigure should be false', () {
@@ -100,25 +87,22 @@ void main() {
     });
     await expectLater(
       amplify.configure(validJsonConfiguration),
-      throwsException,
+      throwsPluginError,
     );
     expect(amplify.isConfigured, false);
   });
 
   test(
-      'configure should result in AmplifyException when invalid value is passed',
+      'configure should result in ConfigurationError when invalid value is passed',
       () async {
+    expect(
+      amplify.asyncConfig,
+      throwsConfigurationError,
+    );
     await expectLater(
       amplify.configure(invalidConfiguration),
-      throwsA(
-        isA<AmplifyException>().having(
-          (e) => e.underlyingException,
-          'underlyingException',
-          isA<FormatException>(),
-        ),
-      ),
+      throwsConfigurationError,
     );
-    expect(amplify.isConfigured, isFalse);
   });
 
   test('calling configure twice results in an exception', () async {
@@ -136,33 +120,44 @@ void main() {
   test('adding multiple plugins using addPlugins method doesn\'t throw',
       () async {
     await amplify.addPlugins([
-      AmplifyStorageS3MethodChannel(),
-      AmplifyAnalyticsPinpointMethodChannel(),
+      AmplifyDataStore(modelProvider: ModelProvider.instance),
+      AmplifyDataStore(modelProvider: ModelProvider.instance),
     ]);
     await amplify.configure(validJsonConfiguration);
     expect(amplify.isConfigured, true);
   });
 
   test('adding single plugins using addPlugin method doesn\'t throw', () async {
-    await amplify.addPlugin(AmplifyStorageS3MethodChannel());
+    await amplify
+        .addPlugin(AmplifyDataStore(modelProvider: ModelProvider.instance));
     await amplify.configure(validJsonConfiguration);
     expect(amplify.isConfigured, true);
   });
 
-  test('adding multiple plugins from same Storage category does not throw',
+  test('adding multiple plugins from same Analytic category throws exception',
       () async {
-    await amplify.addPlugin(AmplifyStorageS3MethodChannel());
+    await amplify
+        .addPlugin(AmplifyDataStore(modelProvider: ModelProvider.instance));
     expect(
-      amplify.addPlugin(AmplifyStorageS3MethodChannel()),
-      completes,
+      amplify
+          .addPlugin(AmplifyDataStore(modelProvider: ModelProvider.instance)),
+      throwsA(
+        isA<PluginError>().having(
+          (e) => e.toString(),
+          'toString',
+          contains('DataStore plugin has already been added'),
+        ),
+      ),
     );
   });
 
   test('adding plugins after configure throws an exception', () async {
-    await amplify.addPlugin(AmplifyStorageS3MethodChannel());
+    await amplify
+        .addPlugin(AmplifyDataStore(modelProvider: ModelProvider.instance));
     await amplify.configure(validJsonConfiguration);
     try {
-      await amplify.addPlugin(AmplifyAnalyticsPinpointMethodChannel());
+      await amplify
+          .addPlugin(AmplifyDataStore(modelProvider: ModelProvider.instance));
     } catch (e) {
       expect(e, amplifyAlreadyConfiguredForAddPluginException);
       expect(amplify.isConfigured, true);
@@ -173,13 +168,7 @@ void main() {
 
   test('Calling a plugin through Amplify before adding one', () async {
     await amplify.configure(validJsonConfiguration);
-    try {
-      await Amplify.Auth.signOut();
-    } catch (e) {
-      expect(e, pluginNotAddedException);
-      return;
-    }
-    fail('an exception should have been thrown');
+    expect(() => Amplify.Auth.signOut(), throwsPluginNotAddedError);
   });
 
   test(

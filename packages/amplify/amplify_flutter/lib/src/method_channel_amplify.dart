@@ -1,17 +1,5 @@
-/*
- * Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License").
- * You may not use this file except in compliance with the License.
- * A copy of the License is located at
- *
- *  http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
+// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
@@ -70,7 +58,7 @@ class MethodChannelAmplify extends AmplifyClassImpl {
       } else if (plugin is APIPluginInterface) {
         await API.addPlugin(plugin, authProviderRepo: authProviderRepo);
       } else {
-        throw AmplifyException(
+        throw PluginError(
           'The type of plugin ${plugin.runtimeType} is not yet supported '
           'in Amplify.',
           recoverySuggestion:
@@ -79,7 +67,7 @@ class MethodChannelAmplify extends AmplifyClassImpl {
       }
     } on Exception catch (e) {
       safePrint('Amplify plugin was not added');
-      throw AmplifyException(
+      throw PluginError(
         'Amplify plugin ${plugin.runtimeType} was not added successfully.',
         recoverySuggestion: AmplifyExceptionMessages.missingRecoverySuggestion,
         underlyingException: e.toString(),
@@ -102,15 +90,8 @@ class MethodChannelAmplify extends AmplifyClassImpl {
           'configuration': config,
         },
       );
-      await Future.wait(
-        Analytics.plugins.map((plugin) => plugin.onConfigure()),
-      );
     } on PlatformException catch (e) {
-      if (e.code == 'AnalyticsException') {
-        throw AnalyticsException.fromMap(
-          Map<String, String>.from(e.details as Map),
-        );
-      } else if (e.code == 'AmplifyException') {
+      if (e.code == 'AmplifyException') {
         throw AmplifyException.fromMap(
           Map<String, String>.from(e.details as Map),
         );
@@ -119,20 +100,13 @@ class MethodChannelAmplify extends AmplifyClassImpl {
       } else {
         // This shouldn't happen. All exceptions coming from platform for
         // amplify_flutter should have a known code. Throw an unknown error.
-        throw AmplifyException(AmplifyExceptionMessages.missingExceptionMessage,
-            recoverySuggestion:
-                AmplifyExceptionMessages.missingRecoverySuggestion,
-            underlyingException: e.toString());
+        throw PluginError(
+          AmplifyExceptionMessages.missingExceptionMessage,
+          recoverySuggestion:
+              AmplifyExceptionMessages.missingRecoverySuggestion,
+          underlyingException: e.toString(),
+        );
       }
     }
-  }
-
-  @override
-  Future<void> reset() async {
-    Auth.reset();
-    Analytics.reset();
-    Storage.reset();
-    DataStore.reset();
-    API.reset();
   }
 }

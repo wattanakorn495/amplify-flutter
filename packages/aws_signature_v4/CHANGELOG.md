@@ -1,3 +1,17 @@
+## 0.3.1
+
+### Fixes
+- fix(sigv4): Path normalization with empty path
+
+## 0.3.0
+
+### Fixes
+- fix(sigV4): Add `port` to signed request
+- fix(sigv4): Make body signing configurable ([#2318](https://github.com/aws-amplify/amplify-flutter/pull/2318))
+
+### Features
+- feat(core): AWS config file
+
 ## 0.2.2
 
 - Minor bug fixes and improvements
