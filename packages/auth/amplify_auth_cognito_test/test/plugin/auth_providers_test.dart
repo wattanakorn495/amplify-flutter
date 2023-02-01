@@ -27,20 +27,25 @@ class TestAmplifyAuthUserPoolOnly extends AmplifyAuthCognitoDart {
   Future<CognitoAuthSession> fetchAuthSession({
     CognitoSessionOptions? options,
   }) async {
-    final getAWSCredentials = options?.getAWSCredentials;
-    if (getAWSCredentials != null && getAWSCredentials) {
-      throw const InvalidAccountTypeException.noIdentityPool(
-        recoverySuggestion:
-            'Register an identity pool using the CLI or set getAWSCredentials '
-            'to false',
-      );
-    }
     return CognitoAuthSession(
       isSignedIn: true,
-      userPoolTokens: CognitoUserPoolTokens(
-        accessToken: accessToken,
-        idToken: idToken,
-        refreshToken: refreshToken,
+      userPoolTokensResult: AuthResult.success(
+        CognitoUserPoolTokens(
+          accessToken: accessToken,
+          idToken: idToken,
+          refreshToken: refreshToken,
+        ),
+      ),
+      userSubResult: const AuthResult.success(userSub),
+      credentialsResult: const AuthResult.error(
+        InvalidAccountTypeException.noIdentityPool(
+          recoverySuggestion: 'Register an identity pool using the CLI',
+        ),
+      ),
+      identityIdResult: const AuthResult.error(
+        InvalidAccountTypeException.noIdentityPool(
+          recoverySuggestion: 'Register an identity pool using the CLI',
+        ),
       ),
     );
   }

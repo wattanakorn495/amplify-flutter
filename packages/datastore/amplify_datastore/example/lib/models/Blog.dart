@@ -184,6 +184,11 @@ class _BlogModelType extends ModelType<Blog> {
   Blog fromJson(Map<String, dynamic> jsonData) {
     return Blog.fromJson(jsonData);
   }
+
+  @override
+  String modelName() {
+    return 'Person';
+  }
 }
 
 /// This is an auto generated class representing the model identifier

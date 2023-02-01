@@ -182,6 +182,11 @@ class _HasManyChildExplicitModelType extends ModelType<HasManyChildExplicit> {
   HasManyChildExplicit fromJson(Map<String, dynamic> jsonData) {
     return HasManyChildExplicit.fromJson(jsonData);
   }
+
+  @override
+  String modelName() {
+    return 'PostWithAuthRules';
+  }
 }
 
 /// This is an auto generated class representing the model identifier

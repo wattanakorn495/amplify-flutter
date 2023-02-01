@@ -1,3 +1,16 @@
+## 0.4.0+1
+
+### Features
+- feat(smithy_aws): add copyWith to S3ClientConfig
+
+## 0.4.0
+
+### Breaking Changes
+- feat(aft)!: Add plugins to SDK generation
+
+### Fixes
+- fix(smithy): Retry behavior
+
 ## 0.3.2
 
 ### Features

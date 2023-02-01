@@ -20,10 +20,8 @@ void main() {
     final session = await Amplify.Auth.fetchAuthSession(
       options: CognitoSessionOptions(forceRefresh: forceRefresh),
     ) as CognitoAuthSession;
-    final idToken = session.userPoolTokens?.idToken;
-    expect(idToken, isNotNull, reason: 'User is logged in');
-
-    return idToken!.claims.customClaims;
+    final idToken = session.userPoolTokensResult.value.idToken;
+    return idToken.claims.customClaims;
   }
 
   group('Force refresh', () {
@@ -47,7 +45,7 @@ void main() {
         username: username,
         password: password,
       );
-      expect(res.nextStep.signInStep, 'DONE');
+      expect(res.nextStep.signInStep, AuthSignInStep.done);
 
       expect(
         await getCustomAttributes(),

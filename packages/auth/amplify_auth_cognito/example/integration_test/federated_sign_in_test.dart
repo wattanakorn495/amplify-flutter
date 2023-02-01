@@ -59,13 +59,13 @@ void main() {
         username: username,
         password: password,
       );
-      expect(signInResult.nextStep.signInStep, 'DONE');
+      expect(signInResult.nextStep.signInStep, AuthSignInStep.done);
 
       final userPoolTokens =
-          (await cognitoPlugin.fetchAuthSession()).userPoolTokens!;
+          (await cognitoPlugin.fetchAuthSession()).userPoolTokensResult.value;
       // Clear but do not sign out so that tokens are still valid.
       // ignore: invalid_use_of_protected_member
-      await cognitoPlugin.plugin.stateMachine.dispatch(
+      await cognitoPlugin.stateMachine.dispatch(
         CredentialStoreEvent.clearCredentials(
           CognitoUserPoolKeys(userPoolConfig),
         ),
@@ -82,7 +82,7 @@ void main() {
         username: username,
         password: password,
       );
-      expect(signInResult.nextStep.signInStep, 'DONE');
+      expect(signInResult.nextStep.signInStep, AuthSignInStep.done);
 
       await expectLater(
         cognitoPlugin.federateToIdentityPool(
@@ -105,41 +105,37 @@ void main() {
 
     asyncTest('replaces unauthenticated identity', (_) async {
       // Get unauthenticated identity
-      final unauthSession = await cognitoPlugin.fetchAuthSession(
-        options: const CognitoSessionOptions(getAWSCredentials: true),
-      );
+      final unauthSession = await cognitoPlugin.fetchAuthSession();
 
       final authSession = await federateToIdentityPool();
       expect(
         authSession.identityId,
-        unauthSession.identityId,
+        unauthSession.identityIdResult.value,
         reason: 'Should retain unauthenticated identity',
       );
       expect(
         authSession.credentials,
-        isNot(unauthSession.credentials),
+        isNot(unauthSession.credentialsResult.value),
         reason: 'Should get new credentials',
       );
     });
 
     asyncTest('can specify identity ID', (_) async {
       // Get unauthenticated identity (doesn't matter, just need identity ID)
-      final unauthSession = await cognitoPlugin.fetchAuthSession(
-        options: const CognitoSessionOptions(getAWSCredentials: true),
-      );
-      final identityId = unauthSession.identityId!;
+      final unauthSession = await cognitoPlugin.fetchAuthSession();
+      final identityId = unauthSession.identityIdResult.value;
 
       final signInResult = await cognitoPlugin.signIn(
         username: username,
         password: password,
       );
-      expect(signInResult.nextStep.signInStep, 'DONE');
+      expect(signInResult.nextStep.signInStep, AuthSignInStep.done);
 
       final userPoolTokens =
-          (await cognitoPlugin.fetchAuthSession()).userPoolTokens!;
+          (await cognitoPlugin.fetchAuthSession()).userPoolTokensResult.value;
       // Clear but do not sign out so that tokens are still valid.
       // ignore: invalid_use_of_protected_member
-      await cognitoPlugin.plugin.stateMachine.dispatch(
+      await cognitoPlugin.stateMachine.dispatch(
         CredentialStoreEvent.clearCredentials(
           CognitoUserPoolKeys(userPoolConfig),
         ),
@@ -176,23 +172,23 @@ void main() {
     });
 
     asyncTest('can clear federation', (_) async {
-      await federateToIdentityPool();
+      final federateToIdentityPoolResult = await federateToIdentityPool();
 
       await expectLater(
         cognitoPlugin.clearFederationToIdentityPool(),
         completes,
       );
 
-      final clearedSession = await cognitoPlugin.fetchAuthSession();
+      final unauthSession = await cognitoPlugin.fetchAuthSession();
       expect(
-        clearedSession.identityId,
-        isNull,
-        reason: 'Should clear session',
+        unauthSession.identityIdResult.value,
+        isNot(federateToIdentityPoolResult.identityId),
+        reason: 'Should clear session and refetch',
       );
       expect(
-        clearedSession.credentials,
-        isNull,
-        reason: 'Should clear session',
+        unauthSession.credentialsResult.value,
+        isNot(federateToIdentityPoolResult.credentials),
+        reason: 'Should clear session and refetch',
       );
     });
 

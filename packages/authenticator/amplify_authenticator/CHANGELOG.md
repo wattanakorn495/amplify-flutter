@@ -1,3 +1,22 @@
+## 1.0.0-next.3
+
+### Fixes
+- fix(authenticator): ARB syntax ([#2560](https://github.com/aws-amplify/amplify-flutter/pull/2560))
+
+### Breaking Changes
+- fix(auth)!: Fetch Auth Session offline behavior ([#2585](https://github.com/aws-amplify/amplify-flutter/pull/2585))
+
+## 1.0.0-next.2
+
+### Fixes
+- fix(authenticator): Example Dead Link ([#2505](https://github.com/aws-amplify/amplify-flutter/pull/2505))
+- fix(authenticator): Navigation via TabBar ([#2486](https://github.com/aws-amplify/amplify-flutter/pull/2486))
+- fix(authenticator): keyboard navigation ([#2473](https://github.com/aws-amplify/amplify-flutter/pull/2473))
+
+### Breaking Changes
+- refactor(auth)!: Align exception types
+- refactor(core)!: Migrate exception types
+
 ## 1.0.0-next.1+3
 
 ### Fixes

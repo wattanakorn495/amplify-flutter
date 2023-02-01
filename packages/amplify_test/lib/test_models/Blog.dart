@@ -200,10 +200,9 @@ class Blog extends Model {
   static final QueryField FILES = QueryField(fieldName: "files");
   static final QueryField POSTS = QueryField(
       fieldName: "posts",
-      fieldType: ModelFieldType(ModelFieldTypeEnum.model,
-          ofModelName: (Post).toString()));
-  static var schema = Model.defineSchema(
-      define: (ModelTypeDefinitionBuilder modelSchemaDefinition) {
+      fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: 'Post'));
+  static var schema =
+      Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Blog";
     modelSchemaDefinition.pluralName = "Blogs";
 
@@ -239,7 +238,7 @@ class Blog extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
         key: Blog.POSTS,
         isRequired: false,
-        ofModelName: (Post).toString(),
+        ofModelName: 'Post',
         associatedKey: Post.BLOG));
 
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
@@ -256,6 +255,11 @@ class _BlogModelType extends ModelType<Blog> {
   @override
   Blog fromJson(Map<String, dynamic> jsonData) {
     return Blog.fromJson(jsonData);
+  }
+
+  @override
+  String modelName() {
+    return 'Blog';
   }
 }
 

@@ -52,7 +52,7 @@ Future<ResetPasswordResult> resetPassword({
   return Amplify.Auth.resetPassword(username: username);
 }
 
-Future<UpdatePasswordResult> confirmResetPassword({
+Future<ResetPasswordResult> confirmResetPassword({
   required String username,
   required String newPassword,
   required String confirmationCode,
@@ -75,11 +75,7 @@ Future<void> changePassword({
 }
 
 Future<CognitoAuthSession> fetchAuthSession() async {
-  final res = await Amplify.Auth.fetchAuthSession(
-    options: const CognitoSessionOptions(
-      getAWSCredentials: true,
-    ),
-  );
+  final res = await Amplify.Auth.fetchAuthSession();
   return res as CognitoAuthSession;
 }
 

@@ -4,6 +4,8 @@ dependency_overrides:
     path: ../../api/amplify_api
   amplify_api_android:
     path: ../../api/amplify_api_android
+  amplify_api_dart:
+    path: ../../api/amplify_api_dart
   amplify_api_ios:
     path: ../../api/amplify_api_ios
   amplify_auth_cognito:

@@ -84,11 +84,8 @@ class AppComponent extends StatefulComponent {
       AuthState startingAuthState;
 
       try {
-        final session = await Amplify.Auth.fetchAuthSession(
-          options: const CognitoSessionOptions(
-            getAWSCredentials: true,
-          ),
-        ) as CognitoAuthSession;
+        final session =
+            await Amplify.Auth.fetchAuthSession() as CognitoAuthSession;
         startingAuthState =
             session.isSignedIn ? AuthState.authenticated : AuthState.login;
       } on Exception {
@@ -119,20 +116,22 @@ class AppComponent extends StatefulComponent {
   void _processSignInResult(SignInResult res) {
     if (!res.isSignedIn) {
       switch (res.nextStep.signInStep) {
-        case 'CONFIRM_SIGN_IN_WITH_SMS_MFA_CODE':
+        case AuthSignInStep.confirmSignInWithSmsMfaCode:
           setState(() {
             appState = appState.copyWith(
               authState: AuthState.confirmSignin,
             );
           });
           return;
-        case 'CONFIRM_SIGN_IN_WITH_NEW_PASSWORD':
+        case AuthSignInStep.confirmSignInWithNewPassword:
           setState(() {
             appState = appState.copyWith(
               authState: AuthState.confirmNewPassword,
             );
           });
           return;
+        default:
+          break;
       }
     }
     setState(
@@ -146,7 +145,9 @@ class AppComponent extends StatefulComponent {
 
   Future<void> _fetchUnAuthCredentials() async {
     final session = await fetchAuthSession();
-    safePrint('sessionToken : ${session.credentials?.sessionToken}');
+    safePrint(
+      'sessionToken : ${session.credentialsResult.value.sessionToken}',
+    );
   }
 
   @override
