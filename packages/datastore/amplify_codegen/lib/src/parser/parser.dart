@@ -18,6 +18,7 @@ import 'package:amplify_codegen/src/helpers/model.dart';
 import 'package:amplify_codegen/src/helpers/types.dart';
 import 'package:amplify_codegen/src/parser/connection_info.dart';
 import 'package:amplify_core/amplify_core.dart' hide ModelType;
+// ignore: implementation_imports
 import 'package:amplify_core/src/types/models/mipr.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:collection/collection.dart';

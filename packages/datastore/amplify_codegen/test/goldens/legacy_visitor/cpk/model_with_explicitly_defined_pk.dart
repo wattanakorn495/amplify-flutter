@@ -234,79 +234,124 @@ abstract class ModelWithExplicitlyDefinedPk
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'ModelWithExplicitlyDefinedPK',
-      'pluralName': 'ModelWithExplicitlyDefinedPKs',
-      'fields': {
-        'modelID': {
-          'name': 'modelID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'title': {
-          'name': 'title',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'modelID',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'ModelWithExplicitlyDefinedPK',
+      'pluralName',
+      'ModelWithExplicitlyDefinedPKs',
+      'fields',
+      [
+        'modelID',
+        [
+          'name',
+          'modelID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'title',
+        [
+          'name',
+          'title',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'modelID',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get modelId;
 
   /// Query field for the [modelId] field.
-  QueryField<String, ModelWithExplicitlyDefinedPk, String> get $modelId =>
-      _queryFields.$modelId;
+  static QueryField<String, ModelWithExplicitlyDefinedPk, String>
+      get $modelId => _queryFields.$modelId;
 
   /// Query field for the [modelId] field.
   @Deprecated(r'Use $modelId instead')
-  QueryField<String, ModelWithExplicitlyDefinedPk, String> get MODEL_ID =>
-      $modelId;
+  static QueryField<String, ModelWithExplicitlyDefinedPk, String>
+      get MODEL_ID => $modelId;
   @override
   String get title;
 
   /// Query field for the [title] field.
-  QueryField<String, ModelWithExplicitlyDefinedPk, String> get $title =>
+  static QueryField<String, ModelWithExplicitlyDefinedPk, String> get $title =>
       _queryFields.$title;
 
   /// Query field for the [title] field.
   @Deprecated(r'Use $title instead')
-  QueryField<String, ModelWithExplicitlyDefinedPk, String> get TITLE => $title;
+  static QueryField<String, ModelWithExplicitlyDefinedPk, String> get TITLE =>
+      $title;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, ModelWithExplicitlyDefinedPk, String>
+  static QueryField<String, ModelWithExplicitlyDefinedPk, String>
       get $modelIdentifier => _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, ModelWithExplicitlyDefinedPk, String>
+  static QueryField<String, ModelWithExplicitlyDefinedPk, String>
       get MODEL_IDENTIFIER => $modelIdentifier;
   ModelWithExplicitlyDefinedPk copyWith({
     String? modelId,

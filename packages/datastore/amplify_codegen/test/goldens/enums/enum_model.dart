@@ -243,92 +243,147 @@ abstract class EnumModel extends PartialEnumModel
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'EnumModel',
-      'pluralName': 'EnumModels',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'enum': {
-          'name': 'enum',
-          'type': {'enum': 'MY_ENUM'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredEnum': {
-          'name': 'requiredEnum',
-          'type': {'enum': 'MY_ENUM'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'EnumModel',
+      'pluralName',
+      'EnumModels',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'enum',
+        [
+          'name',
+          'enum',
+          'type',
+          [
+            'enum',
+            'MY_ENUM',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredEnum',
+        [
+          'name',
+          'requiredEnum',
+          'type',
+          [
+            'enum',
+            'MY_ENUM',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, EnumModel, String> get $id => _queryFields.$id;
+  static QueryField<String, EnumModel, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, EnumModel, String> get ID => $id;
+  static QueryField<String, EnumModel, String> get ID => $id;
   @override
   MyEnum? get enum_;
 
   /// Query field for the [enum_] field.
-  QueryField<String, EnumModel, MyEnum?> get $enum_ => _queryFields.$enum_;
+  static QueryField<String, EnumModel, MyEnum?> get $enum_ =>
+      _queryFields.$enum_;
 
   /// Query field for the [enum_] field.
   @Deprecated(r'Use $enum_ instead')
-  QueryField<String, EnumModel, MyEnum?> get ENUM => $enum_;
+  static QueryField<String, EnumModel, MyEnum?> get ENUM => $enum_;
   @override
   MyEnum get requiredEnum;
 
   /// Query field for the [requiredEnum] field.
-  QueryField<String, EnumModel, MyEnum> get $requiredEnum =>
+  static QueryField<String, EnumModel, MyEnum> get $requiredEnum =>
       _queryFields.$requiredEnum;
 
   /// Query field for the [requiredEnum] field.
   @Deprecated(r'Use $requiredEnum instead')
-  QueryField<String, EnumModel, MyEnum> get REQUIRED_ENUM => $requiredEnum;
+  static QueryField<String, EnumModel, MyEnum> get REQUIRED_ENUM =>
+      $requiredEnum;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, EnumModel, String> get $modelIdentifier =>
+  static QueryField<String, EnumModel, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, EnumModel, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, EnumModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   EnumModel copyWith({
     String? id,

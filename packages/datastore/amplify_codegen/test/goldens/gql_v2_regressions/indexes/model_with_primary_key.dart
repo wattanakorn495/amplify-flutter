@@ -304,128 +304,212 @@ abstract class ModelWithPrimaryKey extends PartialModelWithPrimaryKey
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'ModelWithPrimaryKey',
-      'pluralName': 'ModelWithPrimaryKeys',
-      'fields': {
-        'productID': {
-          'name': 'productID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'name': {
-          'name': 'name',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'content': {
-          'name': 'content',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'albumID': {
-          'name': 'albumID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'categoryID': {
-          'name': 'categoryID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'secondary',
-          'primaryField': 'albumID',
-          'sortKeyFields': [],
-          'name': 'byAlbum',
-          'queryField': 'modelWithPrimaryKeysByAlbumID',
-        },
-        {
-          'type': 'secondary',
-          'primaryField': 'categoryID',
-          'sortKeyFields': [],
-          'name': 'byCategory',
-          'queryField': 'modelWithPrimaryKeysByCategoryID',
-        },
-        {
-          'type': 'primary',
-          'primaryField': 'productID',
-          'sortKeyFields': [],
-        },
+    const [
+      'name',
+      'ModelWithPrimaryKey',
+      'pluralName',
+      'ModelWithPrimaryKeys',
+      'fields',
+      [
+        'productID',
+        [
+          'name',
+          'productID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'name',
+        [
+          'name',
+          'name',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'content',
+        [
+          'name',
+          'content',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'albumID',
+        [
+          'name',
+          'albumID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'categoryID',
+        [
+          'name',
+          'categoryID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'secondary',
+          'primaryField',
+          'albumID',
+          'sortKeyFields',
+          [],
+          'name',
+          'byAlbum',
+          'queryField',
+          'modelWithPrimaryKeysByAlbumID',
+        ],
+        [
+          'type',
+          'secondary',
+          'primaryField',
+          'categoryID',
+          'sortKeyFields',
+          [],
+          'name',
+          'byCategory',
+          'queryField',
+          'modelWithPrimaryKeysByCategoryID',
+        ],
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'productID',
+          'sortKeyFields',
+          [],
+        ],
+      ],
+    ],
   )!;
 
   @override
   String get productId;
 
   /// Query field for the [productId] field.
-  QueryField<String, ModelWithPrimaryKey, String> get $productId =>
+  static QueryField<String, ModelWithPrimaryKey, String> get $productId =>
       _queryFields.$productId;
 
   /// Query field for the [productId] field.
   @Deprecated(r'Use $productId instead')
-  QueryField<String, ModelWithPrimaryKey, String> get PRODUCT_ID => $productId;
+  static QueryField<String, ModelWithPrimaryKey, String> get PRODUCT_ID =>
+      $productId;
   @override
   String get name;
 
   /// Query field for the [name] field.
-  QueryField<String, ModelWithPrimaryKey, String> get $name =>
+  static QueryField<String, ModelWithPrimaryKey, String> get $name =>
       _queryFields.$name;
 
   /// Query field for the [name] field.
   @Deprecated(r'Use $name instead')
-  QueryField<String, ModelWithPrimaryKey, String> get NAME => $name;
+  static QueryField<String, ModelWithPrimaryKey, String> get NAME => $name;
   @override
   String? get content;
 
   /// Query field for the [content] field.
-  QueryField<String, ModelWithPrimaryKey, String?> get $content =>
+  static QueryField<String, ModelWithPrimaryKey, String?> get $content =>
       _queryFields.$content;
 
   /// Query field for the [content] field.
   @Deprecated(r'Use $content instead')
-  QueryField<String, ModelWithPrimaryKey, String?> get CONTENT => $content;
+  static QueryField<String, ModelWithPrimaryKey, String?> get CONTENT =>
+      $content;
   @override
   String get albumId;
 
   /// Query field for the [albumId] field.
-  QueryField<String, ModelWithPrimaryKey, String> get $albumId =>
+  static QueryField<String, ModelWithPrimaryKey, String> get $albumId =>
       _queryFields.$albumId;
 
   /// Query field for the [albumId] field.
   @Deprecated(r'Use $albumId instead')
-  QueryField<String, ModelWithPrimaryKey, String> get ALBUM_ID => $albumId;
+  static QueryField<String, ModelWithPrimaryKey, String> get ALBUM_ID =>
+      $albumId;
   @override
   String get categoryId;
 
   /// Query field for the [categoryId] field.
-  QueryField<String, ModelWithPrimaryKey, String> get $categoryId =>
+  static QueryField<String, ModelWithPrimaryKey, String> get $categoryId =>
       _queryFields.$categoryId;
 
   /// Query field for the [categoryId] field.
   @Deprecated(r'Use $categoryId instead')
-  QueryField<String, ModelWithPrimaryKey, String> get CATEGORY_ID =>
+  static QueryField<String, ModelWithPrimaryKey, String> get CATEGORY_ID =>
       $categoryId;
   @override
   TemporalDateTime get createdAt;
@@ -433,12 +517,12 @@ abstract class ModelWithPrimaryKey extends PartialModelWithPrimaryKey
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, ModelWithPrimaryKey, String> get $modelIdentifier =>
+  static QueryField<String, ModelWithPrimaryKey, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, ModelWithPrimaryKey, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, ModelWithPrimaryKey, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   ModelWithPrimaryKey copyWith({
     String? productId,

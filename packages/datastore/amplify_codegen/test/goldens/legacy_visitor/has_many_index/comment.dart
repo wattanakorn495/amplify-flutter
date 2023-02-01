@@ -271,124 +271,202 @@ abstract class Comment extends PartialComment
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Comment',
-      'pluralName': 'Comments',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'postID': {
-          'name': 'postID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'post': {
-          'name': 'post',
-          'type': {'model': 'Post'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'BelongsTo',
-            'associatedType': 'Post',
-            'targetNames': ['postID'],
-          },
-        },
-        'content': {
-          'name': 'content',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'secondary',
-          'primaryField': 'postID',
-          'sortKeyFields': [],
-          'name': 'byPost',
-          'queryField': 'commentsByPostID',
-        },
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        },
-        {
-          'type': 'foreign',
-          'primaryField': 'post',
-          'sortKeyFields': ['postID'],
-          'name': 'post',
-        },
+    const [
+      'name',
+      'Comment',
+      'pluralName',
+      'Comments',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'postID',
+        [
+          'name',
+          'postID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'post',
+        [
+          'name',
+          'post',
+          'type',
+          [
+            'model',
+            'Post',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'BelongsTo',
+            'associatedType',
+            'Post',
+            'targetNames',
+            ['postID'],
+          ],
+        ],
+        'content',
+        [
+          'name',
+          'content',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'secondary',
+          'primaryField',
+          'postID',
+          'sortKeyFields',
+          [],
+          'name',
+          'byPost',
+          'queryField',
+          'commentsByPostID',
+        ],
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ],
+        [
+          'type',
+          'foreign',
+          'primaryField',
+          'post',
+          'sortKeyFields',
+          ['postID'],
+          'name',
+          'post',
+        ],
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Comment, String> get $id => _queryFields.$id;
+  static QueryField<String, Comment, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Comment, String> get ID => $id;
+  static QueryField<String, Comment, String> get ID => $id;
   @override
   String get postId;
 
   /// Query field for the [postId] field.
-  QueryField<String, Comment, String> get $postId => _queryFields.$postId;
+  static QueryField<String, Comment, String> get $postId =>
+      _queryFields.$postId;
 
   /// Query field for the [postId] field.
   @Deprecated(r'Use $postId instead')
-  QueryField<String, Comment, String> get POST_ID => $postId;
+  static QueryField<String, Comment, String> get POST_ID => $postId;
   @override
   Post get post;
 
   /// Query field for the [post] field.
-  PostQueryFields<String, Comment> get $post => _queryFields.$post;
+  static PostQueryFields<String, Comment> get $post => _queryFields.$post;
 
   /// Query field for the [post] field.
   @Deprecated(r'Use $post instead')
-  PostQueryFields<String, Comment> get POST => $post;
+  static PostQueryFields<String, Comment> get POST => $post;
   @override
   String get content;
 
   /// Query field for the [content] field.
-  QueryField<String, Comment, String> get $content => _queryFields.$content;
+  static QueryField<String, Comment, String> get $content =>
+      _queryFields.$content;
 
   /// Query field for the [content] field.
   @Deprecated(r'Use $content instead')
-  QueryField<String, Comment, String> get CONTENT => $content;
+  static QueryField<String, Comment, String> get CONTENT => $content;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Comment, String> get $modelIdentifier =>
+  static QueryField<String, Comment, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Comment, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Comment, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Comment copyWith({
     String? id,
     String? postId,

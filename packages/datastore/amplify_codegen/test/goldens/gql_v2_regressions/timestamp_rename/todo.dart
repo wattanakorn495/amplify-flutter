@@ -210,55 +210,100 @@ abstract class Todo extends PartialTodo
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Todo',
-      'pluralName': 'Todos',
-      'fields': {
-        'content': {
-          'name': 'content',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'Todo',
+      'pluralName',
+      'Todos',
+      'fields',
+      [
+        'content',
+        [
+          'name',
+          'content',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String? get content;
 
   /// Query field for the [content] field.
-  QueryField<String, Todo, String?> get $content => _queryFields.$content;
+  static QueryField<String, Todo, String?> get $content =>
+      _queryFields.$content;
 
   /// Query field for the [content] field.
   @Deprecated(r'Use $content instead')
-  QueryField<String, Todo, String?> get CONTENT => $content;
+  static QueryField<String, Todo, String?> get CONTENT => $content;
   @override
   TemporalDateTime get createdAt;
   @override
@@ -267,19 +312,20 @@ abstract class Todo extends PartialTodo
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Todo, String> get $id => _queryFields.$id;
+  static QueryField<String, Todo, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Todo, String> get ID => $id;
+  static QueryField<String, Todo, String> get ID => $id;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Todo, String> get $modelIdentifier =>
+  static QueryField<String, Todo, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Todo, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Todo, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Todo copyWith({
     String? content,
     DateTime? createdAt,

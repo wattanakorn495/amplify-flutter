@@ -216,55 +216,99 @@ abstract class MyModel extends PartialMyModel
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'MyModel',
-      'pluralName': 'MyModels',
-      'fields': {
-        'enum': {
-          'name': 'enum',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'MyModel',
+      'pluralName',
+      'MyModels',
+      'fields',
+      [
+        'enum',
+        [
+          'name',
+          'enum',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get enum_;
 
   /// Query field for the [enum_] field.
-  QueryField<String, MyModel, String> get $enum_ => _queryFields.$enum_;
+  static QueryField<String, MyModel, String> get $enum_ => _queryFields.$enum_;
 
   /// Query field for the [enum_] field.
   @Deprecated(r'Use $enum_ instead')
-  QueryField<String, MyModel, String> get ENUM => $enum_;
+  static QueryField<String, MyModel, String> get ENUM => $enum_;
   @override
   TemporalDateTime get createdAt;
   @override
@@ -273,19 +317,20 @@ abstract class MyModel extends PartialMyModel
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, MyModel, String> get $id => _queryFields.$id;
+  static QueryField<String, MyModel, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, MyModel, String> get ID => $id;
+  static QueryField<String, MyModel, String> get ID => $id;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, MyModel, String> get $modelIdentifier =>
+  static QueryField<String, MyModel, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, MyModel, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, MyModel, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   MyModel copyWith({
     String? enum_,
     DateTime? createdAt,

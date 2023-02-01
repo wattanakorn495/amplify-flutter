@@ -17,6 +17,7 @@ import 'dart:core';
 
 import 'package:amplify_codegen/src/helpers/types.dart';
 import 'package:amplify_core/amplify_core.dart' as amplify_core;
+// ignore: implementation_imports
 import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 import 'package:aws_common/aws_common.dart' as aws_common;
 import 'package:code_builder/code_builder.dart';

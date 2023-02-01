@@ -267,103 +267,170 @@ abstract class Customer extends PartialCustomer
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Customer',
-      'pluralName': 'Customers',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'name': {
-          'name': 'name',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'phoneNumber': {
-          'name': 'phoneNumber',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'accountRepresentativeID': {
-          'name': 'accountRepresentativeID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'secondary',
-          'primaryField': 'accountRepresentativeID',
-          'sortKeyFields': [],
-          'name': 'byRepresentative',
-          'queryField': 'customerByRepresentative',
-        },
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        },
+    const [
+      'name',
+      'Customer',
+      'pluralName',
+      'Customers',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'name',
+        [
+          'name',
+          'name',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'phoneNumber',
+        [
+          'name',
+          'phoneNumber',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'accountRepresentativeID',
+        [
+          'name',
+          'accountRepresentativeID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'secondary',
+          'primaryField',
+          'accountRepresentativeID',
+          'sortKeyFields',
+          [],
+          'name',
+          'byRepresentative',
+          'queryField',
+          'customerByRepresentative',
+        ],
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ],
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Customer, String> get $id => _queryFields.$id;
+  static QueryField<String, Customer, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Customer, String> get ID => $id;
+  static QueryField<String, Customer, String> get ID => $id;
   @override
   String get name;
 
   /// Query field for the [name] field.
-  QueryField<String, Customer, String> get $name => _queryFields.$name;
+  static QueryField<String, Customer, String> get $name => _queryFields.$name;
 
   /// Query field for the [name] field.
   @Deprecated(r'Use $name instead')
-  QueryField<String, Customer, String> get NAME => $name;
+  static QueryField<String, Customer, String> get NAME => $name;
   @override
   String? get phoneNumber;
 
   /// Query field for the [phoneNumber] field.
-  QueryField<String, Customer, String?> get $phoneNumber =>
+  static QueryField<String, Customer, String?> get $phoneNumber =>
       _queryFields.$phoneNumber;
 
   /// Query field for the [phoneNumber] field.
   @Deprecated(r'Use $phoneNumber instead')
-  QueryField<String, Customer, String?> get PHONE_NUMBER => $phoneNumber;
+  static QueryField<String, Customer, String?> get PHONE_NUMBER => $phoneNumber;
   @override
   String get accountRepresentativeId;
 
   /// Query field for the [accountRepresentativeId] field.
-  QueryField<String, Customer, String> get $accountRepresentativeId =>
+  static QueryField<String, Customer, String> get $accountRepresentativeId =>
       _queryFields.$accountRepresentativeId;
 
   /// Query field for the [accountRepresentativeId] field.
   @Deprecated(r'Use $accountRepresentativeId instead')
-  QueryField<String, Customer, String> get ACCOUNT_REPRESENTATIVE_ID =>
+  static QueryField<String, Customer, String> get ACCOUNT_REPRESENTATIVE_ID =>
       $accountRepresentativeId;
   @override
   TemporalDateTime get createdAt;
@@ -371,12 +438,13 @@ abstract class Customer extends PartialCustomer
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Customer, String> get $modelIdentifier =>
+  static QueryField<String, Customer, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Customer, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Customer, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Customer copyWith({
     String? id,
     String? name,

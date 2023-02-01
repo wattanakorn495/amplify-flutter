@@ -245,115 +245,187 @@ abstract class PostTags extends PartialPostTags
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'PostTags',
-      'pluralName': 'PostTags',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'postId': {
-          'name': 'postId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'post': {
-          'name': 'post',
-          'type': {'model': 'Post'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'BelongsTo',
-            'associatedType': 'Post',
-            'targetNames': ['postId'],
-          },
-        },
-        'tagId': {
-          'name': 'tagId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'tag': {
-          'name': 'tag',
-          'type': {'model': 'Tag'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'BelongsTo',
-            'associatedType': 'Tag',
-            'targetNames': ['tagId'],
-          },
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        },
-        {
-          'type': 'secondary',
-          'primaryField': 'postId',
-          'sortKeyFields': [],
-          'name': 'byPost',
-          'queryField': 'postTagsByPostId',
-        },
-        {
-          'type': 'secondary',
-          'primaryField': 'tagId',
-          'sortKeyFields': [],
-          'name': 'byTag',
-          'queryField': 'postTagsByTagId',
-        },
+    const [
+      'name',
+      'PostTags',
+      'pluralName',
+      'PostTags',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'postId',
+        [
+          'name',
+          'postId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'post',
+        [
+          'name',
+          'post',
+          'type',
+          [
+            'model',
+            'Post',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'BelongsTo',
+            'associatedType',
+            'Post',
+            'targetNames',
+            ['postId'],
+          ],
+        ],
+        'tagId',
+        [
+          'name',
+          'tagId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'tag',
+        [
+          'name',
+          'tag',
+          'type',
+          [
+            'model',
+            'Tag',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'BelongsTo',
+            'associatedType',
+            'Tag',
+            'targetNames',
+            ['tagId'],
+          ],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ],
+        [
+          'type',
+          'secondary',
+          'primaryField',
+          'postId',
+          'sortKeyFields',
+          [],
+          'name',
+          'byPost',
+          'queryField',
+          'postTagsByPostId',
+        ],
+        [
+          'type',
+          'secondary',
+          'primaryField',
+          'tagId',
+          'sortKeyFields',
+          [],
+          'name',
+          'byTag',
+          'queryField',
+          'postTagsByTagId',
+        ],
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, PostTags, String> get $id => _queryFields.$id;
+  static QueryField<String, PostTags, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, PostTags, String> get ID => $id;
+  static QueryField<String, PostTags, String> get ID => $id;
   @override
   String get postId;
   @override
   Post get post;
 
   /// Query field for the [post] field.
-  PostQueryFields<String, PostTags> get $post => _queryFields.$post;
+  static PostQueryFields<String, PostTags> get $post => _queryFields.$post;
 
   /// Query field for the [post] field.
   @Deprecated(r'Use $post instead')
-  PostQueryFields<String, PostTags> get POST => $post;
+  static PostQueryFields<String, PostTags> get POST => $post;
   @override
   String get tagId;
   @override
   Tag get tag;
 
   /// Query field for the [tag] field.
-  TagQueryFields<String, PostTags> get $tag => _queryFields.$tag;
+  static TagQueryFields<String, PostTags> get $tag => _queryFields.$tag;
 
   /// Query field for the [tag] field.
   @Deprecated(r'Use $tag instead')
-  TagQueryFields<String, PostTags> get TAG => $tag;
+  static TagQueryFields<String, PostTags> get TAG => $tag;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, PostTags, String> get $modelIdentifier =>
+  static QueryField<String, PostTags, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, PostTags, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, PostTags, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   PostTags copyWith({
     String? id,
     String? postId,

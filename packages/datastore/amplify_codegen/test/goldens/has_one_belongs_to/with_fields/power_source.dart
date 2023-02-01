@@ -245,92 +245,147 @@ abstract class PowerSource extends PartialPowerSource
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'PowerSource',
-      'pluralName': 'PowerSources',
-      'fields': {
-        'sourceID': {
-          'name': 'sourceID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'amps': {
-          'name': 'amps',
-          'type': {'scalar': 'Float'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'volts': {
-          'name': 'volts',
-          'type': {'scalar': 'Float'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'sourceID',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'PowerSource',
+      'pluralName',
+      'PowerSources',
+      'fields',
+      [
+        'sourceID',
+        [
+          'name',
+          'sourceID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'amps',
+        [
+          'name',
+          'amps',
+          'type',
+          [
+            'scalar',
+            'Float',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'volts',
+        [
+          'name',
+          'volts',
+          'type',
+          [
+            'scalar',
+            'Float',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'sourceID',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get sourceId;
 
   /// Query field for the [sourceId] field.
-  QueryField<String, PowerSource, String> get $sourceId =>
+  static QueryField<String, PowerSource, String> get $sourceId =>
       _queryFields.$sourceId;
 
   /// Query field for the [sourceId] field.
   @Deprecated(r'Use $sourceId instead')
-  QueryField<String, PowerSource, String> get SOURCE_ID => $sourceId;
+  static QueryField<String, PowerSource, String> get SOURCE_ID => $sourceId;
   @override
   double get amps;
 
   /// Query field for the [amps] field.
-  QueryField<String, PowerSource, double> get $amps => _queryFields.$amps;
+  static QueryField<String, PowerSource, double> get $amps =>
+      _queryFields.$amps;
 
   /// Query field for the [amps] field.
   @Deprecated(r'Use $amps instead')
-  QueryField<String, PowerSource, double> get AMPS => $amps;
+  static QueryField<String, PowerSource, double> get AMPS => $amps;
   @override
   double get volts;
 
   /// Query field for the [volts] field.
-  QueryField<String, PowerSource, double> get $volts => _queryFields.$volts;
+  static QueryField<String, PowerSource, double> get $volts =>
+      _queryFields.$volts;
 
   /// Query field for the [volts] field.
   @Deprecated(r'Use $volts instead')
-  QueryField<String, PowerSource, double> get VOLTS => $volts;
+  static QueryField<String, PowerSource, double> get VOLTS => $volts;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, PowerSource, String> get $modelIdentifier =>
+  static QueryField<String, PowerSource, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, PowerSource, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, PowerSource, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   PowerSource copyWith({
     String? sourceId,

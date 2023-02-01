@@ -305,98 +305,158 @@ abstract class Tag extends PartialTag
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Tag',
-      'pluralName': 'Tags',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'label': {
-          'name': 'label',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'posts': {
-          'name': 'posts',
-          'type': {
-            'list': {'model': 'Post'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'HasMany',
-            'associatedType': 'PostTags',
-            'associatedFields': ['tag'],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': ['label'],
-        }
+    const [
+      'name',
+      'Tag',
+      'pluralName',
+      'Tags',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'label',
+        [
+          'name',
+          'label',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'posts',
+        [
+          'name',
+          'posts',
+          'type',
+          [
+            'list',
+            [
+              'model',
+              'Post',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'HasMany',
+            'associatedType',
+            'PostTags',
+            'associatedFields',
+            ['tag'],
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          ['label'],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<TagIdentifier, Tag, String> get $id => _queryFields.$id;
+  static QueryField<TagIdentifier, Tag, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<TagIdentifier, Tag, String> get ID => $id;
+  static QueryField<TagIdentifier, Tag, String> get ID => $id;
   @override
   String get label;
 
   /// Query field for the [label] field.
-  QueryField<TagIdentifier, Tag, String> get $label => _queryFields.$label;
+  static QueryField<TagIdentifier, Tag, String> get $label =>
+      _queryFields.$label;
 
   /// Query field for the [label] field.
   @Deprecated(r'Use $label instead')
-  QueryField<TagIdentifier, Tag, String> get LABEL => $label;
+  static QueryField<TagIdentifier, Tag, String> get LABEL => $label;
   @override
   AsyncModelCollection<PostIdentifier, Post, PartialPost, Post>? get posts;
 
   /// Query field for the [posts] field.
-  PostQueryFields<TagIdentifier, Tag> get $posts => _queryFields.$posts;
+  static PostQueryFields<TagIdentifier, Tag> get $posts => _queryFields.$posts;
 
   /// Query field for the [posts] field.
   @Deprecated(r'Use $posts instead')
-  PostQueryFields<TagIdentifier, Tag> get POSTS => $posts;
+  static PostQueryFields<TagIdentifier, Tag> get POSTS => $posts;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<TagIdentifier, Tag, TagIdentifier> get $modelIdentifier =>
+  static QueryField<TagIdentifier, Tag, TagIdentifier> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<TagIdentifier, Tag, TagIdentifier> get MODEL_IDENTIFIER =>
+  static QueryField<TagIdentifier, Tag, TagIdentifier> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   Tag copyWith({
     String? id,

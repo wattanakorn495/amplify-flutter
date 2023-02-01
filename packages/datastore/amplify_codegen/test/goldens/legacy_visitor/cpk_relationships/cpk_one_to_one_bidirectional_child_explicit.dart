@@ -418,119 +418,198 @@ abstract class CpkOneToOneBidirectionalChildExplicit
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'CpkOneToOneBidirectionalChildExplicit',
-      'pluralName': 'CpkOneToOneBidirectionalChildExplicits',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'name': {
-          'name': 'name',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'belongsToParentID': {
-          'name': 'belongsToParentID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'belongsToParentName': {
-          'name': 'belongsToParentName',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'belongsToParent': {
-          'name': 'belongsToParent',
-          'type': {'model': 'CpkOneToOneBidirectionalParent'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'BelongsTo',
-            'associatedType': 'CpkOneToOneBidirectionalParent',
-            'targetNames': [
+    const [
+      'name',
+      'CpkOneToOneBidirectionalChildExplicit',
+      'pluralName',
+      'CpkOneToOneBidirectionalChildExplicits',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'name',
+        [
+          'name',
+          'name',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'belongsToParentID',
+        [
+          'name',
+          'belongsToParentID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'belongsToParentName',
+        [
+          'name',
+          'belongsToParentName',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'belongsToParent',
+        [
+          'name',
+          'belongsToParent',
+          'type',
+          [
+            'model',
+            'CpkOneToOneBidirectionalParent',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'BelongsTo',
+            'associatedType',
+            'CpkOneToOneBidirectionalParent',
+            'targetNames',
+            [
               'belongsToParentID',
               'belongsToParentName',
             ],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': ['name'],
-        },
-        {
-          'type': 'foreign',
-          'primaryField': 'belongsToParent',
-          'sortKeyFields': [
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+      ],
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          ['name'],
+        ],
+        [
+          'type',
+          'foreign',
+          'primaryField',
+          'belongsToParent',
+          'sortKeyFields',
+          [
             'belongsToParentID',
             'belongsToParentName',
           ],
-          'name': 'belongsToParent',
-        },
+          'name',
+          'belongsToParent',
+        ],
       ],
-    },
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<
+  static QueryField<
       CpkOneToOneBidirectionalChildExplicitIdentifier,
       CpkOneToOneBidirectionalChildExplicit,
       String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<CpkOneToOneBidirectionalChildExplicitIdentifier,
+  static QueryField<CpkOneToOneBidirectionalChildExplicitIdentifier,
       CpkOneToOneBidirectionalChildExplicit, String> get ID => $id;
   @override
   String get name;
 
   /// Query field for the [name] field.
-  QueryField<
+  static QueryField<
       CpkOneToOneBidirectionalChildExplicitIdentifier,
       CpkOneToOneBidirectionalChildExplicit,
       String> get $name => _queryFields.$name;
 
   /// Query field for the [name] field.
   @Deprecated(r'Use $name instead')
-  QueryField<CpkOneToOneBidirectionalChildExplicitIdentifier,
+  static QueryField<CpkOneToOneBidirectionalChildExplicitIdentifier,
       CpkOneToOneBidirectionalChildExplicit, String> get NAME => $name;
   @override
   String? get belongsToParentId;
 
   /// Query field for the [belongsToParentId] field.
-  QueryField<
+  static QueryField<
       CpkOneToOneBidirectionalChildExplicitIdentifier,
       CpkOneToOneBidirectionalChildExplicit,
       String?> get $belongsToParentId => _queryFields.$belongsToParentId;
 
   /// Query field for the [belongsToParentId] field.
   @Deprecated(r'Use $belongsToParentId instead')
-  QueryField<
+  static QueryField<
       CpkOneToOneBidirectionalChildExplicitIdentifier,
       CpkOneToOneBidirectionalChildExplicit,
       String?> get BELONGS_TO_PARENT_ID => $belongsToParentId;
@@ -538,14 +617,14 @@ abstract class CpkOneToOneBidirectionalChildExplicit
   String? get belongsToParentName;
 
   /// Query field for the [belongsToParentName] field.
-  QueryField<
+  static QueryField<
       CpkOneToOneBidirectionalChildExplicitIdentifier,
       CpkOneToOneBidirectionalChildExplicit,
       String?> get $belongsToParentName => _queryFields.$belongsToParentName;
 
   /// Query field for the [belongsToParentName] field.
   @Deprecated(r'Use $belongsToParentName instead')
-  QueryField<
+  static QueryField<
       CpkOneToOneBidirectionalChildExplicitIdentifier,
       CpkOneToOneBidirectionalChildExplicit,
       String?> get BELONGS_TO_PARENT_NAME => $belongsToParentName;
@@ -553,14 +632,14 @@ abstract class CpkOneToOneBidirectionalChildExplicit
   CpkOneToOneBidirectionalParent? get belongsToParent;
 
   /// Query field for the [belongsToParent] field.
-  CpkOneToOneBidirectionalParentQueryFields<
+  static CpkOneToOneBidirectionalParentQueryFields<
           CpkOneToOneBidirectionalChildExplicitIdentifier,
           CpkOneToOneBidirectionalChildExplicit>
       get $belongsToParent => _queryFields.$belongsToParent;
 
   /// Query field for the [belongsToParent] field.
   @Deprecated(r'Use $belongsToParent instead')
-  CpkOneToOneBidirectionalParentQueryFields<
+  static CpkOneToOneBidirectionalParentQueryFields<
           CpkOneToOneBidirectionalChildExplicitIdentifier,
           CpkOneToOneBidirectionalChildExplicit>
       get BELONGS_TO_PARENT => $belongsToParent;
@@ -570,7 +649,7 @@ abstract class CpkOneToOneBidirectionalChildExplicit
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<
+  static QueryField<
           CpkOneToOneBidirectionalChildExplicitIdentifier,
           CpkOneToOneBidirectionalChildExplicit,
           CpkOneToOneBidirectionalChildExplicitIdentifier>
@@ -578,7 +657,7 @@ abstract class CpkOneToOneBidirectionalChildExplicit
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<
+  static QueryField<
           CpkOneToOneBidirectionalChildExplicitIdentifier,
           CpkOneToOneBidirectionalChildExplicit,
           CpkOneToOneBidirectionalChildExplicitIdentifier>

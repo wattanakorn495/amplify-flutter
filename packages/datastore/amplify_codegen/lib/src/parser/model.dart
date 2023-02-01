@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:amplify_codegen/src/parser/field.dart';
+// ignore: implementation_imports
 import 'package:amplify_core/src/types/models/mipr.dart';
 import 'package:collection/collection.dart';
 import 'package:gql/ast.dart';
@@ -55,9 +56,12 @@ extension ModelDefinitionHelpers on ObjectTypeDefinitionNode {
       final indexFields = directive.hasArgument('fields')
           ? directive.argumentNamed('fields')!.stringListValue
           : const <String>[];
-      yield ModelIndex(
+      final queryField = directive.argumentNamed('queryField')?.stringValue ??
+          queryFieldName(field.wireName);
+      yield ModelIndex.secondaryKey(
         name: indexName,
         field: field.wireName,
+        queryField: queryField,
         sortKeyFields: indexFields,
       );
     }

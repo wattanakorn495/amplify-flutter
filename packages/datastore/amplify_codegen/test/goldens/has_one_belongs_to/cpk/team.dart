@@ -259,77 +259,123 @@ abstract class Team extends PartialTeam
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Team',
-      'pluralName': 'Teams',
-      'fields': {
-        'teamId': {
-          'name': 'teamId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'name': {
-          'name': 'name',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'teamId',
-          'sortKeyFields': ['name'],
-        }
+    const [
+      'name',
+      'Team',
+      'pluralName',
+      'Teams',
+      'fields',
+      [
+        'teamId',
+        [
+          'name',
+          'teamId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'name',
+        [
+          'name',
+          'name',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'teamId',
+          'sortKeyFields',
+          ['name'],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get teamId;
 
   /// Query field for the [teamId] field.
-  QueryField<TeamIdentifier, Team, String> get $teamId => _queryFields.$teamId;
+  static QueryField<TeamIdentifier, Team, String> get $teamId =>
+      _queryFields.$teamId;
 
   /// Query field for the [teamId] field.
   @Deprecated(r'Use $teamId instead')
-  QueryField<TeamIdentifier, Team, String> get TEAM_ID => $teamId;
+  static QueryField<TeamIdentifier, Team, String> get TEAM_ID => $teamId;
   @override
   String get name;
 
   /// Query field for the [name] field.
-  QueryField<TeamIdentifier, Team, String> get $name => _queryFields.$name;
+  static QueryField<TeamIdentifier, Team, String> get $name =>
+      _queryFields.$name;
 
   /// Query field for the [name] field.
   @Deprecated(r'Use $name instead')
-  QueryField<TeamIdentifier, Team, String> get NAME => $name;
+  static QueryField<TeamIdentifier, Team, String> get NAME => $name;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<TeamIdentifier, Team, TeamIdentifier> get $modelIdentifier =>
-      _queryFields.$modelIdentifier;
+  static QueryField<TeamIdentifier, Team, TeamIdentifier>
+      get $modelIdentifier => _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<TeamIdentifier, Team, TeamIdentifier> get MODEL_IDENTIFIER =>
-      $modelIdentifier;
+  static QueryField<TeamIdentifier, Team, TeamIdentifier>
+      get MODEL_IDENTIFIER => $modelIdentifier;
   Team copyWith({
     String? teamId,
     String? name,

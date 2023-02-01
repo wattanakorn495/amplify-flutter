@@ -72,31 +72,62 @@ class Contact
   static final mipr.NonModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.NonModelTypeDefinition.serializer,
-    const {
-      'name': 'Contact',
-      'fields': {
-        'contactName': {
-          'name': 'contactName',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'phone': {
-          'name': 'phone',
-          'type': {'nonModel': 'Phone'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'mailingAddresses': {
-          'name': 'mailingAddresses',
-          'type': {
-            'list': {'nonModel': 'Address'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-    },
+    const [
+      'name',
+      'Contact',
+      'fields',
+      [
+        'contactName',
+        [
+          'name',
+          'contactName',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'phone',
+        [
+          'name',
+          'phone',
+          'type',
+          [
+            'nonModel',
+            'Phone',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'mailingAddresses',
+        [
+          'name',
+          'mailingAddresses',
+          'type',
+          [
+            'list',
+            [
+              'nonModel',
+              'Address',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+      ],
+    ],
   )!;
 
   @override

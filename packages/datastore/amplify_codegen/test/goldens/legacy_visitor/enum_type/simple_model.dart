@@ -222,76 +222,121 @@ abstract class SimpleModel extends PartialSimpleModel
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'SimpleModel',
-      'pluralName': 'SimpleModels',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'status': {
-          'name': 'status',
-          'type': {'enum': 'Status'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'SimpleModel',
+      'pluralName',
+      'SimpleModels',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'status',
+        [
+          'name',
+          'status',
+          'type',
+          [
+            'enum',
+            'Status',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, SimpleModel, String> get $id => _queryFields.$id;
+  static QueryField<String, SimpleModel, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, SimpleModel, String> get ID => $id;
+  static QueryField<String, SimpleModel, String> get ID => $id;
   @override
   Status? get status;
 
   /// Query field for the [status] field.
-  QueryField<String, SimpleModel, Status?> get $status => _queryFields.$status;
+  static QueryField<String, SimpleModel, Status?> get $status =>
+      _queryFields.$status;
 
   /// Query field for the [status] field.
   @Deprecated(r'Use $status instead')
-  QueryField<String, SimpleModel, Status?> get STATUS => $status;
+  static QueryField<String, SimpleModel, Status?> get STATUS => $status;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, SimpleModel, String> get $modelIdentifier =>
+  static QueryField<String, SimpleModel, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, SimpleModel, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, SimpleModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   SimpleModel copyWith({
     String? id,

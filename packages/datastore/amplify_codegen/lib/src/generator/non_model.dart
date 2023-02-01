@@ -18,6 +18,7 @@ import 'package:amplify_codegen/src/generator/types.dart';
 import 'package:amplify_codegen/src/helpers/field.dart';
 import 'package:amplify_codegen/src/helpers/types.dart';
 import 'package:amplify_core/amplify_core.dart';
+// ignore: implementation_imports
 import 'package:amplify_core/src/types/models/mipr.dart' as mipr;
 import 'package:code_builder/code_builder.dart';
 
@@ -109,36 +110,11 @@ class NonModelGenerator extends StructureGenerator<NonModelTypeDefinition> {
                 .call([
                   DartTypes.amplifyCore.mipr.nonModelTypeDefinition
                       .property('serializer'),
-                  literalConstMap(
+                  literalConstList(
                     mipr.serializers.serializeWith(
                       mipr.NonModelTypeDefinition.serializer,
                       definition,
-                    ) as Map,
-                  ),
-                ])
-                .nullChecked
-                .code,
-        ),
-      );
-
-      // The static `schema` getter
-      c.fields.add(
-        Field(
-          (f) => f
-            ..modifier = FieldModifier.final$
-            ..static = true
-            ..type = DartTypes.amplifyCore.mipr.nonModelTypeDefinition
-            ..name = 'schema'
-            ..assignment = DartTypes.amplifyCore.mipr.serializers
-                .property('deserializeWith')
-                .call([
-                  DartTypes.amplifyCore.mipr.nonModelTypeDefinition
-                      .property('serializer'),
-                  literalConstMap(
-                    mipr.serializers.serializeWith(
-                      mipr.NonModelTypeDefinition.serializer,
-                      definition,
-                    ) as Map,
+                    ) as List<Object?>,
                   ),
                 ])
                 .nullChecked

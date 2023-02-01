@@ -471,237 +471,373 @@ abstract class TemporalTimeModel extends PartialTemporalTimeModel
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'TemporalTimeModel',
-      'pluralName': 'TemporalTimeModels',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'date': {
-          'name': 'date',
-          'type': {'scalar': 'AWSDate'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'time': {
-          'name': 'time',
-          'type': {'scalar': 'AWSTime'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'dateTime': {
-          'name': 'dateTime',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'timestamp': {
-          'name': 'timestamp',
-          'type': {'scalar': 'AWSTimestamp'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'intNum': {
-          'name': 'intNum',
-          'type': {'scalar': 'Int'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'dateList': {
-          'name': 'dateList',
-          'type': {
-            'list': {'scalar': 'AWSDate'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'timeList': {
-          'name': 'timeList',
-          'type': {
-            'list': {'scalar': 'AWSTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'dateTimeList': {
-          'name': 'dateTimeList',
-          'type': {
-            'list': {'scalar': 'AWSDateTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'timestampList': {
-          'name': 'timestampList',
-          'type': {
-            'list': {'scalar': 'AWSTimestamp'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'intList': {
-          'name': 'intList',
-          'type': {
-            'list': {'scalar': 'Int'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'TemporalTimeModel',
+      'pluralName',
+      'TemporalTimeModels',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'date',
+        [
+          'name',
+          'date',
+          'type',
+          [
+            'scalar',
+            'AWSDate',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'time',
+        [
+          'name',
+          'time',
+          'type',
+          [
+            'scalar',
+            'AWSTime',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'dateTime',
+        [
+          'name',
+          'dateTime',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'timestamp',
+        [
+          'name',
+          'timestamp',
+          'type',
+          [
+            'scalar',
+            'AWSTimestamp',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'intNum',
+        [
+          'name',
+          'intNum',
+          'type',
+          [
+            'scalar',
+            'Int',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'dateList',
+        [
+          'name',
+          'dateList',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDate',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'timeList',
+        [
+          'name',
+          'timeList',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTime',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'dateTimeList',
+        [
+          'name',
+          'dateTimeList',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDateTime',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'timestampList',
+        [
+          'name',
+          'timestampList',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTimestamp',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'intList',
+        [
+          'name',
+          'intList',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Int',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, TemporalTimeModel, String> get $id => _queryFields.$id;
+  static QueryField<String, TemporalTimeModel, String> get $id =>
+      _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, TemporalTimeModel, String> get ID => $id;
+  static QueryField<String, TemporalTimeModel, String> get ID => $id;
   @override
   TemporalDate? get date;
 
   /// Query field for the [date] field.
-  QueryField<String, TemporalTimeModel, TemporalDate?> get $date =>
+  static QueryField<String, TemporalTimeModel, TemporalDate?> get $date =>
       _queryFields.$date;
 
   /// Query field for the [date] field.
   @Deprecated(r'Use $date instead')
-  QueryField<String, TemporalTimeModel, TemporalDate?> get DATE => $date;
+  static QueryField<String, TemporalTimeModel, TemporalDate?> get DATE => $date;
   @override
   TemporalTime? get time;
 
   /// Query field for the [time] field.
-  QueryField<String, TemporalTimeModel, TemporalTime?> get $time =>
+  static QueryField<String, TemporalTimeModel, TemporalTime?> get $time =>
       _queryFields.$time;
 
   /// Query field for the [time] field.
   @Deprecated(r'Use $time instead')
-  QueryField<String, TemporalTimeModel, TemporalTime?> get TIME => $time;
+  static QueryField<String, TemporalTimeModel, TemporalTime?> get TIME => $time;
   @override
   TemporalDateTime? get dateTime;
 
   /// Query field for the [dateTime] field.
-  QueryField<String, TemporalTimeModel, TemporalDateTime?> get $dateTime =>
-      _queryFields.$dateTime;
+  static QueryField<String, TemporalTimeModel, TemporalDateTime?>
+      get $dateTime => _queryFields.$dateTime;
 
   /// Query field for the [dateTime] field.
   @Deprecated(r'Use $dateTime instead')
-  QueryField<String, TemporalTimeModel, TemporalDateTime?> get DATE_TIME =>
-      $dateTime;
+  static QueryField<String, TemporalTimeModel, TemporalDateTime?>
+      get DATE_TIME => $dateTime;
   @override
   TemporalTimestamp? get timestamp;
 
   /// Query field for the [timestamp] field.
-  QueryField<String, TemporalTimeModel, TemporalTimestamp?> get $timestamp =>
-      _queryFields.$timestamp;
+  static QueryField<String, TemporalTimeModel, TemporalTimestamp?>
+      get $timestamp => _queryFields.$timestamp;
 
   /// Query field for the [timestamp] field.
   @Deprecated(r'Use $timestamp instead')
-  QueryField<String, TemporalTimeModel, TemporalTimestamp?> get TIMESTAMP =>
-      $timestamp;
+  static QueryField<String, TemporalTimeModel, TemporalTimestamp?>
+      get TIMESTAMP => $timestamp;
   @override
   int? get intNum;
 
   /// Query field for the [intNum] field.
-  QueryField<String, TemporalTimeModel, int?> get $intNum =>
+  static QueryField<String, TemporalTimeModel, int?> get $intNum =>
       _queryFields.$intNum;
 
   /// Query field for the [intNum] field.
   @Deprecated(r'Use $intNum instead')
-  QueryField<String, TemporalTimeModel, int?> get INT_NUM => $intNum;
+  static QueryField<String, TemporalTimeModel, int?> get INT_NUM => $intNum;
   @override
   List<TemporalDate?>? get dateList;
 
   /// Query field for the [dateList] field.
-  QueryField<String, TemporalTimeModel, TemporalDate?> get $dateList =>
+  static QueryField<String, TemporalTimeModel, TemporalDate?> get $dateList =>
       _queryFields.$dateList;
 
   /// Query field for the [dateList] field.
   @Deprecated(r'Use $dateList instead')
-  QueryField<String, TemporalTimeModel, TemporalDate?> get DATE_LIST =>
+  static QueryField<String, TemporalTimeModel, TemporalDate?> get DATE_LIST =>
       $dateList;
   @override
   List<TemporalTime?>? get timeList;
 
   /// Query field for the [timeList] field.
-  QueryField<String, TemporalTimeModel, TemporalTime?> get $timeList =>
+  static QueryField<String, TemporalTimeModel, TemporalTime?> get $timeList =>
       _queryFields.$timeList;
 
   /// Query field for the [timeList] field.
   @Deprecated(r'Use $timeList instead')
-  QueryField<String, TemporalTimeModel, TemporalTime?> get TIME_LIST =>
+  static QueryField<String, TemporalTimeModel, TemporalTime?> get TIME_LIST =>
       $timeList;
   @override
   List<TemporalDateTime?>? get dateTimeList;
 
   /// Query field for the [dateTimeList] field.
-  QueryField<String, TemporalTimeModel, TemporalDateTime?> get $dateTimeList =>
-      _queryFields.$dateTimeList;
+  static QueryField<String, TemporalTimeModel, TemporalDateTime?>
+      get $dateTimeList => _queryFields.$dateTimeList;
 
   /// Query field for the [dateTimeList] field.
   @Deprecated(r'Use $dateTimeList instead')
-  QueryField<String, TemporalTimeModel, TemporalDateTime?> get DATE_TIME_LIST =>
-      $dateTimeList;
+  static QueryField<String, TemporalTimeModel, TemporalDateTime?>
+      get DATE_TIME_LIST => $dateTimeList;
   @override
   List<TemporalTimestamp?>? get timestampList;
 
   /// Query field for the [timestampList] field.
-  QueryField<String, TemporalTimeModel, TemporalTimestamp?>
+  static QueryField<String, TemporalTimeModel, TemporalTimestamp?>
       get $timestampList => _queryFields.$timestampList;
 
   /// Query field for the [timestampList] field.
   @Deprecated(r'Use $timestampList instead')
-  QueryField<String, TemporalTimeModel, TemporalTimestamp?>
+  static QueryField<String, TemporalTimeModel, TemporalTimestamp?>
       get TIMESTAMP_LIST => $timestampList;
   @override
   List<int?>? get intList;
 
   /// Query field for the [intList] field.
-  QueryField<String, TemporalTimeModel, int?> get $intList =>
+  static QueryField<String, TemporalTimeModel, int?> get $intList =>
       _queryFields.$intList;
 
   /// Query field for the [intList] field.
   @Deprecated(r'Use $intList instead')
-  QueryField<String, TemporalTimeModel, int?> get INT_LIST => $intList;
+  static QueryField<String, TemporalTimeModel, int?> get INT_LIST => $intList;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, TemporalTimeModel, String> get $modelIdentifier =>
+  static QueryField<String, TemporalTimeModel, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, TemporalTimeModel, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, TemporalTimeModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   TemporalTimeModel copyWith({
     String? id,

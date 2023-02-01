@@ -69,29 +69,58 @@ class Phone
   static final mipr.NonModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.NonModelTypeDefinition.serializer,
-    const {
-      'name': 'Phone',
-      'fields': {
-        'countryCode': {
-          'name': 'countryCode',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'areaCode': {
-          'name': 'areaCode',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'number': {
-          'name': 'number',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-    },
+    const [
+      'name',
+      'Phone',
+      'fields',
+      [
+        'countryCode',
+        [
+          'name',
+          'countryCode',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'areaCode',
+        [
+          'name',
+          'areaCode',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'number',
+        [
+          'name',
+          'number',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+      ],
+    ],
   )!;
 
   @override

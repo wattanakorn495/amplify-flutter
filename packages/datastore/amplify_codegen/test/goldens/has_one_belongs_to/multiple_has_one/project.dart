@@ -466,140 +466,250 @@ abstract class Project extends PartialProject
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Project',
-      'pluralName': 'Projects',
-      'fields': {
-        'projectId': {
-          'name': 'projectId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'name': {
-          'name': 'name',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'devTeam': {
-          'name': 'devTeam',
-          'type': {'model': 'Team'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'HasOne',
-            'associatedType': 'Team',
-            'associatedFields': ['project'],
-            'targetNames': [
+    const [
+      'name',
+      'Project',
+      'pluralName',
+      'Projects',
+      'fields',
+      [
+        'projectId',
+        [
+          'name',
+          'projectId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'name',
+        [
+          'name',
+          'name',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'devTeam',
+        [
+          'name',
+          'devTeam',
+          'type',
+          [
+            'model',
+            'Team',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'HasOne',
+            'associatedType',
+            'Team',
+            'associatedFields',
+            ['project'],
+            'targetNames',
+            [
               'projectDevTeamTeamId',
               'projectDevTeamName',
             ],
-          },
-        },
-        'productTeam': {
-          'name': 'productTeam',
-          'type': {'model': 'Team'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'HasOne',
-            'associatedType': 'Team',
-            'associatedFields': ['project'],
-            'targetNames': [
+          ],
+        ],
+        'productTeam',
+        [
+          'name',
+          'productTeam',
+          'type',
+          [
+            'model',
+            'Team',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'HasOne',
+            'associatedType',
+            'Team',
+            'associatedFields',
+            ['project'],
+            'targetNames',
+            [
               'projectProductTeamTeamId',
               'projectProductTeamName',
             ],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'projectDevTeamTeamId': {
-          'name': 'projectDevTeamTeamId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'projectDevTeamName': {
-          'name': 'projectDevTeamName',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'projectProductTeamTeamId': {
-          'name': 'projectProductTeamTeamId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'projectProductTeamName': {
-          'name': 'projectProductTeamName',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'projectId',
-          'sortKeyFields': ['name'],
-        }
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'projectDevTeamTeamId',
+        [
+          'name',
+          'projectDevTeamTeamId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'projectDevTeamName',
+        [
+          'name',
+          'projectDevTeamName',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'projectProductTeamTeamId',
+        [
+          'name',
+          'projectProductTeamTeamId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'projectProductTeamName',
+        [
+          'name',
+          'projectProductTeamName',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'projectId',
+          'sortKeyFields',
+          ['name'],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get projectId;
 
   /// Query field for the [projectId] field.
-  QueryField<ProjectIdentifier, Project, String> get $projectId =>
+  static QueryField<ProjectIdentifier, Project, String> get $projectId =>
       _queryFields.$projectId;
 
   /// Query field for the [projectId] field.
   @Deprecated(r'Use $projectId instead')
-  QueryField<ProjectIdentifier, Project, String> get PROJECT_ID => $projectId;
+  static QueryField<ProjectIdentifier, Project, String> get PROJECT_ID =>
+      $projectId;
   @override
   String get name;
 
   /// Query field for the [name] field.
-  QueryField<ProjectIdentifier, Project, String> get $name =>
+  static QueryField<ProjectIdentifier, Project, String> get $name =>
       _queryFields.$name;
 
   /// Query field for the [name] field.
   @Deprecated(r'Use $name instead')
-  QueryField<ProjectIdentifier, Project, String> get NAME => $name;
+  static QueryField<ProjectIdentifier, Project, String> get NAME => $name;
   @override
   AsyncModel<TeamIdentifier, Team, PartialTeam, Team>? get devTeam;
 
   /// Query field for the [devTeam] field.
-  TeamQueryFields<ProjectIdentifier, Project> get $devTeam =>
+  static TeamQueryFields<ProjectIdentifier, Project> get $devTeam =>
       _queryFields.$devTeam;
 
   /// Query field for the [devTeam] field.
   @Deprecated(r'Use $devTeam instead')
-  TeamQueryFields<ProjectIdentifier, Project> get DEV_TEAM => $devTeam;
+  static TeamQueryFields<ProjectIdentifier, Project> get DEV_TEAM => $devTeam;
   @override
   AsyncModel<TeamIdentifier, Team, PartialTeam, Team>? get productTeam;
 
   /// Query field for the [productTeam] field.
-  TeamQueryFields<ProjectIdentifier, Project> get $productTeam =>
+  static TeamQueryFields<ProjectIdentifier, Project> get $productTeam =>
       _queryFields.$productTeam;
 
   /// Query field for the [productTeam] field.
   @Deprecated(r'Use $productTeam instead')
-  TeamQueryFields<ProjectIdentifier, Project> get PRODUCT_TEAM => $productTeam;
+  static TeamQueryFields<ProjectIdentifier, Project> get PRODUCT_TEAM =>
+      $productTeam;
   @override
   TemporalDateTime get createdAt;
   @override
@@ -608,54 +718,54 @@ abstract class Project extends PartialProject
   String? get projectDevTeamTeamId;
 
   /// Query field for the [projectDevTeamTeamId] field.
-  QueryField<ProjectIdentifier, Project, String?> get $projectDevTeamTeamId =>
-      _queryFields.$projectDevTeamTeamId;
+  static QueryField<ProjectIdentifier, Project, String?>
+      get $projectDevTeamTeamId => _queryFields.$projectDevTeamTeamId;
 
   /// Query field for the [projectDevTeamTeamId] field.
   @Deprecated(r'Use $projectDevTeamTeamId instead')
-  QueryField<ProjectIdentifier, Project, String?>
+  static QueryField<ProjectIdentifier, Project, String?>
       get PROJECT_DEV_TEAM_TEAM_ID => $projectDevTeamTeamId;
   @override
   String? get projectDevTeamName;
 
   /// Query field for the [projectDevTeamName] field.
-  QueryField<ProjectIdentifier, Project, String?> get $projectDevTeamName =>
-      _queryFields.$projectDevTeamName;
+  static QueryField<ProjectIdentifier, Project, String?>
+      get $projectDevTeamName => _queryFields.$projectDevTeamName;
 
   /// Query field for the [projectDevTeamName] field.
   @Deprecated(r'Use $projectDevTeamName instead')
-  QueryField<ProjectIdentifier, Project, String?> get PROJECT_DEV_TEAM_NAME =>
-      $projectDevTeamName;
+  static QueryField<ProjectIdentifier, Project, String?>
+      get PROJECT_DEV_TEAM_NAME => $projectDevTeamName;
   @override
   String? get projectProductTeamTeamId;
 
   /// Query field for the [projectProductTeamTeamId] field.
-  QueryField<ProjectIdentifier, Project, String?>
+  static QueryField<ProjectIdentifier, Project, String?>
       get $projectProductTeamTeamId => _queryFields.$projectProductTeamTeamId;
 
   /// Query field for the [projectProductTeamTeamId] field.
   @Deprecated(r'Use $projectProductTeamTeamId instead')
-  QueryField<ProjectIdentifier, Project, String?>
+  static QueryField<ProjectIdentifier, Project, String?>
       get PROJECT_PRODUCT_TEAM_TEAM_ID => $projectProductTeamTeamId;
   @override
   String? get projectProductTeamName;
 
   /// Query field for the [projectProductTeamName] field.
-  QueryField<ProjectIdentifier, Project, String?> get $projectProductTeamName =>
-      _queryFields.$projectProductTeamName;
+  static QueryField<ProjectIdentifier, Project, String?>
+      get $projectProductTeamName => _queryFields.$projectProductTeamName;
 
   /// Query field for the [projectProductTeamName] field.
   @Deprecated(r'Use $projectProductTeamName instead')
-  QueryField<ProjectIdentifier, Project, String?>
+  static QueryField<ProjectIdentifier, Project, String?>
       get PROJECT_PRODUCT_TEAM_NAME => $projectProductTeamName;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<ProjectIdentifier, Project, ProjectIdentifier>
+  static QueryField<ProjectIdentifier, Project, ProjectIdentifier>
       get $modelIdentifier => _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<ProjectIdentifier, Project, ProjectIdentifier>
+  static QueryField<ProjectIdentifier, Project, ProjectIdentifier>
       get MODEL_IDENTIFIER => $modelIdentifier;
   Project copyWith({
     String? projectId,

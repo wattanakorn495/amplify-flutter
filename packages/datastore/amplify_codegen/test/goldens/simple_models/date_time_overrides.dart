@@ -199,78 +199,115 @@ abstract class DateTimeOverrides extends PartialDateTimeOverrides
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'DateTimeOverrides',
-      'pluralName': 'DateTimeOverrides',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'DateTimeOverrides',
+      'pluralName',
+      'DateTimeOverrides',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, DateTimeOverrides, String> get $id => _queryFields.$id;
+  static QueryField<String, DateTimeOverrides, String> get $id =>
+      _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, DateTimeOverrides, String> get ID => $id;
+  static QueryField<String, DateTimeOverrides, String> get ID => $id;
   @override
   String get createdAt;
 
   /// Query field for the [createdAt] field.
-  QueryField<String, DateTimeOverrides, String> get $createdAt =>
+  static QueryField<String, DateTimeOverrides, String> get $createdAt =>
       _queryFields.$createdAt;
 
   /// Query field for the [createdAt] field.
   @Deprecated(r'Use $createdAt instead')
-  QueryField<String, DateTimeOverrides, String> get CREATED_AT => $createdAt;
+  static QueryField<String, DateTimeOverrides, String> get CREATED_AT =>
+      $createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [updatedAt] field.
-  QueryField<String, DateTimeOverrides, TemporalDateTime> get $updatedAt =>
-      _queryFields.$updatedAt;
+  static QueryField<String, DateTimeOverrides, TemporalDateTime>
+      get $updatedAt => _queryFields.$updatedAt;
 
   /// Query field for the [updatedAt] field.
   @Deprecated(r'Use $updatedAt instead')
-  QueryField<String, DateTimeOverrides, TemporalDateTime> get UPDATED_AT =>
-      $updatedAt;
+  static QueryField<String, DateTimeOverrides, TemporalDateTime>
+      get UPDATED_AT => $updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, DateTimeOverrides, String> get $modelIdentifier =>
+  static QueryField<String, DateTimeOverrides, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, DateTimeOverrides, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, DateTimeOverrides, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   DateTimeOverrides copyWith({
     String? id,

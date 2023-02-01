@@ -235,9 +235,8 @@ abstract class Blog extends PartialBlog
         : AsyncModelCollection<String, Post, PartialPost, Post>.fromList(
             (json['posts'] as List<Object?>)
                 .cast<Map<String, Object?>?>()
-                .map(
-                  (el) => el == null ? null : Post.classType.fromJson<Post>(el),
-                )
+                .map((el) =>
+                    el == null ? null : Post.classType.fromJson<Post>(el))
                 .whereType<Post>()
                 .toList(),
           );
@@ -257,98 +256,158 @@ abstract class Blog extends PartialBlog
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Blog',
-      'pluralName': 'Blogs',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'name': {
-          'name': 'name',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'posts': {
-          'name': 'posts',
-          'type': {
-            'list': {'model': 'Post'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'HasMany',
-            'associatedType': 'Post',
-            'associatedFields': ['blog'],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'Blog',
+      'pluralName',
+      'Blogs',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'name',
+        [
+          'name',
+          'name',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'posts',
+        [
+          'name',
+          'posts',
+          'type',
+          [
+            'list',
+            [
+              'model',
+              'Post',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'HasMany',
+            'associatedType',
+            'Post',
+            'associatedFields',
+            ['blog'],
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Blog, String> get $id => _queryFields.$id;
+  static QueryField<String, Blog, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Blog, String> get ID => $id;
+  static QueryField<String, Blog, String> get ID => $id;
   @override
   String get name;
 
   /// Query field for the [name] field.
-  QueryField<String, Blog, String> get $name => _queryFields.$name;
+  static QueryField<String, Blog, String> get $name => _queryFields.$name;
 
   /// Query field for the [name] field.
   @Deprecated(r'Use $name instead')
-  QueryField<String, Blog, String> get NAME => $name;
+  static QueryField<String, Blog, String> get NAME => $name;
   @override
   AsyncModelCollection<String, Post, PartialPost, Post>? get posts;
 
   /// Query field for the [posts] field.
-  PostQueryFields<String, Blog> get $posts => _queryFields.$posts;
+  static PostQueryFields<String, Blog> get $posts => _queryFields.$posts;
 
   /// Query field for the [posts] field.
   @Deprecated(r'Use $posts instead')
-  PostQueryFields<String, Blog> get POSTS => $posts;
+  static PostQueryFields<String, Blog> get POSTS => $posts;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Blog, String> get $modelIdentifier =>
+  static QueryField<String, Blog, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Blog, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Blog, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Blog copyWith({
     String? id,
     String? name,

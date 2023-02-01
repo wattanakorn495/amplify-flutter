@@ -35,7 +35,7 @@ class ModelProvider extends ModelProviderInterface {
   static final instance = ModelProvider._();
 
   @override
-  String get version => '2ffd0441e541f90e2ee4418fb1c433f3';
+  String get version => 'aceca09852271429ea6dcb5f467062a4';
   @override
   List<mipr.ModelTypeDefinition> get modelSchemas => [
         BatteryCharger.schema,

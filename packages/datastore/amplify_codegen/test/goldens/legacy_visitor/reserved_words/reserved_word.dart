@@ -221,76 +221,121 @@ abstract class ReservedWord extends PartialReservedWord
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'ReservedWord',
-      'pluralName': 'ReservedWords',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'class': {
-          'name': 'class',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'ReservedWord',
+      'pluralName',
+      'ReservedWords',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'class',
+        [
+          'name',
+          'class',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, ReservedWord, String> get $id => _queryFields.$id;
+  static QueryField<String, ReservedWord, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, ReservedWord, String> get ID => $id;
+  static QueryField<String, ReservedWord, String> get ID => $id;
   @override
   String get class_;
 
   /// Query field for the [class_] field.
-  QueryField<String, ReservedWord, String> get $class_ => _queryFields.$class_;
+  static QueryField<String, ReservedWord, String> get $class_ =>
+      _queryFields.$class_;
 
   /// Query field for the [class_] field.
   @Deprecated(r'Use $class_ instead')
-  QueryField<String, ReservedWord, String> get CLASS => $class_;
+  static QueryField<String, ReservedWord, String> get CLASS => $class_;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, ReservedWord, String> get $modelIdentifier =>
+  static QueryField<String, ReservedWord, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, ReservedWord, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, ReservedWord, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   ReservedWord copyWith({
     String? id,

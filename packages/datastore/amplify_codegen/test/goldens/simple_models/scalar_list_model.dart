@@ -2264,1054 +2264,1665 @@ abstract class ScalarListModel extends PartialScalarListModel
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'ScalarListModel',
-      'pluralName': 'ScalarListModels',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfString': {
-          'name': 'listOfString',
-          'type': {
-            'list': {'scalar': 'String'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredString': {
-          'name': 'listOfRequiredString',
-          'type': {
-            'list': {'scalar': 'String'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfString': {
-          'name': 'requiredListOfString',
-          'type': {
-            'list': {'scalar': 'String'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredString': {
-          'name': 'requiredListOfRequiredString',
-          'type': {
-            'list': {'scalar': 'String'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfInteger': {
-          'name': 'listOfInteger',
-          'type': {
-            'list': {'scalar': 'Int'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredInteger': {
-          'name': 'listOfRequiredInteger',
-          'type': {
-            'list': {'scalar': 'Int'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfInteger': {
-          'name': 'requiredListOfInteger',
-          'type': {
-            'list': {'scalar': 'Int'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredInteger': {
-          'name': 'requiredListOfRequiredInteger',
-          'type': {
-            'list': {'scalar': 'Int'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfFloat': {
-          'name': 'listOfFloat',
-          'type': {
-            'list': {'scalar': 'Float'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredFloat': {
-          'name': 'listOfRequiredFloat',
-          'type': {
-            'list': {'scalar': 'Float'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfFloat': {
-          'name': 'requiredListOfFloat',
-          'type': {
-            'list': {'scalar': 'Float'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredFloat': {
-          'name': 'requiredListOfRequiredFloat',
-          'type': {
-            'list': {'scalar': 'Float'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfBoolean': {
-          'name': 'listOfBoolean',
-          'type': {
-            'list': {'scalar': 'Boolean'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredBoolean': {
-          'name': 'listOfRequiredBoolean',
-          'type': {
-            'list': {'scalar': 'Boolean'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfBoolean': {
-          'name': 'requiredListOfBoolean',
-          'type': {
-            'list': {'scalar': 'Boolean'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredBoolean': {
-          'name': 'requiredListOfRequiredBoolean',
-          'type': {
-            'list': {'scalar': 'Boolean'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfAWSDate': {
-          'name': 'listOfAWSDate',
-          'type': {
-            'list': {'scalar': 'AWSDate'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredAWSDate': {
-          'name': 'listOfRequiredAWSDate',
-          'type': {
-            'list': {'scalar': 'AWSDate'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfAWSDate': {
-          'name': 'requiredListOfAWSDate',
-          'type': {
-            'list': {'scalar': 'AWSDate'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredAWSDate': {
-          'name': 'requiredListOfRequiredAWSDate',
-          'type': {
-            'list': {'scalar': 'AWSDate'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfAWSDateTime': {
-          'name': 'listOfAWSDateTime',
-          'type': {
-            'list': {'scalar': 'AWSDateTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredAWSDateTime': {
-          'name': 'listOfRequiredAWSDateTime',
-          'type': {
-            'list': {'scalar': 'AWSDateTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfAWSDateTime': {
-          'name': 'requiredListOfAWSDateTime',
-          'type': {
-            'list': {'scalar': 'AWSDateTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredAWSDateTime': {
-          'name': 'requiredListOfRequiredAWSDateTime',
-          'type': {
-            'list': {'scalar': 'AWSDateTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfAWSTime': {
-          'name': 'listOfAWSTime',
-          'type': {
-            'list': {'scalar': 'AWSTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredAWSTime': {
-          'name': 'listOfRequiredAWSTime',
-          'type': {
-            'list': {'scalar': 'AWSTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfAWSTime': {
-          'name': 'requiredListOfAWSTime',
-          'type': {
-            'list': {'scalar': 'AWSTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredAWSTime': {
-          'name': 'requiredListOfRequiredAWSTime',
-          'type': {
-            'list': {'scalar': 'AWSTime'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfAWSTimestamp': {
-          'name': 'listOfAWSTimestamp',
-          'type': {
-            'list': {'scalar': 'AWSTimestamp'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredAWSTimestamp': {
-          'name': 'listOfRequiredAWSTimestamp',
-          'type': {
-            'list': {'scalar': 'AWSTimestamp'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfAWSTimestamp': {
-          'name': 'requiredListOfAWSTimestamp',
-          'type': {
-            'list': {'scalar': 'AWSTimestamp'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredAWSTimestamp': {
-          'name': 'requiredListOfRequiredAWSTimestamp',
-          'type': {
-            'list': {'scalar': 'AWSTimestamp'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfAWSEmail': {
-          'name': 'listOfAWSEmail',
-          'type': {
-            'list': {'scalar': 'AWSEmail'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredAWSEmail': {
-          'name': 'listOfRequiredAWSEmail',
-          'type': {
-            'list': {'scalar': 'AWSEmail'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfAWSEmail': {
-          'name': 'requiredListOfAWSEmail',
-          'type': {
-            'list': {'scalar': 'AWSEmail'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredAWSEmail': {
-          'name': 'requiredListOfRequiredAWSEmail',
-          'type': {
-            'list': {'scalar': 'AWSEmail'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfAWSJSON': {
-          'name': 'listOfAWSJSON',
-          'type': {
-            'list': {'scalar': 'AWSJSON'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredAWSJSON': {
-          'name': 'listOfRequiredAWSJSON',
-          'type': {
-            'list': {'scalar': 'AWSJSON'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfAWSJSON': {
-          'name': 'requiredListOfAWSJSON',
-          'type': {
-            'list': {'scalar': 'AWSJSON'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredAWSJSON': {
-          'name': 'requiredListOfRequiredAWSJSON',
-          'type': {
-            'list': {'scalar': 'AWSJSON'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfAWSPhone': {
-          'name': 'listOfAWSPhone',
-          'type': {
-            'list': {'scalar': 'AWSPhone'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredAWSPhone': {
-          'name': 'listOfRequiredAWSPhone',
-          'type': {
-            'list': {'scalar': 'AWSPhone'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfAWSPhone': {
-          'name': 'requiredListOfAWSPhone',
-          'type': {
-            'list': {'scalar': 'AWSPhone'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredAWSPhone': {
-          'name': 'requiredListOfRequiredAWSPhone',
-          'type': {
-            'list': {'scalar': 'AWSPhone'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfAWSUrl': {
-          'name': 'listOfAWSUrl',
-          'type': {
-            'list': {'scalar': 'AWSURL'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredAWSUrl': {
-          'name': 'listOfRequiredAWSUrl',
-          'type': {
-            'list': {'scalar': 'AWSURL'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfAWSUrl': {
-          'name': 'requiredListOfAWSUrl',
-          'type': {
-            'list': {'scalar': 'AWSURL'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredAWSUrl': {
-          'name': 'requiredListOfRequiredAWSUrl',
-          'type': {
-            'list': {'scalar': 'AWSURL'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfAWSIpAddress': {
-          'name': 'listOfAWSIpAddress',
-          'type': {
-            'list': {'scalar': 'AWSIPAddress'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'listOfRequiredAWSIpAddress': {
-          'name': 'listOfRequiredAWSIpAddress',
-          'type': {
-            'list': {'scalar': 'AWSIPAddress'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfAWSIpAddress': {
-          'name': 'requiredListOfAWSIpAddress',
-          'type': {
-            'list': {'scalar': 'AWSIPAddress'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredListOfRequiredAWSIpAddress': {
-          'name': 'requiredListOfRequiredAWSIpAddress',
-          'type': {
-            'list': {'scalar': 'AWSIPAddress'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'ScalarListModel',
+      'pluralName',
+      'ScalarListModels',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfString',
+        [
+          'name',
+          'listOfString',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'String',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredString',
+        [
+          'name',
+          'listOfRequiredString',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'String',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfString',
+        [
+          'name',
+          'requiredListOfString',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'String',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredString',
+        [
+          'name',
+          'requiredListOfRequiredString',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'String',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfInteger',
+        [
+          'name',
+          'listOfInteger',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Int',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredInteger',
+        [
+          'name',
+          'listOfRequiredInteger',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Int',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfInteger',
+        [
+          'name',
+          'requiredListOfInteger',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Int',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredInteger',
+        [
+          'name',
+          'requiredListOfRequiredInteger',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Int',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfFloat',
+        [
+          'name',
+          'listOfFloat',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Float',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredFloat',
+        [
+          'name',
+          'listOfRequiredFloat',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Float',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfFloat',
+        [
+          'name',
+          'requiredListOfFloat',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Float',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredFloat',
+        [
+          'name',
+          'requiredListOfRequiredFloat',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Float',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfBoolean',
+        [
+          'name',
+          'listOfBoolean',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Boolean',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredBoolean',
+        [
+          'name',
+          'listOfRequiredBoolean',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Boolean',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfBoolean',
+        [
+          'name',
+          'requiredListOfBoolean',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Boolean',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredBoolean',
+        [
+          'name',
+          'requiredListOfRequiredBoolean',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Boolean',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfAWSDate',
+        [
+          'name',
+          'listOfAWSDate',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDate',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredAWSDate',
+        [
+          'name',
+          'listOfRequiredAWSDate',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDate',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfAWSDate',
+        [
+          'name',
+          'requiredListOfAWSDate',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDate',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredAWSDate',
+        [
+          'name',
+          'requiredListOfRequiredAWSDate',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDate',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfAWSDateTime',
+        [
+          'name',
+          'listOfAWSDateTime',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDateTime',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredAWSDateTime',
+        [
+          'name',
+          'listOfRequiredAWSDateTime',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDateTime',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfAWSDateTime',
+        [
+          'name',
+          'requiredListOfAWSDateTime',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDateTime',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredAWSDateTime',
+        [
+          'name',
+          'requiredListOfRequiredAWSDateTime',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSDateTime',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfAWSTime',
+        [
+          'name',
+          'listOfAWSTime',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTime',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredAWSTime',
+        [
+          'name',
+          'listOfRequiredAWSTime',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTime',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfAWSTime',
+        [
+          'name',
+          'requiredListOfAWSTime',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTime',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredAWSTime',
+        [
+          'name',
+          'requiredListOfRequiredAWSTime',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTime',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfAWSTimestamp',
+        [
+          'name',
+          'listOfAWSTimestamp',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTimestamp',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredAWSTimestamp',
+        [
+          'name',
+          'listOfRequiredAWSTimestamp',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTimestamp',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfAWSTimestamp',
+        [
+          'name',
+          'requiredListOfAWSTimestamp',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTimestamp',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredAWSTimestamp',
+        [
+          'name',
+          'requiredListOfRequiredAWSTimestamp',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSTimestamp',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfAWSEmail',
+        [
+          'name',
+          'listOfAWSEmail',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSEmail',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredAWSEmail',
+        [
+          'name',
+          'listOfRequiredAWSEmail',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSEmail',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfAWSEmail',
+        [
+          'name',
+          'requiredListOfAWSEmail',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSEmail',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredAWSEmail',
+        [
+          'name',
+          'requiredListOfRequiredAWSEmail',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSEmail',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfAWSJSON',
+        [
+          'name',
+          'listOfAWSJSON',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSJSON',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredAWSJSON',
+        [
+          'name',
+          'listOfRequiredAWSJSON',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSJSON',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfAWSJSON',
+        [
+          'name',
+          'requiredListOfAWSJSON',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSJSON',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredAWSJSON',
+        [
+          'name',
+          'requiredListOfRequiredAWSJSON',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSJSON',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfAWSPhone',
+        [
+          'name',
+          'listOfAWSPhone',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSPhone',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredAWSPhone',
+        [
+          'name',
+          'listOfRequiredAWSPhone',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSPhone',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfAWSPhone',
+        [
+          'name',
+          'requiredListOfAWSPhone',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSPhone',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredAWSPhone',
+        [
+          'name',
+          'requiredListOfRequiredAWSPhone',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSPhone',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfAWSUrl',
+        [
+          'name',
+          'listOfAWSUrl',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSURL',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredAWSUrl',
+        [
+          'name',
+          'listOfRequiredAWSUrl',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSURL',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfAWSUrl',
+        [
+          'name',
+          'requiredListOfAWSUrl',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSURL',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredAWSUrl',
+        [
+          'name',
+          'requiredListOfRequiredAWSUrl',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSURL',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfAWSIpAddress',
+        [
+          'name',
+          'listOfAWSIpAddress',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSIPAddress',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'listOfRequiredAWSIpAddress',
+        [
+          'name',
+          'listOfRequiredAWSIpAddress',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSIPAddress',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfAWSIpAddress',
+        [
+          'name',
+          'requiredListOfAWSIpAddress',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSIPAddress',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredListOfRequiredAWSIpAddress',
+        [
+          'name',
+          'requiredListOfRequiredAWSIpAddress',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'AWSIPAddress',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, ScalarListModel, String> get $id => _queryFields.$id;
+  static QueryField<String, ScalarListModel, String> get $id =>
+      _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, ScalarListModel, String> get ID => $id;
+  static QueryField<String, ScalarListModel, String> get ID => $id;
   @override
   List<String?>? get listOfString;
 
   /// Query field for the [listOfString] field.
-  QueryField<String, ScalarListModel, String?> get $listOfString =>
+  static QueryField<String, ScalarListModel, String?> get $listOfString =>
       _queryFields.$listOfString;
 
   /// Query field for the [listOfString] field.
   @Deprecated(r'Use $listOfString instead')
-  QueryField<String, ScalarListModel, String?> get LIST_OF_STRING =>
+  static QueryField<String, ScalarListModel, String?> get LIST_OF_STRING =>
       $listOfString;
   @override
   List<String>? get listOfRequiredString;
 
   /// Query field for the [listOfRequiredString] field.
-  QueryField<String, ScalarListModel, String> get $listOfRequiredString =>
-      _queryFields.$listOfRequiredString;
+  static QueryField<String, ScalarListModel, String>
+      get $listOfRequiredString => _queryFields.$listOfRequiredString;
 
   /// Query field for the [listOfRequiredString] field.
   @Deprecated(r'Use $listOfRequiredString instead')
-  QueryField<String, ScalarListModel, String> get LIST_OF_REQUIRED_STRING =>
-      $listOfRequiredString;
+  static QueryField<String, ScalarListModel, String>
+      get LIST_OF_REQUIRED_STRING => $listOfRequiredString;
   @override
   List<String?> get requiredListOfString;
 
   /// Query field for the [requiredListOfString] field.
-  QueryField<String, ScalarListModel, String?> get $requiredListOfString =>
-      _queryFields.$requiredListOfString;
+  static QueryField<String, ScalarListModel, String?>
+      get $requiredListOfString => _queryFields.$requiredListOfString;
 
   /// Query field for the [requiredListOfString] field.
   @Deprecated(r'Use $requiredListOfString instead')
-  QueryField<String, ScalarListModel, String?> get REQUIRED_LIST_OF_STRING =>
-      $requiredListOfString;
+  static QueryField<String, ScalarListModel, String?>
+      get REQUIRED_LIST_OF_STRING => $requiredListOfString;
   @override
   List<String> get requiredListOfRequiredString;
 
   /// Query field for the [requiredListOfRequiredString] field.
-  QueryField<String, ScalarListModel, String>
+  static QueryField<String, ScalarListModel, String>
       get $requiredListOfRequiredString =>
           _queryFields.$requiredListOfRequiredString;
 
   /// Query field for the [requiredListOfRequiredString] field.
   @Deprecated(r'Use $requiredListOfRequiredString instead')
-  QueryField<String, ScalarListModel, String>
+  static QueryField<String, ScalarListModel, String>
       get REQUIRED_LIST_OF_REQUIRED_STRING => $requiredListOfRequiredString;
   @override
   List<int?>? get listOfInteger;
 
   /// Query field for the [listOfInteger] field.
-  QueryField<String, ScalarListModel, int?> get $listOfInteger =>
+  static QueryField<String, ScalarListModel, int?> get $listOfInteger =>
       _queryFields.$listOfInteger;
 
   /// Query field for the [listOfInteger] field.
   @Deprecated(r'Use $listOfInteger instead')
-  QueryField<String, ScalarListModel, int?> get LIST_OF_INTEGER =>
+  static QueryField<String, ScalarListModel, int?> get LIST_OF_INTEGER =>
       $listOfInteger;
   @override
   List<int>? get listOfRequiredInteger;
 
   /// Query field for the [listOfRequiredInteger] field.
-  QueryField<String, ScalarListModel, int> get $listOfRequiredInteger =>
+  static QueryField<String, ScalarListModel, int> get $listOfRequiredInteger =>
       _queryFields.$listOfRequiredInteger;
 
   /// Query field for the [listOfRequiredInteger] field.
   @Deprecated(r'Use $listOfRequiredInteger instead')
-  QueryField<String, ScalarListModel, int> get LIST_OF_REQUIRED_INTEGER =>
-      $listOfRequiredInteger;
+  static QueryField<String, ScalarListModel, int>
+      get LIST_OF_REQUIRED_INTEGER => $listOfRequiredInteger;
   @override
   List<int?> get requiredListOfInteger;
 
   /// Query field for the [requiredListOfInteger] field.
-  QueryField<String, ScalarListModel, int?> get $requiredListOfInteger =>
+  static QueryField<String, ScalarListModel, int?> get $requiredListOfInteger =>
       _queryFields.$requiredListOfInteger;
 
   /// Query field for the [requiredListOfInteger] field.
   @Deprecated(r'Use $requiredListOfInteger instead')
-  QueryField<String, ScalarListModel, int?> get REQUIRED_LIST_OF_INTEGER =>
-      $requiredListOfInteger;
+  static QueryField<String, ScalarListModel, int?>
+      get REQUIRED_LIST_OF_INTEGER => $requiredListOfInteger;
   @override
   List<int> get requiredListOfRequiredInteger;
 
   /// Query field for the [requiredListOfRequiredInteger] field.
-  QueryField<String, ScalarListModel, int> get $requiredListOfRequiredInteger =>
-      _queryFields.$requiredListOfRequiredInteger;
+  static QueryField<String, ScalarListModel, int>
+      get $requiredListOfRequiredInteger =>
+          _queryFields.$requiredListOfRequiredInteger;
 
   /// Query field for the [requiredListOfRequiredInteger] field.
   @Deprecated(r'Use $requiredListOfRequiredInteger instead')
-  QueryField<String, ScalarListModel, int>
+  static QueryField<String, ScalarListModel, int>
       get REQUIRED_LIST_OF_REQUIRED_INTEGER => $requiredListOfRequiredInteger;
   @override
   List<double?>? get listOfFloat;
 
   /// Query field for the [listOfFloat] field.
-  QueryField<String, ScalarListModel, double?> get $listOfFloat =>
+  static QueryField<String, ScalarListModel, double?> get $listOfFloat =>
       _queryFields.$listOfFloat;
 
   /// Query field for the [listOfFloat] field.
   @Deprecated(r'Use $listOfFloat instead')
-  QueryField<String, ScalarListModel, double?> get LIST_OF_FLOAT =>
+  static QueryField<String, ScalarListModel, double?> get LIST_OF_FLOAT =>
       $listOfFloat;
   @override
   List<double>? get listOfRequiredFloat;
 
   /// Query field for the [listOfRequiredFloat] field.
-  QueryField<String, ScalarListModel, double> get $listOfRequiredFloat =>
+  static QueryField<String, ScalarListModel, double> get $listOfRequiredFloat =>
       _queryFields.$listOfRequiredFloat;
 
   /// Query field for the [listOfRequiredFloat] field.
   @Deprecated(r'Use $listOfRequiredFloat instead')
-  QueryField<String, ScalarListModel, double> get LIST_OF_REQUIRED_FLOAT =>
-      $listOfRequiredFloat;
+  static QueryField<String, ScalarListModel, double>
+      get LIST_OF_REQUIRED_FLOAT => $listOfRequiredFloat;
   @override
   List<double?> get requiredListOfFloat;
 
   /// Query field for the [requiredListOfFloat] field.
-  QueryField<String, ScalarListModel, double?> get $requiredListOfFloat =>
-      _queryFields.$requiredListOfFloat;
+  static QueryField<String, ScalarListModel, double?>
+      get $requiredListOfFloat => _queryFields.$requiredListOfFloat;
 
   /// Query field for the [requiredListOfFloat] field.
   @Deprecated(r'Use $requiredListOfFloat instead')
-  QueryField<String, ScalarListModel, double?> get REQUIRED_LIST_OF_FLOAT =>
-      $requiredListOfFloat;
+  static QueryField<String, ScalarListModel, double?>
+      get REQUIRED_LIST_OF_FLOAT => $requiredListOfFloat;
   @override
   List<double> get requiredListOfRequiredFloat;
 
   /// Query field for the [requiredListOfRequiredFloat] field.
-  QueryField<String, ScalarListModel, double>
+  static QueryField<String, ScalarListModel, double>
       get $requiredListOfRequiredFloat =>
           _queryFields.$requiredListOfRequiredFloat;
 
   /// Query field for the [requiredListOfRequiredFloat] field.
   @Deprecated(r'Use $requiredListOfRequiredFloat instead')
-  QueryField<String, ScalarListModel, double>
+  static QueryField<String, ScalarListModel, double>
       get REQUIRED_LIST_OF_REQUIRED_FLOAT => $requiredListOfRequiredFloat;
   @override
   List<bool?>? get listOfBoolean;
 
   /// Query field for the [listOfBoolean] field.
-  QueryField<String, ScalarListModel, bool?> get $listOfBoolean =>
+  static QueryField<String, ScalarListModel, bool?> get $listOfBoolean =>
       _queryFields.$listOfBoolean;
 
   /// Query field for the [listOfBoolean] field.
   @Deprecated(r'Use $listOfBoolean instead')
-  QueryField<String, ScalarListModel, bool?> get LIST_OF_BOOLEAN =>
+  static QueryField<String, ScalarListModel, bool?> get LIST_OF_BOOLEAN =>
       $listOfBoolean;
   @override
   List<bool>? get listOfRequiredBoolean;
 
   /// Query field for the [listOfRequiredBoolean] field.
-  QueryField<String, ScalarListModel, bool> get $listOfRequiredBoolean =>
+  static QueryField<String, ScalarListModel, bool> get $listOfRequiredBoolean =>
       _queryFields.$listOfRequiredBoolean;
 
   /// Query field for the [listOfRequiredBoolean] field.
   @Deprecated(r'Use $listOfRequiredBoolean instead')
-  QueryField<String, ScalarListModel, bool> get LIST_OF_REQUIRED_BOOLEAN =>
-      $listOfRequiredBoolean;
+  static QueryField<String, ScalarListModel, bool>
+      get LIST_OF_REQUIRED_BOOLEAN => $listOfRequiredBoolean;
   @override
   List<bool?> get requiredListOfBoolean;
 
   /// Query field for the [requiredListOfBoolean] field.
-  QueryField<String, ScalarListModel, bool?> get $requiredListOfBoolean =>
-      _queryFields.$requiredListOfBoolean;
+  static QueryField<String, ScalarListModel, bool?>
+      get $requiredListOfBoolean => _queryFields.$requiredListOfBoolean;
 
   /// Query field for the [requiredListOfBoolean] field.
   @Deprecated(r'Use $requiredListOfBoolean instead')
-  QueryField<String, ScalarListModel, bool?> get REQUIRED_LIST_OF_BOOLEAN =>
-      $requiredListOfBoolean;
+  static QueryField<String, ScalarListModel, bool?>
+      get REQUIRED_LIST_OF_BOOLEAN => $requiredListOfBoolean;
   @override
   List<bool> get requiredListOfRequiredBoolean;
 
   /// Query field for the [requiredListOfRequiredBoolean] field.
-  QueryField<String, ScalarListModel, bool>
+  static QueryField<String, ScalarListModel, bool>
       get $requiredListOfRequiredBoolean =>
           _queryFields.$requiredListOfRequiredBoolean;
 
   /// Query field for the [requiredListOfRequiredBoolean] field.
   @Deprecated(r'Use $requiredListOfRequiredBoolean instead')
-  QueryField<String, ScalarListModel, bool>
+  static QueryField<String, ScalarListModel, bool>
       get REQUIRED_LIST_OF_REQUIRED_BOOLEAN => $requiredListOfRequiredBoolean;
   @override
   List<TemporalDate?>? get listOfAwsDate;
 
   /// Query field for the [listOfAwsDate] field.
-  QueryField<String, ScalarListModel, TemporalDate?> get $listOfAwsDate =>
-      _queryFields.$listOfAwsDate;
+  static QueryField<String, ScalarListModel, TemporalDate?>
+      get $listOfAwsDate => _queryFields.$listOfAwsDate;
 
   /// Query field for the [listOfAwsDate] field.
   @Deprecated(r'Use $listOfAwsDate instead')
-  QueryField<String, ScalarListModel, TemporalDate?> get LIST_OF_AWS_DATE =>
-      $listOfAwsDate;
+  static QueryField<String, ScalarListModel, TemporalDate?>
+      get LIST_OF_AWS_DATE => $listOfAwsDate;
   @override
   List<TemporalDate>? get listOfRequiredAwsDate;
 
   /// Query field for the [listOfRequiredAwsDate] field.
-  QueryField<String, ScalarListModel, TemporalDate>
+  static QueryField<String, ScalarListModel, TemporalDate>
       get $listOfRequiredAwsDate => _queryFields.$listOfRequiredAwsDate;
 
   /// Query field for the [listOfRequiredAwsDate] field.
   @Deprecated(r'Use $listOfRequiredAwsDate instead')
-  QueryField<String, ScalarListModel, TemporalDate>
+  static QueryField<String, ScalarListModel, TemporalDate>
       get LIST_OF_REQUIRED_AWS_DATE => $listOfRequiredAwsDate;
   @override
   List<TemporalDate?> get requiredListOfAwsDate;
 
   /// Query field for the [requiredListOfAwsDate] field.
-  QueryField<String, ScalarListModel, TemporalDate?>
+  static QueryField<String, ScalarListModel, TemporalDate?>
       get $requiredListOfAwsDate => _queryFields.$requiredListOfAwsDate;
 
   /// Query field for the [requiredListOfAwsDate] field.
   @Deprecated(r'Use $requiredListOfAwsDate instead')
-  QueryField<String, ScalarListModel, TemporalDate?>
+  static QueryField<String, ScalarListModel, TemporalDate?>
       get REQUIRED_LIST_OF_AWS_DATE => $requiredListOfAwsDate;
   @override
   List<TemporalDate> get requiredListOfRequiredAwsDate;
 
   /// Query field for the [requiredListOfRequiredAwsDate] field.
-  QueryField<String, ScalarListModel, TemporalDate>
+  static QueryField<String, ScalarListModel, TemporalDate>
       get $requiredListOfRequiredAwsDate =>
           _queryFields.$requiredListOfRequiredAwsDate;
 
   /// Query field for the [requiredListOfRequiredAwsDate] field.
   @Deprecated(r'Use $requiredListOfRequiredAwsDate instead')
-  QueryField<String, ScalarListModel, TemporalDate>
+  static QueryField<String, ScalarListModel, TemporalDate>
       get REQUIRED_LIST_OF_REQUIRED_AWS_DATE => $requiredListOfRequiredAwsDate;
   @override
   List<TemporalDateTime?>? get listOfAwsDateTime;
 
   /// Query field for the [listOfAwsDateTime] field.
-  QueryField<String, ScalarListModel, TemporalDateTime?>
+  static QueryField<String, ScalarListModel, TemporalDateTime?>
       get $listOfAwsDateTime => _queryFields.$listOfAwsDateTime;
 
   /// Query field for the [listOfAwsDateTime] field.
   @Deprecated(r'Use $listOfAwsDateTime instead')
-  QueryField<String, ScalarListModel, TemporalDateTime?>
+  static QueryField<String, ScalarListModel, TemporalDateTime?>
       get LIST_OF_AWS_DATE_TIME => $listOfAwsDateTime;
   @override
   List<TemporalDateTime>? get listOfRequiredAwsDateTime;
 
   /// Query field for the [listOfRequiredAwsDateTime] field.
-  QueryField<String, ScalarListModel, TemporalDateTime>
+  static QueryField<String, ScalarListModel, TemporalDateTime>
       get $listOfRequiredAwsDateTime => _queryFields.$listOfRequiredAwsDateTime;
 
   /// Query field for the [listOfRequiredAwsDateTime] field.
   @Deprecated(r'Use $listOfRequiredAwsDateTime instead')
-  QueryField<String, ScalarListModel, TemporalDateTime>
+  static QueryField<String, ScalarListModel, TemporalDateTime>
       get LIST_OF_REQUIRED_AWS_DATE_TIME => $listOfRequiredAwsDateTime;
   @override
   List<TemporalDateTime?> get requiredListOfAwsDateTime;
 
   /// Query field for the [requiredListOfAwsDateTime] field.
-  QueryField<String, ScalarListModel, TemporalDateTime?>
+  static QueryField<String, ScalarListModel, TemporalDateTime?>
       get $requiredListOfAwsDateTime => _queryFields.$requiredListOfAwsDateTime;
 
   /// Query field for the [requiredListOfAwsDateTime] field.
   @Deprecated(r'Use $requiredListOfAwsDateTime instead')
-  QueryField<String, ScalarListModel, TemporalDateTime?>
+  static QueryField<String, ScalarListModel, TemporalDateTime?>
       get REQUIRED_LIST_OF_AWS_DATE_TIME => $requiredListOfAwsDateTime;
   @override
   List<TemporalDateTime> get requiredListOfRequiredAwsDateTime;
 
   /// Query field for the [requiredListOfRequiredAwsDateTime] field.
-  QueryField<String, ScalarListModel, TemporalDateTime>
+  static QueryField<String, ScalarListModel, TemporalDateTime>
       get $requiredListOfRequiredAwsDateTime =>
           _queryFields.$requiredListOfRequiredAwsDateTime;
 
   /// Query field for the [requiredListOfRequiredAwsDateTime] field.
   @Deprecated(r'Use $requiredListOfRequiredAwsDateTime instead')
-  QueryField<String, ScalarListModel, TemporalDateTime>
+  static QueryField<String, ScalarListModel, TemporalDateTime>
       get REQUIRED_LIST_OF_REQUIRED_AWS_DATE_TIME =>
           $requiredListOfRequiredAwsDateTime;
   @override
   List<TemporalTime?>? get listOfAwsTime;
 
   /// Query field for the [listOfAwsTime] field.
-  QueryField<String, ScalarListModel, TemporalTime?> get $listOfAwsTime =>
-      _queryFields.$listOfAwsTime;
+  static QueryField<String, ScalarListModel, TemporalTime?>
+      get $listOfAwsTime => _queryFields.$listOfAwsTime;
 
   /// Query field for the [listOfAwsTime] field.
   @Deprecated(r'Use $listOfAwsTime instead')
-  QueryField<String, ScalarListModel, TemporalTime?> get LIST_OF_AWS_TIME =>
-      $listOfAwsTime;
+  static QueryField<String, ScalarListModel, TemporalTime?>
+      get LIST_OF_AWS_TIME => $listOfAwsTime;
   @override
   List<TemporalTime>? get listOfRequiredAwsTime;
 
   /// Query field for the [listOfRequiredAwsTime] field.
-  QueryField<String, ScalarListModel, TemporalTime>
+  static QueryField<String, ScalarListModel, TemporalTime>
       get $listOfRequiredAwsTime => _queryFields.$listOfRequiredAwsTime;
 
   /// Query field for the [listOfRequiredAwsTime] field.
   @Deprecated(r'Use $listOfRequiredAwsTime instead')
-  QueryField<String, ScalarListModel, TemporalTime>
+  static QueryField<String, ScalarListModel, TemporalTime>
       get LIST_OF_REQUIRED_AWS_TIME => $listOfRequiredAwsTime;
   @override
   List<TemporalTime?> get requiredListOfAwsTime;
 
   /// Query field for the [requiredListOfAwsTime] field.
-  QueryField<String, ScalarListModel, TemporalTime?>
+  static QueryField<String, ScalarListModel, TemporalTime?>
       get $requiredListOfAwsTime => _queryFields.$requiredListOfAwsTime;
 
   /// Query field for the [requiredListOfAwsTime] field.
   @Deprecated(r'Use $requiredListOfAwsTime instead')
-  QueryField<String, ScalarListModel, TemporalTime?>
+  static QueryField<String, ScalarListModel, TemporalTime?>
       get REQUIRED_LIST_OF_AWS_TIME => $requiredListOfAwsTime;
   @override
   List<TemporalTime> get requiredListOfRequiredAwsTime;
 
   /// Query field for the [requiredListOfRequiredAwsTime] field.
-  QueryField<String, ScalarListModel, TemporalTime>
+  static QueryField<String, ScalarListModel, TemporalTime>
       get $requiredListOfRequiredAwsTime =>
           _queryFields.$requiredListOfRequiredAwsTime;
 
   /// Query field for the [requiredListOfRequiredAwsTime] field.
   @Deprecated(r'Use $requiredListOfRequiredAwsTime instead')
-  QueryField<String, ScalarListModel, TemporalTime>
+  static QueryField<String, ScalarListModel, TemporalTime>
       get REQUIRED_LIST_OF_REQUIRED_AWS_TIME => $requiredListOfRequiredAwsTime;
   @override
   List<TemporalTimestamp?>? get listOfAwsTimestamp;
 
   /// Query field for the [listOfAwsTimestamp] field.
-  QueryField<String, ScalarListModel, TemporalTimestamp?>
+  static QueryField<String, ScalarListModel, TemporalTimestamp?>
       get $listOfAwsTimestamp => _queryFields.$listOfAwsTimestamp;
 
   /// Query field for the [listOfAwsTimestamp] field.
   @Deprecated(r'Use $listOfAwsTimestamp instead')
-  QueryField<String, ScalarListModel, TemporalTimestamp?>
+  static QueryField<String, ScalarListModel, TemporalTimestamp?>
       get LIST_OF_AWS_TIMESTAMP => $listOfAwsTimestamp;
   @override
   List<TemporalTimestamp>? get listOfRequiredAwsTimestamp;
 
   /// Query field for the [listOfRequiredAwsTimestamp] field.
-  QueryField<String, ScalarListModel, TemporalTimestamp>
+  static QueryField<String, ScalarListModel, TemporalTimestamp>
       get $listOfRequiredAwsTimestamp =>
           _queryFields.$listOfRequiredAwsTimestamp;
 
   /// Query field for the [listOfRequiredAwsTimestamp] field.
   @Deprecated(r'Use $listOfRequiredAwsTimestamp instead')
-  QueryField<String, ScalarListModel, TemporalTimestamp>
+  static QueryField<String, ScalarListModel, TemporalTimestamp>
       get LIST_OF_REQUIRED_AWS_TIMESTAMP => $listOfRequiredAwsTimestamp;
   @override
   List<TemporalTimestamp?> get requiredListOfAwsTimestamp;
 
   /// Query field for the [requiredListOfAwsTimestamp] field.
-  QueryField<String, ScalarListModel, TemporalTimestamp?>
+  static QueryField<String, ScalarListModel, TemporalTimestamp?>
       get $requiredListOfAwsTimestamp =>
           _queryFields.$requiredListOfAwsTimestamp;
 
   /// Query field for the [requiredListOfAwsTimestamp] field.
   @Deprecated(r'Use $requiredListOfAwsTimestamp instead')
-  QueryField<String, ScalarListModel, TemporalTimestamp?>
+  static QueryField<String, ScalarListModel, TemporalTimestamp?>
       get REQUIRED_LIST_OF_AWS_TIMESTAMP => $requiredListOfAwsTimestamp;
   @override
   List<TemporalTimestamp> get requiredListOfRequiredAwsTimestamp;
 
   /// Query field for the [requiredListOfRequiredAwsTimestamp] field.
-  QueryField<String, ScalarListModel, TemporalTimestamp>
+  static QueryField<String, ScalarListModel, TemporalTimestamp>
       get $requiredListOfRequiredAwsTimestamp =>
           _queryFields.$requiredListOfRequiredAwsTimestamp;
 
   /// Query field for the [requiredListOfRequiredAwsTimestamp] field.
   @Deprecated(r'Use $requiredListOfRequiredAwsTimestamp instead')
-  QueryField<String, ScalarListModel, TemporalTimestamp>
+  static QueryField<String, ScalarListModel, TemporalTimestamp>
       get REQUIRED_LIST_OF_REQUIRED_AWS_TIMESTAMP =>
           $requiredListOfRequiredAwsTimestamp;
   @override
   List<String?>? get listOfAwsEmail;
 
   /// Query field for the [listOfAwsEmail] field.
-  QueryField<String, ScalarListModel, String?> get $listOfAwsEmail =>
+  static QueryField<String, ScalarListModel, String?> get $listOfAwsEmail =>
       _queryFields.$listOfAwsEmail;
 
   /// Query field for the [listOfAwsEmail] field.
   @Deprecated(r'Use $listOfAwsEmail instead')
-  QueryField<String, ScalarListModel, String?> get LIST_OF_AWS_EMAIL =>
+  static QueryField<String, ScalarListModel, String?> get LIST_OF_AWS_EMAIL =>
       $listOfAwsEmail;
   @override
   List<String>? get listOfRequiredAwsEmail;
 
   /// Query field for the [listOfRequiredAwsEmail] field.
-  QueryField<String, ScalarListModel, String> get $listOfRequiredAwsEmail =>
-      _queryFields.$listOfRequiredAwsEmail;
+  static QueryField<String, ScalarListModel, String>
+      get $listOfRequiredAwsEmail => _queryFields.$listOfRequiredAwsEmail;
 
   /// Query field for the [listOfRequiredAwsEmail] field.
   @Deprecated(r'Use $listOfRequiredAwsEmail instead')
-  QueryField<String, ScalarListModel, String> get LIST_OF_REQUIRED_AWS_EMAIL =>
-      $listOfRequiredAwsEmail;
+  static QueryField<String, ScalarListModel, String>
+      get LIST_OF_REQUIRED_AWS_EMAIL => $listOfRequiredAwsEmail;
   @override
   List<String?> get requiredListOfAwsEmail;
 
   /// Query field for the [requiredListOfAwsEmail] field.
-  QueryField<String, ScalarListModel, String?> get $requiredListOfAwsEmail =>
-      _queryFields.$requiredListOfAwsEmail;
+  static QueryField<String, ScalarListModel, String?>
+      get $requiredListOfAwsEmail => _queryFields.$requiredListOfAwsEmail;
 
   /// Query field for the [requiredListOfAwsEmail] field.
   @Deprecated(r'Use $requiredListOfAwsEmail instead')
-  QueryField<String, ScalarListModel, String?> get REQUIRED_LIST_OF_AWS_EMAIL =>
-      $requiredListOfAwsEmail;
+  static QueryField<String, ScalarListModel, String?>
+      get REQUIRED_LIST_OF_AWS_EMAIL => $requiredListOfAwsEmail;
   @override
   List<String> get requiredListOfRequiredAwsEmail;
 
   /// Query field for the [requiredListOfRequiredAwsEmail] field.
-  QueryField<String, ScalarListModel, String>
+  static QueryField<String, ScalarListModel, String>
       get $requiredListOfRequiredAwsEmail =>
           _queryFields.$requiredListOfRequiredAwsEmail;
 
   /// Query field for the [requiredListOfRequiredAwsEmail] field.
   @Deprecated(r'Use $requiredListOfRequiredAwsEmail instead')
-  QueryField<String, ScalarListModel, String>
+  static QueryField<String, ScalarListModel, String>
       get REQUIRED_LIST_OF_REQUIRED_AWS_EMAIL =>
           $requiredListOfRequiredAwsEmail;
   @override
   List<Object?>? get listOfAwsjson;
 
   /// Query field for the [listOfAwsjson] field.
-  QueryField<String, ScalarListModel, Object?> get $listOfAwsjson =>
+  static QueryField<String, ScalarListModel, Object?> get $listOfAwsjson =>
       _queryFields.$listOfAwsjson;
 
   /// Query field for the [listOfAwsjson] field.
   @Deprecated(r'Use $listOfAwsjson instead')
-  QueryField<String, ScalarListModel, Object?> get LIST_OF_AWSJSON =>
+  static QueryField<String, ScalarListModel, Object?> get LIST_OF_AWSJSON =>
       $listOfAwsjson;
   @override
   List<Object>? get listOfRequiredAwsjson;
 
   /// Query field for the [listOfRequiredAwsjson] field.
-  QueryField<String, ScalarListModel, Object> get $listOfRequiredAwsjson =>
-      _queryFields.$listOfRequiredAwsjson;
+  static QueryField<String, ScalarListModel, Object>
+      get $listOfRequiredAwsjson => _queryFields.$listOfRequiredAwsjson;
 
   /// Query field for the [listOfRequiredAwsjson] field.
   @Deprecated(r'Use $listOfRequiredAwsjson instead')
-  QueryField<String, ScalarListModel, Object> get LIST_OF_REQUIRED_AWSJSON =>
-      $listOfRequiredAwsjson;
+  static QueryField<String, ScalarListModel, Object>
+      get LIST_OF_REQUIRED_AWSJSON => $listOfRequiredAwsjson;
   @override
   List<Object?> get requiredListOfAwsjson;
 
   /// Query field for the [requiredListOfAwsjson] field.
-  QueryField<String, ScalarListModel, Object?> get $requiredListOfAwsjson =>
-      _queryFields.$requiredListOfAwsjson;
+  static QueryField<String, ScalarListModel, Object?>
+      get $requiredListOfAwsjson => _queryFields.$requiredListOfAwsjson;
 
   /// Query field for the [requiredListOfAwsjson] field.
   @Deprecated(r'Use $requiredListOfAwsjson instead')
-  QueryField<String, ScalarListModel, Object?> get REQUIRED_LIST_OF_AWSJSON =>
-      $requiredListOfAwsjson;
+  static QueryField<String, ScalarListModel, Object?>
+      get REQUIRED_LIST_OF_AWSJSON => $requiredListOfAwsjson;
   @override
   List<Object> get requiredListOfRequiredAwsjson;
 
   /// Query field for the [requiredListOfRequiredAwsjson] field.
-  QueryField<String, ScalarListModel, Object>
+  static QueryField<String, ScalarListModel, Object>
       get $requiredListOfRequiredAwsjson =>
           _queryFields.$requiredListOfRequiredAwsjson;
 
   /// Query field for the [requiredListOfRequiredAwsjson] field.
   @Deprecated(r'Use $requiredListOfRequiredAwsjson instead')
-  QueryField<String, ScalarListModel, Object>
+  static QueryField<String, ScalarListModel, Object>
       get REQUIRED_LIST_OF_REQUIRED_AWSJSON => $requiredListOfRequiredAwsjson;
   @override
   List<String?>? get listOfAwsPhone;
 
   /// Query field for the [listOfAwsPhone] field.
-  QueryField<String, ScalarListModel, String?> get $listOfAwsPhone =>
+  static QueryField<String, ScalarListModel, String?> get $listOfAwsPhone =>
       _queryFields.$listOfAwsPhone;
 
   /// Query field for the [listOfAwsPhone] field.
   @Deprecated(r'Use $listOfAwsPhone instead')
-  QueryField<String, ScalarListModel, String?> get LIST_OF_AWS_PHONE =>
+  static QueryField<String, ScalarListModel, String?> get LIST_OF_AWS_PHONE =>
       $listOfAwsPhone;
   @override
   List<String>? get listOfRequiredAwsPhone;
 
   /// Query field for the [listOfRequiredAwsPhone] field.
-  QueryField<String, ScalarListModel, String> get $listOfRequiredAwsPhone =>
-      _queryFields.$listOfRequiredAwsPhone;
+  static QueryField<String, ScalarListModel, String>
+      get $listOfRequiredAwsPhone => _queryFields.$listOfRequiredAwsPhone;
 
   /// Query field for the [listOfRequiredAwsPhone] field.
   @Deprecated(r'Use $listOfRequiredAwsPhone instead')
-  QueryField<String, ScalarListModel, String> get LIST_OF_REQUIRED_AWS_PHONE =>
-      $listOfRequiredAwsPhone;
+  static QueryField<String, ScalarListModel, String>
+      get LIST_OF_REQUIRED_AWS_PHONE => $listOfRequiredAwsPhone;
   @override
   List<String?> get requiredListOfAwsPhone;
 
   /// Query field for the [requiredListOfAwsPhone] field.
-  QueryField<String, ScalarListModel, String?> get $requiredListOfAwsPhone =>
-      _queryFields.$requiredListOfAwsPhone;
+  static QueryField<String, ScalarListModel, String?>
+      get $requiredListOfAwsPhone => _queryFields.$requiredListOfAwsPhone;
 
   /// Query field for the [requiredListOfAwsPhone] field.
   @Deprecated(r'Use $requiredListOfAwsPhone instead')
-  QueryField<String, ScalarListModel, String?> get REQUIRED_LIST_OF_AWS_PHONE =>
-      $requiredListOfAwsPhone;
+  static QueryField<String, ScalarListModel, String?>
+      get REQUIRED_LIST_OF_AWS_PHONE => $requiredListOfAwsPhone;
   @override
   List<String> get requiredListOfRequiredAwsPhone;
 
   /// Query field for the [requiredListOfRequiredAwsPhone] field.
-  QueryField<String, ScalarListModel, String>
+  static QueryField<String, ScalarListModel, String>
       get $requiredListOfRequiredAwsPhone =>
           _queryFields.$requiredListOfRequiredAwsPhone;
 
   /// Query field for the [requiredListOfRequiredAwsPhone] field.
   @Deprecated(r'Use $requiredListOfRequiredAwsPhone instead')
-  QueryField<String, ScalarListModel, String>
+  static QueryField<String, ScalarListModel, String>
       get REQUIRED_LIST_OF_REQUIRED_AWS_PHONE =>
           $requiredListOfRequiredAwsPhone;
   @override
   List<Uri?>? get listOfAwsUrl;
 
   /// Query field for the [listOfAwsUrl] field.
-  QueryField<String, ScalarListModel, Uri?> get $listOfAwsUrl =>
+  static QueryField<String, ScalarListModel, Uri?> get $listOfAwsUrl =>
       _queryFields.$listOfAwsUrl;
 
   /// Query field for the [listOfAwsUrl] field.
   @Deprecated(r'Use $listOfAwsUrl instead')
-  QueryField<String, ScalarListModel, Uri?> get LIST_OF_AWS_URL =>
+  static QueryField<String, ScalarListModel, Uri?> get LIST_OF_AWS_URL =>
       $listOfAwsUrl;
   @override
   List<Uri>? get listOfRequiredAwsUrl;
 
   /// Query field for the [listOfRequiredAwsUrl] field.
-  QueryField<String, ScalarListModel, Uri> get $listOfRequiredAwsUrl =>
+  static QueryField<String, ScalarListModel, Uri> get $listOfRequiredAwsUrl =>
       _queryFields.$listOfRequiredAwsUrl;
 
   /// Query field for the [listOfRequiredAwsUrl] field.
   @Deprecated(r'Use $listOfRequiredAwsUrl instead')
-  QueryField<String, ScalarListModel, Uri> get LIST_OF_REQUIRED_AWS_URL =>
-      $listOfRequiredAwsUrl;
+  static QueryField<String, ScalarListModel, Uri>
+      get LIST_OF_REQUIRED_AWS_URL => $listOfRequiredAwsUrl;
   @override
   List<Uri?> get requiredListOfAwsUrl;
 
   /// Query field for the [requiredListOfAwsUrl] field.
-  QueryField<String, ScalarListModel, Uri?> get $requiredListOfAwsUrl =>
+  static QueryField<String, ScalarListModel, Uri?> get $requiredListOfAwsUrl =>
       _queryFields.$requiredListOfAwsUrl;
 
   /// Query field for the [requiredListOfAwsUrl] field.
   @Deprecated(r'Use $requiredListOfAwsUrl instead')
-  QueryField<String, ScalarListModel, Uri?> get REQUIRED_LIST_OF_AWS_URL =>
-      $requiredListOfAwsUrl;
+  static QueryField<String, ScalarListModel, Uri?>
+      get REQUIRED_LIST_OF_AWS_URL => $requiredListOfAwsUrl;
   @override
   List<Uri> get requiredListOfRequiredAwsUrl;
 
   /// Query field for the [requiredListOfRequiredAwsUrl] field.
-  QueryField<String, ScalarListModel, Uri> get $requiredListOfRequiredAwsUrl =>
-      _queryFields.$requiredListOfRequiredAwsUrl;
+  static QueryField<String, ScalarListModel, Uri>
+      get $requiredListOfRequiredAwsUrl =>
+          _queryFields.$requiredListOfRequiredAwsUrl;
 
   /// Query field for the [requiredListOfRequiredAwsUrl] field.
   @Deprecated(r'Use $requiredListOfRequiredAwsUrl instead')
-  QueryField<String, ScalarListModel, Uri>
+  static QueryField<String, ScalarListModel, Uri>
       get REQUIRED_LIST_OF_REQUIRED_AWS_URL => $requiredListOfRequiredAwsUrl;
   @override
   List<String?>? get listOfAwsIpAddress;
 
   /// Query field for the [listOfAwsIpAddress] field.
-  QueryField<String, ScalarListModel, String?> get $listOfAwsIpAddress =>
+  static QueryField<String, ScalarListModel, String?> get $listOfAwsIpAddress =>
       _queryFields.$listOfAwsIpAddress;
 
   /// Query field for the [listOfAwsIpAddress] field.
   @Deprecated(r'Use $listOfAwsIpAddress instead')
-  QueryField<String, ScalarListModel, String?> get LIST_OF_AWS_IP_ADDRESS =>
-      $listOfAwsIpAddress;
+  static QueryField<String, ScalarListModel, String?>
+      get LIST_OF_AWS_IP_ADDRESS => $listOfAwsIpAddress;
   @override
   List<String>? get listOfRequiredAwsIpAddress;
 
   /// Query field for the [listOfRequiredAwsIpAddress] field.
-  QueryField<String, ScalarListModel, String> get $listOfRequiredAwsIpAddress =>
-      _queryFields.$listOfRequiredAwsIpAddress;
+  static QueryField<String, ScalarListModel, String>
+      get $listOfRequiredAwsIpAddress =>
+          _queryFields.$listOfRequiredAwsIpAddress;
 
   /// Query field for the [listOfRequiredAwsIpAddress] field.
   @Deprecated(r'Use $listOfRequiredAwsIpAddress instead')
-  QueryField<String, ScalarListModel, String>
+  static QueryField<String, ScalarListModel, String>
       get LIST_OF_REQUIRED_AWS_IP_ADDRESS => $listOfRequiredAwsIpAddress;
   @override
   List<String?> get requiredListOfAwsIpAddress;
 
   /// Query field for the [requiredListOfAwsIpAddress] field.
-  QueryField<String, ScalarListModel, String?>
+  static QueryField<String, ScalarListModel, String?>
       get $requiredListOfAwsIpAddress =>
           _queryFields.$requiredListOfAwsIpAddress;
 
   /// Query field for the [requiredListOfAwsIpAddress] field.
   @Deprecated(r'Use $requiredListOfAwsIpAddress instead')
-  QueryField<String, ScalarListModel, String?>
+  static QueryField<String, ScalarListModel, String?>
       get REQUIRED_LIST_OF_AWS_IP_ADDRESS => $requiredListOfAwsIpAddress;
   @override
   List<String> get requiredListOfRequiredAwsIpAddress;
 
   /// Query field for the [requiredListOfRequiredAwsIpAddress] field.
-  QueryField<String, ScalarListModel, String>
+  static QueryField<String, ScalarListModel, String>
       get $requiredListOfRequiredAwsIpAddress =>
           _queryFields.$requiredListOfRequiredAwsIpAddress;
 
   /// Query field for the [requiredListOfRequiredAwsIpAddress] field.
   @Deprecated(r'Use $requiredListOfRequiredAwsIpAddress instead')
-  QueryField<String, ScalarListModel, String>
+  static QueryField<String, ScalarListModel, String>
       get REQUIRED_LIST_OF_REQUIRED_AWS_IP_ADDRESS =>
           $requiredListOfRequiredAwsIpAddress;
   @override
@@ -3320,12 +3931,12 @@ abstract class ScalarListModel extends PartialScalarListModel
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, ScalarListModel, String> get $modelIdentifier =>
+  static QueryField<String, ScalarListModel, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, ScalarListModel, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, ScalarListModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   ScalarListModel copyWith({
     String? id,

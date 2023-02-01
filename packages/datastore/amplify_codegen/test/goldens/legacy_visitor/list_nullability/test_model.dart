@@ -392,168 +392,266 @@ abstract class TestModel extends PartialTestModel
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'TestModel',
-      'pluralName': 'TestModels',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'floatVal': {
-          'name': 'floatVal',
-          'type': {'scalar': 'Float'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'floatNullableVal': {
-          'name': 'floatNullableVal',
-          'type': {'scalar': 'Float'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'floatList': {
-          'name': 'floatList',
-          'type': {
-            'list': {'scalar': 'Float'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'floatNullableList': {
-          'name': 'floatNullableList',
-          'type': {
-            'list': {'scalar': 'Float'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'nullableFloatList': {
-          'name': 'nullableFloatList',
-          'type': {
-            'list': {'scalar': 'Float'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'nullableFloatNullableList': {
-          'name': 'nullableFloatNullableList',
-          'type': {
-            'list': {'scalar': 'Float'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'TestModel',
+      'pluralName',
+      'TestModels',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'floatVal',
+        [
+          'name',
+          'floatVal',
+          'type',
+          [
+            'scalar',
+            'Float',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'floatNullableVal',
+        [
+          'name',
+          'floatNullableVal',
+          'type',
+          [
+            'scalar',
+            'Float',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'floatList',
+        [
+          'name',
+          'floatList',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Float',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'floatNullableList',
+        [
+          'name',
+          'floatNullableList',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Float',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'nullableFloatList',
+        [
+          'name',
+          'nullableFloatList',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Float',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'nullableFloatNullableList',
+        [
+          'name',
+          'nullableFloatNullableList',
+          'type',
+          [
+            'list',
+            [
+              'scalar',
+              'Float',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, TestModel, String> get $id => _queryFields.$id;
+  static QueryField<String, TestModel, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, TestModel, String> get ID => $id;
+  static QueryField<String, TestModel, String> get ID => $id;
   @override
   double get floatVal;
 
   /// Query field for the [floatVal] field.
-  QueryField<String, TestModel, double> get $floatVal => _queryFields.$floatVal;
+  static QueryField<String, TestModel, double> get $floatVal =>
+      _queryFields.$floatVal;
 
   /// Query field for the [floatVal] field.
   @Deprecated(r'Use $floatVal instead')
-  QueryField<String, TestModel, double> get FLOAT_VAL => $floatVal;
+  static QueryField<String, TestModel, double> get FLOAT_VAL => $floatVal;
   @override
   double? get floatNullableVal;
 
   /// Query field for the [floatNullableVal] field.
-  QueryField<String, TestModel, double?> get $floatNullableVal =>
+  static QueryField<String, TestModel, double?> get $floatNullableVal =>
       _queryFields.$floatNullableVal;
 
   /// Query field for the [floatNullableVal] field.
   @Deprecated(r'Use $floatNullableVal instead')
-  QueryField<String, TestModel, double?> get FLOAT_NULLABLE_VAL =>
+  static QueryField<String, TestModel, double?> get FLOAT_NULLABLE_VAL =>
       $floatNullableVal;
   @override
   List<double> get floatList;
 
   /// Query field for the [floatList] field.
-  QueryField<String, TestModel, double> get $floatList =>
+  static QueryField<String, TestModel, double> get $floatList =>
       _queryFields.$floatList;
 
   /// Query field for the [floatList] field.
   @Deprecated(r'Use $floatList instead')
-  QueryField<String, TestModel, double> get FLOAT_LIST => $floatList;
+  static QueryField<String, TestModel, double> get FLOAT_LIST => $floatList;
   @override
   List<double>? get floatNullableList;
 
   /// Query field for the [floatNullableList] field.
-  QueryField<String, TestModel, double> get $floatNullableList =>
+  static QueryField<String, TestModel, double> get $floatNullableList =>
       _queryFields.$floatNullableList;
 
   /// Query field for the [floatNullableList] field.
   @Deprecated(r'Use $floatNullableList instead')
-  QueryField<String, TestModel, double> get FLOAT_NULLABLE_LIST =>
+  static QueryField<String, TestModel, double> get FLOAT_NULLABLE_LIST =>
       $floatNullableList;
   @override
   List<double?> get nullableFloatList;
 
   /// Query field for the [nullableFloatList] field.
-  QueryField<String, TestModel, double?> get $nullableFloatList =>
+  static QueryField<String, TestModel, double?> get $nullableFloatList =>
       _queryFields.$nullableFloatList;
 
   /// Query field for the [nullableFloatList] field.
   @Deprecated(r'Use $nullableFloatList instead')
-  QueryField<String, TestModel, double?> get NULLABLE_FLOAT_LIST =>
+  static QueryField<String, TestModel, double?> get NULLABLE_FLOAT_LIST =>
       $nullableFloatList;
   @override
   List<double?>? get nullableFloatNullableList;
 
   /// Query field for the [nullableFloatNullableList] field.
-  QueryField<String, TestModel, double?> get $nullableFloatNullableList =>
-      _queryFields.$nullableFloatNullableList;
+  static QueryField<String, TestModel, double?>
+      get $nullableFloatNullableList => _queryFields.$nullableFloatNullableList;
 
   /// Query field for the [nullableFloatNullableList] field.
   @Deprecated(r'Use $nullableFloatNullableList instead')
-  QueryField<String, TestModel, double?> get NULLABLE_FLOAT_NULLABLE_LIST =>
-      $nullableFloatNullableList;
+  static QueryField<String, TestModel, double?>
+      get NULLABLE_FLOAT_NULLABLE_LIST => $nullableFloatNullableList;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, TestModel, String> get $modelIdentifier =>
+  static QueryField<String, TestModel, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, TestModel, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, TestModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   TestModel copyWith({
     String? id,

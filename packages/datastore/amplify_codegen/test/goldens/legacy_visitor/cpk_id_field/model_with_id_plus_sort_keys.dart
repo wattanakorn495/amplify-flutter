@@ -328,101 +328,154 @@ abstract class ModelWithIdPlusSortKeys extends PartialModelWithIdPlusSortKeys
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'ModelWithIDPlusSortKeys',
-      'pluralName': 'ModelWithIDPlusSortKeys',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'title': {
-          'name': 'title',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'rating': {
-          'name': 'rating',
-          'type': {'scalar': 'Int'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [
+    const [
+      'name',
+      'ModelWithIDPlusSortKeys',
+      'pluralName',
+      'ModelWithIDPlusSortKeys',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'title',
+        [
+          'name',
+          'title',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'rating',
+        [
+          'name',
+          'rating',
+          'type',
+          [
+            'scalar',
+            'Int',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+      ],
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [
             'title',
             'rating',
           ],
-        }
+        ]
       ],
-    },
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys, String>
-      get $id => _queryFields.$id;
+  static QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
+      String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys, String>
-      get ID => $id;
+  static QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
+      String> get ID => $id;
   @override
   String get title;
 
   /// Query field for the [title] field.
-  QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys, String>
-      get $title => _queryFields.$title;
+  static QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
+      String> get $title => _queryFields.$title;
 
   /// Query field for the [title] field.
   @Deprecated(r'Use $title instead')
-  QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys, String>
-      get TITLE => $title;
+  static QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
+      String> get TITLE => $title;
   @override
   int get rating;
 
   /// Query field for the [rating] field.
-  QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys, int>
-      get $rating => _queryFields.$rating;
+  static QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
+      int> get $rating => _queryFields.$rating;
 
   /// Query field for the [rating] field.
   @Deprecated(r'Use $rating instead')
-  QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys, int>
-      get RATING => $rating;
+  static QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
+      int> get RATING => $rating;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
+  static QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
           ModelWithIdPlusSortKeysIdentifier>
       get $modelIdentifier => _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
+  static QueryField<ModelWithIdPlusSortKeysIdentifier, ModelWithIdPlusSortKeys,
           ModelWithIdPlusSortKeysIdentifier>
       get MODEL_IDENTIFIER => $modelIdentifier;
   ModelWithIdPlusSortKeys copyWith({

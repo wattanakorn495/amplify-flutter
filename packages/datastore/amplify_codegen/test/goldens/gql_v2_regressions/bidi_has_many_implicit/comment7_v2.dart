@@ -269,96 +269,167 @@ abstract class Comment7V2 extends PartialComment7V2
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Comment7V2',
-      'pluralName': 'Comment7V2s',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'content': {
-          'name': 'content',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'post': {
-          'name': 'post',
-          'type': {'model': 'Post7V2'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'BelongsTo',
-            'associatedType': 'Post7V2',
-            'targetNames': ['post7V2CommentsId'],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'post7V2CommentsId': {
-          'name': 'post7V2CommentsId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        },
-        {
-          'type': 'foreign',
-          'primaryField': 'post',
-          'sortKeyFields': ['post7V2CommentsId'],
-          'name': 'post',
-        },
+    const [
+      'name',
+      'Comment7V2',
+      'pluralName',
+      'Comment7V2s',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'content',
+        [
+          'name',
+          'content',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'post',
+        [
+          'name',
+          'post',
+          'type',
+          [
+            'model',
+            'Post7V2',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'BelongsTo',
+            'associatedType',
+            'Post7V2',
+            'targetNames',
+            ['post7V2CommentsId'],
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'post7V2CommentsId',
+        [
+          'name',
+          'post7V2CommentsId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            false,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ],
+        [
+          'type',
+          'foreign',
+          'primaryField',
+          'post',
+          'sortKeyFields',
+          ['post7V2CommentsId'],
+          'name',
+          'post',
+        ],
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Comment7V2, String> get $id => _queryFields.$id;
+  static QueryField<String, Comment7V2, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Comment7V2, String> get ID => $id;
+  static QueryField<String, Comment7V2, String> get ID => $id;
   @override
   String? get content;
 
   /// Query field for the [content] field.
-  QueryField<String, Comment7V2, String?> get $content => _queryFields.$content;
+  static QueryField<String, Comment7V2, String?> get $content =>
+      _queryFields.$content;
 
   /// Query field for the [content] field.
   @Deprecated(r'Use $content instead')
-  QueryField<String, Comment7V2, String?> get CONTENT => $content;
+  static QueryField<String, Comment7V2, String?> get CONTENT => $content;
   @override
   Post7V2? get post;
 
   /// Query field for the [post] field.
-  Post7V2QueryFields<String, Comment7V2> get $post => _queryFields.$post;
+  static Post7V2QueryFields<String, Comment7V2> get $post => _queryFields.$post;
 
   /// Query field for the [post] field.
   @Deprecated(r'Use $post instead')
-  Post7V2QueryFields<String, Comment7V2> get POST => $post;
+  static Post7V2QueryFields<String, Comment7V2> get POST => $post;
   @override
   TemporalDateTime get createdAt;
   @override
@@ -367,12 +438,12 @@ abstract class Comment7V2 extends PartialComment7V2
   String? get post7V2CommentsId;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Comment7V2, String> get $modelIdentifier =>
+  static QueryField<String, Comment7V2, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Comment7V2, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, Comment7V2, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   Comment7V2 copyWith({
     String? id,

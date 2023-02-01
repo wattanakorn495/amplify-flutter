@@ -17,7 +17,9 @@ import 'dart:collection';
 import 'package:amplify_codegen/src/helpers/field.dart';
 import 'package:amplify_codegen/src/helpers/language.dart';
 import 'package:amplify_codegen/src/helpers/types.dart';
+// ignore: implementation_imports
 import 'package:amplify_core/src/types/models/mipr.dart';
+// ignore: implementation_imports
 import 'package:amplify_core/src/types/models/model.dart'
     show RemoteModelMetadata;
 import 'package:aws_common/aws_common.dart';

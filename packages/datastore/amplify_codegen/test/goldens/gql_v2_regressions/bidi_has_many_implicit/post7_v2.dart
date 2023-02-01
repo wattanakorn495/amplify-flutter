@@ -316,120 +316,205 @@ abstract class Post7V2 extends PartialPost7V2
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Post7V2',
-      'pluralName': 'Post7V2s',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'title': {
-          'name': 'title',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'blog': {
-          'name': 'blog',
-          'type': {'model': 'Blog7V2'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'BelongsTo',
-            'associatedType': 'Blog7V2',
-            'targetNames': ['blog7V2PostsId'],
-          },
-        },
-        'comments': {
-          'name': 'comments',
-          'type': {
-            'list': {'model': 'Comment7V2'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'HasMany',
-            'associatedType': 'Comment7V2',
-            'associatedFields': ['post'],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'blog7V2PostsId': {
-          'name': 'blog7V2PostsId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        },
-        {
-          'type': 'foreign',
-          'primaryField': 'blog',
-          'sortKeyFields': ['blog7V2PostsId'],
-          'name': 'blog',
-        },
+    const [
+      'name',
+      'Post7V2',
+      'pluralName',
+      'Post7V2s',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'title',
+        [
+          'name',
+          'title',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'blog',
+        [
+          'name',
+          'blog',
+          'type',
+          [
+            'model',
+            'Blog7V2',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'BelongsTo',
+            'associatedType',
+            'Blog7V2',
+            'targetNames',
+            ['blog7V2PostsId'],
+          ],
+        ],
+        'comments',
+        [
+          'name',
+          'comments',
+          'type',
+          [
+            'list',
+            [
+              'model',
+              'Comment7V2',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'HasMany',
+            'associatedType',
+            'Comment7V2',
+            'associatedFields',
+            ['post'],
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'blog7V2PostsId',
+        [
+          'name',
+          'blog7V2PostsId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            false,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ],
+        [
+          'type',
+          'foreign',
+          'primaryField',
+          'blog',
+          'sortKeyFields',
+          ['blog7V2PostsId'],
+          'name',
+          'blog',
+        ],
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Post7V2, String> get $id => _queryFields.$id;
+  static QueryField<String, Post7V2, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Post7V2, String> get ID => $id;
+  static QueryField<String, Post7V2, String> get ID => $id;
   @override
   String get title;
 
   /// Query field for the [title] field.
-  QueryField<String, Post7V2, String> get $title => _queryFields.$title;
+  static QueryField<String, Post7V2, String> get $title => _queryFields.$title;
 
   /// Query field for the [title] field.
   @Deprecated(r'Use $title instead')
-  QueryField<String, Post7V2, String> get TITLE => $title;
+  static QueryField<String, Post7V2, String> get TITLE => $title;
   @override
   Blog7V2? get blog;
 
   /// Query field for the [blog] field.
-  Blog7V2QueryFields<String, Post7V2> get $blog => _queryFields.$blog;
+  static Blog7V2QueryFields<String, Post7V2> get $blog => _queryFields.$blog;
 
   /// Query field for the [blog] field.
   @Deprecated(r'Use $blog instead')
-  Blog7V2QueryFields<String, Post7V2> get BLOG => $blog;
+  static Blog7V2QueryFields<String, Post7V2> get BLOG => $blog;
   @override
   AsyncModelCollection<String, Comment7V2, PartialComment7V2, Comment7V2>?
       get comments;
 
   /// Query field for the [comments] field.
-  Comment7V2QueryFields<String, Post7V2> get $comments =>
+  static Comment7V2QueryFields<String, Post7V2> get $comments =>
       _queryFields.$comments;
 
   /// Query field for the [comments] field.
   @Deprecated(r'Use $comments instead')
-  Comment7V2QueryFields<String, Post7V2> get COMMENTS => $comments;
+  static Comment7V2QueryFields<String, Post7V2> get COMMENTS => $comments;
   @override
   TemporalDateTime get createdAt;
   @override
@@ -438,12 +523,13 @@ abstract class Post7V2 extends PartialPost7V2
   String? get blog7V2PostsId;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Post7V2, String> get $modelIdentifier =>
+  static QueryField<String, Post7V2, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Post7V2, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Post7V2, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Post7V2 copyWith({
     String? id,
     String? title,

@@ -279,56 +279,114 @@ abstract class BatteryCharger extends PartialBatteryCharger
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'BatteryCharger',
-      'pluralName': 'BatteryChargers',
-      'fields': {
-        'powerSource': {
-          'name': 'powerSource',
-          'type': {'model': 'PowerSource'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'HasOne',
-            'associatedType': 'PowerSource',
-            'associatedFields': ['id'],
-            'targetNames': ['batteryChargerPowerSourceId'],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'batteryChargerPowerSourceId': {
-          'name': 'batteryChargerPowerSourceId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'BatteryCharger',
+      'pluralName',
+      'BatteryChargers',
+      'fields',
+      [
+        'powerSource',
+        [
+          'name',
+          'powerSource',
+          'type',
+          [
+            'model',
+            'PowerSource',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'HasOne',
+            'associatedType',
+            'PowerSource',
+            'associatedFields',
+            ['id'],
+            'targetNames',
+            ['batteryChargerPowerSourceId'],
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'batteryChargerPowerSourceId',
+        [
+          'name',
+          'batteryChargerPowerSourceId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
@@ -336,12 +394,12 @@ abstract class BatteryCharger extends PartialBatteryCharger
       get powerSource;
 
   /// Query field for the [powerSource] field.
-  PowerSourceQueryFields<String, BatteryCharger> get $powerSource =>
+  static PowerSourceQueryFields<String, BatteryCharger> get $powerSource =>
       _queryFields.$powerSource;
 
   /// Query field for the [powerSource] field.
   @Deprecated(r'Use $powerSource instead')
-  PowerSourceQueryFields<String, BatteryCharger> get POWER_SOURCE =>
+  static PowerSourceQueryFields<String, BatteryCharger> get POWER_SOURCE =>
       $powerSource;
   @override
   TemporalDateTime get createdAt;
@@ -351,31 +409,31 @@ abstract class BatteryCharger extends PartialBatteryCharger
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, BatteryCharger, String> get $id => _queryFields.$id;
+  static QueryField<String, BatteryCharger, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, BatteryCharger, String> get ID => $id;
+  static QueryField<String, BatteryCharger, String> get ID => $id;
   @override
   String? get batteryChargerPowerSourceId;
 
   /// Query field for the [batteryChargerPowerSourceId] field.
-  QueryField<String, BatteryCharger, String?>
+  static QueryField<String, BatteryCharger, String?>
       get $batteryChargerPowerSourceId =>
           _queryFields.$batteryChargerPowerSourceId;
 
   /// Query field for the [batteryChargerPowerSourceId] field.
   @Deprecated(r'Use $batteryChargerPowerSourceId instead')
-  QueryField<String, BatteryCharger, String?>
+  static QueryField<String, BatteryCharger, String?>
       get BATTERY_CHARGER_POWER_SOURCE_ID => $batteryChargerPowerSourceId;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, BatteryCharger, String> get $modelIdentifier =>
+  static QueryField<String, BatteryCharger, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, BatteryCharger, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, BatteryCharger, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   BatteryCharger copyWith({
     PowerSource? powerSource,

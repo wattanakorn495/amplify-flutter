@@ -45,17 +45,28 @@ class MyNonModel
   static final mipr.NonModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.NonModelTypeDefinition.serializer,
-    const {
-      'name': 'MyNonModel',
-      'fields': {
-        'enum': {
-          'name': 'enum',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        }
-      },
-    },
+    const [
+      'name',
+      'MyNonModel',
+      'fields',
+      [
+        'enum',
+        [
+          'name',
+          'enum',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+      ],
+    ],
   )!;
 
   @override

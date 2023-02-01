@@ -409,156 +409,253 @@ abstract class TestEnumModel extends PartialTestEnumModel
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'TestEnumModel',
-      'pluralName': 'TestEnumModels',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'enumVal': {
-          'name': 'enumVal',
-          'type': {'enum': 'TestEnum'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'nullableEnumVal': {
-          'name': 'nullableEnumVal',
-          'type': {'enum': 'TestEnum'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'enumList': {
-          'name': 'enumList',
-          'type': {
-            'list': {'enum': 'TestEnum'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'enumNullableList': {
-          'name': 'enumNullableList',
-          'type': {
-            'list': {'enum': 'TestEnum'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'nullableEnumList': {
-          'name': 'nullableEnumList',
-          'type': {
-            'list': {'enum': 'TestEnum'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'nullableEnumNullableList': {
-          'name': 'nullableEnumNullableList',
-          'type': {
-            'list': {'enum': 'TestEnum'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'TestEnumModel',
+      'pluralName',
+      'TestEnumModels',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'enumVal',
+        [
+          'name',
+          'enumVal',
+          'type',
+          [
+            'enum',
+            'TestEnum',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'nullableEnumVal',
+        [
+          'name',
+          'nullableEnumVal',
+          'type',
+          [
+            'enum',
+            'TestEnum',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'enumList',
+        [
+          'name',
+          'enumList',
+          'type',
+          [
+            'list',
+            [
+              'enum',
+              'TestEnum',
+              true,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'enumNullableList',
+        [
+          'name',
+          'enumNullableList',
+          'type',
+          [
+            'list',
+            [
+              'enum',
+              'TestEnum',
+              true,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'nullableEnumList',
+        [
+          'name',
+          'nullableEnumList',
+          'type',
+          [
+            'list',
+            [
+              'enum',
+              'TestEnum',
+              false,
+            ],
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'nullableEnumNullableList',
+        [
+          'name',
+          'nullableEnumNullableList',
+          'type',
+          [
+            'list',
+            [
+              'enum',
+              'TestEnum',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, TestEnumModel, String> get $id => _queryFields.$id;
+  static QueryField<String, TestEnumModel, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, TestEnumModel, String> get ID => $id;
+  static QueryField<String, TestEnumModel, String> get ID => $id;
   @override
   TestEnum get enumVal;
 
   /// Query field for the [enumVal] field.
-  QueryField<String, TestEnumModel, TestEnum> get $enumVal =>
+  static QueryField<String, TestEnumModel, TestEnum> get $enumVal =>
       _queryFields.$enumVal;
 
   /// Query field for the [enumVal] field.
   @Deprecated(r'Use $enumVal instead')
-  QueryField<String, TestEnumModel, TestEnum> get ENUM_VAL => $enumVal;
+  static QueryField<String, TestEnumModel, TestEnum> get ENUM_VAL => $enumVal;
   @override
   TestEnum? get nullableEnumVal;
 
   /// Query field for the [nullableEnumVal] field.
-  QueryField<String, TestEnumModel, TestEnum?> get $nullableEnumVal =>
+  static QueryField<String, TestEnumModel, TestEnum?> get $nullableEnumVal =>
       _queryFields.$nullableEnumVal;
 
   /// Query field for the [nullableEnumVal] field.
   @Deprecated(r'Use $nullableEnumVal instead')
-  QueryField<String, TestEnumModel, TestEnum?> get NULLABLE_ENUM_VAL =>
+  static QueryField<String, TestEnumModel, TestEnum?> get NULLABLE_ENUM_VAL =>
       $nullableEnumVal;
   @override
   List<TestEnum> get enumList;
 
   /// Query field for the [enumList] field.
-  QueryField<String, TestEnumModel, TestEnum> get $enumList =>
+  static QueryField<String, TestEnumModel, TestEnum> get $enumList =>
       _queryFields.$enumList;
 
   /// Query field for the [enumList] field.
   @Deprecated(r'Use $enumList instead')
-  QueryField<String, TestEnumModel, TestEnum> get ENUM_LIST => $enumList;
+  static QueryField<String, TestEnumModel, TestEnum> get ENUM_LIST => $enumList;
   @override
   List<TestEnum>? get enumNullableList;
 
   /// Query field for the [enumNullableList] field.
-  QueryField<String, TestEnumModel, TestEnum> get $enumNullableList =>
+  static QueryField<String, TestEnumModel, TestEnum> get $enumNullableList =>
       _queryFields.$enumNullableList;
 
   /// Query field for the [enumNullableList] field.
   @Deprecated(r'Use $enumNullableList instead')
-  QueryField<String, TestEnumModel, TestEnum> get ENUM_NULLABLE_LIST =>
+  static QueryField<String, TestEnumModel, TestEnum> get ENUM_NULLABLE_LIST =>
       $enumNullableList;
   @override
   List<TestEnum?> get nullableEnumList;
 
   /// Query field for the [nullableEnumList] field.
-  QueryField<String, TestEnumModel, TestEnum?> get $nullableEnumList =>
+  static QueryField<String, TestEnumModel, TestEnum?> get $nullableEnumList =>
       _queryFields.$nullableEnumList;
 
   /// Query field for the [nullableEnumList] field.
   @Deprecated(r'Use $nullableEnumList instead')
-  QueryField<String, TestEnumModel, TestEnum?> get NULLABLE_ENUM_LIST =>
+  static QueryField<String, TestEnumModel, TestEnum?> get NULLABLE_ENUM_LIST =>
       $nullableEnumList;
   @override
   List<TestEnum?>? get nullableEnumNullableList;
 
   /// Query field for the [nullableEnumNullableList] field.
-  QueryField<String, TestEnumModel, TestEnum?> get $nullableEnumNullableList =>
-      _queryFields.$nullableEnumNullableList;
+  static QueryField<String, TestEnumModel, TestEnum?>
+      get $nullableEnumNullableList => _queryFields.$nullableEnumNullableList;
 
   /// Query field for the [nullableEnumNullableList] field.
   @Deprecated(r'Use $nullableEnumNullableList instead')
-  QueryField<String, TestEnumModel, TestEnum?>
+  static QueryField<String, TestEnumModel, TestEnum?>
       get NULLABLE_ENUM_NULLABLE_LIST => $nullableEnumNullableList;
   @override
   TemporalDateTime get createdAt;
@@ -566,12 +663,12 @@ abstract class TestEnumModel extends PartialTestEnumModel
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, TestEnumModel, String> get $modelIdentifier =>
+  static QueryField<String, TestEnumModel, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, TestEnumModel, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, TestEnumModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   TestEnumModel copyWith({
     String? id,

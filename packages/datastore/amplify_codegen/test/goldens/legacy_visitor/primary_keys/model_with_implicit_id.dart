@@ -225,56 +225,100 @@ abstract class ModelWithImplicitId extends PartialModelWithImplicitId
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'ModelWithImplicitID',
-      'pluralName': 'ModelWithImplicitIDs',
-      'fields': {
-        'title': {
-          'name': 'title',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'ModelWithImplicitID',
+      'pluralName',
+      'ModelWithImplicitIDs',
+      'fields',
+      [
+        'title',
+        [
+          'name',
+          'title',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get title;
 
   /// Query field for the [title] field.
-  QueryField<String, ModelWithImplicitId, String> get $title =>
+  static QueryField<String, ModelWithImplicitId, String> get $title =>
       _queryFields.$title;
 
   /// Query field for the [title] field.
   @Deprecated(r'Use $title instead')
-  QueryField<String, ModelWithImplicitId, String> get TITLE => $title;
+  static QueryField<String, ModelWithImplicitId, String> get TITLE => $title;
   @override
   TemporalDateTime get createdAt;
   @override
@@ -283,19 +327,20 @@ abstract class ModelWithImplicitId extends PartialModelWithImplicitId
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, ModelWithImplicitId, String> get $id => _queryFields.$id;
+  static QueryField<String, ModelWithImplicitId, String> get $id =>
+      _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, ModelWithImplicitId, String> get ID => $id;
+  static QueryField<String, ModelWithImplicitId, String> get ID => $id;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, ModelWithImplicitId, String> get $modelIdentifier =>
+  static QueryField<String, ModelWithImplicitId, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, ModelWithImplicitId, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, ModelWithImplicitId, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   ModelWithImplicitId copyWith({
     String? title,

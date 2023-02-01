@@ -243,98 +243,159 @@ abstract class Comment2 extends PartialComment2
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Comment2',
-      'pluralName': 'Comment2s',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'postID': {
-          'name': 'postID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'content': {
-          'name': 'content',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'secondary',
-          'primaryField': 'postID',
-          'sortKeyFields': [],
-          'name': 'byPost',
-          'queryField': 'comment2sByPostID',
-        },
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        },
+    const [
+      'name',
+      'Comment2',
+      'pluralName',
+      'Comment2s',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'postID',
+        [
+          'name',
+          'postID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'content',
+        [
+          'name',
+          'content',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'secondary',
+          'primaryField',
+          'postID',
+          'sortKeyFields',
+          [],
+          'name',
+          'byPost',
+          'queryField',
+          'comment2sByPostID',
+        ],
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ],
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Comment2, String> get $id => _queryFields.$id;
+  static QueryField<String, Comment2, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Comment2, String> get ID => $id;
+  static QueryField<String, Comment2, String> get ID => $id;
   @override
   String get postId;
 
   /// Query field for the [postId] field.
-  QueryField<String, Comment2, String> get $postId => _queryFields.$postId;
+  static QueryField<String, Comment2, String> get $postId =>
+      _queryFields.$postId;
 
   /// Query field for the [postId] field.
   @Deprecated(r'Use $postId instead')
-  QueryField<String, Comment2, String> get POST_ID => $postId;
+  static QueryField<String, Comment2, String> get POST_ID => $postId;
   @override
   String get content;
 
   /// Query field for the [content] field.
-  QueryField<String, Comment2, String> get $content => _queryFields.$content;
+  static QueryField<String, Comment2, String> get $content =>
+      _queryFields.$content;
 
   /// Query field for the [content] field.
   @Deprecated(r'Use $content instead')
-  QueryField<String, Comment2, String> get CONTENT => $content;
+  static QueryField<String, Comment2, String> get CONTENT => $content;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Comment2, String> get $modelIdentifier =>
+  static QueryField<String, Comment2, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Comment2, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Comment2, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Comment2 copyWith({
     String? id,
     String? postId,

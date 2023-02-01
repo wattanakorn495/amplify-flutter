@@ -265,78 +265,124 @@ abstract class CpkModel extends PartialCpkModel
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'CPKModel',
-      'pluralName': 'CPKModels',
-      'fields': {
-        'firstName': {
-          'name': 'firstName',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'lastName': {
-          'name': 'lastName',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'firstName',
-          'sortKeyFields': ['lastName'],
-        }
+    const [
+      'name',
+      'CPKModel',
+      'pluralName',
+      'CPKModels',
+      'fields',
+      [
+        'firstName',
+        [
+          'name',
+          'firstName',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'lastName',
+        [
+          'name',
+          'lastName',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'firstName',
+          'sortKeyFields',
+          ['lastName'],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get firstName;
 
   /// Query field for the [firstName] field.
-  QueryField<CpkModelIdentifier, CpkModel, String> get $firstName =>
+  static QueryField<CpkModelIdentifier, CpkModel, String> get $firstName =>
       _queryFields.$firstName;
 
   /// Query field for the [firstName] field.
   @Deprecated(r'Use $firstName instead')
-  QueryField<CpkModelIdentifier, CpkModel, String> get FIRST_NAME => $firstName;
+  static QueryField<CpkModelIdentifier, CpkModel, String> get FIRST_NAME =>
+      $firstName;
   @override
   String get lastName;
 
   /// Query field for the [lastName] field.
-  QueryField<CpkModelIdentifier, CpkModel, String> get $lastName =>
+  static QueryField<CpkModelIdentifier, CpkModel, String> get $lastName =>
       _queryFields.$lastName;
 
   /// Query field for the [lastName] field.
   @Deprecated(r'Use $lastName instead')
-  QueryField<CpkModelIdentifier, CpkModel, String> get LAST_NAME => $lastName;
+  static QueryField<CpkModelIdentifier, CpkModel, String> get LAST_NAME =>
+      $lastName;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<CpkModelIdentifier, CpkModel, CpkModelIdentifier>
+  static QueryField<CpkModelIdentifier, CpkModel, CpkModelIdentifier>
       get $modelIdentifier => _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<CpkModelIdentifier, CpkModel, CpkModelIdentifier>
+  static QueryField<CpkModelIdentifier, CpkModel, CpkModelIdentifier>
       get MODEL_IDENTIFIER => $modelIdentifier;
   CpkModel copyWith({
     String? firstName,

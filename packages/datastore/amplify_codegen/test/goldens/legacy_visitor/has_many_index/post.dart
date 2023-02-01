@@ -314,128 +314,208 @@ abstract class Post extends PartialPost
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Post',
-      'pluralName': 'Posts',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'title': {
-          'name': 'title',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'rating': {
-          'name': 'rating',
-          'type': {'scalar': 'Int'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'status': {
-          'name': 'status',
-          'type': {'enum': 'PostStatus'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'comments': {
-          'name': 'comments',
-          'type': {
-            'list': {'model': 'Comment'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'HasMany',
-            'associatedType': 'Comment',
-            'associatedFields': ['post'],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'Post',
+      'pluralName',
+      'Posts',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'title',
+        [
+          'name',
+          'title',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'rating',
+        [
+          'name',
+          'rating',
+          'type',
+          [
+            'scalar',
+            'Int',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'status',
+        [
+          'name',
+          'status',
+          'type',
+          [
+            'enum',
+            'PostStatus',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'comments',
+        [
+          'name',
+          'comments',
+          'type',
+          [
+            'list',
+            [
+              'model',
+              'Comment',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'HasMany',
+            'associatedType',
+            'Comment',
+            'associatedFields',
+            ['post'],
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Post, String> get $id => _queryFields.$id;
+  static QueryField<String, Post, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Post, String> get ID => $id;
+  static QueryField<String, Post, String> get ID => $id;
   @override
   String get title;
 
   /// Query field for the [title] field.
-  QueryField<String, Post, String> get $title => _queryFields.$title;
+  static QueryField<String, Post, String> get $title => _queryFields.$title;
 
   /// Query field for the [title] field.
   @Deprecated(r'Use $title instead')
-  QueryField<String, Post, String> get TITLE => $title;
+  static QueryField<String, Post, String> get TITLE => $title;
   @override
   int get rating;
 
   /// Query field for the [rating] field.
-  QueryField<String, Post, int> get $rating => _queryFields.$rating;
+  static QueryField<String, Post, int> get $rating => _queryFields.$rating;
 
   /// Query field for the [rating] field.
   @Deprecated(r'Use $rating instead')
-  QueryField<String, Post, int> get RATING => $rating;
+  static QueryField<String, Post, int> get RATING => $rating;
   @override
   PostStatus get status;
 
   /// Query field for the [status] field.
-  QueryField<String, Post, PostStatus> get $status => _queryFields.$status;
+  static QueryField<String, Post, PostStatus> get $status =>
+      _queryFields.$status;
 
   /// Query field for the [status] field.
   @Deprecated(r'Use $status instead')
-  QueryField<String, Post, PostStatus> get STATUS => $status;
+  static QueryField<String, Post, PostStatus> get STATUS => $status;
   @override
   AsyncModelCollection<String, Comment, PartialComment, Comment>? get comments;
 
   /// Query field for the [comments] field.
-  CommentQueryFields<String, Post> get $comments => _queryFields.$comments;
+  static CommentQueryFields<String, Post> get $comments =>
+      _queryFields.$comments;
 
   /// Query field for the [comments] field.
   @Deprecated(r'Use $comments instead')
-  CommentQueryFields<String, Post> get COMMENTS => $comments;
+  static CommentQueryFields<String, Post> get COMMENTS => $comments;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Post, String> get $modelIdentifier =>
+  static QueryField<String, Post, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Post, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Post, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Post copyWith({
     String? id,
     String? title,

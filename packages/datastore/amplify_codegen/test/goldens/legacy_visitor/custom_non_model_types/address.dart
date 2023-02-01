@@ -84,41 +84,88 @@ class Address
   static final mipr.NonModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.NonModelTypeDefinition.serializer,
-    const {
-      'name': 'Address',
-      'fields': {
-        'line1': {
-          'name': 'line1',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'line2': {
-          'name': 'line2',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'city': {
-          'name': 'city',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'state': {
-          'name': 'state',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'postalCode': {
-          'name': 'postalCode',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-    },
+    const [
+      'name',
+      'Address',
+      'fields',
+      [
+        'line1',
+        [
+          'name',
+          'line1',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'line2',
+        [
+          'name',
+          'line2',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'city',
+        [
+          'name',
+          'city',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'state',
+        [
+          'name',
+          'state',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'postalCode',
+        [
+          'name',
+          'postalCode',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+      ],
+    ],
   )!;
 
   @override

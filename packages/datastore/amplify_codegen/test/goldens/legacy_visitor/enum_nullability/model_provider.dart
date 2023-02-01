@@ -34,7 +34,7 @@ class ModelProvider extends ModelProviderInterface {
   static final instance = ModelProvider._();
 
   @override
-  String get version => '8b69a9648ae48b3e1613b6d284bd3023';
+  String get version => '86599a08ed27f14676de89d86d26fd31';
   @override
   List<mipr.ModelTypeDefinition> get modelSchemas => [TestEnumModel.schema];
   @override

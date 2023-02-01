@@ -99,8 +99,7 @@ class PostQueryFields<ModelIdentifier extends Object,
   CommentQueryFields<ModelIdentifier, M> get $comments => CommentQueryFields(
         NestedQueryField<ModelIdentifier, M, PostIdentifier, Post, Comment>(
           const QueryField<PostIdentifier, Post, Comment>(
-            fieldName: 'comments',
-          ),
+              fieldName: 'comments'),
           root: _root,
         ),
       );
@@ -311,104 +310,165 @@ abstract class Post extends PartialPost
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Post',
-      'pluralName': 'Posts',
-      'fields': {
-        'postId': {
-          'name': 'postId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'title': {
-          'name': 'title',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'comments': {
-          'name': 'comments',
-          'type': {
-            'list': {'model': 'Comment'}
-          },
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'HasMany',
-            'associatedType': 'Comment',
-            'associatedFields': [
+    const [
+      'name',
+      'Post',
+      'pluralName',
+      'Posts',
+      'fields',
+      [
+        'postId',
+        [
+          'name',
+          'postId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'title',
+        [
+          'name',
+          'title',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'comments',
+        [
+          'name',
+          'comments',
+          'type',
+          [
+            'list',
+            [
+              'model',
+              'Comment',
+              false,
+            ],
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'HasMany',
+            'associatedType',
+            'Comment',
+            'associatedFields',
+            [
               'postCommentsPostId',
               'postCommentsTitle',
             ],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'postId',
-          'sortKeyFields': ['title'],
-        }
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'postId',
+          'sortKeyFields',
+          ['title'],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get postId;
 
   /// Query field for the [postId] field.
-  QueryField<PostIdentifier, Post, String> get $postId => _queryFields.$postId;
+  static QueryField<PostIdentifier, Post, String> get $postId =>
+      _queryFields.$postId;
 
   /// Query field for the [postId] field.
   @Deprecated(r'Use $postId instead')
-  QueryField<PostIdentifier, Post, String> get POST_ID => $postId;
+  static QueryField<PostIdentifier, Post, String> get POST_ID => $postId;
   @override
   String get title;
 
   /// Query field for the [title] field.
-  QueryField<PostIdentifier, Post, String> get $title => _queryFields.$title;
+  static QueryField<PostIdentifier, Post, String> get $title =>
+      _queryFields.$title;
 
   /// Query field for the [title] field.
   @Deprecated(r'Use $title instead')
-  QueryField<PostIdentifier, Post, String> get TITLE => $title;
+  static QueryField<PostIdentifier, Post, String> get TITLE => $title;
   @override
   AsyncModelCollection<CommentIdentifier, Comment, PartialComment, Comment>?
       get comments;
 
   /// Query field for the [comments] field.
-  CommentQueryFields<PostIdentifier, Post> get $comments =>
+  static CommentQueryFields<PostIdentifier, Post> get $comments =>
       _queryFields.$comments;
 
   /// Query field for the [comments] field.
   @Deprecated(r'Use $comments instead')
-  CommentQueryFields<PostIdentifier, Post> get COMMENTS => $comments;
+  static CommentQueryFields<PostIdentifier, Post> get COMMENTS => $comments;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<PostIdentifier, Post, PostIdentifier> get $modelIdentifier =>
-      _queryFields.$modelIdentifier;
+  static QueryField<PostIdentifier, Post, PostIdentifier>
+      get $modelIdentifier => _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<PostIdentifier, Post, PostIdentifier> get MODEL_IDENTIFIER =>
-      $modelIdentifier;
+  static QueryField<PostIdentifier, Post, PostIdentifier>
+      get MODEL_IDENTIFIER => $modelIdentifier;
   Post copyWith({
     String? postId,
     String? title,

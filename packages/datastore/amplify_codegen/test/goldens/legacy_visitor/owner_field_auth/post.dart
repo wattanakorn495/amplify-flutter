@@ -237,104 +237,163 @@ abstract class Post extends PartialPost
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Post',
-      'pluralName': 'Posts',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'title': {
-          'name': 'title',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'author': {
-          'name': 'author',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [
-        {
-          'authStrategy': 'OWNER',
-          'provider': 'USERPOOLS',
-          'operations': [
+    const [
+      'name',
+      'Post',
+      'pluralName',
+      'Posts',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'title',
+        [
+          'name',
+          'title',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'author',
+        [
+          'name',
+          'author',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+      ],
+      'authRules',
+      [
+        [
+          'authStrategy',
+          'OWNER',
+          'provider',
+          'USERPOOLS',
+          'operations',
+          [
             'CREATE',
             'UPDATE',
             'DELETE',
             'READ',
           ],
-          'ownerField': 'author',
-          'identityClaim': 'sub::username',
-        }
+          'ownerField',
+          'author',
+          'identityClaim',
+          'sub::username',
+        ]
       ],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
       ],
-    },
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Post, String> get $id => _queryFields.$id;
+  static QueryField<String, Post, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Post, String> get ID => $id;
+  static QueryField<String, Post, String> get ID => $id;
   @override
   String get title;
 
   /// Query field for the [title] field.
-  QueryField<String, Post, String> get $title => _queryFields.$title;
+  static QueryField<String, Post, String> get $title => _queryFields.$title;
 
   /// Query field for the [title] field.
   @Deprecated(r'Use $title instead')
-  QueryField<String, Post, String> get TITLE => $title;
+  static QueryField<String, Post, String> get TITLE => $title;
   @override
   String get author;
 
   /// Query field for the [author] field.
-  QueryField<String, Post, String> get $author => _queryFields.$author;
+  static QueryField<String, Post, String> get $author => _queryFields.$author;
 
   /// Query field for the [author] field.
   @Deprecated(r'Use $author instead')
-  QueryField<String, Post, String> get AUTHOR => $author;
+  static QueryField<String, Post, String> get AUTHOR => $author;
   @override
   TemporalDateTime get createdAt;
   @override
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Post, String> get $modelIdentifier =>
+  static QueryField<String, Post, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Post, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Post, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Post copyWith({
     String? id,
     String? title,

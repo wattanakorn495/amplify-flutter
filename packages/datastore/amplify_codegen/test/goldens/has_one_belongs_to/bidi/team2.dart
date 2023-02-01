@@ -271,96 +271,167 @@ abstract class Team2 extends PartialTeam2
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Team2',
-      'pluralName': 'Team2s',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'name': {
-          'name': 'name',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'project': {
-          'name': 'project',
-          'type': {'model': 'Project2'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'BelongsTo',
-            'associatedType': 'Project2',
-            'targetNames': ['team2ProjectId'],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'team2ProjectId': {
-          'name': 'team2ProjectId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        },
-        {
-          'type': 'foreign',
-          'primaryField': 'project',
-          'sortKeyFields': ['team2ProjectId'],
-          'name': 'project',
-        },
+    const [
+      'name',
+      'Team2',
+      'pluralName',
+      'Team2s',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'name',
+        [
+          'name',
+          'name',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'project',
+        [
+          'name',
+          'project',
+          'type',
+          [
+            'model',
+            'Project2',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'BelongsTo',
+            'associatedType',
+            'Project2',
+            'targetNames',
+            ['team2ProjectId'],
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'team2ProjectId',
+        [
+          'name',
+          'team2ProjectId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ],
+        [
+          'type',
+          'foreign',
+          'primaryField',
+          'project',
+          'sortKeyFields',
+          ['team2ProjectId'],
+          'name',
+          'project',
+        ],
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Team2, String> get $id => _queryFields.$id;
+  static QueryField<String, Team2, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Team2, String> get ID => $id;
+  static QueryField<String, Team2, String> get ID => $id;
   @override
   String get name;
 
   /// Query field for the [name] field.
-  QueryField<String, Team2, String> get $name => _queryFields.$name;
+  static QueryField<String, Team2, String> get $name => _queryFields.$name;
 
   /// Query field for the [name] field.
   @Deprecated(r'Use $name instead')
-  QueryField<String, Team2, String> get NAME => $name;
+  static QueryField<String, Team2, String> get NAME => $name;
   @override
   Project2 get project;
 
   /// Query field for the [project] field.
-  Project2QueryFields<String, Team2> get $project => _queryFields.$project;
+  static Project2QueryFields<String, Team2> get $project =>
+      _queryFields.$project;
 
   /// Query field for the [project] field.
   @Deprecated(r'Use $project instead')
-  Project2QueryFields<String, Team2> get PROJECT => $project;
+  static Project2QueryFields<String, Team2> get PROJECT => $project;
   @override
   TemporalDateTime get createdAt;
   @override
@@ -369,12 +440,13 @@ abstract class Team2 extends PartialTeam2
   String get team2ProjectId;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Team2, String> get $modelIdentifier =>
+  static QueryField<String, Team2, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Team2, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Team2, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Team2 copyWith({
     String? id,
     String? name,

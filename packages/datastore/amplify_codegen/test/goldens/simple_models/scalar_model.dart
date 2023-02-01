@@ -839,470 +839,750 @@ abstract class ScalarModel extends PartialScalarModel
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'ScalarModel',
-      'pluralName': 'ScalarModels',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'str': {
-          'name': 'str',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredStr': {
-          'name': 'requiredStr',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'integer': {
-          'name': 'integer',
-          'type': {'scalar': 'Int'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredInteger': {
-          'name': 'requiredInteger',
-          'type': {'scalar': 'Int'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'float': {
-          'name': 'float',
-          'type': {'scalar': 'Float'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredFloat': {
-          'name': 'requiredFloat',
-          'type': {'scalar': 'Float'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'boolean': {
-          'name': 'boolean',
-          'type': {'scalar': 'Boolean'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredBoolean': {
-          'name': 'requiredBoolean',
-          'type': {'scalar': 'Boolean'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'awsDate': {
-          'name': 'awsDate',
-          'type': {'scalar': 'AWSDate'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredAwsDate': {
-          'name': 'requiredAwsDate',
-          'type': {'scalar': 'AWSDate'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'awsDateTime': {
-          'name': 'awsDateTime',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredAwsDateTime': {
-          'name': 'requiredAwsDateTime',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'awsTime': {
-          'name': 'awsTime',
-          'type': {'scalar': 'AWSTime'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredAwsTime': {
-          'name': 'requiredAwsTime',
-          'type': {'scalar': 'AWSTime'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'awsTimestamp': {
-          'name': 'awsTimestamp',
-          'type': {'scalar': 'AWSTimestamp'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredAwsTimestamp': {
-          'name': 'requiredAwsTimestamp',
-          'type': {'scalar': 'AWSTimestamp'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'awsEmail': {
-          'name': 'awsEmail',
-          'type': {'scalar': 'AWSEmail'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredAwsEmail': {
-          'name': 'requiredAwsEmail',
-          'type': {'scalar': 'AWSEmail'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'awsJson': {
-          'name': 'awsJson',
-          'type': {'scalar': 'AWSJSON'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredAwsJson': {
-          'name': 'requiredAwsJson',
-          'type': {'scalar': 'AWSJSON'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'awsPhone': {
-          'name': 'awsPhone',
-          'type': {'scalar': 'AWSPhone'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredAwsPhone': {
-          'name': 'requiredAwsPhone',
-          'type': {'scalar': 'AWSPhone'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'awsUrl': {
-          'name': 'awsUrl',
-          'type': {'scalar': 'AWSURL'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredAwsUrl': {
-          'name': 'requiredAwsUrl',
-          'type': {'scalar': 'AWSURL'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'awsIpAddress': {
-          'name': 'awsIpAddress',
-          'type': {'scalar': 'AWSIPAddress'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'requiredAwsIpAddress': {
-          'name': 'requiredAwsIpAddress',
-          'type': {'scalar': 'AWSIPAddress'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'ScalarModel',
+      'pluralName',
+      'ScalarModels',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'str',
+        [
+          'name',
+          'str',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredStr',
+        [
+          'name',
+          'requiredStr',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'integer',
+        [
+          'name',
+          'integer',
+          'type',
+          [
+            'scalar',
+            'Int',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredInteger',
+        [
+          'name',
+          'requiredInteger',
+          'type',
+          [
+            'scalar',
+            'Int',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'float',
+        [
+          'name',
+          'float',
+          'type',
+          [
+            'scalar',
+            'Float',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredFloat',
+        [
+          'name',
+          'requiredFloat',
+          'type',
+          [
+            'scalar',
+            'Float',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'boolean',
+        [
+          'name',
+          'boolean',
+          'type',
+          [
+            'scalar',
+            'Boolean',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredBoolean',
+        [
+          'name',
+          'requiredBoolean',
+          'type',
+          [
+            'scalar',
+            'Boolean',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'awsDate',
+        [
+          'name',
+          'awsDate',
+          'type',
+          [
+            'scalar',
+            'AWSDate',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredAwsDate',
+        [
+          'name',
+          'requiredAwsDate',
+          'type',
+          [
+            'scalar',
+            'AWSDate',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'awsDateTime',
+        [
+          'name',
+          'awsDateTime',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredAwsDateTime',
+        [
+          'name',
+          'requiredAwsDateTime',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'awsTime',
+        [
+          'name',
+          'awsTime',
+          'type',
+          [
+            'scalar',
+            'AWSTime',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredAwsTime',
+        [
+          'name',
+          'requiredAwsTime',
+          'type',
+          [
+            'scalar',
+            'AWSTime',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'awsTimestamp',
+        [
+          'name',
+          'awsTimestamp',
+          'type',
+          [
+            'scalar',
+            'AWSTimestamp',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredAwsTimestamp',
+        [
+          'name',
+          'requiredAwsTimestamp',
+          'type',
+          [
+            'scalar',
+            'AWSTimestamp',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'awsEmail',
+        [
+          'name',
+          'awsEmail',
+          'type',
+          [
+            'scalar',
+            'AWSEmail',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredAwsEmail',
+        [
+          'name',
+          'requiredAwsEmail',
+          'type',
+          [
+            'scalar',
+            'AWSEmail',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'awsJson',
+        [
+          'name',
+          'awsJson',
+          'type',
+          [
+            'scalar',
+            'AWSJSON',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredAwsJson',
+        [
+          'name',
+          'requiredAwsJson',
+          'type',
+          [
+            'scalar',
+            'AWSJSON',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'awsPhone',
+        [
+          'name',
+          'awsPhone',
+          'type',
+          [
+            'scalar',
+            'AWSPhone',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredAwsPhone',
+        [
+          'name',
+          'requiredAwsPhone',
+          'type',
+          [
+            'scalar',
+            'AWSPhone',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'awsUrl',
+        [
+          'name',
+          'awsUrl',
+          'type',
+          [
+            'scalar',
+            'AWSURL',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredAwsUrl',
+        [
+          'name',
+          'requiredAwsUrl',
+          'type',
+          [
+            'scalar',
+            'AWSURL',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'awsIpAddress',
+        [
+          'name',
+          'awsIpAddress',
+          'type',
+          [
+            'scalar',
+            'AWSIPAddress',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'requiredAwsIpAddress',
+        [
+          'name',
+          'requiredAwsIpAddress',
+          'type',
+          [
+            'scalar',
+            'AWSIPAddress',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, ScalarModel, String> get $id => _queryFields.$id;
+  static QueryField<String, ScalarModel, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, ScalarModel, String> get ID => $id;
+  static QueryField<String, ScalarModel, String> get ID => $id;
   @override
   String? get str;
 
   /// Query field for the [str] field.
-  QueryField<String, ScalarModel, String?> get $str => _queryFields.$str;
+  static QueryField<String, ScalarModel, String?> get $str => _queryFields.$str;
 
   /// Query field for the [str] field.
   @Deprecated(r'Use $str instead')
-  QueryField<String, ScalarModel, String?> get STR => $str;
+  static QueryField<String, ScalarModel, String?> get STR => $str;
   @override
   String get requiredStr;
 
   /// Query field for the [requiredStr] field.
-  QueryField<String, ScalarModel, String> get $requiredStr =>
+  static QueryField<String, ScalarModel, String> get $requiredStr =>
       _queryFields.$requiredStr;
 
   /// Query field for the [requiredStr] field.
   @Deprecated(r'Use $requiredStr instead')
-  QueryField<String, ScalarModel, String> get REQUIRED_STR => $requiredStr;
+  static QueryField<String, ScalarModel, String> get REQUIRED_STR =>
+      $requiredStr;
   @override
   int? get integer;
 
   /// Query field for the [integer] field.
-  QueryField<String, ScalarModel, int?> get $integer => _queryFields.$integer;
+  static QueryField<String, ScalarModel, int?> get $integer =>
+      _queryFields.$integer;
 
   /// Query field for the [integer] field.
   @Deprecated(r'Use $integer instead')
-  QueryField<String, ScalarModel, int?> get INTEGER => $integer;
+  static QueryField<String, ScalarModel, int?> get INTEGER => $integer;
   @override
   int get requiredInteger;
 
   /// Query field for the [requiredInteger] field.
-  QueryField<String, ScalarModel, int> get $requiredInteger =>
+  static QueryField<String, ScalarModel, int> get $requiredInteger =>
       _queryFields.$requiredInteger;
 
   /// Query field for the [requiredInteger] field.
   @Deprecated(r'Use $requiredInteger instead')
-  QueryField<String, ScalarModel, int> get REQUIRED_INTEGER => $requiredInteger;
+  static QueryField<String, ScalarModel, int> get REQUIRED_INTEGER =>
+      $requiredInteger;
   @override
   double? get float;
 
   /// Query field for the [float] field.
-  QueryField<String, ScalarModel, double?> get $float => _queryFields.$float;
+  static QueryField<String, ScalarModel, double?> get $float =>
+      _queryFields.$float;
 
   /// Query field for the [float] field.
   @Deprecated(r'Use $float instead')
-  QueryField<String, ScalarModel, double?> get FLOAT => $float;
+  static QueryField<String, ScalarModel, double?> get FLOAT => $float;
   @override
   double get requiredFloat;
 
   /// Query field for the [requiredFloat] field.
-  QueryField<String, ScalarModel, double> get $requiredFloat =>
+  static QueryField<String, ScalarModel, double> get $requiredFloat =>
       _queryFields.$requiredFloat;
 
   /// Query field for the [requiredFloat] field.
   @Deprecated(r'Use $requiredFloat instead')
-  QueryField<String, ScalarModel, double> get REQUIRED_FLOAT => $requiredFloat;
+  static QueryField<String, ScalarModel, double> get REQUIRED_FLOAT =>
+      $requiredFloat;
   @override
   bool? get boolean;
 
   /// Query field for the [boolean] field.
-  QueryField<String, ScalarModel, bool?> get $boolean => _queryFields.$boolean;
+  static QueryField<String, ScalarModel, bool?> get $boolean =>
+      _queryFields.$boolean;
 
   /// Query field for the [boolean] field.
   @Deprecated(r'Use $boolean instead')
-  QueryField<String, ScalarModel, bool?> get BOOLEAN => $boolean;
+  static QueryField<String, ScalarModel, bool?> get BOOLEAN => $boolean;
   @override
   bool get requiredBoolean;
 
   /// Query field for the [requiredBoolean] field.
-  QueryField<String, ScalarModel, bool> get $requiredBoolean =>
+  static QueryField<String, ScalarModel, bool> get $requiredBoolean =>
       _queryFields.$requiredBoolean;
 
   /// Query field for the [requiredBoolean] field.
   @Deprecated(r'Use $requiredBoolean instead')
-  QueryField<String, ScalarModel, bool> get REQUIRED_BOOLEAN =>
+  static QueryField<String, ScalarModel, bool> get REQUIRED_BOOLEAN =>
       $requiredBoolean;
   @override
   TemporalDate? get awsDate;
 
   /// Query field for the [awsDate] field.
-  QueryField<String, ScalarModel, TemporalDate?> get $awsDate =>
+  static QueryField<String, ScalarModel, TemporalDate?> get $awsDate =>
       _queryFields.$awsDate;
 
   /// Query field for the [awsDate] field.
   @Deprecated(r'Use $awsDate instead')
-  QueryField<String, ScalarModel, TemporalDate?> get AWS_DATE => $awsDate;
+  static QueryField<String, ScalarModel, TemporalDate?> get AWS_DATE =>
+      $awsDate;
   @override
   TemporalDate get requiredAwsDate;
 
   /// Query field for the [requiredAwsDate] field.
-  QueryField<String, ScalarModel, TemporalDate> get $requiredAwsDate =>
+  static QueryField<String, ScalarModel, TemporalDate> get $requiredAwsDate =>
       _queryFields.$requiredAwsDate;
 
   /// Query field for the [requiredAwsDate] field.
   @Deprecated(r'Use $requiredAwsDate instead')
-  QueryField<String, ScalarModel, TemporalDate> get REQUIRED_AWS_DATE =>
+  static QueryField<String, ScalarModel, TemporalDate> get REQUIRED_AWS_DATE =>
       $requiredAwsDate;
   @override
   TemporalDateTime? get awsDateTime;
 
   /// Query field for the [awsDateTime] field.
-  QueryField<String, ScalarModel, TemporalDateTime?> get $awsDateTime =>
+  static QueryField<String, ScalarModel, TemporalDateTime?> get $awsDateTime =>
       _queryFields.$awsDateTime;
 
   /// Query field for the [awsDateTime] field.
   @Deprecated(r'Use $awsDateTime instead')
-  QueryField<String, ScalarModel, TemporalDateTime?> get AWS_DATE_TIME =>
+  static QueryField<String, ScalarModel, TemporalDateTime?> get AWS_DATE_TIME =>
       $awsDateTime;
   @override
   TemporalDateTime get requiredAwsDateTime;
 
   /// Query field for the [requiredAwsDateTime] field.
-  QueryField<String, ScalarModel, TemporalDateTime> get $requiredAwsDateTime =>
-      _queryFields.$requiredAwsDateTime;
+  static QueryField<String, ScalarModel, TemporalDateTime>
+      get $requiredAwsDateTime => _queryFields.$requiredAwsDateTime;
 
   /// Query field for the [requiredAwsDateTime] field.
   @Deprecated(r'Use $requiredAwsDateTime instead')
-  QueryField<String, ScalarModel, TemporalDateTime>
+  static QueryField<String, ScalarModel, TemporalDateTime>
       get REQUIRED_AWS_DATE_TIME => $requiredAwsDateTime;
   @override
   TemporalTime? get awsTime;
 
   /// Query field for the [awsTime] field.
-  QueryField<String, ScalarModel, TemporalTime?> get $awsTime =>
+  static QueryField<String, ScalarModel, TemporalTime?> get $awsTime =>
       _queryFields.$awsTime;
 
   /// Query field for the [awsTime] field.
   @Deprecated(r'Use $awsTime instead')
-  QueryField<String, ScalarModel, TemporalTime?> get AWS_TIME => $awsTime;
+  static QueryField<String, ScalarModel, TemporalTime?> get AWS_TIME =>
+      $awsTime;
   @override
   TemporalTime get requiredAwsTime;
 
   /// Query field for the [requiredAwsTime] field.
-  QueryField<String, ScalarModel, TemporalTime> get $requiredAwsTime =>
+  static QueryField<String, ScalarModel, TemporalTime> get $requiredAwsTime =>
       _queryFields.$requiredAwsTime;
 
   /// Query field for the [requiredAwsTime] field.
   @Deprecated(r'Use $requiredAwsTime instead')
-  QueryField<String, ScalarModel, TemporalTime> get REQUIRED_AWS_TIME =>
+  static QueryField<String, ScalarModel, TemporalTime> get REQUIRED_AWS_TIME =>
       $requiredAwsTime;
   @override
   TemporalTimestamp? get awsTimestamp;
 
   /// Query field for the [awsTimestamp] field.
-  QueryField<String, ScalarModel, TemporalTimestamp?> get $awsTimestamp =>
-      _queryFields.$awsTimestamp;
+  static QueryField<String, ScalarModel, TemporalTimestamp?>
+      get $awsTimestamp => _queryFields.$awsTimestamp;
 
   /// Query field for the [awsTimestamp] field.
   @Deprecated(r'Use $awsTimestamp instead')
-  QueryField<String, ScalarModel, TemporalTimestamp?> get AWS_TIMESTAMP =>
-      $awsTimestamp;
+  static QueryField<String, ScalarModel, TemporalTimestamp?>
+      get AWS_TIMESTAMP => $awsTimestamp;
   @override
   TemporalTimestamp get requiredAwsTimestamp;
 
   /// Query field for the [requiredAwsTimestamp] field.
-  QueryField<String, ScalarModel, TemporalTimestamp>
+  static QueryField<String, ScalarModel, TemporalTimestamp>
       get $requiredAwsTimestamp => _queryFields.$requiredAwsTimestamp;
 
   /// Query field for the [requiredAwsTimestamp] field.
   @Deprecated(r'Use $requiredAwsTimestamp instead')
-  QueryField<String, ScalarModel, TemporalTimestamp>
+  static QueryField<String, ScalarModel, TemporalTimestamp>
       get REQUIRED_AWS_TIMESTAMP => $requiredAwsTimestamp;
   @override
   String? get awsEmail;
 
   /// Query field for the [awsEmail] field.
-  QueryField<String, ScalarModel, String?> get $awsEmail =>
+  static QueryField<String, ScalarModel, String?> get $awsEmail =>
       _queryFields.$awsEmail;
 
   /// Query field for the [awsEmail] field.
   @Deprecated(r'Use $awsEmail instead')
-  QueryField<String, ScalarModel, String?> get AWS_EMAIL => $awsEmail;
+  static QueryField<String, ScalarModel, String?> get AWS_EMAIL => $awsEmail;
   @override
   String get requiredAwsEmail;
 
   /// Query field for the [requiredAwsEmail] field.
-  QueryField<String, ScalarModel, String> get $requiredAwsEmail =>
+  static QueryField<String, ScalarModel, String> get $requiredAwsEmail =>
       _queryFields.$requiredAwsEmail;
 
   /// Query field for the [requiredAwsEmail] field.
   @Deprecated(r'Use $requiredAwsEmail instead')
-  QueryField<String, ScalarModel, String> get REQUIRED_AWS_EMAIL =>
+  static QueryField<String, ScalarModel, String> get REQUIRED_AWS_EMAIL =>
       $requiredAwsEmail;
   @override
   Object? get awsJson;
 
   /// Query field for the [awsJson] field.
-  QueryField<String, ScalarModel, Object?> get $awsJson =>
+  static QueryField<String, ScalarModel, Object?> get $awsJson =>
       _queryFields.$awsJson;
 
   /// Query field for the [awsJson] field.
   @Deprecated(r'Use $awsJson instead')
-  QueryField<String, ScalarModel, Object?> get AWS_JSON => $awsJson;
+  static QueryField<String, ScalarModel, Object?> get AWS_JSON => $awsJson;
   @override
   Object get requiredAwsJson;
 
   /// Query field for the [requiredAwsJson] field.
-  QueryField<String, ScalarModel, Object> get $requiredAwsJson =>
+  static QueryField<String, ScalarModel, Object> get $requiredAwsJson =>
       _queryFields.$requiredAwsJson;
 
   /// Query field for the [requiredAwsJson] field.
   @Deprecated(r'Use $requiredAwsJson instead')
-  QueryField<String, ScalarModel, Object> get REQUIRED_AWS_JSON =>
+  static QueryField<String, ScalarModel, Object> get REQUIRED_AWS_JSON =>
       $requiredAwsJson;
   @override
   String? get awsPhone;
 
   /// Query field for the [awsPhone] field.
-  QueryField<String, ScalarModel, String?> get $awsPhone =>
+  static QueryField<String, ScalarModel, String?> get $awsPhone =>
       _queryFields.$awsPhone;
 
   /// Query field for the [awsPhone] field.
   @Deprecated(r'Use $awsPhone instead')
-  QueryField<String, ScalarModel, String?> get AWS_PHONE => $awsPhone;
+  static QueryField<String, ScalarModel, String?> get AWS_PHONE => $awsPhone;
   @override
   String get requiredAwsPhone;
 
   /// Query field for the [requiredAwsPhone] field.
-  QueryField<String, ScalarModel, String> get $requiredAwsPhone =>
+  static QueryField<String, ScalarModel, String> get $requiredAwsPhone =>
       _queryFields.$requiredAwsPhone;
 
   /// Query field for the [requiredAwsPhone] field.
   @Deprecated(r'Use $requiredAwsPhone instead')
-  QueryField<String, ScalarModel, String> get REQUIRED_AWS_PHONE =>
+  static QueryField<String, ScalarModel, String> get REQUIRED_AWS_PHONE =>
       $requiredAwsPhone;
   @override
   Uri? get awsUrl;
 
   /// Query field for the [awsUrl] field.
-  QueryField<String, ScalarModel, Uri?> get $awsUrl => _queryFields.$awsUrl;
+  static QueryField<String, ScalarModel, Uri?> get $awsUrl =>
+      _queryFields.$awsUrl;
 
   /// Query field for the [awsUrl] field.
   @Deprecated(r'Use $awsUrl instead')
-  QueryField<String, ScalarModel, Uri?> get AWS_URL => $awsUrl;
+  static QueryField<String, ScalarModel, Uri?> get AWS_URL => $awsUrl;
   @override
   Uri get requiredAwsUrl;
 
   /// Query field for the [requiredAwsUrl] field.
-  QueryField<String, ScalarModel, Uri> get $requiredAwsUrl =>
+  static QueryField<String, ScalarModel, Uri> get $requiredAwsUrl =>
       _queryFields.$requiredAwsUrl;
 
   /// Query field for the [requiredAwsUrl] field.
   @Deprecated(r'Use $requiredAwsUrl instead')
-  QueryField<String, ScalarModel, Uri> get REQUIRED_AWS_URL => $requiredAwsUrl;
+  static QueryField<String, ScalarModel, Uri> get REQUIRED_AWS_URL =>
+      $requiredAwsUrl;
   @override
   String? get awsIpAddress;
 
   /// Query field for the [awsIpAddress] field.
-  QueryField<String, ScalarModel, String?> get $awsIpAddress =>
+  static QueryField<String, ScalarModel, String?> get $awsIpAddress =>
       _queryFields.$awsIpAddress;
 
   /// Query field for the [awsIpAddress] field.
   @Deprecated(r'Use $awsIpAddress instead')
-  QueryField<String, ScalarModel, String?> get AWS_IP_ADDRESS => $awsIpAddress;
+  static QueryField<String, ScalarModel, String?> get AWS_IP_ADDRESS =>
+      $awsIpAddress;
   @override
   String get requiredAwsIpAddress;
 
   /// Query field for the [requiredAwsIpAddress] field.
-  QueryField<String, ScalarModel, String> get $requiredAwsIpAddress =>
+  static QueryField<String, ScalarModel, String> get $requiredAwsIpAddress =>
       _queryFields.$requiredAwsIpAddress;
 
   /// Query field for the [requiredAwsIpAddress] field.
   @Deprecated(r'Use $requiredAwsIpAddress instead')
-  QueryField<String, ScalarModel, String> get REQUIRED_AWS_IP_ADDRESS =>
+  static QueryField<String, ScalarModel, String> get REQUIRED_AWS_IP_ADDRESS =>
       $requiredAwsIpAddress;
   @override
   TemporalDateTime get createdAt;
@@ -1310,12 +1590,12 @@ abstract class ScalarModel extends PartialScalarModel
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, ScalarModel, String> get $modelIdentifier =>
+  static QueryField<String, ScalarModel, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, ScalarModel, String> get MODEL_IDENTIFIER =>
+  static QueryField<String, ScalarModel, String> get MODEL_IDENTIFIER =>
       $modelIdentifier;
   ScalarModel copyWith({
     String? id,

@@ -233,73 +233,122 @@ abstract class ModelWithExplicitIdAndSdi
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'ModelWithExplicitIDAndSDI',
-      'pluralName': 'ModelWithExplicitIDAndSDIs',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'parentID': {
-          'name': 'parentID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'secondary',
-          'primaryField': 'parentID',
-          'sortKeyFields': [],
-          'name': 'byParent',
-          'queryField': 'modelWithExplicitIDAndSDIsByParentID',
-        },
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        },
+    const [
+      'name',
+      'ModelWithExplicitIDAndSDI',
+      'pluralName',
+      'ModelWithExplicitIDAndSDIs',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'parentID',
+        [
+          'name',
+          'parentID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'secondary',
+          'primaryField',
+          'parentID',
+          'sortKeyFields',
+          [],
+          'name',
+          'byParent',
+          'queryField',
+          'modelWithExplicitIDAndSDIsByParentID',
+        ],
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ],
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, ModelWithExplicitIdAndSdi, String> get $id =>
+  static QueryField<String, ModelWithExplicitIdAndSdi, String> get $id =>
       _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, ModelWithExplicitIdAndSdi, String> get ID => $id;
+  static QueryField<String, ModelWithExplicitIdAndSdi, String> get ID => $id;
   @override
   String? get parentId;
 
   /// Query field for the [parentId] field.
-  QueryField<String, ModelWithExplicitIdAndSdi, String?> get $parentId =>
+  static QueryField<String, ModelWithExplicitIdAndSdi, String?> get $parentId =>
       _queryFields.$parentId;
 
   /// Query field for the [parentId] field.
   @Deprecated(r'Use $parentId instead')
-  QueryField<String, ModelWithExplicitIdAndSdi, String?> get PARENT_ID =>
+  static QueryField<String, ModelWithExplicitIdAndSdi, String?> get PARENT_ID =>
       $parentId;
   @override
   TemporalDateTime get createdAt;
@@ -307,13 +356,13 @@ abstract class ModelWithExplicitIdAndSdi
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, ModelWithExplicitIdAndSdi, String> get $modelIdentifier =>
-      _queryFields.$modelIdentifier;
+  static QueryField<String, ModelWithExplicitIdAndSdi, String>
+      get $modelIdentifier => _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, ModelWithExplicitIdAndSdi, String> get MODEL_IDENTIFIER =>
-      $modelIdentifier;
+  static QueryField<String, ModelWithExplicitIdAndSdi, String>
+      get MODEL_IDENTIFIER => $modelIdentifier;
   ModelWithExplicitIdAndSdi copyWith({
     String? id,
     String? parentId,

@@ -282,91 +282,158 @@ abstract class Project2 extends PartialProject2
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'Project2',
-      'pluralName': 'Project2s',
-      'fields': {
-        'id': {
-          'name': 'id',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'name': {
-          'name': 'name',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'team': {
-          'name': 'team',
-          'type': {'model': 'Team2'},
-          'isReadOnly': false,
-          'authRules': [],
-          'association': {
-            'associationType': 'HasOne',
-            'associatedType': 'Team2',
-            'associatedFields': ['project'],
-            'targetNames': ['project2TeamId'],
-          },
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'project2TeamId': {
-          'name': 'project2TeamId',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'id',
-          'sortKeyFields': [],
-        }
+    const [
+      'name',
+      'Project2',
+      'pluralName',
+      'Project2s',
+      'fields',
+      [
+        'id',
+        [
+          'name',
+          'id',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'name',
+        [
+          'name',
+          'name',
+          'type',
+          [
+            'scalar',
+            'String',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'team',
+        [
+          'name',
+          'team',
+          'type',
+          [
+            'model',
+            'Team2',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+          'association',
+          [
+            'associationType',
+            'HasOne',
+            'associatedType',
+            'Team2',
+            'associatedFields',
+            ['project'],
+            'targetNames',
+            ['project2TeamId'],
+          ],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'project2TeamId',
+        [
+          'name',
+          'project2TeamId',
+          'type',
+          [
+            'scalar',
+            'ID',
+            false,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
       ],
-    },
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'id',
+          'sortKeyFields',
+          [],
+        ]
+      ],
+    ],
   )!;
 
   @override
   String get id;
 
   /// Query field for the [id] field.
-  QueryField<String, Project2, String> get $id => _queryFields.$id;
+  static QueryField<String, Project2, String> get $id => _queryFields.$id;
 
   /// Query field for the [id] field.
   @Deprecated(r'Use $id instead')
-  QueryField<String, Project2, String> get ID => $id;
+  static QueryField<String, Project2, String> get ID => $id;
   @override
   String? get name;
 
   /// Query field for the [name] field.
-  QueryField<String, Project2, String?> get $name => _queryFields.$name;
+  static QueryField<String, Project2, String?> get $name => _queryFields.$name;
 
   /// Query field for the [name] field.
   @Deprecated(r'Use $name instead')
-  QueryField<String, Project2, String?> get NAME => $name;
+  static QueryField<String, Project2, String?> get NAME => $name;
   @override
   AsyncModel<String, Team2, PartialTeam2, Team2>? get team;
 
   /// Query field for the [team] field.
-  Team2QueryFields<String, Project2> get $team => _queryFields.$team;
+  static Team2QueryFields<String, Project2> get $team => _queryFields.$team;
 
   /// Query field for the [team] field.
   @Deprecated(r'Use $team instead')
-  Team2QueryFields<String, Project2> get TEAM => $team;
+  static Team2QueryFields<String, Project2> get TEAM => $team;
   @override
   TemporalDateTime get createdAt;
   @override
@@ -375,20 +442,22 @@ abstract class Project2 extends PartialProject2
   String? get project2TeamId;
 
   /// Query field for the [project2TeamId] field.
-  QueryField<String, Project2, String?> get $project2TeamId =>
+  static QueryField<String, Project2, String?> get $project2TeamId =>
       _queryFields.$project2TeamId;
 
   /// Query field for the [project2TeamId] field.
   @Deprecated(r'Use $project2TeamId instead')
-  QueryField<String, Project2, String?> get PROJECT2_TEAM_ID => $project2TeamId;
+  static QueryField<String, Project2, String?> get PROJECT2_TEAM_ID =>
+      $project2TeamId;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<String, Project2, String> get $modelIdentifier =>
+  static QueryField<String, Project2, String> get $modelIdentifier =>
       _queryFields.$modelIdentifier;
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<String, Project2, String> get MODEL_IDENTIFIER => $modelIdentifier;
+  static QueryField<String, Project2, String> get MODEL_IDENTIFIER =>
+      $modelIdentifier;
   Project2 copyWith({
     String? id,
     String? name,

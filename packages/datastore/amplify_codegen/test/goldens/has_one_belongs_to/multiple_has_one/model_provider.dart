@@ -35,7 +35,7 @@ class ModelProvider extends ModelProviderInterface {
   static final instance = ModelProvider._();
 
   @override
-  String get version => '804e98ee1d02b3f4181609125b3e8fc8';
+  String get version => 'eddb938f6be17f8b382145faa2383f21';
   @override
   List<mipr.ModelTypeDefinition> get modelSchemas => [
         Project.schema,

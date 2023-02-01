@@ -381,67 +381,120 @@ abstract class ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
   static final mipr.ModelTypeDefinition schema =
       mipr.serializers.deserializeWith(
     mipr.ModelTypeDefinition.serializer,
-    const {
-      'name': 'ModelWithExplicitlyDefinedPKPlusSortKeysAsCompositeKey',
-      'pluralName': 'ModelWithExplicitlyDefinedPKPlusSortKeysAsCompositeKeys',
-      'fields': {
-        'modelID': {
-          'name': 'modelID',
-          'type': {'scalar': 'ID'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'title': {
-          'name': 'title',
-          'type': {'scalar': 'String'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'rating': {
-          'name': 'rating',
-          'type': {'scalar': 'Int'},
-          'isReadOnly': false,
-          'authRules': [],
-        },
-        'createdAt': {
-          'name': 'createdAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-        'updatedAt': {
-          'name': 'updatedAt',
-          'type': {'scalar': 'AWSDateTime'},
-          'isReadOnly': true,
-          'authRules': [],
-        },
-      },
-      'authRules': [],
-      'indexes': [
-        {
-          'type': 'primary',
-          'primaryField': 'modelID',
-          'sortKeyFields': [
+    const [
+      'name',
+      'ModelWithExplicitlyDefinedPKPlusSortKeysAsCompositeKey',
+      'pluralName',
+      'ModelWithExplicitlyDefinedPKPlusSortKeysAsCompositeKeys',
+      'fields',
+      [
+        'modelID',
+        [
+          'name',
+          'modelID',
+          'type',
+          [
+            'scalar',
+            'ID',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'title',
+        [
+          'name',
+          'title',
+          'type',
+          [
+            'scalar',
+            'String',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'rating',
+        [
+          'name',
+          'rating',
+          'type',
+          [
+            'scalar',
+            'Int',
+            true,
+          ],
+          'isReadOnly',
+          false,
+          'authRules',
+          [],
+        ],
+        'createdAt',
+        [
+          'name',
+          'createdAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+        'updatedAt',
+        [
+          'name',
+          'updatedAt',
+          'type',
+          [
+            'scalar',
+            'AWSDateTime',
+            true,
+          ],
+          'isReadOnly',
+          true,
+          'authRules',
+          [],
+        ],
+      ],
+      'authRules',
+      [],
+      'indexes',
+      [
+        [
+          'type',
+          'primary',
+          'primaryField',
+          'modelID',
+          'sortKeyFields',
+          [
             'title',
             'rating',
           ],
-        }
+        ]
       ],
-    },
+    ],
   )!;
 
   @override
   String get modelId;
 
   /// Query field for the [modelId] field.
-  QueryField<
+  static QueryField<
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey,
       String> get $modelId => _queryFields.$modelId;
 
   /// Query field for the [modelId] field.
   @Deprecated(r'Use $modelId instead')
-  QueryField<
+  static QueryField<
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey,
       String> get MODEL_ID => $modelId;
@@ -449,14 +502,14 @@ abstract class ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
   String get title;
 
   /// Query field for the [title] field.
-  QueryField<
+  static QueryField<
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey,
       String> get $title => _queryFields.$title;
 
   /// Query field for the [title] field.
   @Deprecated(r'Use $title instead')
-  QueryField<
+  static QueryField<
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey,
       String> get TITLE => $title;
@@ -464,14 +517,14 @@ abstract class ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
   int get rating;
 
   /// Query field for the [rating] field.
-  QueryField<
+  static QueryField<
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey,
       int> get $rating => _queryFields.$rating;
 
   /// Query field for the [rating] field.
   @Deprecated(r'Use $rating instead')
-  QueryField<
+  static QueryField<
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
       ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey,
       int> get RATING => $rating;
@@ -481,7 +534,7 @@ abstract class ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
   TemporalDateTime get updatedAt;
 
   /// Query field for the [modelIdentifier] field.
-  QueryField<
+  static QueryField<
           ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
           ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey,
           ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier>
@@ -489,7 +542,7 @@ abstract class ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey
 
   /// Query field for the [modelIdentifier] field.
   @Deprecated(r'Use $modelIdentifier instead')
-  QueryField<
+  static QueryField<
           ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier,
           ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKey,
           ModelWithExplicitlyDefinedPkPlusSortKeysAsCompositeKeyIdentifier>
