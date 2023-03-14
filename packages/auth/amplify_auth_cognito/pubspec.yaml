@@ -1,4 +1,4 @@
-name: amplify_auth_cognito
+name: amplify_auth_cognito_v0_6_12
 description: The Amplify Flutter Auth category plugin using the AWS Cognito provider.
 version: 0.6.4-rc.1
 homepage: https://docs.amplify.aws/lib/q/platform/flutter/
