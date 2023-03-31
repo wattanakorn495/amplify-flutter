@@ -5,6 +5,7 @@
 library aws_common.js.readable_stream;
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:typed_data';
 
 import 'package:async/async.dart';
@@ -20,6 +21,7 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @JS()
 @anonymous
+@staticInterop
 class UnderlyingSource {
   /// {@macro aws_common.js.readable_stream}
   factory UnderlyingSource({
@@ -86,11 +88,11 @@ class UnderlyingSource {
   }
 
   external factory UnderlyingSource._({
-    Object? start,
-    Object? pull,
-    Object? cancel,
-    String? type,
-    int? autoAllocateChunkSize,
+    JSAny? start,
+    JSAny? pull,
+    JSAny? cancel,
+    JSAny? type,
+    JSAny? autoAllocateChunkSize,
   });
 }
 
@@ -133,15 +135,17 @@ UnderlyingSource createUnderlyingSource({
               String? reason,
               ReadableStreamController? controller,
             ) {
-              return Promise.fromFuture(cancel(reason, controller));
+              return createPromiseFromFuture(
+                Future<void>.value(cancel(reason, controller)),
+              );
             })
           : allowInterop(cancel);
   return UnderlyingSource._(
-    start: startFn,
-    pull: pullFn,
-    cancel: cancelFn,
+    start: startFn?.toJS as JSAny?,
+    pull: pullFn?.toJS as JSAny?,
+    cancel: cancelFn?.toJS as JSAny?,
     type: type.jsValue,
-    autoAllocateChunkSize: autoAllocateChunkSize ?? undefined,
+    autoAllocateChunkSize: autoAllocateChunkSize?.toJS as JSAny? ?? undefined,
   );
 }
 
@@ -161,7 +165,11 @@ enum ReadableStreamType with JSEnum {
 /// Similar to a Dart [StreamController].
 /// {@endtemplate}
 @JS()
-abstract class ReadableStreamController {
+@staticInterop
+abstract class ReadableStreamController {}
+
+/// {@macro aws_common.js.readable_stream_controller}
+extension PropsReadableStreamController on ReadableStreamController {
   /// The desired size required to fill the stream's internal queue.
   external int get desiredSize;
 
@@ -172,17 +180,13 @@ abstract class ReadableStreamController {
   external void enqueue(Uint8List chunk);
 }
 
-/// {@macro aws_common.js.readable_stream_controller}
-extension PropsReadableStreamController on ReadableStreamController {
-  // TODO(dnys1): Move methods here when staticInterop is enabled.
-}
-
 /// {@template aws_common.js.readable_stream_default_controller}
 /// A default [ReadableStreamController], for [ReadableStream]s which are not
 /// byte streams.
 /// {@endtemplate}
 @JS()
 @anonymous
+@staticInterop
 class ReadableStreamDefaultController extends ReadableStreamController {}
 
 /// {@template aws_common.js.readable_byte_stream_controller}
@@ -191,12 +195,14 @@ class ReadableStreamDefaultController extends ReadableStreamController {}
 /// {@endtemplate}
 @JS()
 @anonymous
+@staticInterop
 class ReadableByteStreamController extends ReadableStreamController {}
 
 /// {@template aws_common.js.readable_stream}
 /// Represents a readable stream of byte data.
 /// {@endtemplate}
 @JS()
+@staticInterop
 class ReadableStream {
   /// {@macro aws_common.js.readable_stream}
   external factory ReadableStream([UnderlyingSource? underlyingSource]);
@@ -242,6 +248,7 @@ extension PropsReadableStream on ReadableStream {
 /// {@endtemplate}
 @JS()
 @anonymous
+@staticInterop
 abstract class ReadableStreamReader {}
 
 /// {@macro aws_common.js.readable_stream_reader}
@@ -275,6 +282,7 @@ extension PropsReadableStreamReader on ReadableStreamReader {
 /// {@endtemplate}
 @JS()
 @anonymous
+@staticInterop
 class ReadableStreamBYOBReader extends ReadableStreamReader {}
 
 /// {@template aws_common.js.readable_stream_default_reader}
@@ -283,6 +291,7 @@ class ReadableStreamBYOBReader extends ReadableStreamReader {}
 /// {@endtemplate}
 @JS()
 @anonymous
+@staticInterop
 class ReadableStreamDefaultReader extends ReadableStreamReader {}
 
 /// {@macro aws_common.js.readable_stream_default_reader}
@@ -310,6 +319,7 @@ enum ReadableStreamReaderMode with JSEnum {
 /// {@endtemplate}
 @JS()
 @anonymous
+@staticInterop
 abstract class ReadableStreamChunk {}
 
 /// {@macro aws_common.js.readable_stream_chunk}

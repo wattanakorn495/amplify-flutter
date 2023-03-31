@@ -4,5 +4,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
     "source.organizeImports": true,
-  }
+  },
+  "dart.sdkPath": "/Users/dillonnys/dev/dart-sdk/sdk/xcodebuild/ReleaseARM64/dart-sdk"
 }

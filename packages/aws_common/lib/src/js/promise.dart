@@ -1,74 +1,52 @@
-// Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-// SPDX-License-Identifier: Apache-2.0
+// Copyright 2013 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
 
-library aws_http.js.promise;
-
-import 'dart:async';
+@JS()
+library js_promise;
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart' as js_util;
-import 'package:meta/meta.dart';
 
-/// A [Promise] executor callback.
-typedef Executor<T> = void Function(
-  void Function(T) resolve,
-  void Function(Object) reject,
-);
-
-/// {@template aws_common.js.promise}
-/// Represents the eventual completion (or failure) of an asynchronous operation
-/// and its resulting value.
-/// {@endtemplate}
 @JS()
 @staticInterop
-class Promise<T> {
-  /// Creates a JS Promise.
-  factory Promise(Executor<T> executor) => createPromise(executor);
+class PromiseResolver<T extends Object?> {}
 
-  external factory Promise._(Executor<T> executor);
-
-  /// Creates a Promise from a Dart [future].
-  ///
-  /// If [captureError] is `true`, all errors will be caught by the promise
-  /// and not reported as unhandled errors in the current [Zone]. This can
-  /// decrease the visibility of errors in Dart code depending on the level of
-  /// integration with JS APIs and their error-handling specifics.
-  factory Promise.fromFuture(
-    Future<T> future, {
-    bool captureError = false,
-  }) =>
-      createPromiseFromFuture(future, captureError: captureError);
+extension PromiseResolverExtension<T extends Object?> on PromiseResolver<T> {
+  void resolve(T result) => js_util
+      .callMethod(this, 'call', <Object>[this, if (result != null) result]);
 }
 
-/// Factory for [Promise].
-///
-// TODO(dnys1): Remove when fixed https://github.com/dart-lang/sdk/issues/49778.
-@internal
-Promise<T> createPromise<T>(Executor<T> executor) =>
-    Promise._(allowInterop(executor));
+@JS()
+@staticInterop
+class PromiseRejecter {}
 
-/// Factory for [Promise.fromFuture].
-///
-// TODO(dnys1): Remove when fixed https://github.com/dart-lang/sdk/issues/49778.
-@internal
-Promise<T> createPromiseFromFuture<T>(
-  Future<T> future, {
-  bool captureError = false,
-}) {
-  return createPromise((resolve, reject) async {
-    try {
-      resolve(await future);
-    } on Object catch (e) {
-      reject(e);
-      if (!captureError) {
-        rethrow;
-      }
-    }
-  });
+extension PromiseRejecterExtension on PromiseRejecter {
+  void reject(Object? error) => js_util
+      .callMethod(this, 'call', <Object>[this, if (error != null) error]);
 }
 
-/// {@macro aws_common.js.promise}
-extension PropsPromise<T> on Promise<T> {
-  /// Resolves `this` as a Dart [Future].
-  Future<T> get future => js_util.promiseToFuture(this);
+/// Type-safe JS Promises
+@JS('Promise')
+@staticInterop
+abstract class Promise<T extends Object?> {
+  /// A constructor for a JS promise
+  external factory Promise(PromiseExecutor<T> executor);
+}
+
+/// The type of function that is used to create a Promise<T>
+typedef PromiseExecutor<T extends Object?> = void Function(
+  PromiseResolver<T> resolve,
+  PromiseRejecter reject,
+);
+
+Promise<T> createPromiseFromFuture<T>(Future<T> future) {
+  return Promise<T>(
+    allowInterop((PromiseResolver<T> resolver, PromiseRejecter rejecter) {
+      future.then(
+        (T value) => resolver.resolve(value),
+        onError: (Object? error) => rejecter.reject(error),
+      );
+    }),
+  );
 }

@@ -1,6 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
+import 'dart:js_interop';
+
 import 'package:aws_common/aws_common.dart';
 import 'package:aws_common/src/js/abort.dart';
 import 'package:aws_common/src/js/common.dart';
@@ -230,19 +232,19 @@ abstract class RequestInit {
   }
 
   external factory RequestInit._({
-    String? cache,
-    String? credentials,
-    String? mode,
-    String? destination,
-    String? redirect,
-    String? referrer,
-    Object? headers,
-    String? integrity,
-    String? duplex,
-    AbortSignal? signal,
-    bool? keepalive,
-    String? method,
-    Object? body,
+    JSAny? cache,
+    JSAny? credentials,
+    JSAny? mode,
+    JSAny? destination,
+    JSAny? redirect,
+    JSAny? referrer,
+    JSAny? headers,
+    JSAny? integrity,
+    JSAny? duplex,
+    JSAny? signal,
+    JSAny? keepalive,
+    JSString? method,
+    JSAny? body,
   });
 }
 
@@ -287,16 +289,16 @@ RequestInit createRequestInit({
     mode: mode.jsValue,
     destination: destination.jsValue,
     redirect: redirect.jsValue,
-    referrer: referrer ?? undefined,
+    referrer: referrer?.toJS as JSAny? ?? undefined,
     headers: headers != null ? js_util.jsify(headers) : undefined,
-    integrity: integrity ?? undefined,
-    keepalive: keepalive ?? undefined,
-    method: method.value,
-    signal: signal ?? undefined,
-    body: body ?? undefined,
+    integrity: integrity?.toJS as JSAny? ?? undefined,
+    keepalive: keepalive?.toJS as JSAny? ?? undefined,
+    method: method.value.toJS,
+    signal: signal as JSAny? ?? undefined,
+    body: body as JSAny? ?? undefined,
     // Added for full compatibility with all `fetch` impls:
     // https://developer.chrome.com/articles/fetch-streaming-requests/#half-duplex
-    duplex: 'half',
+    duplex: 'half'.toJS as JSAny,
   );
 }
 
@@ -406,5 +408,5 @@ external Promise<Response> _fetch(String url, [RequestInit? init]);
 /// the network, returning a promise which is fulfilled once the response is
 /// available.
 Future<Response> fetch(String url, [RequestInit? init]) {
-  return _fetch(url, init).future;
+  return js_util.promiseToFuture(_fetch(url, init));
 }

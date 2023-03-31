@@ -4,6 +4,7 @@
 // ignore_for_file: avoid_classes_with_only_static_members, prefer_void_to_null
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'dart:js_util' as js_util;
 
 import 'package:aws_common/src/util/recase.dart';
@@ -11,7 +12,7 @@ import 'package:js/js.dart';
 
 /// The JS `undefined`.
 @JS()
-external Null get undefined;
+external JSAny? get undefined;
 
 /// An [Enum] representing a nullable JS value.
 mixin JSEnum on Enum {
@@ -20,12 +21,12 @@ mixin JSEnum on Enum {
   /// Default values are represented as `undefined`, as opposed to `null` which
   /// can be interpreted incorrectly by DOM APIs. Non-default values are
   /// representated as the parameter-cased [name].
-  String? get jsValue {
+  JSAny? get jsValue {
     switch (name) {
       case r'default$':
         return undefined;
       default:
-        return name.paramCase;
+        return name.paramCase.toJS as JSAny;
     }
   }
 }
@@ -71,9 +72,9 @@ abstract class EventTarget {}
 /// {@macro worker_bee.js.interop.event_target}
 extension PropsEventTarget on EventTarget {
   /// Registers [listener] as a callback for events of type [type].
-  void addEventListener<T extends Event>(
+  void addEventListener(
     String type,
-    EventHandler<T> listener,
+    void Function(Event) listener,
   ) =>
       js_util.callMethod(this, 'addEventListener', [
         type,
@@ -82,9 +83,9 @@ extension PropsEventTarget on EventTarget {
       ]);
 
   /// Removes [listener] as a callback for events of type [type].
-  void removeEventListener<T extends Event>(
+  void removeEventListener(
     String type,
-    EventHandler<T> listener,
+    void Function(Event) listener,
   ) =>
       js_util.callMethod(this, 'removeEventListener', [
         type,
@@ -140,14 +141,14 @@ extension PropsMessageEvent on MessageEvent {
   /// The data sent by the message emitter.
   Object? get data {
     final Object? data = js_util.getProperty(this, 'data');
-    return dartify(data);
+    return js_util.dartify(data);
   }
 
   /// An array of [MessagePort] objects representing the ports associated with
   /// the channel the message is being sent through.
   List<MessagePort> get ports {
     final Object ports = js_util.getProperty(this, 'ports');
-    return (dartify(ports) as List).cast<MessagePort>();
+    return (js_util.dartify(ports) as List).cast<MessagePort>();
   }
 }
 
@@ -165,10 +166,13 @@ extension PropsMessagePort on MessagePort {
   /// Fired when a MessagePort object receives a message.
   Stream<MessageEvent> get onMessage {
     final controller = StreamController<MessageEvent>();
-    addEventListener<MessageEvent>('message', controller.add);
-    addEventListener<MessageEvent>(
+    addEventListener(
+      'message',
+      (event) => controller.add(event as MessageEvent),
+    );
+    addEventListener(
       'messageerror',
-      (event) {
+      (Object event) {
         controller
           ..addError(event)
           ..close();
@@ -323,54 +327,4 @@ class JSObject {
 
   /// The prototype of the JS `Object` class.
   external static Object get prototype;
-}
-
-/// Returns `true` if a given object is a simple JavaScript object.
-bool isJavaScriptSimpleObject(Object? value) {
-  final proto = JSObject.getPrototypeOf(value);
-  return proto == null || proto == JSObject.prototype;
-}
-
-Object? _getConstructor(String constructorName) =>
-    js_util.getProperty(self, constructorName);
-
-/// Like [js_util.instanceof] only takes a [String] for the object name instead
-/// of a constructor object.
-bool instanceOfString(Object? element, String objectType) {
-  final constructor = _getConstructor(objectType);
-  return constructor != null && js_util.instanceof(element, constructor);
-}
-
-/// Returns `true` if a given object is a JavaScript array.
-bool isJavaScriptArray(Object? value) => instanceOfString(value, 'Array');
-
-/// Inverse of [js_util.jsify]. Converts JS types to Dart.
-// TODO(dnys1): Remove when dartify is available in js_util.
-Object? dartify(Object? o) {
-  if (o == null) return null;
-  if (isJavaScriptSimpleObject(o)) {
-    final dartObject = <Object?, Object?>{};
-    final originalKeys = JSObject.keys(o);
-    final dartKeys = <Object?>[];
-    for (final key in originalKeys) {
-      dartKeys.add(dartify(key));
-    }
-    for (var i = 0; i < originalKeys.length; i++) {
-      final jsKey = originalKeys[i];
-      final dartKey = dartKeys[i];
-      final Object? jsValue = js_util.getProperty(o, jsKey);
-      dartObject[dartKey] = dartify(jsValue);
-    }
-    return dartObject;
-  }
-  if (isJavaScriptArray(o)) {
-    final dartObject = <Object?>[];
-    final int length = js_util.getProperty(o, 'length');
-    for (var i = 0; i < length; i++) {
-      final Object? jsValue = js_util.getProperty(o, i);
-      dartObject.add(dartify(jsValue));
-    }
-    return dartObject;
-  }
-  return o;
 }

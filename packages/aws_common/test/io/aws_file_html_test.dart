@@ -1,7 +1,8 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
-@TestOn('browser')
+// TODO(dnys1): Use JS interop instead of `dart:html` so that WASM works.
+@TestOn('browser && !wasm')
 
 import 'dart:convert';
 import 'dart:html' as html;

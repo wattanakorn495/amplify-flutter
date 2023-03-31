@@ -52,7 +52,7 @@ void clientTest(
             ..sink.add(protocol.value)
             ..sink.add(secure);
           httpServerQueue = StreamQueue(httpServerChannel.stream);
-          host = 'localhost:${await httpServerQueue.next}';
+          host = 'localhost:${(await httpServerQueue.next as num).toInt()}';
           client = debugClient..supportedProtocols = supportedProtocols;
         });
         tearDown(() async {
