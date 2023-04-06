@@ -5,7 +5,6 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_push_notifications_pinpoint/amplify_push_notifications_pinpoint.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'amplifyconfiguration.dart';
 
@@ -31,23 +30,6 @@ void main() async {
     if (!Amplify.isConfigured) {
       await Amplify.addPlugins([authPlugin, notificationsPlugin]);
       await Amplify.configure(amplifyconfig);
-
-      // Required to call this after Amplify.configure.
-      // Doesn't get called on app start as event is swallowed by library to register device.
-      Amplify.Notifications.Push.onTokenReceived.listen((event) {
-        print('🚀 onTokenReceived $event');
-      });
-
-      // Required to call this after Amplify.configure.
-      Amplify.Notifications.Push.onNotificationReceivedInForeground
-          .listen((event) {
-        print('🚀 onNotificationReceivedInForeground $event');
-      });
-
-      // Required to call this after Amplify.configure.
-      Amplify.Notifications.Push.onNotificationOpened.listen((event) {
-        print('🚀 onNotificationOpened $event');
-      });
     }
   } on Exception catch (e) {
     safePrint(e.toString());
@@ -65,10 +47,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool isConfigured = false;
-  bool isForegroundListernerInitialized = false;
-  bool isBackgroundListernerInitialized = false;
-  bool notificationOpenedListernerInitialized = false;
-  int globalBgCallbackCount = 0;
 
   PushNotificationMessage? foregroundMessage;
   PushNotificationMessage? backgroundMessage;
@@ -76,18 +54,35 @@ class _MyAppState extends State<MyApp> {
   PushNotificationMessage? notificaitonOpenedMessage;
   PushNotificationPermissionStatus? getPermissionStatus;
   bool? requestPermissionsResult;
+  bool didIdentifyUser = false;
   PushNotificationMessage? launchNotificaitonAvailable;
 
-  Future<int> getAndUpdateCallbackCounts() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.reload();
-      globalBgCallbackCount = prefs.getInt(globalBgCallbackKey) ?? 0;
-      return globalBgCallbackCount;
-    } on Exception catch (e) {
-      print('Error when get call $e');
-      return 0;
-    }
+  @override
+  void initState() {
+    // Required to call this after Amplify.configure.
+    // Doesn't get called on app start as event is swallowed by library to register device.
+    Amplify.Notifications.Push.onTokenReceived.listen((event) {
+      print('🚀 onTokenReceived $event');
+    });
+
+    // Required to call this after Amplify.configure.
+    Amplify.Notifications.Push.onNotificationReceivedInForeground
+        .listen((event) {
+      print('🚀 onNotificationReceivedInForeground $event');
+      setState(() {
+        foregroundMessage = event;
+      });
+    });
+
+    // Required to call this after Amplify.configure.
+    Amplify.Notifications.Push.onNotificationOpened.listen((event) {
+      print('🚀 onNotificationOpened $event');
+      setState(() {
+        notificaitonOpenedMessage = event;
+      });
+    });
+
+    super.initState();
   }
 
   void getLaunchNotif() {
@@ -120,36 +115,6 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: ListView(
             children: [
-              const Divider(
-                height: 20,
-              ),
-              FutureBuilder<int>(
-                future: getAndUpdateCallbackCounts(),
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<int> snapshot,
-                ) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return ListTile(
-                      title: Text(
-                        'Background callback count: ${snapshot.data}',
-                      ),
-                    );
-                  } else {
-                    return const ListTile(
-                      title: Text(
-                        'Background callback count:0',
-                      ),
-                    );
-                  }
-                },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {});
-                },
-                child: const Text('Refresh count'),
-              ),
               headerText('Permissions APIs'),
               ElevatedButton(
                 onPressed: () async {
@@ -162,7 +127,9 @@ class _MyAppState extends State<MyApp> {
                 child: const Text('getPermissionStatus'),
               ),
               if (getPermissionStatus != null)
-                Text('Perimission status: $getPermissionStatus'),
+                ListTile(
+                  title: Text('Perimission status: $getPermissionStatus'),
+                ),
               ElevatedButton(
                 onPressed: () async {
                   final result =
@@ -174,8 +141,10 @@ class _MyAppState extends State<MyApp> {
                 child: const Text('requestPermissions'),
               ),
               if (requestPermissionsResult != null)
-                Text(
-                  'Requesting Perimission result: $requestPermissionsResult',
+                ListTile(
+                  title: Text(
+                    'Requesting Perimission result: $requestPermissionsResult',
+                  ),
                 ),
               const Divider(
                 height: 20,
@@ -183,21 +152,51 @@ class _MyAppState extends State<MyApp> {
               headerText('Analytics APIs'),
               ElevatedButton(
                 onPressed: () async {
-                  await Amplify.Notifications.Push.identifyUser(
-                    userId: 'test-user-101',
-                    userProfile: AnalyticsUserProfile(name: 'test-name-101'),
-                  );
+                  try {
+                    await Amplify.Notifications.Push.identifyUser(
+                      userId: 'test-user-101',
+                      userProfile: AnalyticsUserProfile(name: 'test-name-101'),
+                    );
+                    setState(() {
+                      didIdentifyUser = true;
+                    });
+                  } on Exception catch (e) {
+                    print('ERROR identifying user: $e');
+                    setState(() {
+                      didIdentifyUser = true;
+                    });
+                  }
                 },
                 child: const Text('identifyUser'),
               ),
+              if (didIdentifyUser)
+                const Text('User was identified with Pinpoint'),
               const Divider(
                 height: 20,
               ),
               headerText('Notification Handling APIs'),
+              if (foregroundMessage != null)
+                ListTile(
+                  title: Text(
+                    'Foreground message title: ${foregroundMessage?.title}',
+                  ),
+                ),
+              if (notificaitonOpenedMessage != null)
+                ListTile(
+                  title: Text(
+                    'Opened by tap on notification message title: ${notificaitonOpenedMessage?.title}',
+                  ),
+                ),
               ElevatedButton(
                 onPressed: getLaunchNotif,
                 child: const Text('get Launch Notification'),
               ),
+              if (launchNotificaitonAvailable == null)
+                const ListTile(
+                  title: Text(
+                    'No Launch Notification to display.',
+                  ),
+                ),
               if (launchNotificaitonAvailable != null)
                 ListTile(
                   title: Text(
