@@ -30,7 +30,7 @@ data class FlutterSignInWithWebUIRequest(val map: HashMap<String, *>) {
     }
 
     companion object {
-        private var allowedProviders: Array<String> = arrayOf("amazon", "google", "facebook", "apple")
+        private var allowedProviders: Array<String> = arrayOf("amazon", "google", "facebook", "apple","LINE-dev")
         private const val validationErrorMessage: String = "SignInWithWebUI Request malformed."
 
         fun validate(req: HashMap<String, *>?) {
