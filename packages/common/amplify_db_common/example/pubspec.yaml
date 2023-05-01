@@ -16,6 +16,7 @@ dependencies:
 # TODO(dnys1): Remove when Flutter 3.3 is no longer supported
 dependency_overrides:
   async: ^2.9.0
+  test_api: any
 
 dev_dependencies:
   amplify_lints: ^2.0.0
